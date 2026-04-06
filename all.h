@@ -1752,6 +1752,53 @@ struct FImplementedInterface {
   UProperty *PointerProperty;           ///< the pointer property that is located at the offset of the interface's vtable
 };
 
+/* ---------------------------------------------------------- UWillowCustomizationManager ---------------------------------------------------------- */
+
+struct native FPendingCustomization {
+  UCustomizationDefinition    *Definition;
+  /** ICustomizable */
+  TArray_FImplementedInterface Targets;
+};
+struct native FProductCustomizationInfo {
+  int ProductID;
+  int NumUnlockableCustomizations;
+  int NumCustomizations;
+};
+struct native FCustomizationSizeMapping  {
+  int ProductID;
+  int NumCustomizations;
+};
+struct UWillowCustomizationManager {
+  UObject                            Super;
+  void                              *VfTable_FCallbackEventDevice;
+  TArray_FPendingCustomization       PendingCustomizations;
+  int                                NumHeadsLoadedSinceLastGC;
+  BITFIELD                           bRequestingImmediateGC : 1;
+  TArray_UCustomizationDefinitionPtr AllCustomizations;
+  TArray_FProductCustomizationInfo   LoadedProductsCustomizationInfos;
+  TArray_FCustomizationSizeMapping   CustomizationSizes;
+}; assert_size(UWillowCustomizationManager, 120);
+
+/* ---------------------------------------------------------- ULcdHelper ---------------------------------------------------------- */
+
+struct ULcdHelper {
+  UObject Super;
+  void   *VfTable_FTickableObject;
+}; assert_size(ULcdHelper, 64);
+
+/* ---------------------------------------------------------- UUIManager ---------------------------------------------------------- */
+
+struct UUIManager {
+  UObject Super;
+}; assert_size(UUIManager, 60);
+
+/* ---------------------------------------------------------- UOnlineStats ---------------------------------------------------------- */
+
+struct UOnlineStats {
+  UObject                         Super;
+  TArray_FStringIdToStringMapping ViewIdMappings;
+}; assert_size(UOnlineStats, 72);
+
 /* ---------------------------------------------------------- UIniLocPatcher ---------------------------------------------------------- */
 
 struct native FIniLocFileEntry {
@@ -3140,6 +3187,31 @@ struct UGearboxDialogAction {
   UGearboxDialogNode Super;
 }; assert_size(UGearboxDialogAction, 112);
 
+/* ---------------------------------------------------------- UGearboxDialogNonTemplateAction ---------------------------------------------------------- */
+
+struct UGearboxDialogNonTemplateAction {
+  UGearboxDialogAction Super;
+}; assert_size(UGearboxDialogNonTemplateAction, 112);
+
+/* ---------------------------------------------------------- UGearboxDialogAct_Talk ---------------------------------------------------------- */
+
+struct UGearboxDialogAct_Talk {
+  UGearboxDialogNonTemplateAction Super;
+  float                           OutputDelay;
+  BITFIELD                        bShowTalkers      : 1;
+  BITFIELD                        bPreviewing       : 1;
+  BITFIELD                        bInstigatorTalker : 1;
+  TArray_FGearboxDialogData       TalkData;
+}; assert_size(UGearboxDialogAct_Talk, 132);
+
+/* ---------------------------------------------------------- UGearboxDialogAct_Trigger ---------------------------------------------------------- */
+
+struct UGearboxDialogAct_Trigger {
+  UGearboxDialogNonTemplateAction Super;
+  UGearboxDialogEventTag         *DialogEvent;
+  BITFIELD                        bPreviewing : 1;
+}; assert_size(UGearboxDialogAct_Trigger, 120);
+
 /* ---------------------------------------------------------- UGearboxDialogVariable ---------------------------------------------------------- */
 
 struct UGearboxDialogVariable {
@@ -3183,13 +3255,12 @@ struct UGearboxDialogGroup {
   TArray_UGearboxDialogNameTagPtr  NameTags;
   TArray_UGearboxDialogEventTagPtr EventTags;
   UGearboxDialogGroup             *ParentGroup;
-  TArray_UGearboxDialogNodePtr Nodes;
-  UGearboxDialogEvent *SharedDialogEvent;
-  /* TODO: GearboxDialogAct_Talk */
-  void *SharedTalkAct;
-  TArray_FOutputLinkToStruct OutputLinksToStructs;
-  TArray_FDialogEventData DialogEvents;
-  TArray_FTalkActData TalkActs;
+  TArray_UGearboxDialogNodePtr     Nodes;
+  UGearboxDialogEvent             *SharedDialogEvent;
+  UGearboxDialogAct_Talk          *SharedTalkAct;
+  TArray_FOutputLinkToStruct       OutputLinksToStructs;
+  TArray_FDialogEventData          DialogEvents;
+  TArray_FTalkActData              TalkActs;
 }; assert_size(UGearboxDialogGroup, 156);
 
 /* ---------------------------------------------------------- UGearboxDialogTemplateGroup ---------------------------------------------------------- */
@@ -5278,21 +5349,19 @@ struct UAkEvent {
 /* ---------------------------------------------------------- UGearboxDialogEventData ---------------------------------------------------------- */
 
 struct UGearboxDialogEventData {
-  UObject Super;
-  FDialogEventInfo EventInfo;
-  AActor *Instigator;
-  AActor *Other;
-  UObject *ObjectParameter;
-  AActor *LastTalker;
-  /* TODO: GearboxDialogAct_Talk */
-  void *LiveTalkAction;
-  int LiveTalkActionDataID;
-  FDialogEventInfo TemplateEventInfo;
-  /* TODO: GearboxDialogAct_Trigger */
-  void *LiveTriggerAction;
-  FAkPlayingInfo PlayingInfo;
-  float TalkFinishTime;
-  int UseCount;
+  UObject                    Super;
+  FDialogEventInfo           EventInfo;
+  AActor                    *Instigator;
+  AActor                    *Other;
+  UObject                   *ObjectParameter;
+  AActor                    *LastTalker;
+  UGearboxDialogAct_Talk    *LiveTalkAction;
+  int                        LiveTalkActionDataID;
+  FDialogEventInfo           TemplateEventInfo;
+  UGearboxDialogAct_Trigger *LiveTriggerAction;
+  FAkPlayingInfo             PlayingInfo;
+  float                      TalkFinishTime;
+  int                        UseCount;
 }; assert_size(UGearboxDialogEventData, 120);
 
 /* ---------------------------------------------------------- UGearboxEngineGlobals ---------------------------------------------------------- */
@@ -5397,33 +5466,33 @@ struct UForceFeedbackWaveform {
 #pragma pack(push, 4)
 struct native FUniqueNetId {
   QWORD Uid;
-  BYTE ShiftId[16];
+  BYTE  ShiftId[16];
 };
 #pragma pack(pop)
 struct native FFriendsQuery {
   FUniqueNetId UniqueId;
-  BITFIELD bIsFriend : 1;
+  BITFIELD     bIsFriend : 1;
 };
 struct native FOnlineFriend {
-  FUniqueNetId UniqueId;
-  FString SessionId;
-  FString SessionInfo;
-  FString NickName;
-  FString FirstPartyName;
-  FString ShiftName;
-  FString PresenceInfo;
+  FUniqueNetId       UniqueId;
+  FString            SessionId;
+  FString            SessionInfo;
+  FString            NickName;
+  FString            FirstPartyName;
+  FString            ShiftName;
+  FString            PresenceInfo;
   EOnlineFriendState FriendState;
-  EFriendPlatform FriendPlatform;
-  BITFIELD bIsOnline          : 1;
-  BITFIELD bIsPlaying         : 1;
-  BITFIELD bIsPlayingThisGame : 1;
-  BITFIELD bIsJoinable        : 1;
-  BITFIELD bHasVoiceSupport   : 1;
-  BITFIELD bHaveInvited       : 1;
-  BITFIELD bHasInvitedYou     : 1;
-  BITFIELD bHaveRequested     : 1;
-  BITFIELD bHasRequestedYou   : 1;
-  BITFIELD bShowInGame        : 1;
+  EFriendPlatform    FriendPlatform;
+  BITFIELD           bIsOnline          : 1;
+  BITFIELD           bIsPlaying         : 1;
+  BITFIELD           bIsPlayingThisGame : 1;
+  BITFIELD           bIsJoinable        : 1;
+  BITFIELD           bHasVoiceSupport   : 1;
+  BITFIELD           bHaveInvited       : 1;
+  BITFIELD           bHasInvitedYou     : 1;
+  BITFIELD           bHaveRequested     : 1;
+  BITFIELD           bHasRequestedYou   : 1;
+  BITFIELD           bShowInGame        : 1;
 };
 struct native FAppIdLicenseInfo {
   int AppID;
@@ -5435,77 +5504,77 @@ struct native FTOCInfo {
   FString Path;
 };
 struct native FOnlineContent {
-  EOnlineContentType ContentType;
-  BYTE UserIndex;
-  BITFIELD bIsCorrupt : 1;
-  int DeviceID;
-  int LicenseMask;
-  FString FriendlyName;
-  FString Filename;
-  FString ContentPath;
-  TArray_FString ContentPackages;
-  TArray_FString ContentFiles;
+  EOnlineContentType       ContentType;
+  BYTE                     UserIndex;
+  BITFIELD                 bIsCorrupt : 1;
+  int                      DeviceID;
+  int                      LicenseMask;
+  FString                  FriendlyName;
+  FString                  Filename;
+  FString                  ContentPath;
+  TArray_FString           ContentPackages;
+  TArray_FString           ContentFiles;
   TArray_FAppIdLicenseInfo CachedAppIdInfo;
-  FTOCInfo TOCInfo;
+  FTOCInfo                 TOCInfo;
 };
 struct native FOnlineCrossTitleContent {
   FOnlineContent Super;
-  int TitleId;
+  int            TitleId;
 };
 struct native FOnlineContentNameInfo {
   FString ContentName;
-  int EngineVersion;
-  FGuid CookedVersionID;
+  int     EngineVersion;
+  FGuid   CookedVersionID;
 };
 struct native FNamedOnlineContent {
-  FOnlineContent Super;
-  FOnlineContentNameInfo NameInfo;
+  FOnlineContent          Super;
+  FOnlineContentNameInfo  NameInfo;
   ENamedOnlineContentType NamedContentType;
 };
 struct native FCompatibilityOnlineContent {
-  int VersionNumber;
-  FNamedOnlineContent Container;
+  int                        VersionNumber;
+  FNamedOnlineContent        Container;
   TArray_FNamedOnlineContent Content;
 };
 struct native FMarketplaceContent {
-  int UserIndex;
-  int OfferId;
-  int PreviewOfferId;
-  FString OfferName;
-  int OfferType;
+  int         UserIndex;
+  int         OfferId;
+  int         PreviewOfferId;
+  FString     OfferName;
+  int         OfferType;
   TArray_BYTE ContentId;
-  BITFIELD bIsUnrestrictedLicense : 1;
-  int LicenseMask;
-  int TitleId;
-  int ContentCategory;
-  FString TitleName;
-  BITFIELD bUserHasPurchased : 1;
-  int PackageSize;
-  int InstallSize;
-  FString SellText;
-  int AssetId;
-  int PurchaseQuantity;
-  int PointsPrice;
-  FString PriceText;
-  FString OfferIdText;
+  BITFIELD    bIsUnrestrictedLicense : 1;
+  int         LicenseMask;
+  int         TitleId;
+  int         ContentCategory;
+  FString     TitleName;
+  BITFIELD    bUserHasPurchased : 1;
+  int         PackageSize;
+  int         InstallSize;
+  FString     SellText;
+  int         AssetId;
+  int         PurchaseQuantity;
+  int         PointsPrice;
+  FString     PriceText;
+  FString     OfferIdText;
 };
 struct native FOnlineRegistrant {
   FUniqueNetId PlayerNetId;
 };
 struct native FOnlineArbitrationRegistrant {
   FOnlineRegistrant Super; 
-  QWORD MachineId;
-  int Trustworthiness;
+  QWORD             MachineId;
+  int               Trustworthiness;
 };
 struct FSpeechRecognizedWord {
-  int WordId;
+  int     WordId;
   FString WordText;
-  float Confidence;
+  float   Confidence;
 };
 struct native FOnlinePlayerScore {
   FUniqueNetId PlayerID;
-  int TeamID;
-  int Score;
+  int          TeamID;
+  int          Score;
 };
 struct native FLocalTalker {
   BITFIELD bHasVoice            : 1;
@@ -5517,124 +5586,123 @@ struct native FLocalTalker {
 };
 struct native FRemoteTalker {
   FUniqueNetId TalkerId;
-  float LastNotificationTime;
-  BITFIELD bWasTalking   : 1;
-  BITFIELD bIsTalking    : 1;
-  BITFIELD bIsRegistered : 1;
+  float        LastNotificationTime;
+  BITFIELD     bWasTalking   : 1;
+  BITFIELD     bIsTalking    : 1;
+  BITFIELD     bIsRegistered : 1;
 };
 struct native FOnlineFriendMessage {
   FUniqueNetId SendingPlayerId;
-  FString SendingPlayerNick;
-  BITFIELD bIsFriendInvite : 1;
-  BITFIELD bIsGameInvite   : 1;
-  BITFIELD bWasAccepted    : 1;
-  BITFIELD bWasDenied      : 1;
-  FString Message;
+  FString      SendingPlayerNick;
+  BITFIELD     bIsFriendInvite : 1;
+  BITFIELD     bIsGameInvite   : 1;
+  BITFIELD     bWasAccepted    : 1;
+  BITFIELD     bWasDenied      : 1;
+  FString      Message;
 };
 struct native FNamedInterface {
-  FName InterfaceName;
+  FName    InterfaceName;
   UObject *InterfaceObject;
 };
 struct native FNamedInterfaceDef {
-  FName InterfaceName;
+  FName   InterfaceName;
   FString InterfaceClassName;
 };
 struct native FTitleFile {
-  FString Filename;
+  FString                     Filename;
   EOnlineEnumerationReadState AsyncState;
-  TArray_BYTE Data;
+  TArray_BYTE                 Data;
 };
 struct native FCommunityContentFile {
-  int ContentId;
-  int FileId;
-  int ContentType;
-  int FileSize;
+  int          ContentId;
+  int          FileId;
+  int          ContentType;
+  int          FileSize;
   FUniqueNetId Owner;
-  int DownloadCount;
-  float AverageRating;
-  int RatingCount;
-  int LastRatingGiven;
-  FString LocalFilePath;
+  int          DownloadCount;
+  float        AverageRating;
+  int          RatingCount;
+  int          LastRatingGiven;
+  FString      LocalFilePath;
 };
 struct native FCommunityContentMetadata {
-  int ContentType;
+  int                      ContentType;
   TArray_FSettingsProperty MetadataItems;
 };
 struct native FNamedSession {
-  FName SessionName;
-  void *SessionInfo;
-  UOnlineGameSettings *GameSettings;
-  TArray_FOnlineRegistrant Registrants;
+  FName                               SessionName;
+  void                               *SessionInfo;
+  UOnlineGameSettings                *GameSettings;
+  TArray_FOnlineRegistrant            Registrants;
   TArray_FOnlineArbitrationRegistrant ArbitrationRegistrants;
 };
 struct native FAchievementDetails {
-  int Id;
-  FString AchievementName;
-  FString Description;
-  FString HowTo;
+  int       Id;
+  FString   AchievementName;
+  FString   Description;
+  FString   HowTo;
   USurface *Image;
-  BYTE MonthEarned;
-  BYTE DayEarned;
-  BYTE YearEarned;
-  BYTE DayOfWeekEarned;
-  int GamerPoints;
-  BITFIELD bIsSecret           : 1;
-  BITFIELD bWasAchievedOnline  : 1;
-  BITFIELD bWasAchievedOffline : 1;
+  BYTE      MonthEarned;
+  BYTE      DayEarned;
+  BYTE      YearEarned;
+  BYTE      DayOfWeekEarned;
+  int       GamerPoints;
+  BITFIELD  bIsSecret           : 1;
+  BITFIELD  bWasAchievedOnline  : 1;
+  BITFIELD  bWasAchievedOffline : 1;
 };
 struct native FOnlinePartyMember {
   FUniqueNetId UniqueId;
-  FString NickName;
-  BYTE LocalUserNum;
-  ENATType NatType;
-  int TitleId;
-  BITFIELD bIsLocal           : 1;
-  BITFIELD bIsInPartyVoice    : 1;
-  BITFIELD bIsTalking         : 1;
-  BITFIELD bIsInGameSession   : 1;
-  BITFIELD bIsPlayingThisGame : 1;
-  FString SessionId;
-  int Data1;
-  int Data2;
-  int Data3;
-  int Data4;
+  FString      NickName;
+  BYTE         LocalUserNum;
+  ENATType     NatType;
+  int          TitleId;
+  BITFIELD     bIsLocal           : 1;
+  BITFIELD     bIsInPartyVoice    : 1;
+  BITFIELD     bIsTalking         : 1;
+  BITFIELD     bIsInGameSession   : 1;
+  BITFIELD     bIsPlayingThisGame : 1;
+  FString      SessionId;
+  int          Data1;
+  int          Data2;
+  int          Data3;
+  int          Data4;
 };
 struct UOnlineSubsystem {
-  UObject Super;
-  void *VfTable_FTickableObject;
+  UObject                   Super;
+  void                     *VfTable_FTickableObject;
   /** OnlineAccountInterface */
-  FImplementedInterface AccountInterface;
+  FImplementedInterface     AccountInterface;
   /** OnlinePlayerInterface */
-  FImplementedInterface PlayerInterface;
+  FImplementedInterface     PlayerInterface;
   /** OnlinePlayerInterfaceEx */
-  FImplementedInterface PlayerInterfaceEx;
+  FImplementedInterface     PlayerInterfaceEx;
   /** OnlineSystemInterface */
-  FImplementedInterface SystemInterface;
+  FImplementedInterface     SystemInterface;
   /** OnlineGameInterface */
-  FImplementedInterface GameInterface;
+  FImplementedInterface     GameInterface;
   /** OnlineContentInterface */
-  FImplementedInterface ContentInterface;
+  FImplementedInterface     ContentInterface;
   /** OnlineVoiceInterface */
-  FImplementedInterface VoiceInterface;
+  FImplementedInterface     VoiceInterface;
   /** OnlineStatsInterface */
-  FImplementedInterface StatsInterface;
+  FImplementedInterface     StatsInterface;
   /** OnlineNewsInterface */
-  FImplementedInterface NewsInterface;
+  FImplementedInterface     NewsInterface;
   /** OnlinePartyChatInterface */
-  FImplementedInterface PartyChatInterface;
+  FImplementedInterface     PartyChatInterface;
   /** OnlineTitleFileInterface */
-  FImplementedInterface TitleFileInterface;
+  FImplementedInterface     TitleFileInterface;
   /** OnlineAuthInterface */
-  FImplementedInterface AuthInterface;
-  TArray_FNamedInterface NamedInterfaces;
+  FImplementedInterface     AuthInterface;
+  TArray_FNamedInterface    NamedInterfaces;
   TArray_FNamedInterfaceDef NamedInterfaceDefs;
-  TArray_FNamedSession Sessions;
-  BITFIELD bUseBuildIdOverride : 1;
-  int BuildIdOverride;
-  FString IniLocPatcherClassName;
-  /* TODO: IniLocPatcher */
-  void *Patcher;
-  float AsyncMinCompletionTime;
+  TArray_FNamedSession      Sessions;
+  BITFIELD                  bUseBuildIdOverride : 1;
+  int                       BuildIdOverride;
+  FString                   IniLocPatcherClassName;
+  UIniLocPatcher           *Patcher;
+  float                     AsyncMinCompletionTime;
 }; assert_size(UOnlineSubsystem, 224);
 
 /* ---------------------------------------------------------- UOnlineSubsystemCommonImpl ---------------------------------------------------------- */
@@ -6151,6 +6219,35 @@ struct USettings {
   TArray_FLocalizedStringSettingMetaData   LocalizedSettingsMappings;
   TArray_FSettingsPropertyPropertyMetaData PropertyMappings;
 }; assert_size(USettings, 108);
+
+/* ---------------------------------------------------------- UOnlineStatsRead ---------------------------------------------------------- */
+
+struct native FOnlineStatsColumn {
+  int           ColumnNo;
+  FSettingsData StatValue;
+};
+struct native FOnlineStatsRow {
+  FUniqueNetId              PlayerID;
+  FSettingsData             Rank;
+  FString                   NickName;
+  TArray_FOnlineStatsColumn Columns;
+};
+struct native FColumnMetaData {
+  int     Id;
+  FName   Name;
+  FString ColumnName;
+};
+struct UOnlineStatsRead {
+  UOnlineStats           Super;
+  int                    ViewId;
+  int                    SortColumnId;
+  TArray_INT             ColumnIds;
+  int                    TotalRowsInView;
+  TArray_FOnlineStatsRow Rows;
+  TArray_FColumnMetaData ColumnMappings;
+  FString                ViewName;
+  int                    TitleId;
+}; assert_size(UOnlineStatsRead, 136);
 
 /* ---------------------------------------------------------- UOnlineSubsystemSteamworks ---------------------------------------------------------- */
 
@@ -11325,6 +11422,20 @@ struct UInventoryDataProviderGFxObject {
   int                            UnloadableCount;
 }; assert_size(UInventoryDataProviderGFxObject, 196);
 
+/* ---------------------------------------------------------- UTradingPanelGFxObject ---------------------------------------------------------- */
+
+struct UTradingPanelGFxObject {
+  UBaseTopLevelPanelGFxObject   Super;
+  UInventoryListPanelGFxObject *BackpackPanel;
+  /* TODO: TradingOffersPanelGFxObject */
+  void                         *OffersPanel;
+  ETradingPanel                 CurrentPanel;
+  ETradingPanel                 ReturnPanel;
+  AWillowInventory             *OfferingThing;
+  FSortFilterConfiguration      CachedSortFilterConfig;
+  BITFIELD                      bCancelNextDrag : 1;
+}; assert_size(UTradingPanelGFxObject, 208);
+
 /* ---------------------------------------------------------- UStatusMenuInventoryPanelGFxObject ---------------------------------------------------------- */
 
 struct UStatusMenuInventoryPanelGFxObject {
@@ -11999,14 +12110,13 @@ struct UIBodyCompositionInstance {
 /* ---------------------------------------------------------- UIMeleeAttacker ---------------------------------------------------------- */
 
 struct native FMeleeOverTimeState {
-  BITFIELD bIsMeleeActive : 1;
-  /* TODO: MeleeDefinition */
-  void *MeleeDefinition;
-  float MeleeStartTime;
-  float TimeElapsedSinceLastMelee;
-  TArray_AActorPtr HitActors;
-  FVector MeleeStartLocation;
-  FRotator MeleeStartRotation;
+  BITFIELD          bIsMeleeActive : 1;
+  UMeleeDefinition *MeleeDefinition;
+  float             MeleeStartTime;
+  float             TimeElapsedSinceLastMelee;
+  TArray_AActorPtr  HitActors;
+  FVector           MeleeStartLocation;
+  FRotator          MeleeStartRotation;
 };
 struct UIMeleeAttacker {
   UInterface Super;
@@ -12021,11 +12131,10 @@ struct native FGearboxDialogData {
   float Pitch;
 };
 struct native FGearboxDialogReplicatedData {
-  float Pitch;
-  UAkEvent *TalkAkEvent;
-  int AkAudioUniqueID;
-  /* TODO: GearboxDialogAct_Talk */
-  void *TalkAct;
+  float                   Pitch;
+  UAkEvent               *TalkAkEvent;
+  int                     AkAudioUniqueID;
+  UGearboxDialogAct_Talk *TalkAct;
   UGearboxDialogEventTag *EventTag;
 };
 struct UGearboxDialogInterface {
@@ -12269,22 +12378,21 @@ struct UBehaviorSequenceEnableByMission {
 
 __ALIGN(16)
 struct UVendingMachineExGFxMovie {
-  UWillowInventoryGFxMovie        Super;
-  AWillowVendingMachineBase      *VM;
-  UVendingMachineExGFxDefinition *VMGFxDef;
-  AWillowPawn                    *OwnerInventoryPawn;
-  FShopItemData                   ItemOfTheDayData;
-  TArray_FShopItemData            ShopItems;
-  TArray_FShopItemData            BuyBackItems;
-  BITFIELD                        bIsStoragePanelShowingBuyback : 1;
-  BITFIELD                        bShouldStartOnLeftPanel       : 1;
-  BITFIELD                        bOnItemOfTheDay               : 1;
-  UTwoPanelInterfaceGFxObject    *TwoPanelInterface;
-  UItemOfTheDayPanelGFxObject    *ItemOfTheDayPanel;
-  UValueGFxObject                *PlayerMoney;
-  UHealthBarGFxObject            *HealthBar;
-  /* TODO: ShieldBarGFxObject */
-  void *ShieldBar;
+  UWillowInventoryGFxMovie          Super;
+  AWillowVendingMachineBase        *VM;
+  UVendingMachineExGFxDefinition   *VMGFxDef;
+  AWillowPawn                      *OwnerInventoryPawn;
+  FShopItemData                     ItemOfTheDayData;
+  TArray_FShopItemData              ShopItems;
+  TArray_FShopItemData              BuyBackItems;
+  BITFIELD                          bIsStoragePanelShowingBuyback : 1;
+  BITFIELD                          bShouldStartOnLeftPanel       : 1;
+  BITFIELD                          bOnItemOfTheDay               : 1;
+  UTwoPanelInterfaceGFxObject      *TwoPanelInterface;
+  UItemOfTheDayPanelGFxObject      *ItemOfTheDayPanel;
+  UValueGFxObject                  *PlayerMoney;
+  UHealthBarGFxObject              *HealthBar;
+  UShieldBarGFxObject              *ShieldBar;
   UAmmoPanelGFxObject              *AmmoPanel;
   UVendingMachineFeedbackGFxObject *Feedback;
   FString                           HealthShopTitle;
@@ -18284,6 +18392,47 @@ struct UAttributeInitializationDefinition {
   Range                                RangeRestriction;
 }; assert_size(UAttributeInitializationDefinition, 240);
 
+/* ---------------------------------------------------------- UMeleeDefinition ---------------------------------------------------------- */
+
+struct UMeleeDefinition {
+  UGBXDefinition              Super;
+  void                       *VfTable_IIDamageCauser;
+  AttributeInitializationData Damage;
+  UClass                     *DamageSource;
+  FName                       DamageTypeDefinitionOverride;
+  UDamageTypeDefinition      *DamageTypeDefinition;
+  UImpactDefinition          *ImpactDefinition;
+  AttributeInitializationData Knockback;
+  AttributeInitializationData StatusEffectDamage;
+  AttributeInitializationData StatusEffectChance;
+  FName                       HitStartSocketOrBone;
+  FVector                     HitStartOffset;
+  BITFIELD                    bMeleeOverPeriodOfTime : 1;
+  BITFIELD                    bHitEachTargetOnlyOnce : 1;
+  BITFIELD                    bStopMeleeOnLanded     : 1;
+  BITFIELD                    bAffectEnemy           : 1;
+  BITFIELD                    bAffectFriendly        : 1;
+  BITFIELD                    bAffectNeutral         : 1;
+  BITFIELD                    bUseDamageRadius       : 1;
+  BITFIELD                    bExpandRadiusOverTime  : 1;
+  BITFIELD                    bUseTargetCone         : 1;
+  BITFIELD                    bIgnoreWorldGeometry   : 1;
+  float                       MaxMeleeDuration;
+  float                       AttackInterval;
+  float                       DamageRadius;
+  float                       DamageHeight;
+  float                       DamageConeAngle;
+  float                       DamageHeightOffset;
+  float                       ConeAngle;
+  float                       TraceDistance;
+  TArray_UBehaviorBasePtr     OnHitEnemy;
+  TArray_UBehaviorBasePtr     OnHitEnemyHealth;
+  TArray_UBehaviorBasePtr     OnHitEnemyShield;
+  TArray_UBehaviorBasePtr     OnHitFriendly;
+  TArray_UBehaviorBasePtr     OnHitEnemyOrFriendly;
+  TArray_UBehaviorBasePtr     OnKilledEnemy;
+}; assert_size(UMeleeDefinition, 276);
+
 /* ---------------------------------------------------------- UAttributeEffect ---------------------------------------------------------- */
 
 struct AppliedAttributeEffect {
@@ -20068,24 +20217,22 @@ struct UWillowGlobals {
   UClass                                    *TheRelevanceUtilityClass;
   TArray_AWillowInteractiveObjectPtr         ClientInteractiveObjects;
   TArray_FLoadingMovieExceptionInfo          LoadingMovieExceptions;
-  /* TODO: LcdHelper */
-  void *TheLCDHelper;
-  UWillowEffectCoordinator *TheEffectsCoordinator;
-  UWillowObstacleUtility   *TheObstacleUtility;
-  /* TODO: WillowCustomizationManager */
-  void *TheCustomizationManager;
-  UWillowPlayerPawnDataManager *ThePlayerPawnDataManager;
-  UAkBank *PersistentLevelSFXBank;
-  UAkBank *PersistentLevelVoiceBank;
-  TArray_AWillowProjectilePtr ActiveHomingProjectileList;
-  TArray_AWillowPickupPtr PickupList;
+  ULcdHelper                                *TheLCDHelper;
+  UWillowEffectCoordinator                  *TheEffectsCoordinator;
+  UWillowObstacleUtility                    *TheObstacleUtility;
+  UWillowCustomizationManager               *TheCustomizationManager;
+  UWillowPlayerPawnDataManager   *ThePlayerPawnDataManager;
+  UAkBank                        *PersistentLevelSFXBank;
+  UAkBank                        *PersistentLevelVoiceBank;
+  TArray_AWillowProjectilePtr     ActiveHomingProjectileList;
+  TArray_AWillowPickupPtr         PickupList;
   /* TODO: VehicleLifetimeManager */
-  void *TheVehicleLifetimeManager;
+  void                           *TheVehicleLifetimeManager;
   /* TODO: VehicleCrewAnimSetLookupTable */
-  void *AggregatedVehicleCrewAnimSetTable;
+  void                           *AggregatedVehicleCrewAnimSetTable;
   /* TODO: TArray_WillowBoundaryTurretPtr */
-  TArray_voidPtr BoundaryTurretList;
-  UNPCLoadBalancer *TheNPCLoadBalancer;
+  TArray_voidPtr                  BoundaryTurretList;
+  UNPCLoadBalancer               *TheNPCLoadBalancer;
   UDamageOverTimeManager         *TheDamageOverTimeManager;
   TArray_AWillowSpectatorPointPtr SpectatorPointList;
   TArray_FCurrencyPresentation    KnownCurrencies;
@@ -20325,38 +20472,37 @@ struct native FItemBehaviorSet {
   TArray_UBehaviorBasePtr OnUsed;
 };
 struct UItemDefinition {
-  UWillowInventoryDefinition Super;
-  void *VfTable_IIBehaviorProvider;
-  void *VfTable_IIConstructObject;
-  UWillowImpactDefinition *DroppedImpact;
-  FString UseFailureCharacterMessage;
-  FString ItemName;
-  BITFIELD bItemNameIsFullName : 1;
-  BITFIELD bUseMeshCompositing : 1;
-  TArray_UItemNamePartDefinitionPtr TitleList;
-  TArray_UItemNamePartDefinitionPtr PrefixList;
-  UStaticMesh *NonCompositeStaticMesh;
-  USkeletalMesh *NonCompositeSkeletalMesh;
-  UMaterialInterface *OverrideMaterial;
-  UGestaltSkeletalMeshDefinition *GestaltMesh;
-  UItemPartListDefinition *AlphaParts;
-  UItemPartListDefinition *BetaParts;
-  UItemPartListDefinition *GammaParts;
-  UItemPartListDefinition *DeltaParts;
-  UItemPartListDefinition *EpsilonParts;
-  UItemPartListDefinition *ZetaParts;
-  UItemPartListDefinition *EtaParts;
-  UItemPartListDefinition *ThetaParts;
-  UItemPartListDefinition *MaterialParts;
-  UBehaviorProviderDefinition *BehaviorProviderDefinition;
-  FItemBehaviorSet Behaviors;
-  TArray_AttributeEffectData ExternalAttributeEffects;
-  TArray_AttributeEffectData ItemAttributeEffects;
-  TArray_FAttributePriorityData ItemCardAttributes;
+  UWillowInventoryDefinition                 Super;
+  void                                      *VfTable_IIBehaviorProvider;
+  void                                      *VfTable_IIConstructObject;
+  UWillowImpactDefinition                   *DroppedImpact;
+  FString                                    UseFailureCharacterMessage;
+  FString                                    ItemName;
+  BITFIELD                                   bItemNameIsFullName : 1;
+  BITFIELD                                   bUseMeshCompositing : 1;
+  TArray_UItemNamePartDefinitionPtr          TitleList;
+  TArray_UItemNamePartDefinitionPtr          PrefixList;
+  UStaticMesh                               *NonCompositeStaticMesh;
+  USkeletalMesh                             *NonCompositeSkeletalMesh;
+  UMaterialInterface                        *OverrideMaterial;
+  UGestaltSkeletalMeshDefinition            *GestaltMesh;
+  UItemPartListDefinition                   *AlphaParts;
+  UItemPartListDefinition                   *BetaParts;
+  UItemPartListDefinition                   *GammaParts;
+  UItemPartListDefinition                   *DeltaParts;
+  UItemPartListDefinition                   *EpsilonParts;
+  UItemPartListDefinition                   *ZetaParts;
+  UItemPartListDefinition                   *EtaParts;
+  UItemPartListDefinition                   *ThetaParts;
+  UItemPartListDefinition                   *MaterialParts;
+  UBehaviorProviderDefinition               *BehaviorProviderDefinition;
+  FItemBehaviorSet                           Behaviors;
+  TArray_AttributeEffectData                 ExternalAttributeEffects;
+  TArray_AttributeEffectData                 ItemAttributeEffects;
+  TArray_FAttributePriorityData              ItemCardAttributes;
   TArray_UAttributePresentationDefinitionPtr CustomPresentations;
-  UPlayerClassIdentifierDefinition *RequiredPlayerClass;
-  /* TODO: InteractionIconDefinition */
-  void *PickupIconOverride;
+  UPlayerClassIdentifierDefinition          *RequiredPlayerClass;
+  UInteractionIconDefinition                *PickupIconOverride;
 }; assert_size(UItemDefinition, 572);
 
 /* ---------------------------------------------------------- UUsableItemDefinition ---------------------------------------------------------- */
@@ -21111,9 +21257,9 @@ struct AWillowInventory {
   UGBXDefinition               *RuntimeAttributeSlotSkill;
   float                         TempStatModifier;
   float                         TempStatModifierBaseValue;
-  TArray_UAttributeModifier     TempStatModifierModifierStack;
+  TArray_UAttributeModifierPtr  TempStatModifierModifierStack;
   TArray_AppliedAttributeEffect AppliedAttributeSlotEffects;
-  TArray_AActor                 ExternalLikenessConsumers;
+  TArray_AActorPtr              ExternalLikenessConsumers;/* 2188 */
 }; assert_size(AWillowInventory, 2200);
 
 /* ---------------------------------------------------------- UWillowInventoryStorage ---------------------------------------------------------- */
@@ -21664,35 +21810,34 @@ struct UItemInspectionGFxMovie {
 
 __ALIGN(16)
 struct UTradingGFxMovie {
-  UWillowInventoryGFxMovie Super;
-  FString OfferingString;
-  FString ReceivingString;
-  FString TooltipString;
-  FString ToolTipString_Split;
-  FString ReadyString;
-  FString TradeString;
-  FString DuelString;
-  FString CancelDuelString;
-  FString CancelTradeString;
-  FString WinnerTakeAllString;
-  FString NoRoomForItemsString;
-  int MyMoneyOffer;
-  int CachedPartnerMoneyOffer;
-  PlayerTradingStance CachedMyStance;
-  PlayerTradingStance CachedPartnerStance;
-  FCellContentData OfferedContents[8];
-  TArray_AWillowInventoryPtr BackpackThings;
-  /* TODO: TradingPanelGFxObject */
-  void *TradingPanel;
+  UWillowInventoryGFxMovie        Super;
+  FString                         OfferingString;
+  FString                         ReceivingString;
+  FString                         TooltipString;
+  FString                         ToolTipString_Split;
+  FString                         ReadyString;
+  FString                         TradeString;
+  FString                         DuelString;
+  FString                         CancelDuelString;
+  FString                         CancelTradeString;
+  FString                         WinnerTakeAllString;
+  FString                         NoRoomForItemsString;
+  int                             MyMoneyOffer;
+  int                             CachedPartnerMoneyOffer;
+  PlayerTradingStance             CachedMyStance;
+  PlayerTradingStance             CachedPartnerStance;
+  FCellContentData                OfferedContents[8];
+  TArray_AWillowInventoryPtr      BackpackThings;
+  UTradingPanelGFxObject         *TradingPanel;
   /* TODO: TradingGFxDefinition */
-  void *TradingDef;
-  FSortFilterConfiguration CompareConfiguration;
+  void                           *TradingDef;
+  FSortFilterConfiguration        CompareConfiguration;
   TArray_FSortFilterConfiguration GenericSortConfigurations;
-  int GenericSortConfigIndex;
-  BITFIELD bDoDuelingCheck     : 1;
-  BITFIELD bDuelingAllowed     : 1;
-  BITFIELD bUseTextboxForMoney : 1;
-  FString LastMoneyOfferString;
+  int                             GenericSortConfigIndex;
+  BITFIELD                        bDoDuelingCheck     : 1;
+  BITFIELD                        bDuelingAllowed     : 1;
+  BITFIELD                        bUseTextboxForMoney : 1;
+  FString                         LastMoneyOfferString;
 }; assert_size(UTradingGFxMovie, 1472);
 
 /* ---------------------------------------------------------- UStatusMenuExGFxMovie ---------------------------------------------------------- */

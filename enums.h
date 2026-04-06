@@ -8795,3 +8795,12 @@ enum EExprToken {
 	EX_FirstNative			= 0x70,
 	EX_Max					= 0x1000,
 };
+
+/* ---------------------------------------------------------- UTradingPanelGFxObject ---------------------------------------------------------- */
+
+typedef enum ETradingPanel : unsigned char {
+  ETP_Backpack,                   // 0
+  ETP_Offers,                     // 1
+  ETP_MAX                         // 2
+} ETradingPanel;
+#define ETradingPanel  ETradingPanel

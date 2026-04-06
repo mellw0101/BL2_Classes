@@ -174,6 +174,23 @@ _(FScriptDelegate);
 
 _(FImplementedInterface);
 
+_(FPendingCustomization);
+_(FProductCustomizationInfo);
+_(FCustomizationSizeMapping);
+_(UWillowCustomizationManager);
+
+/* ---------------------------------------------------------- ULcdHelper ---------------------------------------------------------- */
+
+_(ULcdHelper);
+
+/* ---------------------------------------------------------- UUIManager ---------------------------------------------------------- */
+
+_(UUIManager);
+
+/* ---------------------------------------------------------- UOnlineStats ---------------------------------------------------------- */
+
+_(UOnlineStats);
+
 /* ---------------------------------------------------------- UIniLocPatcher ---------------------------------------------------------- */
 
 _(FIniLocFileEntry);
@@ -528,6 +545,18 @@ _(UGearboxDialogNode);
 /* ---------------------------------------------------------- UGearboxDialogAction ---------------------------------------------------------- */
 
 _(UGearboxDialogAction);
+
+/* ---------------------------------------------------------- UGearboxDialogNonTemplateAction ---------------------------------------------------------- */
+
+_(UGearboxDialogNonTemplateAction);
+
+/* ---------------------------------------------------------- UGearboxDialogAct_Talk ---------------------------------------------------------- */
+
+_(UGearboxDialogAct_Talk);
+
+/* ---------------------------------------------------------- UGearboxDialogAct_Trigger ---------------------------------------------------------- */
+
+_(UGearboxDialogAct_Trigger);
 
 /* ---------------------------------------------------------- UGearboxDialogVariable ---------------------------------------------------------- */
 
@@ -1120,6 +1149,13 @@ _(FLocalizedStringSettingMetaData);
 _(FIdToStringMapping);
 _(FSettingsPropertyPropertyMetaData);
 _(USettings);
+
+/* ---------------------------------------------------------- UOnlineStatsRead ---------------------------------------------------------- */
+
+_(FOnlineStatsColumn);
+_(FOnlineStatsRow);
+_(FColumnMetaData);
+_(UOnlineStatsRead);
 
 /* ---------------------------------------------------------- UOnlineSubsystemSteamworks ---------------------------------------------------------- */
 
@@ -2164,6 +2200,10 @@ _(FHeavyInventoryElement);
 _(FSortFilterConfiguration);
 _(UInventoryDataProviderGFxObject);
 
+/* ---------------------------------------------------------- UTradingPanelGFxObject ---------------------------------------------------------- */
+
+_(UTradingPanelGFxObject);
+
 /* ---------------------------------------------------------- UStatusMenuInventoryPanelGFxObject ---------------------------------------------------------- */
 
 _(UStatusMenuInventoryPanelGFxObject);
@@ -3184,6 +3224,10 @@ _(ConditionalValueExpression);
 _(ConditionalInitializationExpressions);
 _(AttributeBaseValueData);
 _(UAttributeInitializationDefinition);
+
+/* ---------------------------------------------------------- UMeleeDefinition ---------------------------------------------------------- */
+
+_(UMeleeDefinition);
 
 /* ---------------------------------------------------------- UAttributeEffect ---------------------------------------------------------- */
 
