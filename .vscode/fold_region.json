@@ -1,0 +1,22 @@
+"foldDefinitions": [
+  /* Block comments */
+  {
+    "foldStartRegex": "^(?=.*/\\*(?!.*\\*/))",
+    "foldEndRegex": "^\\s*(?!.*/\\*)(?=.*\\*/[\\s*$\\s*\\\\])",
+    // "foldEndRegex": "\\*+/[\\s]*$",
+    "isFoldedByDefault": false
+  },
+  /* Keyword 'template' */
+  {
+    "foldStartRegex": "^\\s*template[\\s]*\\<?(?:\\s*$)?(?!.*>\\s*$)",
+    "foldEndRegex": "^(?!.*<).*>\\s*$",
+    // "foldEndRegex": "(?!.*<)>[\\s]*$",
+    "isFoldedByDefault": false
+  },
+  /* '()' */
+  {
+    "foldStartRegex": "^(?=.*\\(((?!.*[\\)}]))|(?=.*\\((?=.*\"(?=.*\"(?!.*[\\)}])))))",
+    "foldEndRegex": "^(?!.*[\\({])(?=.*\\)[,;\\s*$])",
+    "isFoldedByDefault": false
+  },
+]
