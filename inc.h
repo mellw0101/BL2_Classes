@@ -322,6 +322,18 @@ _(URB_BodyInstance);
 _(FExpressionInput);
 _(UMaterialExpression);
 
+/* ---------------------------------------------------------- UMaterialExpressionComment ---------------------------------------------------------- */
+
+_(UMaterialExpressionComment);
+
+/* ---------------------------------------------------------- UMaterialExpressionSwizzle ---------------------------------------------------------- */
+
+_(UMaterialExpressionSwizzle);
+
+/* ---------------------------------------------------------- UMaterialExpressionCompound ---------------------------------------------------------- */
+
+_(UMaterialExpressionCompound);
+
 /* ---------------------------------------------------------- UHitRegionHelper ---------------------------------------------------------- */
 
 _(FHitRegionDamage);
@@ -1475,6 +1487,15 @@ _(FBasedPosition);
 _(FResourcePoolReference);
 _(AActor);
 
+/* ---------------------------------------------------------- AAnemoneInfectionState ---------------------------------------------------------- */
+
+_(FFDisplayTimer);
+_(AAnemoneInfectionState);
+
+/* ---------------------------------------------------------- AKeyPoint ---------------------------------------------------------- */
+
+_(AKeyPoint);
+
 /* ---------------------------------------------------------- AWillowBoundaryTurret ---------------------------------------------------------- */
 
 _(AWillowBoundaryTurret);
@@ -2133,6 +2154,10 @@ _(UGFxMovieStatePlayerAware);
 
 _(UGearboxGFxMovie);
 
+/* ---------------------------------------------------------- UGFxMovieInteractiveObject ---------------------------------------------------------- */
+
+_(UGFxMovieInteractiveObject);
+
 /* ---------------------------------------------------------- UWillowGFxMovie ---------------------------------------------------------- */
 
 _(UWillowGFxMovie);
@@ -2460,6 +2485,9 @@ _(UComponent);
 
 _(FCurveEdInterface);
 _(UScriptStruct);
+
+/* ---------------------------------------------------------- UStructProperty ---------------------------------------------------------- */
+
 _(UStructProperty);
 _(FOutParmRec);
 _(FFrame);
@@ -2469,8 +2497,16 @@ _(FPushedState);
 
 _(UFunction);
 
+/* ---------------------------------------------------------- UDistributionFloat ---------------------------------------------------------- */
+
 _(UDistributionFloat);
+
+/* ---------------------------------------------------------- UDistributionVector ---------------------------------------------------------- */
+
 _(UDistributionVector);
+
+/* ---------------------------------------------------------- UFactory ---------------------------------------------------------- */
+
 _(UFactory);
 _(FSceneInterface);
 
@@ -3303,6 +3339,10 @@ _(ConditionalInitializationExpressions);
 _(AttributeBaseValueData);
 _(UAttributeInitializationDefinition);
 
+/* ---------------------------------------------------------- UAnemoneInfectionDefinition ---------------------------------------------------------- */
+
+_(UAnemoneInfectionDefinition);
+
 /* ---------------------------------------------------------- UMeleeDefinition ---------------------------------------------------------- */
 
 _(UMeleeDefinition);
@@ -3927,6 +3967,10 @@ _(FServerResponseLine);
 
 _(AInfo);
 
+/* ---------------------------------------------------------- AHeightFog ---------------------------------------------------------- */
+
+_(AHeightFog);
+
 /* ---------------------------------------------------------- APotentialClimbWatcher ---------------------------------------------------------- */
 
 _(APotentialClimbWatcher);
@@ -4003,11 +4047,13 @@ _(FNavMeshPathGoalEvaluatorCacheDatum);
 _(FHostMigrationState);
 _(FNavigationArea);
 
+/* ---------------------------------------------------------- USurface ---------------------------------------------------------- */
+
 _(USurface);
-_(LightmassMaterialInterfaceSettings);
 
 /* ---------------------------------------------------------- UMaterialInterface ---------------------------------------------------------- */
 
+_(FLightmassMaterialInterfaceSettings);
 _(UMaterialInterface);
 
 /* ---------------------------------------------------------- UMaterial ---------------------------------------------------------- */

@@ -312,28 +312,22 @@ struct FPostProcessSettings {
 struct FRawDistribution {
   /** Type of distribution, NOT NEEDED */
 	BYTE Type;
-
 	/** How to process the data in the lookup table */
 	BYTE Op;
-
 	/** How many elements per entry (ie, RDO_Random needs two elements to rand between) IMPLIED BY OP!!!*/
 	BYTE LookupTableNumElements;
-
 	/** The size of one element (1 for floats, 3 for vectors, etc) multiplied by number of elements */
 	BYTE LookupTableChunkSize;
-
 	/** Lookup table of values */
 	TArray_LOOKUPVALUE LookupTable;
-
 	/** Time between values in the lookup table */
 	float LookupTableTimeScale;
-
 	/** Absolute time of the first value */
 	float LookupTableStartTime;
 };
 
 struct FRawDistributionFloat {
-  FRawDistribution Super;
+  FRawDistribution    Super;
   UDistributionFloat *Distribution;
 };
 
@@ -2341,16 +2335,43 @@ struct FExpressionInput {
   int                  GCC64_Padding;
 };
 struct UMaterialExpression {
-  UObject  Super;
-  BITFIELD bRealtimePreview          : 1;
-  BITFIELD bNeedToUpdatePreview      : 1;
-  BITFIELD bIsParameterExpression    : 1;
-  BITFIELD bShowOutputNameOnPin      : 1;
-  BITFIELD bHidePreviewWindow        : 1;
-  BITFIELD bUsedByStaticParameterSet : 1;
-  /* TODO: MaterialExpressionCompound */
-  void *Compound;
+  UObject                      Super;
+  BITFIELD                     bRealtimePreview          : 1;
+  BITFIELD                     bNeedToUpdatePreview      : 1;
+  BITFIELD                     bIsParameterExpression    : 1;
+  BITFIELD                     bShowOutputNameOnPin      : 1;
+  BITFIELD                     bHidePreviewWindow        : 1;
+  BITFIELD                     bUsedByStaticParameterSet : 1;
+  UMaterialExpressionCompound *Compound;
 }; assert_size(UMaterialExpression, 68);
+
+/* ---------------------------------------------------------- UMaterialExpressionComment ---------------------------------------------------------- */
+
+struct UMaterialExpressionComment {
+  UMaterialExpression Super;
+  int                 PosX;
+  int                 PosY;
+  int                 SizeX;
+  int                 SizeY;
+  FString             Text;
+}; assert_size(UMaterialExpressionComment, 96);
+
+/* ---------------------------------------------------------- UMaterialExpressionSwizzle ---------------------------------------------------------- */
+
+struct UMaterialExpressionSwizzle {
+  UMaterialExpression Super;
+  FExpressionInput    Input;
+  FString             SwizzleMask;
+}; assert_size(UMaterialExpressionSwizzle, 108);
+
+/* ---------------------------------------------------------- UMaterialExpressionCompound ---------------------------------------------------------- */
+
+struct UMaterialExpressionCompound {
+  UMaterialExpression           Super;
+  TArray_UMaterialExpressionPtr MaterialExpressions;
+  FString                       Caption;
+  BITFIELD                      bExpanded : 1;
+}; assert_size(UMaterialExpressionCompound, 96);
 
 /* ---------------------------------------------------------- UHitRegionHelper ---------------------------------------------------------- */
 
@@ -4734,9 +4755,9 @@ struct UParticleLODLevel {
 /* ---------------------------------------------------------- UParticleEmitter ---------------------------------------------------------- */
 
 struct native FParticleBurst {
-  int Count;
-  int CountLow;
-  float Time;
+  int                   Count;
+  int                   CountLow;
+  float                 Time;
   FRawDistributionFloat CountDistribution;
 };
 struct UParticleEmitter {
@@ -7454,7 +7475,7 @@ struct UWillowPhysicalMaterialProperty {
 /* ---------------------------------------------------------- AActor ---------------------------------------------------------- */
 
 struct native FTimerData {
-  BITFIELD bLoop : 1;
+  BITFIELD bLoop   : 1;
   BITFIELD bPaused : 1;
   FName    FuncName;
   float    Rate;
@@ -7699,6 +7720,41 @@ struct AActor {
 	TArray_USeqAct_LatentPtr  LatentActions;
 	float                     MostRecentDamageTaken;/* 388 */
 }; assert_size(AActor, 392);
+
+/* ---------------------------------------------------------- AAnemoneInfectionState ---------------------------------------------------------- */
+
+struct native FFDisplayTimer {
+  BITFIELD bShowing : 1;
+  float    Timer;
+  float    Speed;
+  float    Value;
+};
+struct AAnemoneInfectionState {
+  AActor                       Super;
+  UGFxMovieInteractiveObject  *TimerMovie;
+  AWillowPlayerController     *WPC;
+  float                        InfectionRate;
+  float                        CurrentInfection;
+  float                        CurrentSkillFXValue;
+  float                        SkillFXSpeed;
+  float                        DamageTimer;
+  float                        TemporarilyHiddenTimer;
+  BITFIELD                     bIsLocalPlayer : 1;
+  BITFIELD                     bIsImmune      : 1;
+  TArray_AActorPtr             SmallZones;
+  TArray_AActorPtr             LargeZones;
+  UAnemoneInfectionDefinition *InfectionDefinition;
+  AHeightFog                  *HeightFog;
+  float                        HeightFogValue;
+  FFDisplayTimer               DisplayTimer;
+}; assert_size(AAnemoneInfectionState, 480);
+
+/* ---------------------------------------------------------- AKeyPoint ---------------------------------------------------------- */
+
+struct AKeyPoint {
+  AActor            Super;
+  USpriteComponent *SpriteComp;
+}; assert_size(AKeyPoint, 396);
 
 /* ---------------------------------------------------------- AWillowBoundaryTurret ---------------------------------------------------------- */
 
@@ -8703,7 +8759,6 @@ DECLARE_A_TMAP(UMaterialInterfacePtr, TScopedPointer_FRawIndexBuffer16or32);
 
 /* ---------------------------------------------------------- AVolume ---------------------------------------------------------- */
 
-#pragma pack(push, 4)
 struct AVolume {
 	ABrush           Super;
 	TArray_AActorPtr AssociatedActors;
@@ -8711,7 +8766,6 @@ struct AVolume {
 	BITFIELD         bProcessAllActors : 1; /* 00 */
 	BITFIELD         bPawnsOnly        : 1; /* 000 */
 }; assert_size(AVolume, 444);
-#pragma pack(pop)
 
 /* ---------------------------------------------------------- APortalVolume ---------------------------------------------------------- */
 
@@ -8736,57 +8790,52 @@ struct FCheckpointRecord {
   BITFIELD bPainCausing : 1;
   BITFIELD bActive      : 1;
 };
-#pragma pack(push, 4)
 struct APhysicsVolume {
-  AVolume Super;
-  FVector ZoneVelocity;
-  BITFIELD bVelocityAffectsWalking   : 1;
-  BITFIELD bPainCausing              : 1;
-  BITFIELD bAIShouldIgnorePain       : 1;
-  BITFIELD bEntryPain                : 1;
-  BITFIELD BACKUP_bPainCausing       : 1;
-  BITFIELD bDestructive              : 1;
-  BITFIELD bNoInventory              : 1;
-  BITFIELD bMoveProjectiles          : 1;
-  BITFIELD bBounceVelocity           : 1;
-  BITFIELD bNeutralZone              : 1;
-  BITFIELD bCrowdAgentsPlayDeathAnim : 1;
-  BITFIELD bPhysicsOnContact         : 1;
-  BITFIELD bWaterVolume              : 1;
-  float GroundFriction;
-  float TerminalVelocity;
-  float DamagePerSec;
-  /** Class<DamageType> */
-  UClass *DamageType;
+  AVolume                Super;
+  FVector                ZoneVelocity;
+  BITFIELD               bVelocityAffectsWalking   : 1;
+  BITFIELD               bPainCausing              : 1;
+  BITFIELD               bAIShouldIgnorePain       : 1;
+  BITFIELD               bEntryPain                : 1;
+  BITFIELD               BACKUP_bPainCausing       : 1;
+  BITFIELD               bDestructive              : 1;
+  BITFIELD               bNoInventory              : 1;
+  BITFIELD               bMoveProjectiles          : 1;
+  BITFIELD               bBounceVelocity           : 1;
+  BITFIELD               bNeutralZone              : 1;
+  BITFIELD               bCrowdAgentsPlayDeathAnim : 1;
+  BITFIELD               bPhysicsOnContact         : 1;
+  BITFIELD               bWaterVolume              : 1;
+  float                  GroundFriction;
+  float                  TerminalVelocity;
+  float                  DamagePerSec;
+  UClass                *DamageType;  /** Class<DamageType> */
   UDamageTypeDefinition *DamageTypeDefinition;
-  UImpactDefinition *ImpactDefinition;
-  int Priority;
-  float FluidFriction;
-  float PainInterval;
-  float RigidBodyDamping;
-  float MaxDampingForce;
-  AInfo *PainTimer;
-  AController *DamageInstigator;
-  APhysicsVolume *NextPhysicsVolume;
+  UImpactDefinition     *ImpactDefinition;
+  int                    Priority;
+  float                  FluidFriction;
+  float                  PainInterval;
+  float                  RigidBodyDamping;
+  float                  MaxDampingForce;
+  AInfo                 *PainTimer;
+  AController           *DamageInstigator;
+  APhysicsVolume        *NextPhysicsVolume;
 }; assert_size(APhysicsVolume, 516);
-#pragma pack(pop)
 
 /* ---------------------------------------------------------- ALadderVolume ---------------------------------------------------------- */
 
-#pragma pack(push, 4)
 struct ALadderVolume {
-  APhysicsVolume Super;
-  FRotator WallDir;
-  FVector LookDir;
-  FVector ClimbDir;
-  ALadder *LadderList;
-  BITFIELD bNoPhysicalLadder    : 1; /* 0 */
-  BITFIELD bAutoPath            : 1; /* 00 */
-  BITFIELD bAllowLadderStrafing : 1; /* 000 */
-  APawn *PendingClimber;
+  APhysicsVolume   Super;
+  FRotator         WallDir;
+  FVector          LookDir;
+  FVector          ClimbDir;
+  ALadder         *LadderList;
+  BITFIELD         bNoPhysicalLadder    : 1; /* 0 */
+  BITFIELD         bAutoPath            : 1; /* 00 */
+  BITFIELD         bAllowLadderStrafing : 1; /* 000 */
+  APawn           *PendingClimber;
   UArrowComponent *WallDirArrow;
 }; assert_size(ALadderVolume, 568);
-#pragma pack(pop)
 
 /* ---------------------------------------------------------- FCheckResult ---------------------------------------------------------- */
 
@@ -8803,19 +8852,18 @@ struct FIteratorActorList {
 
 /* Results from a collision check. */
 struct FCheckResult {
-  FIteratorActorList  Super;
-	FVector						  Location;	// Location of the hit in coordinate system of the returner.
-	FVector						  Normal;		// Normal vector in coordinate system of the returner. Zero=none.
-	float						    Time;		// Time until hit, if line check.
-	INT							    Item;		// Primitive data item which was hit, INDEX_NONE=none.
-	UMaterialInterface *Material;	// Material of the item which was hit.
-	UPhysicalMaterial *PhysMaterial; // Physical material that was hit
-	UPrimitiveComponent *Component;	// PrimitiveComponent that the check hit.
-	UPrimitiveComponent *SourceComponent;// PrimitiveComponent of testing actor which collided with 'Component' (above)
-	FName BoneName;	// Name of bone we hit (for skeletal meshes).
-	ULevel *Level;		// Level that was hit in case of BSPLineCheck
-	INT LevelIndex; // Index of the level that was hit in the case of BSP checks.
-
+  FIteratorActorList   Super;
+	FVector						   Location;         /** Location of the hit in coordinate system of the returner. */
+	FVector						   Normal;           /** Normal vector in coordinate system of the returner. Zero=none. */
+	float						     Time;             /** Time until hit, if line check. */
+	INT							     Item;             /** Primitive data item which was hit, INDEX_NONE=none. */
+	UMaterialInterface  *Material;         /** Material of the item which was hit. */
+	UPhysicalMaterial   *PhysMaterial;     /** Physical material that was hit */
+	UPrimitiveComponent *Component;        /** PrimitiveComponent that the check hit. */
+	UPrimitiveComponent *SourceComponent;  /** PrimitiveComponent of testing actor which collided with 'Component' (above) */
+	FName                BoneName;         /** Name of bone we hit (for skeletal meshes). */
+	ULevel              *Level;            /** Level that was hit in case of BSPLineCheck. */
+	int                  LevelIndex;       /** Index of the level that was hit in the case of BSP checks. */
 	/** This line check started penetrating the primitive. */
 	UBOOL bStartPenetrating;
 };
@@ -10906,6 +10954,12 @@ struct UGearboxGFxMovie {
   FScriptDelegate __OnClosed__Delegate;
 }; assert_size(UGearboxGFxMovie, 596);
 
+/* ---------------------------------------------------------- UGFxMovieInteractiveObject ---------------------------------------------------------- */
+
+struct UGFxMovieInteractiveObject {
+  UGearboxGFxMovie Super;
+}; assert_size(UGFxMovieInteractiveObject, 596);
+
 /* ---------------------------------------------------------- UWillowGFxMovie ---------------------------------------------------------- */
 
 struct UWillowGFxMovie {
@@ -12362,22 +12416,20 @@ struct native FComponentData {
   UEngineInteractionIconDefinition *SecondaryInteractIcon;
 };
 struct native FInstanceDataUnion {
-  FName Name;
-  /** EInstanceDataType */
+  FName             Name;
   EInstanceDataType Type;
-  /** EReplicationType */
-  EReplicationType Replication;
-  BYTE MaxSwitchValue;
-  BYTE BitsRequiredForMaxSwitchValue;
-  BITFIELD Bool          : 1;
-  BITFIELD DeleteByOwner : 1;
-  int Int;
-  float Float;
-  FVector Vector;
-  UObject *Object;
-  FComponentData ComponentData;
-  FString String;
-  int BodyCompositionIndex;
+  EReplicationType  Replication;
+  BYTE              MaxSwitchValue;
+  BYTE              BitsRequiredForMaxSwitchValue;
+  BITFIELD          Bool          : 1;
+  BITFIELD          DeleteByOwner : 1;
+  int               Int;
+  float             Float;
+  FVector           Vector;
+  UObject          *Object;
+  FComponentData    ComponentData;
+  FString           String;
+  int               BodyCompositionIndex;
 };
 struct native FInstanceDataSet {
   TArray_FInstanceDataUnion Data;
@@ -13401,6 +13453,8 @@ struct FCurveEdInterface {
   } *vftable;
 };
 
+/* ---------------------------------------------------------- UScriptStruct ---------------------------------------------------------- */
+
 struct UScriptStruct {
   UStruct     Super;
   FString     DefaultStructPropText;
@@ -13408,20 +13462,23 @@ struct UScriptStruct {
   TArray_BYTE StructDefaults;
 }; assert_size(UScriptStruct, 168);
 
-#pragma pack(push, 4)
+/* ---------------------------------------------------------- UStructProperty ---------------------------------------------------------- */
+
 struct UStructProperty {
   UProperty      Super;
   UScriptStruct* Struct;
 }; assert_size(UStructProperty, 132);
-#pragma pack(pop)
+
+/* ---------------------------------------------------------- UDistributionFloat ---------------------------------------------------------- */
 
 struct UDistributionFloat {
-  UComponent Super;
+  UComponent        Super;
   FCurveEdInterface CurveEd;
-  BITFIELD bCanBeBaked:1;
-  BITFIELD bIsDirty:1;
-  BITFIELD : 0;
+  BITFIELD          bCanBeBaked : 1;
+  BITFIELD          bIsDirty    : 1;
 }; assert_size(UDistributionFloat, 80);
+
+/* ---------------------------------------------------------- UDistributionVector ---------------------------------------------------------- */
 
 struct UDistributionVector {
   UComponent Super;
@@ -13430,6 +13487,8 @@ struct UDistributionVector {
   BITFIELD bIsDirty:1;
   BITFIELD : 0;
 }; assert_size(UDistributionVector, 80);
+
+/* ---------------------------------------------------------- UFactory ---------------------------------------------------------- */
 
 /* An object responsible for creating and importing new objects. */
 struct UFactory {
@@ -13442,11 +13501,12 @@ struct UFactory {
 	BITFIELD        bEditAfterNew : 1;
 	BITFIELD        bEditorImport : 1;
 	BITFIELD        bText         : 1;
-	INT             AutoPriority;
-
-	/** List of game names that this factory can be used for (if empty, all games valid) */
-	TArray_FString ValidGameNames;
+	int             AutoPriority;
+	/** List of game names that this factory can be used for (if empty, all games valid). */
+	TArray_FString  ValidGameNames;
 }; assert_size(UFactory, 112);
+
+/* ---------------------------------------------------------- FFrame ---------------------------------------------------------- */
 
 /* Information remembered about an Out parameter. */
 struct FOutParmRec {
@@ -13454,9 +13514,6 @@ struct FOutParmRec {
 	BYTE        *PropAddr;
 	FOutParmRec *NextOutParm;
 };
-
-/* ---------------------------------------------------------- FFrame ---------------------------------------------------------- */
-
 /* Information about script execution at one stack level. */
 struct FFrame {
   FOutputDevice Super;
@@ -13472,9 +13529,9 @@ struct FFrame {
 
 /* Contains information needed for returning to a previous state */
 struct FPushedState {
-  UState* State;
-  UStruct* Node;
-  BYTE* Code;
+  UState  *State;
+  UStruct *Node;
+  BYTE    *Code;
 };
 
 /* ---------------------------------------------------------- FStateFrame ---------------------------------------------------------- */
@@ -13507,10 +13564,9 @@ struct UFunction {
   FName	  FriendlyName;   /** Friendly version for this function, mainly for operators. */
   BYTE	  OperPrecedence;
 	/* Variables in memory only. */
-	BYTE	NumParms;
-	WORD	ParmsSize;
-	WORD	ReturnValueOffset;
-
+	BYTE	  NumParms;
+	WORD	  ParmsSize;
+	WORD	  ReturnValueOffset;
 	/** pointer to first local struct property in this UFunction that contains defaults */
 	UStructProperty* FirstStructWithDefaults;
   UObject_PMF Func;
@@ -18544,14 +18600,12 @@ struct UWillowExplosionImpactDefinition {
 
 /* ---------------------------------------------------------- UAttributeInitializationDefinition ---------------------------------------------------------- */
 
-/* ----------------------------- AttributeInitializationData ----------------------------- */
 struct AttributeInitializationData {
   float                               BaseValueConstant;
   UAttributeDefinition               *BaseValueAttribute;
   UAttributeInitializationDefinition *InitializationDefinition;
   float                               BaseValueScaleConstant;
 };
-/* ----------------------------- BalanceFormula ----------------------------- */
 struct BalanceFormula {
   BITFIELD                    bEnabled : 1;
   AttributeInitializationData Multiplier;
@@ -18559,32 +18613,27 @@ struct BalanceFormula {
   AttributeInitializationData Power;
   AttributeInitializationData Offset;
 };
-/* ----------------------------- Variance ----------------------------- */
 struct Variance {
   BITFIELD                    bEnabled : 1;
   BITFIELD                    bUseIntegerRandomization : 1;
   AttributeInitializationData LowerBound;
   AttributeInitializationData UpperBound;
 };
-/* ----------------------------- Range ----------------------------- */
 struct Range {
   BITFIELD                    bEnableMinValueRestriction : 1;
   AttributeInitializationData MinValue;
   BITFIELD                    bEnableMaxValueRestriction : 1;
   AttributeInitializationData MaxValue;
 };
-/* ----------------------------- ConditionalValueExpression ----------------------------- */
 struct ConditionalValueExpression {
   AttributeInitializationData    BaseValueIfTrue;
   TArray_AttributeExpressionData Expressions;
 };
-/* ----------------------------- ConditionalInitializationExpressions ----------------------------- */
 struct ConditionalInitializationExpressions {
   BITFIELD                          bEnabled : 1;
   TArray_ConditionalValueExpression ConditionalExpressionList;
   AttributeInitializationData       DefaultBaseValue;
 };
-/* ----------------------------- AttributeBaseValueData ----------------------------- */
 struct AttributeBaseValueData {
   UAttributeDefinition       *Attribute;
   AttributeInitializationData BaseValue;
@@ -18598,6 +18647,33 @@ struct UAttributeInitializationDefinition {
   Variance                             RandomVariance;
   Range                                RangeRestriction;
 }; assert_size(UAttributeInitializationDefinition, 240);
+
+/* ---------------------------------------------------------- UAnemoneInfectionDefinition ---------------------------------------------------------- */
+
+struct UAnemoneInfectionDefinition {
+  UGBXDefinition               Super;
+  float                        FullInfectionTime;
+  float                        FullHealingTime;
+  UGFxMovieDefinition         *MovieDefinition;
+  float                        DisplaySpeed;
+  float                        DiscoveryTextHiddenTime;
+  UParticleSystem             *InfectionFXTemplate;
+  USkillDefinition            *GasCloudSkill;
+  UParticleSystem             *SkillFXTemplate;
+  float                        SkillFXInTime;
+  float                        SkillFXOutTime;
+  UParticleSystem             *SmallAmbientFXTemplate;
+  UParticleSystem             *LargeAmbientFXTemplate;
+  UAkEvent                    *StartEvent;
+  UAkEvent                    *StopEvent;
+  UAkRtpc                     *AkRtpc;
+  UMissionObjectiveDefinition *LinkedObjective;
+  AttributeInitializationData  FullyInfectedDamage;
+  UClass                      *DamageType;  /** Class<DamageType> */
+  float                        DamageFrequency;
+  float                        FogDensityValue;
+  float                        FogRampUpTime;
+}; assert_size(UAnemoneInfectionDefinition, 156);
 
 /* ---------------------------------------------------------- UMeleeDefinition ---------------------------------------------------------- */
 
@@ -25330,6 +25406,14 @@ struct AInfo {
   AActor Super;
 }; assert_size(AInfo, 392);
 
+/* ---------------------------------------------------------- AHeightFog ---------------------------------------------------------- */
+
+struct AHeightFog {
+  AInfo                Super;
+  UHeightFogComponent *Component;
+  BITFIELD             bEnabled : 1;  
+}; assert_size(AHeightFog, 400);
+
 /* ---------------------------------------------------------- APotentialClimbWatcher ---------------------------------------------------------- */
 
 struct APotentialClimbWatcher {
@@ -26207,149 +26291,144 @@ struct AWorldInfo {
 }; assert_size(AWorldInfo, 1680);
 #pragma pack(pop)
 
+/* ---------------------------------------------------------- USurface ---------------------------------------------------------- */
+
 struct USurface {
   UObject Super;
 }; assert_size(USurface, 60);
 
-struct LightmassMaterialInterfaceSettings {
-  float DistanceFieldPenumbraScale;
-  BITFIELD bCastShadowAsMasked : 1;
-  BITFIELD bOverrideCastShadowAsMasked : 1;
-  BITFIELD bOverrideEmissiveBoost : 1;
-  BITFIELD bOverrideDiffuseBoost : 1;
-  BITFIELD bOverrideSpecularBoost : 1;
-  BITFIELD bOverrideExportResolutionScale : 1;
-  BITFIELD bOverrideDistanceFieldPenumbraScale : 1;
-};
-
 /* ---------------------------------------------------------- UMaterialInterface ---------------------------------------------------------- */
 
+struct FLightmassMaterialInterfaceSettings {
+  float    DistanceFieldPenumbraScale;
+  BITFIELD bCastShadowAsMasked                 : 1;
+  BITFIELD bOverrideCastShadowAsMasked         : 1;
+  BITFIELD bOverrideEmissiveBoost              : 1;
+  BITFIELD bOverrideDiffuseBoost               : 1;
+  BITFIELD bOverrideSpecularBoost              : 1;
+  BITFIELD bOverrideExportResolutionScale      : 1;
+  BITFIELD bOverrideDistanceFieldPenumbraScale : 1;
+};
 struct UMaterialInterface {
-  USurface Super;
-  FRenderCommandFence ParentRefFence;
-  LightmassMaterialInterfaceSettings LightMassSettings;
-  /** ECustomSkinType */
-  ECustomSkinType CustomSkinType;
+  USurface                            Super;
+  FRenderCommandFence                 ParentRefFence;
+  FLightmassMaterialInterfaceSettings LightMassSettings;
+  ECustomSkinType                     CustomSkinType;
 }; assert_size(UMaterialInterface, 76);
 
 /* ---------------------------------------------------------- UMaterial ---------------------------------------------------------- */
 
 struct FMaterialInput {
   UMaterialExpression *Expression;
-  int Mask;
-  int MaskR;
-  int MaskG;
-  int MaskB;
-  int MaskA;
-  int GCC64_Padding;
+  int                  Mask;
+  int                  MaskR;
+  int                  MaskG;
+  int                  MaskB;
+  int                  MaskA;
+  int                  GCC64_Padding;
 };
 struct FColorMaterialInput {
   FMaterialInput Super;
-  BITFIELD UseConstant : 1;
-  FColor Constant;
+  BITFIELD       UseConstant : 1;
+  FColor         Constant;
 };
 struct FScalarMaterialInput {
   FMaterialInput Super;
-  BITFIELD UseConstant : 1;
-  float Constant;
+  BITFIELD       UseConstant : 1;
+  float          Constant;
 };
 struct FVectorMaterialInput {
   FMaterialInput Super;
-  BITFIELD UseConstant : 1;
-  FVector Constant;
+  BITFIELD       UseConstant : 1;
+  FVector        Constant;
 };
 struct FVector2MaterialInput {
   FMaterialInput Super;
-  BITFIELD UseConstant : 1;
-  float ConstantX;
-  float ConstantY;
+  BITFIELD       UseConstant : 1;
+  float          ConstantX;
+  float          ConstantY;
 };
 struct UMaterial {
-  UMaterialInterface Super;
-  UPhysicalMaterial *PhysMaterial;
-  /** Class<PhysicalMaterial> */
-  UClass *PhysicalMaterial;
-  UTexture2D *PhysMaterialMask;
-  int PhysMaterialMaskUVChannel;
-  UPhysicalMaterial *BlackPhysicalMaterial;
-  UPhysicalMaterial *WhitePhysicalMaterial;
-  FColorMaterialInput DiffuseColor;
-  FScalarMaterialInput DiffusePower;
-  FColorMaterialInput SpecularColor;
-  FScalarMaterialInput SpecularPower;
-  FVectorMaterialInput Normal;
-  FColorMaterialInput EmissiveColor;
-  FScalarMaterialInput Opacity;
-  FScalarMaterialInput OpacityMask;
-  float OpacityMaskClipValue;
-  BITFIELD bNeedsShadowDepthBias                         : 1;
-  BITFIELD TwoSided                                      : 1;
-  BITFIELD TwoSidedSeparatePass                          : 1;
-  BITFIELD bDisableDepthTest                             : 1;
-  BITFIELD bDisableEdgeDetection                         : 1;
-  BITFIELD bSceneTextureRenderBehindTranslucency         : 1;
-  BITFIELD bAllowFog                                     : 1;
-  BITFIELD bTranslucencyReceiveDominantShadowsFromStatic : 1;
-  BITFIELD bTranslucencyInheritDominantShadowsFromOpaque : 1;
-  BITFIELD bAllowTranslucencyDoF                         : 1;
-  BITFIELD bUseOneLayerDistortion                        : 1;
-  BITFIELD bUseLitTranslucencyDepthPass                  : 1;
-  BITFIELD bUseLitTranslucencyPostRenderDepthPass        : 1;
-  BITFIELD bCastLitTranslucencyShadowAsMasked            : 1;
-  BITFIELD bUsedAsLightFunction                          : 1;
-  BITFIELD bUsedWithFogVolumes                           : 1;
-  BITFIELD bUsedAsSpecialEngineMaterial                  : 1;
-  BITFIELD bUsedWithSkeletalMesh                         : 1;
-  BITFIELD bUsedWithTerrain                              : 1;
-  BITFIELD bUsedWithLandscape                            : 1;
-  BITFIELD bUsedWithFracturedMeshes                      : 1;
-  BITFIELD bUsedWithParticleSystem                       : 1;
-  BITFIELD bUsedWithParticleSprites                      : 1;
-  BITFIELD bUsedWithBeamTrails                           : 1;
-  BITFIELD bUsedWithParticleSubUV                        : 1;
-  BITFIELD bUsedWithFoliage                              : 1;
-  BITFIELD bUsedWithSpeedTree                            : 1;
-  BITFIELD bUsedWithStaticLighting                       : 1;
-  BITFIELD bUsedWithLensFlare                            : 1;
-  BITFIELD bUsedWithGammaCorrection                      : 1;
-  BITFIELD bUsedWithInstancedMeshParticles               : 1;
-  BITFIELD bUsedWithFluidSurfaces                        : 1;
-  BITFIELD bUsedWithDecals                               : 1;
-  BITFIELD bUsedWithMaterialEffect                       : 1;
-  BITFIELD bUsedWithMorphTargets                         : 1;
-  BITFIELD bUsedWithRadialBlur                           : 1;
-  BITFIELD bUsedWithInstancedMeshes                      : 1;
-  BITFIELD bUsedWithSplineMeshes                         : 1;
-  BITFIELD bUsedWithAPEXMeshes                           : 1;
-  BITFIELD bUsedWithSPHFluid                             : 1;
-  BITFIELD bUsedWithScreenDoorFade                       : 1;
-  BITFIELD bUsedWithWires                                : 1;
-  BITFIELD Wireframe                                     : 1;
-  BITFIELD bPerPixelCameraVector                         : 1;
-  BITFIELD bAllowLightmapSpecular                        : 1;
-  BITFIELD bNoDraw                                       : 1;
-  BITFIELD bFullResTransConsole                          : 1;
-  BITFIELD bIsFallbackMaterial                           : 1;
-  BITFIELD bUsesDistortion                               : 1;
-  BITFIELD bIsMasked                                     : 1;
-  BITFIELD bIsPreviewMaterial                            : 1;
-  FVector2MaterialInput Distortion;
-  /** EBlendMode */
-  EBlendMode BlendMode;
-  /** EMaterialLightingModel */
-  EMaterialLightingModel LightingModel;
-  /** EParticleDownsampling */
-  EParticleDownsampling ParticleDownsampling;
-  /** EMaterialTessellationMode */
-  EMaterialTessellationMode D3D11TessellationMode;
-  FColorMaterialInput CustomLighting;
-  FColorMaterialInput CustomSkylightDiffuse;
-  FVectorMaterialInput AnisotropicDirection;
-  FScalarMaterialInput TwoSidedLightingMask;
-  FColorMaterialInput TwoSidedLightingColor;
-  FVectorMaterialInput WorldPositionOffset;
-  FVectorMaterialInput WorldDisplacement;
-  FVector2MaterialInput TessellationFactors;
+  UMaterialInterface            Super;
+  UPhysicalMaterial            *PhysMaterial;
+  UClass                       *PhysicalMaterial;  /** Class<PhysicalMaterial> */
+  UTexture2D                   *PhysMaterialMask;
+  int                           PhysMaterialMaskUVChannel;
+  UPhysicalMaterial            *BlackPhysicalMaterial;
+  UPhysicalMaterial            *WhitePhysicalMaterial;
+  FColorMaterialInput           DiffuseColor;
+  FScalarMaterialInput          DiffusePower;
+  FColorMaterialInput           SpecularColor;
+  FScalarMaterialInput          SpecularPower;
+  FVectorMaterialInput          Normal;
+  FColorMaterialInput           EmissiveColor;
+  FScalarMaterialInput          Opacity;
+  FScalarMaterialInput          OpacityMask;
+  float                         OpacityMaskClipValue;
+  BITFIELD                      bNeedsShadowDepthBias                         : 1;
+  BITFIELD                      TwoSided                                      : 1;
+  BITFIELD                      TwoSidedSeparatePass                          : 1;
+  BITFIELD                      bDisableDepthTest                             : 1;
+  BITFIELD                      bDisableEdgeDetection                         : 1;
+  BITFIELD                      bSceneTextureRenderBehindTranslucency         : 1;
+  BITFIELD                      bAllowFog                                     : 1;
+  BITFIELD                      bTranslucencyReceiveDominantShadowsFromStatic : 1;
+  BITFIELD                      bTranslucencyInheritDominantShadowsFromOpaque : 1;
+  BITFIELD                      bAllowTranslucencyDoF                         : 1;
+  BITFIELD                      bUseOneLayerDistortion                        : 1;
+  BITFIELD                      bUseLitTranslucencyDepthPass                  : 1;
+  BITFIELD                      bUseLitTranslucencyPostRenderDepthPass        : 1;
+  BITFIELD                      bCastLitTranslucencyShadowAsMasked            : 1;
+  BITFIELD                      bUsedAsLightFunction                          : 1;
+  BITFIELD                      bUsedWithFogVolumes                           : 1;
+  BITFIELD                      bUsedAsSpecialEngineMaterial                  : 1;
+  BITFIELD                      bUsedWithSkeletalMesh                         : 1;
+  BITFIELD                      bUsedWithTerrain                              : 1;
+  BITFIELD                      bUsedWithLandscape                            : 1;
+  BITFIELD                      bUsedWithFracturedMeshes                      : 1;
+  BITFIELD                      bUsedWithParticleSystem                       : 1;
+  BITFIELD                      bUsedWithParticleSprites                      : 1;
+  BITFIELD                      bUsedWithBeamTrails                           : 1;
+  BITFIELD                      bUsedWithParticleSubUV                        : 1;
+  BITFIELD                      bUsedWithFoliage                              : 1;
+  BITFIELD                      bUsedWithSpeedTree                            : 1;
+  BITFIELD                      bUsedWithStaticLighting                       : 1;
+  BITFIELD                      bUsedWithLensFlare                            : 1;
+  BITFIELD                      bUsedWithGammaCorrection                      : 1;
+  BITFIELD                      bUsedWithInstancedMeshParticles               : 1;
+  BITFIELD                      bUsedWithFluidSurfaces                        : 1;
+  BITFIELD                      bUsedWithDecals                               : 1;
+  BITFIELD                      bUsedWithMaterialEffect                       : 1;
+  BITFIELD                      bUsedWithMorphTargets                         : 1;
+  BITFIELD                      bUsedWithRadialBlur                           : 1;
+  BITFIELD                      bUsedWithInstancedMeshes                      : 1;
+  BITFIELD                      bUsedWithSplineMeshes                         : 1;
+  BITFIELD                      bUsedWithAPEXMeshes                           : 1;
+  BITFIELD                      bUsedWithSPHFluid                             : 1;
+  BITFIELD                      bUsedWithScreenDoorFade                       : 1;
+  BITFIELD                      bUsedWithWires                                : 1;
+  BITFIELD                      Wireframe                                     : 1;
+  BITFIELD                      bPerPixelCameraVector                         : 1;
+  BITFIELD                      bAllowLightmapSpecular                        : 1;
+  BITFIELD                      bNoDraw                                       : 1;
+  BITFIELD                      bFullResTransConsole                          : 1;
+  BITFIELD                      bIsFallbackMaterial                           : 1;
+  BITFIELD                      bUsesDistortion                               : 1;
+  BITFIELD                      bIsMasked                                     : 1;
+  BITFIELD                      bIsPreviewMaterial                            : 1;
+  FVector2MaterialInput         Distortion;
+  EBlendMode                    BlendMode;
+  EMaterialLightingModel        LightingModel;
+  EParticleDownsampling         ParticleDownsampling;
+  EMaterialTessellationMode     D3D11TessellationMode;
+  FColorMaterialInput           CustomLighting;
+  FColorMaterialInput           CustomSkylightDiffuse;
+  FVectorMaterialInput          AnisotropicDirection;
+  FScalarMaterialInput          TwoSidedLightingMask;
+  FColorMaterialInput           TwoSidedLightingColor;
+  FVectorMaterialInput          WorldPositionOffset;
+  FVectorMaterialInput          WorldDisplacement;
+  FVector2MaterialInput         TessellationFactors;
   void                         *MaterialResources[2];
   void                         *DefaultMaterialInstances[3];
   int                           EditorX;
@@ -26357,9 +26436,7 @@ struct UMaterial {
   int                           EditorPitch;
   int                           EditorYaw;
   TArray_UMaterialExpressionPtr Expressions;
-  /* native map{VOID,VOID} */
   _TMAP_NAME(INT, INT)          EditorParameters;
-  /* CHECK if FTexture? */
   TArray_UTexturePtr            ReferencedTextures;
 }; assert_size(UMaterial, 888);
 
