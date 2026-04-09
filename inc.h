@@ -13,6 +13,11 @@
 
 typedef void *FPointer;
 
+#define __int8  char
+#define __int16 short
+#define __int32 long
+#define __int64 long long int
+
 typedef unsigned __int8   BYTE;
 typedef unsigned __int16  WORD;
 typedef unsigned __int32  DWORD;
@@ -174,6 +179,24 @@ _(FScriptDelegate);
 /* ---------------------------------------------------------- FImplementedInterface ---------------------------------------------------------- */
 
 _(FImplementedInterface);
+
+/* ---------------------------------------------------------- UParticleSystemReplay ---------------------------------------------------------- */
+
+_(FParticleEmitterReplayFrame);
+_(FParticleSystemReplayFrame);
+_(UParticleSystemReplay);
+
+/* ---------------------------------------------------------- UParticleModuleEventSendToGame ---------------------------------------------------------- */
+
+_(UParticleModuleEventSendToGame);
+
+/* ---------------------------------------------------------- UActionResource ---------------------------------------------------------- */
+
+_(UActionResource);
+
+/* ---------------------------------------------------------- URES_Skill ---------------------------------------------------------- */
+
+_(URES_Skill);
 
 /* ---------------------------------------------------------- UActorFactory ---------------------------------------------------------- */
 
@@ -869,9 +892,27 @@ _(FParticleCurvePair);
 _(FParticleRandomSeedInfo);
 _(UParticleModule);
 
+/* ---------------------------------------------------------- UParticleModuleOrbitBase ---------------------------------------------------------- */
+
+_(UParticleModuleOrbitBase);
+
+/* ---------------------------------------------------------- UParticleModuleOrbit ---------------------------------------------------------- */
+
+_(FOrbitOptions);
+_(UParticleModuleOrbit);
+
 /* ---------------------------------------------------------- UParticleModuleEventBase ---------------------------------------------------------- */
 
 _(UParticleModuleEventBase);
+
+/* ---------------------------------------------------------- UParticleModuleEventReceiverBase ---------------------------------------------------------- */
+
+_(UParticleModuleEventReceiverBase);
+
+/* ---------------------------------------------------------- UParticleModuleEventGenerator ---------------------------------------------------------- */
+
+_(FParticleEvent_GenerateInfo);
+_(UParticleModuleEventGenerator);
 
 /* ---------------------------------------------------------- UParticleModuleSpawnBase ---------------------------------------------------------- */
 
@@ -988,6 +1029,10 @@ _(FPreviewSkelMeshStruct);
 _(FPreviewSocketStruct);
 _(FPreviewAnimSetsStruct);
 _(UAnimTree);
+
+/* ---------------------------------------------------------- UWillowAnimTree ---------------------------------------------------------- */
+
+_(UWillowAnimTree);
 
 /* ---------------------------------------------------------- UAnimNodeSlot ---------------------------------------------------------- */
 
@@ -1724,6 +1769,10 @@ _(FActionSkillCustomEventReplicationData);
 _(FCachedWeaponInfo);
 _(AActionSkill);
 
+/* ---------------------------------------------------------- AScorpioActionSkill ---------------------------------------------------------- */
+
+_(AScorpioActionSkill);
+
 /* ---------------------------------------------------------- FCheckResult ---------------------------------------------------------- */
 
 _(FIteratorList);
@@ -1871,6 +1920,10 @@ _(UDataStoreClient);
 _(FUIDataProviderField);
 _(UUIDataProvider);
 
+/* ---------------------------------------------------------- UUIResourceCombinationProvider ---------------------------------------------------------- */
+
+_(UUIResourceCombinationProvider);
+
 /* ---------------------------------------------------------- UUIDataProvider_OnlinePlayerStorageArray ---------------------------------------------------------- */
 
 _(UUIDataProvider_OnlinePlayerStorageArray);
@@ -1925,6 +1978,10 @@ _(UUIDataProvider_Settings);
 
 _(UUIResourceDataProvider);
 
+/* ---------------------------------------------------------- UUIWeaponSummary ---------------------------------------------------------- */
+
+_(UUIWeaponSummary);
+
 /* ---------------------------------------------------------- UUIDataProvider_MenuItem ---------------------------------------------------------- */
 
 _(UUIDataProvider_MenuItem);
@@ -1937,9 +1994,28 @@ _(UUIDynamicFieldProvider);
 
 _(UUIDataStore);
 
+/* ---------------------------------------------------------- UUIDataStore_GameResource ---------------------------------------------------------- */
+
+_(FGameResourceDataProvider);
+_(UUIDataStore_GameResource);
+
+/* ---------------------------------------------------------- UUIDataStore_MenuItems ---------------------------------------------------------- */
+
+_(UUIDataStore_MenuItems);
+
+/* ---------------------------------------------------------- UUIDataStore_DynamicResource ---------------------------------------------------------- */
+
+_(FDynamicResourceProviderDefinition);
+_(UUIDataStore_DynamicResource);
+
 /* ---------------------------------------------------------- UUIDataStore_Remote ---------------------------------------------------------- */
 
 _(UUIDataStore_Remote);
+
+/* ---------------------------------------------------------- UUIDataStore_OnlineGameSearch ---------------------------------------------------------- */
+
+_(FGameSearchCfg);
+_(UUIDataStore_OnlineGameSearch);
 
 /* ---------------------------------------------------------- UUIDataStore_OnlinePlayerData ---------------------------------------------------------- */
 
@@ -3729,6 +3805,11 @@ _(USeqEvent_TakeHitRegionDamage);
 
 _(USequenceAction);
 
+/* ---------------------------------------------------------- USeqAct_ExecuteSkill ---------------------------------------------------------- */
+
+_(USeqAct_ExecuteSkill);
+
+/* ---------------------------------------------------------- USeqAct_Latent ---------------------------------------------------------- */
 
 _(USeqAct_Latent);
 
@@ -4183,6 +4264,9 @@ _(ULensFlareComponent);
 
 /* ---------------------------------------------------------- UParticleSystemComponent ---------------------------------------------------------- */
 
+_(FParticleEmitterInstance);
+_(FParticleEmitterInstanceMotionBlurInfo);
+_(FViewParticleEmitterInstanceMotionBlurInfo);
 _(FParticleSysParam);
 _(FParticleEventData);
 _(FParticleEventSpawnData);

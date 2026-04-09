@@ -1,0 +1,7 @@
+[
+  {
+    "directory": "c:/Users/Mellw/Desktop/IDA BACKUP/UE3/types",
+    "file": "c:/Users/Mellw/Desktop/IDA BACKUP/UE3/types/all.h",
+    "command": "clang -Wno-visibility -Wno-missing-declarations c:/Users/Mellw/Desktop/IDA BACKUP/UE3/types/all.h"
+  }
+]

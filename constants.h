@@ -417,3 +417,138 @@ static const char *WEATHER_PSC_INSTANCE_DATA_NAME_2  = "WeatherParticle_Screen";
 /* ---------------------------------------------------------- UBehaviorBase ---------------------------------------------------------- */
 
 static const int LINK_ID_RESERVED_FOR_DEFAULT_BEHAVIOR_OUTPUT = -1;
+
+/* ---------------------------------------------------------- AGearboxPawn ---------------------------------------------------------- */
+
+static const double SecondsToRememberRecentIncomingShots = 3.0;
+
+/* ---------------------------------------------------------- AGBXNavMesh ---------------------------------------------------------- */
+
+static const int   NUM_EDGES                        = 3;
+static const int   WORDSIZE                         = 2;
+static const int   NUM_EDGE_BYTES                   = 6;
+static const float DESIRED_NAVMESH_LOOKUP_NODE_SIZE = 1024.0f;
+static const int   MAX_POLY_OBSTACLES               = 6;
+static const int   MAX_POLY_OBSTACLE_BYTES          = 12;
+static const int   MAX_POLY_POINT_CHECKS            = 10;
+
+/* ---------------------------------------------------------- UGameStatsAggregator ---------------------------------------------------------- */
+
+static const int GAMEEVENT_AGGREGATED_DATA = 10000;
+static const int GAMEEVENT_AGGREGATED_PLAYER_TIMEALIVE = 10001;
+static const int GAMEEVENT_AGGREGATED_PLAYER_KILLS = 10002;
+static const int GAMEEVENT_AGGREGATED_PLAYER_DEATHS = 10003;
+static const int GAMEEVENT_AGGREGATED_PLAYER_MATCH_WON = 10004;
+static const int GAMEEVENT_AGGREGATED_PLAYER_ROUND_WON = 10005;
+static const int GAMEEVENT_AGGREGATED_DAMAGE_DEALT_NORMALKILL = 10006;
+static const int GAMEEVENT_AGGREGATED_DAMAGE_RECEIVED_WASNORMALKILL = 10007;
+static const int GAMEEVENT_AGGREGATED_TEAM_KILLS = 10100;
+static const int GAMEEVENT_AGGREGATED_TEAM_DEATHS = 10101;
+static const int GAMEEVENT_AGGREGATED_TEAM_GAME_SCORE = 10102;
+static const int GAMEEVENT_AGGREGATED_TEAM_MATCH_WON = 10103;
+static const int GAMEEVENT_AGGREGATED_TEAM_ROUND_WON = 10104;
+static const int GAMEEVENT_AGGREGATED_DAMAGE_KILLS = 10200;
+static const int GAMEEVENT_AGGREGATED_DAMAGE_DEATHS = 10201;
+static const int GAMEEVENT_AGGREGATED_DAMAGE_DEALT_WEAPON_DAMAGE = 10202;
+static const int GAMEEVENT_AGGREGATED_DAMAGE_DEALT_MELEE_DAMAGE = 10203;
+static const int GAMEEVENT_AGGREGATED_DAMAGE_RECEIVED_WEAPON_DAMAGE = 10204;
+static const int GAMEEVENT_AGGREGATED_DAMAGE_RECEIVED_MELEE_DAMAGE = 10205;
+static const int GAMEEVENT_AGGREGATED_DAMAGE_DEALT_MELEEHITS = 10206;
+static const int GAMEEVENT_AGGREGATED_DAMAGE_RECEIVED_WASMELEEHIT = 10207;
+static const int GAMEEVENT_AGGREGATED_WEAPON_FIRED = 10300;
+static const int GAMEEVENT_AGGREGATED_PAWN_SPAWN = 10400;
+static const int GAMEEVENT_AGGREGATED_GAME_SPECIFIC = 11000;
+
+/* ---------------------------------------------------------- UCustomizationDefinition ---------------------------------------------------------- */
+
+static const int MAX_SECONDARY_PER_PRIMARY = 20;
+
+/* ---------------------------------------------------------- UOnlineMessageGFxMovie ---------------------------------------------------------- */
+
+static const char *TitleFormat    = "<font size='13' color='#FFFFFF'>%message%</font>";
+static const char *SubtitleFormat = "<font size='11' color='#CCCCCC'>%message%</font>";
+
+/* ---------------------------------------------------------- URuleEngineLoadBalanceManager ---------------------------------------------------------- */
+
+static const float MaxTimeMSAllowedPerFrame = 1.f;
+
+/* ---------------------------------------------------------- UMindTargetInfo ---------------------------------------------------------- */
+
+static const int MAX_HIT_TARGET_RECORDS = 5;
+
+/* ---------------------------------------------------------- AWillowTradeManager ---------------------------------------------------------- */
+
+static const int MAX_INV_SLOTS = 4;
+
+/* ---------------------------------------------------------- UUISceneClient ---------------------------------------------------------- */
+
+static const int SCENEFILTER_None               = 0x00000000;
+static const int SCENEFILTER_IncludeTransient   = 0x00000001;
+static const int SCENEFILTER_InputProcessorOnly = 0x00000002;
+static const int SCENEFILTER_PausersOnly        = 0x00000004;
+static const int SCENEFILTER_PrimitiveUsersOnly = 0x00000008;
+static const int SCENEFILTER_UsesPostProcessing = 0x00000010;
+static const int SCENEFILTER_ReceivesFocus      = 0x00000020;
+static const int SCENEFILTER_Any                = 0xFFFFFFFF;
+
+/* ---------------------------------------------------------- UOnlinePlaylistManager ---------------------------------------------------------- */
+
+static const int PLAYER_MATCH  = 0;
+static const int RANKED_MATCH  = 1;
+static const int REC_MATCH     = 2;
+static const int PRIVATE_MATCH = 3;
+
+/* ---------------------------------------------------------- UAITracker ---------------------------------------------------------- */
+
+static const int SNAPSHOT_MAX = 50;
+
+/* ---------------------------------------------------------- UScreenSpaceManager ---------------------------------------------------------- */
+
+static const int ScreenBaseX = 640;
+static const int ScreenBaseY = 480;
+
+/* ---------------------------------------------------------- AWillowRadarManager ---------------------------------------------------------- */
+
+static const int MAX_ACTIVE_SKILL_STATION_ICONS = 28;
+static const int MAX_ACTIVE_DYNAMIC_ICONS       = 18;
+
+/* ---------------------------------------------------------- UPlayerSkillTree ---------------------------------------------------------- */
+
+static const int MAX_SKILL_TYPES = 5;
+
+/* ---------------------------------------------------------- AMissionTracker ---------------------------------------------------------- */
+
+static const int STARTING_MISSION_NUMBER        = 0;
+static const int MAX_DYNAMIC_MISSION_DIRECTIVES = 10;
+static const int MAX_ACTIVE_MISSION_DIRECTORS   = 14;
+
+/* ---------------------------------------------------------- AWillowGameReplicationInfo ---------------------------------------------------------- */
+
+static const int MAX_ACTIVE_WAYPOINTS      = 6;
+static const int MAX_ACTIVE_AREA_WAYPOINTS = 4;
+static const int NUM_FAST_TRAVEL_BYTES     = 16;
+static const int MAX_NUM_NPC_ALLIES        = 2;
+
+/* ---------------------------------------------------------- UWillowDeclarations ---------------------------------------------------------- */
+
+static const int NUM_MISSION_REWARD_CHOICES = 2;
+
+/* ---------------------------------------------------------- AWillowInventoryManager ---------------------------------------------------------- */
+
+static const int STASH_MAX     = 4;
+static const int BUYBACK_SLOTS = 20;
+
+/* ---------------------------------------------------------- UGearboxGlobals ---------------------------------------------------------- */
+
+static const int MAX_VANTAGES_PER_LOOKER = 3;
+
+/* ---------------------------------------------------------- AWillowGameInfo ---------------------------------------------------------- */
+
+static const int MAX_SPLITSCREEN_PLAYERS = 2;
+static const int SHOP_TIMER_RESEND_RATE  = 10;
+static const int MAX_COLISEUM_PLAYERS    = 4;
+
+/* ---------------------------------------------------------- AWillowPlayerReplicationInfo ---------------------------------------------------------- */
+
+static const int MAX_APPLIED_CUSTOMIZATIONS = 5;
+static const int MAX_TRACKED_SKILLS = 17;

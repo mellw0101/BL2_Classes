@@ -17,7 +17,11 @@
 # define SYS_BYTE_ORDER     SYS_LITTLE_ENDIAN
 #endif
 
-#define __ALIGN(x)  __declspec(align(x))
+# define __ALIGN(x)  __declspec(align(x))
+// #ifdef _MSC_VER
+// #else
+// # define __ALIGN(x)  __attribute__((__aligned__(x)))
+// #endif
 
 #define STRUCT(x)       \
   typedef struct x  x;  \
@@ -75,7 +79,11 @@
 
 #define __ASIZE(x, size)  static_assert(sizeof(x) == size)
 
-#define assert_size(x, size)  static_assert(sizeof(x) == (size))
+#ifdef __cplusplus
+# define assert_size(x, size)  static_assert(sizeof(x) == (size))
+#else
+# define assert_size(x, size)  _Static_assert((sizeof(x) == (size)), "Incorrect 'size'")
+#endif
 
 #define CONST  static const
 
@@ -92,7 +100,7 @@
   struct x {  \
     __VA_ARGS__ \
   }; \
-  __ASIZE(x,size)
+  assert_size(x,size)
 
 #define STRU_VFTB_(x, ...) \
   typedef struct VfTable__##x { \

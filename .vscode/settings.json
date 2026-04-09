@@ -1,0 +1,12 @@
+{
+  "editor.foldingStrategy": "indentation",
+  "editor.defaultFoldingRangeProvider": "llvm-vs-code-extensions.vscode-clangd",
+  "clangd.arguments": [
+    "--function-arg-placeholders=0",
+    "--header-insertion=never",
+    "--background-index=true",
+    "--pch-storage=disk",
+    "--completion-style=detailed",
+    "--all-scopes-completion=0",
+  ]
+}

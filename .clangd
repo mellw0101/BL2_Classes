@@ -1,9 +1,22 @@
 CompileFlags:
   Add:
-    # For __except to not give undeclared.
+    # # For __except to not give undeclared.
     - -fms-extensions
-    # - -DINCLUDE_MENU_PRIVATE
-    - -std=c++20
+    # # - -DINCLUDE_MENU_PRIVATE
+    - -std=c11
     - -target
     - i686-w64-mingw32
     - -m32
+    # - -fmodules      # Enable C++20 module support
+    # - -fmodules-cache-path=./module-cache  # Cache the modules in a directory (optional)
+
+Diagnostics:
+  UnusedIncludes: None
+
+Index:
+  Background: Build
+
+# -std=c99
+# -fms-extensions
+# --target=i686-w64-mingw32
+# -m32

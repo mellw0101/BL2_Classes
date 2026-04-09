@@ -4260,10 +4260,6 @@ typedef enum ENPCOnUsedOutputs : unsigned char {
 
 /* ---------------------------------------------------------- AWillowGameInfo ---------------------------------------------------------- */
 
-static const int MAX_SPLITSCREEN_PLAYERS = 2;
-static const int SHOP_TIMER_RESEND_RATE  = 10;
-static const int MAX_COLISEUM_PLAYERS    = 4;
-
 typedef enum EStartGameState : unsigned char {
   SGS_None,                       // 0
   SGS_IntroMovie,                 // 1
@@ -4921,8 +4917,6 @@ typedef enum ECellState : unsigned char {
 
 /* ---------------------------------------------------------- UWillowDeclarations ---------------------------------------------------------- */
 
-static const int NUM_MISSION_REWARD_CHOICES = 2;
-
 typedef enum EQuickWeaponSlot        : unsigned char {
   QuickSelectNone,                // 0
   QuickSelectUp,                  // 1
@@ -4981,14 +4975,7 @@ typedef enum EInventoryPanel : unsigned char {
 } EInventoryPanel;
 #define EInventoryPanel  EInventoryPanel
 
-/* ---------------------------------------------------------- AWillowInventoryManager ---------------------------------------------------------- */
-
-static const int STASH_MAX     = 4;
-static const int BUYBACK_SLOTS = 20;
-
 /* ---------------------------------------------------------- UGearboxGlobals ---------------------------------------------------------- */
-
-static const int MAX_VANTAGES_PER_LOOKER = 3;
 
 typedef enum EMovementFinishedCause     : unsigned char {
   MOVEFINISHED_None,              // 0
@@ -5354,11 +5341,6 @@ typedef enum ETopStatArrow : unsigned char {
   ETSA_MAX                        // 4
 } ETopStatArrow;
 #define ETopStatArrow  ETopStatArrow
-
-/* ---------------------------------------------------------- AWillowPlayerReplicationInfo ---------------------------------------------------------- */
-
-static const int MAX_APPLIED_CUSTOMIZATIONS = 5;
-static const int MAX_TRACKED_SKILLS = 17;
 
 /* ---------------------------------------------------------- USwfMovie ---------------------------------------------------------- */
 
@@ -6918,11 +6900,6 @@ typedef enum EExperienceType : unsigned char {
 
 /* ---------------------------------------------------------- AWillowGameReplicationInfo ---------------------------------------------------------- */
 
-static const int MAX_ACTIVE_WAYPOINTS = 6;
-static const int MAX_ACTIVE_AREA_WAYPOINTS = 4;
-static const int NUM_FAST_TRAVEL_BYTES = 16;
-static const int MAX_NUM_NPC_ALLIES = 2;
-
 typedef enum EMatchmakingState : unsigned char {
   MMS_Inactive,                   // 0
   MMS_Searching1,                 // 1
@@ -6935,10 +6912,6 @@ typedef enum EMatchmakingState : unsigned char {
 #define EMatchmakingState  EMatchmakingState
 
 /* ---------------------------------------------------------- AMissionTracker ---------------------------------------------------------- */
-
-static const int STARTING_MISSION_NUMBER = 0;
-static const int MAX_DYNAMIC_MISSION_DIRECTIVES = 10;
-static const int MAX_ACTIVE_MISSION_DIRECTORS = 14;
 
 typedef enum EAdvanceTrackedMissionResult : unsigned char {
   ATMR_Success,                   // 0
@@ -6989,10 +6962,6 @@ typedef enum EInputActionEvent : unsigned char {
   INPUT_ACTION_MAX                // 2
 } EInputActionEvent;
 #define EInputActionEvent  EInputActionEvent
-
-/* ---------------------------------------------------------- UPlayerSkillTree ---------------------------------------------------------- */
-
-static const int MAX_SKILL_TYPES = 5;
 
 /* ---------------------------------------------------------- UTextureMovie ---------------------------------------------------------- */
 
@@ -7118,9 +7087,6 @@ typedef enum NodeType : unsigned char {
 
 /* ---------------------------------------------------------- AWillowRadarManager ---------------------------------------------------------- */
 
-static const int MAX_ACTIVE_SKILL_STATION_ICONS = 28;
-static const int MAX_ACTIVE_DYNAMIC_ICONS       = 18;
-
 typedef enum ERadarIconType : unsigned char {
   RadarIconType_None,             // 0
   RadarIconType_Gunfire,          // 1
@@ -7159,11 +7125,6 @@ typedef enum EMenuOptionType : unsigned char {
 } EMenuOptionType;
 #define EMenuOptionType  EMenuOptionType
 
-/* ---------------------------------------------------------- UScreenSpaceManager ---------------------------------------------------------- */
-
-static const int ScreenBaseX = 640;
-static const int ScreenBaseY = 480;
-
 /* ---------------------------------------------------------- UBehaviorKernel ---------------------------------------------------------- */
 
 typedef enum EBehaviorProcessState : unsigned char {
@@ -7193,13 +7154,6 @@ typedef enum ECombatMusicManagerState : unsigned char {
 } ECombatMusicManagerState;
 #define ECombatMusicManagerState  ECombatMusicManagerState
 
-/* ---------------------------------------------------------- UOnlinePlaylistManager ---------------------------------------------------------- */
-
-static const int PLAYER_MATCH  = 0;
-static const int RANKED_MATCH  = 1;
-static const int REC_MATCH     = 2;
-static const int PRIVATE_MATCH = 3;
-
 /* ---------------------------------------------------------- UTargetIterator ---------------------------------------------------------- */
 
 typedef enum ETargetIterator : unsigned char {
@@ -7228,8 +7182,6 @@ typedef enum KDBEvalType : unsigned char {
 #define KDBEvalType  KDBEvalType
 
 /* ---------------------------------------------------------- UAITracker ---------------------------------------------------------- */
-
-static const int SNAPSHOT_MAX = 50;
 
 typedef enum ESnapshotEventType : unsigned char {
   SNAP_NoEvent,                   // 0
@@ -7323,17 +7275,6 @@ typedef enum EGFxMoviePooling : unsigned char {
   GMP_MAX                         // 3
 } EGFxMoviePooling;
 #define EGFxMoviePooling  EGFxMoviePooling
-
-/* ---------------------------------------------------------- UUISceneClient ---------------------------------------------------------- */
-
-static const int SCENEFILTER_None               = 0x00000000;
-static const int SCENEFILTER_IncludeTransient   = 0x00000001;
-static const int SCENEFILTER_InputProcessorOnly = 0x00000002;
-static const int SCENEFILTER_PausersOnly = 0x00000004;
-static const int SCENEFILTER_PrimitiveUsersOnly = 0x00000008;
-static const int SCENEFILTER_UsesPostProcessing = 0x00000010;
-static const int SCENEFILTER_ReceivesFocus = 0x00000020;
-static const int SCENEFILTER_Any = 0xFFFFFFFF;
 
 /* ---------------------------------------------------------- UCameraShake ---------------------------------------------------------- */
 
@@ -7503,8 +7444,6 @@ typedef enum ETonemapperType : unsigned char {
 
 /* ---------------------------------------------------------- AWillowTradeManager ---------------------------------------------------------- */
 
-static const int MAX_INV_SLOTS = 4;
-
 typedef enum TradeManagerStatus  : unsigned char {
   TMS_Uninitialized,              // 0
   TMS_OutgoingRequestPending,     // 1
@@ -7552,10 +7491,6 @@ typedef enum TradeSlotStatus     : unsigned char {
 #define PlayerTradingStance  PlayerTradingStance
 #define TradeSlotStatus      TradeSlotStatus
 
-/* ---------------------------------------------------------- UMindTargetInfo ---------------------------------------------------------- */
-
-static const int MAX_HIT_TARGET_RECORDS = 5;
-
 /* ---------------------------------------------------------- USkelControlBase ---------------------------------------------------------- */
 
 typedef enum EBoneControlSpace : unsigned char {
@@ -7570,10 +7505,6 @@ typedef enum EBoneControlSpace : unsigned char {
   BCS_MAX                         // 8
 } EBoneControlSpace;
 #define EBoneControlSpace  EBoneControlSpace
-
-/* ---------------------------------------------------------- URuleEngineLoadBalanceManager ---------------------------------------------------------- */
-
-static const float MaxTimeMSAllowedPerFrame = 1.f;
 
 /* ---------------------------------------------------------- UGbxMessageDefinition ---------------------------------------------------------- */
 
@@ -7638,15 +7569,6 @@ typedef enum ELockoutStyle : unsigned char {
   LOCKOUT_MAX                     // 3
 } ELockoutStyle;
 #define ELockoutStyle  ELockoutStyle
-
-/* ---------------------------------------------------------- UCustomizationDefinition ---------------------------------------------------------- */
-
-static const int MAX_SECONDARY_PER_PRIMARY = 20;
-
-/* ---------------------------------------------------------- UOnlineMessageGFxMovie ---------------------------------------------------------- */
-
-static const char *TitleFormat    = "<font size='13' color='#FFFFFF'>%message%</font>";
-static const char *SubtitleFormat = "<font size='11' color='#CCCCCC'>%message%</font>";
 
 /* ---------------------------------------------------------- UBehavior_CauseDamage ---------------------------------------------------------- */
 
@@ -7721,33 +7643,6 @@ typedef enum GameSessionType : unsigned char {
   GT_MAX                          // 4
 } GameSessionType;
 #define GameSessionType  GameSessionType
-
-/* ---------------------------------------------------------- UGameStatsAggregator ---------------------------------------------------------- */
-
-static const int GAMEEVENT_AGGREGATED_DATA = 10000;
-static const int GAMEEVENT_AGGREGATED_PLAYER_TIMEALIVE = 10001;
-static const int GAMEEVENT_AGGREGATED_PLAYER_KILLS = 10002;
-static const int GAMEEVENT_AGGREGATED_PLAYER_DEATHS = 10003;
-static const int GAMEEVENT_AGGREGATED_PLAYER_MATCH_WON = 10004;
-static const int GAMEEVENT_AGGREGATED_PLAYER_ROUND_WON = 10005;
-static const int GAMEEVENT_AGGREGATED_DAMAGE_DEALT_NORMALKILL = 10006;
-static const int GAMEEVENT_AGGREGATED_DAMAGE_RECEIVED_WASNORMALKILL = 10007;
-static const int GAMEEVENT_AGGREGATED_TEAM_KILLS = 10100;
-static const int GAMEEVENT_AGGREGATED_TEAM_DEATHS = 10101;
-static const int GAMEEVENT_AGGREGATED_TEAM_GAME_SCORE = 10102;
-static const int GAMEEVENT_AGGREGATED_TEAM_MATCH_WON = 10103;
-static const int GAMEEVENT_AGGREGATED_TEAM_ROUND_WON = 10104;
-static const int GAMEEVENT_AGGREGATED_DAMAGE_KILLS = 10200;
-static const int GAMEEVENT_AGGREGATED_DAMAGE_DEATHS = 10201;
-static const int GAMEEVENT_AGGREGATED_DAMAGE_DEALT_WEAPON_DAMAGE = 10202;
-static const int GAMEEVENT_AGGREGATED_DAMAGE_DEALT_MELEE_DAMAGE = 10203;
-static const int GAMEEVENT_AGGREGATED_DAMAGE_RECEIVED_WEAPON_DAMAGE = 10204;
-static const int GAMEEVENT_AGGREGATED_DAMAGE_RECEIVED_MELEE_DAMAGE = 10205;
-static const int GAMEEVENT_AGGREGATED_DAMAGE_DEALT_MELEEHITS = 10206;
-static const int GAMEEVENT_AGGREGATED_DAMAGE_RECEIVED_WASMELEEHIT = 10207;
-static const int GAMEEVENT_AGGREGATED_WEAPON_FIRED = 10300;
-static const int GAMEEVENT_AGGREGATED_PAWN_SPAWN = 10400;
-static const int GAMEEVENT_AGGREGATED_GAME_SPECIFIC = 11000;
 
 /* ---------------------------------------------------------- UMeshBeacon ---------------------------------------------------------- */
 
@@ -7992,16 +7887,6 @@ typedef enum PawnListSource : unsigned char {
 #define EAdjustModifierMode  EAdjustModifierMode
 #define PawnListSource       PawnListSource
 
-/* ---------------------------------------------------------- AGBXNavMesh ---------------------------------------------------------- */
-
-static const int   NUM_EDGES                        = 3;
-static const int   WORDSIZE                         = 2;
-static const int   NUM_EDGE_BYTES                   = 6;
-static const float DESIRED_NAVMESH_LOOKUP_NODE_SIZE = 1024.0f;
-static const int   MAX_POLY_OBSTACLES               = 6;
-static const int   MAX_POLY_OBSTACLE_BYTES          = 12;
-static const int   MAX_POLY_POINT_CHECKS            = 10;
-
 /* ---------------------------------------------------------- ACoverGroup ---------------------------------------------------------- */
 
 typedef enum ECoverGroupFillAction : unsigned char {
@@ -8025,10 +7910,6 @@ typedef enum ESupportedParamTypes {
 	,ESPT_NIL
 } ESupportedParamTypes;
 #define ESupportedParamTypes  ESupportedParamTypes
-
-/* ---------------------------------------------------------- AGearboxPawn ---------------------------------------------------------- */
-
-static const double SecondsToRememberRecentIncomingShots = 3.0;
 
 /* ---------------------------------------------------------- UPopulationDefinition ---------------------------------------------------------- */
 
@@ -8481,3 +8362,23 @@ typedef enum EParticleScreenAlignment : unsigned char {
   PSA_MAX                         // 4
 } EParticleScreenAlignment;
 #define EParticleScreenAlignment  EParticleScreenAlignment
+
+/* ---------------------------------------------------------- USeqAct_ExecuteSkill ---------------------------------------------------------- */
+
+typedef enum EExecuteSkillSequenceInput : unsigned char {
+  SEQUENCE_ActivateSkill,         // 0
+  SEQUENCE_DeactivateSkill,       // 1
+  SEQUENCE_ToggleSkill,           // 2
+  SEQUENCE_MAX                    // 3
+} EExecuteSkillSequenceInput;
+#define EExecuteSkillSequenceInput  EExecuteSkillSequenceInput
+
+/* ---------------------------------------------------------- UParticleModuleOrbit ---------------------------------------------------------- */
+
+typedef enum EOrbitChainMode : unsigned char {
+  EOChainMode_Add,                // 0
+  EOChainMode_Scale,              // 1
+  EOChainMode_Link,               // 2
+  EOChainMode_MAX                 // 3
+} EOrbitChainMode;
+#define EOrbitChainMode  EOrbitChainMode
