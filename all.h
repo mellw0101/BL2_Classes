@@ -1367,7 +1367,7 @@ typedef struct {
   /**
 	 * Checks the RF_PendingKill flag to see if it is dead but memory still valid
 	 */
-  /* 15 */ UBOOL (__thiscall *IsPendingKill)(UObject *);
+  /* 15 */ UBOOL (__thiscall *IsPendingKill)(const UObject *);
   /* 16 */ void  (__thiscall *ShutdownAfterError)(UObject *);
   /* 17 */ void  (__thiscall *PreEditChange_UProperty)(UObject *, UProperty *PropertyAboutToChange);
   /** 
@@ -2979,7 +2979,7 @@ struct UTI_Prioritize {
 
 struct UDownloadablePackageLicense {
   UObject Super;
-  int LicenseMask;
+  int     LicenseMask;
 }; assert_size(UDownloadablePackageLicense, 64);
 
 /* ---------------------------------------------------------- UOnlinePlaylistManager ---------------------------------------------------------- */
@@ -3580,116 +3580,114 @@ struct UWillowAIDebugCamera {
 /* ---------------------------------------------------------- UDamageOverTimeManager ---------------------------------------------------------- */
 
 struct native FSourceObjectData {
-  int UniqueId;
-  UObject *SourceObject;
-  FVector SourceLocation;
-  AController *InstigatedByController;
-  /** IDamageBehavior */
-  FImplementedInterface DamageContext;
-  float StartDamageTime;
-  float TimeElapsedSinceLastDamage;
-  UExplosionDefinition *ExplosionDef;
-  int ExplosionScaleIndex;
-  float InitialDamageRadius;
-  float Damage;
-  BITFIELD bFullDamage : 1;
-  float Momentum;
-  UClass *DamageSource;
+  int                    UniqueId;
+  UObject               *SourceObject;
+  FVector                SourceLocation;
+  AController           *InstigatedByController;
+  FImplementedInterface  DamageContext;  /** IDamageBehavior */
+  float                  StartDamageTime;
+  float                  TimeElapsedSinceLastDamage;
+  UExplosionDefinition  *ExplosionDef;
+  int                    ExplosionScaleIndex;
+  float                  InitialDamageRadius;
+  float                  Damage;
+  BITFIELD               bFullDamage : 1;
+  float                  Momentum;
+  UClass                *DamageSource;
   UDamageTypeDefinition *DamageTypeDef;
-  UImpactDefinition *ImpactDefinition;
-  BITFIELD bCanDamageFriendlies : 1;
-  /** IDamageCauser */
-  FImplementedInterface DamageCauser;
-  BITFIELD bSkipTraceTest : 1;
-  UObject *HitObject;
-  float BarrelSourceTime;
-  float PlantSourceTime;
+  UImpactDefinition     *ImpactDefinition;
+  BITFIELD               bCanDamageFriendlies : 1;
+  FImplementedInterface  DamageCauser;  /** IDamageCauser */
+  BITFIELD               bSkipTraceTest : 1;
+  UObject               *HitObject;
+  float                  BarrelSourceTime;
+  float                  PlantSourceTime;
 };
 struct native FDamageOnlyOnceData {
-  int UniqueId;
+  int     UniqueId;
   AActor *HurtActor;
 };
 struct UDamageOverTimeManager {
-  UObject Super;
-  TArray_FSourceObjectData SourceObjects;
+  UObject                    Super;
+  TArray_FSourceObjectData   SourceObjects;
   TArray_FDamageOnlyOnceData DamageOnlyOnceActors;
-  int UniqueId;
+  int                        UniqueId;
 }; assert_size(UDamageOverTimeManager, 88);
 
 /* ---------------------------------------------------------- UPlayerSkillTree ---------------------------------------------------------- */
 
 struct native transient FPlayerSkillTreeBranchData {
   USkillTreeBranchDefinition *Definition;
-  int BranchPointsToUnlockNextBranch;
-  int Index;
-  int ParentBranchIndex;
-  int PrevBranchIndex;
-  int NextBranchIndex;
-  TArray_INT ChildBranchIndices;
-  TArray_INT TierIndices;
-  UPlayerSkillTree *Owner;
+  int                         BranchPointsToUnlockNextBranch;
+  int                         Index;
+  int                         ParentBranchIndex;
+  int                         PrevBranchIndex;
+  int                         NextBranchIndex;
+  TArray_INT                  ChildBranchIndices;
+  TArray_INT                  TierIndices;
+  UPlayerSkillTree           *Owner;
 };
 struct native transient FPlayerSkillTreeTierData {
-  TArray_INT SkillIndices;
-  int BranchPointsToUnlockTier;
-  int Index;
-  int PrevTierIndex;
-  int NextTierIndex;
-  int ParentBranchIndex;
-  int TierNumber;
-  BITFIELD bUnlocked : 1;
+  TArray_INT        SkillIndices;
+  int               BranchPointsToUnlockTier;
+  int               Index;
+  int               PrevTierIndex;
+  int               NextTierIndex;
+  int               ParentBranchIndex;
+  int               TierNumber;
+  BITFIELD          bUnlocked : 1;
   UPlayerSkillTree *Owner;
 };
 struct native transient FPlayerSkillTreeSkillData {
   USkillDefinition *Definition;
-  int Index;
-  int PrevSkillIndex;
-  int NextSkillIndex;
-  int ParentTierIndex;
-  int PrevSkillTypeIndex;
-  int NextSkillTypeIndex;
-  int Grade;
+  int               Index;
+  int               PrevSkillIndex;
+  int               NextSkillIndex;
+  int               ParentTierIndex;
+  int               PrevSkillTypeIndex;
+  int               NextSkillTypeIndex;
+  int               Grade;
   UPlayerSkillTree *Owner;
 };
 struct native FSkillTreeSkillStateData {
-  USkillDefinition *SkillDefinition;
+  USkillDefinition           *SkillDefinition;
   USkillTreeBranchDefinition *ParentBranchDefinition;
-  int TierNumber;
-  int SkillGrade;
-  BITFIELD bIsUnlocked : 1;
+  int                         TierNumber;
+  int                         SkillGrade;
+  BITFIELD                    bIsUnlocked : 1;
 };
 struct native FSkillTreeTierStateData {
   USkillTreeBranchDefinition *ParentBranchDefinition;
-  int TierNumber;
-  int PointsSpentInTier;
-  BITFIELD bIsUnlocked : 1;
+  int                         TierNumber;
+  int                         PointsSpentInTier;
+  BITFIELD                    bIsUnlocked : 1;
 };
 struct native FSkillTreeBranchStateData {
   USkillTreeBranchDefinition *BranchDefinition;
-  int PointsSpentInBranch;
-  int MaxPointsForBranch;
-  BITFIELD bIsUnlocked : 1;
+  int                         PointsSpentInBranch;
+  int                         MaxPointsForBranch;
+  BITFIELD                    bIsUnlocked : 1;
 };
 struct native FSkillTreeTierLayoutData {
   USkillTreeBranchDefinition *ParentBranchDefinition;
-  int TierNumber;
+  int                         TierNumber;
   USkillTreeBranchDefinition *DependencyBranchDefinition;
-  int DependencyTierNumber;
-  TArray_USkillDefinitionPtr Skills;
+  int                         DependencyTierNumber;
+  TArray_USkillDefinitionPtr  Skills;
 };
 struct UPlayerSkillTree {
-  UObject Super;
+  UObject                           Super;
   int                               SkillTreeRootIndex;
   TArray_FPlayerSkillTreeBranchData Branches;
   TArray_FPlayerSkillTreeTierData   Tiers;
   TArray_FPlayerSkillTreeSkillData  Skills;
   /* private native map{VOID,VOID} */
-  _TMAP_NAME(INT, INT) SkillDefinitionToIndex;
-  int FirstSkillTypeIndex[5];
-  BITFIELD bSuppressNotifications : 1;
-  BITFIELD bInitialized           : 1;
+  _TMAP_NAME(INT, INT)              SkillDefinitionToIndex;
+  int                               FirstSkillTypeIndex[5];
+  BITFIELD                          bSuppressNotifications : 1;
+  BITFIELD                          bInitialized           : 1;
   /** TArray<ISkillTreeListener> */
-  TArray_FImplementedInterface SkillTreeListeners;
+  TArray_FImplementedInterface      SkillTreeListeners;
 }; assert_size(UPlayerSkillTree, 196);
 
 /* ---------------------------------------------------------- UCheatManager ---------------------------------------------------------- */
@@ -4389,7 +4387,7 @@ struct UWillowGFxUIManager {
 
 struct UDownloadablePackageLicenseItem {
   UObject Super;
-  int LicenseMask;
+  int     LicenseMask;
 }; assert_size(UDownloadablePackageLicenseItem, 64);
 
 /* ---------------------------------------------------------- UGoldenKeyLicenseItem ---------------------------------------------------------- */
@@ -6642,95 +6640,60 @@ struct UOnlineSubsystemSteamworks {
   BYTE                         bWasKeyboardInputCanceled;
   ENetworkNotificationPosition CurrentNotificationPosition;
   /* TODO: OnlineGameInterfaceSteamworks */
-  void        *CachedGameInt;
-  FString      LocalProfileName;
-  FString      LoggedInPlayerName;
-  FUniqueNetId LoggedInPlayerId;
-  int         LoggedInPlayerNum;
-  FString     ProfileDataDirectory;
-  FString     ProfileDataExtension;
-  /** delegate<OnWriteProfileSettingsComplete> */
-  TArray_FScriptDelegate WriteProfileSettingsDelegates;
-  UOnlineProfileSettings *CachedProfile;
-  /**delegate<OnReadPlayerStorageComplete> */
-  TArray_FScriptDelegate LocalPlayerStorageReadDelegates;
-  /**delegate<OnWritePlayerStorageComplete> */
-  TArray_FScriptDelegate LocalPlayerStorageWriteDelegates;
-  /**delegate<OnReadPlayerStorageForNetIdComplete> */
-  TArray_FScriptDelegate RemotePlayerStorageReadDelegates;
-  /**delegate<OnRecognitionComplete> */
-  TArray_FScriptDelegate SpeechRecognitionCompleteDelegates;
-  /**delegate<OnReadFriendsComplete> */
-  TArray_FScriptDelegate ReadFriendsDelegates;
-  /**delegate<OnFriendsChange> */
-  TArray_FScriptDelegate FriendsChangeDelegates;
-  /**delegate<OnMutingChange> */
-  TArray_FScriptDelegate MutingChangeDelegates;
-  /**delegate<OnLoginChange> */
-  TArray_FScriptDelegate LoginChangeDelegates;
-  /**delegate<OnLoginFailed> */
-  TArray_FScriptDelegate LoginFailedDelegates;
-  /**delegate<OnLogoutCompleted> */
-  TArray_FScriptDelegate LogoutCompletedDelegates;
-  /**delegate<OnGetUserAgeGroup> */
-  TArray_FScriptDelegate GetUserAgeGroupCompletedDelegates;
-  /**delegate<OnLoginStatusChange> */
-  TArray_FScriptDelegate LoginStatusChangeDelegates;
-  /**delegate<OnCreateOnlineAccountCompleted> */
-  TArray_FScriptDelegate AccountCreateDelegates;
-  /**delegate<OnPlayerTalkingStateChange> */
-  TArray_FScriptDelegate TalkingDelegates;
-  /**delegate<OnReadOnlineStatsComplete> */
-  TArray_FScriptDelegate ReadOnlineStatsCompleteDelegates;
-  /**delegate<OnFlushOnlineStatsComplete> */
-  TArray_FScriptDelegate FlushOnlineStatsDelegates;
-  /**delegate<OnConnectionStatusChange> */
-  TArray_FScriptDelegate ConnectionStatusChangeDelegates;
-  /**delegate<OnControllerChange> */
-  TArray_FScriptDelegate ControllerChangeDelegates;
-  /**delegate<OnLinkStatusChange> */
-  TArray_FScriptDelegate LinkStatusDelegates;
-  /**delegate<OnShareTitleFileComplete> */
-  TArray_FScriptDelegate ShareTitleFileCompleteDelegates;
-  /**delegate<OnReadTitleFileComplete> */
-  TArray_FScriptDelegate ReadTitleFileCompleteDelegates;
-  /**delegate<OnUnlockAchievementComplete> */
-  TArray_FScriptDelegate AchievementDelegates;
-  /**delegate<OnReadAchievementsComplete> */
-  TArray_FScriptDelegate AchievementReadDelegates;
-  /**delegate<OnContentChange> */
-  TArray_FScriptDelegate AnyContentChangeDelegates;
-  FLocalTalker CurrentLocalTalker;
-  TArray_FRemoteTalker RemoteTalkers;
-  int GameID;
-  /* TODO: OnlineStatsRead */
-  void *CurrentStatsRead;
-  TArray_FPropertyToColumn StatWriteKeyMapping;
-  TArray_FPendingPlayerStats PendingStats;
-  FString KeyboardResultsString;
-  /**delegate<OnKeyboardInputComplete> */
-  TArray_FScriptDelegate KeyboardInputDelegates;
-  /**delegate<OnFriendInviteReceived> */
-  TArray_FScriptDelegate FriendInviteReceivedDelegates;
-  /**delegate<OnAddFriendByNameComplete> */
-  TArray_FScriptDelegate AddFriendByNameCompleteDelegates;
-  FProfileSettingsCache ProfileCache;
-  UOnlinePlayerStorage *PlayerStorageCache;
-  FDeviceIdCache DeviceCache;
-  FString LocationUrl;
-  /**delegate<OnSentGameInvite> */
-  TArray_FScriptDelegate SentGameInviteDelegates;
-  /**delegate<OnReceivedGameInvite> */
-  TArray_FScriptDelegate ReceivedGameInviteDelegates;
-  /**delegate<OnJoinFriendGameComplete> */
-  TArray_FScriptDelegate JoinFriendGameCompleteDelegates;
-  /**delegate<OnGetNumberOfCurrentPlayersComplete> */
-  TArray_FScriptDelegate GetNumberOfCurrentPlayersCompleteDelegates;
-  /**delegate<OnRegisterHostStatGuidComplete> */
-  TArray_FScriptDelegate RegisterHostStatGuidCompleteDelegates;
-  /**delegate<OnCheckDownloadableContentList> */
-  TArray_FScriptDelegate CheckDownloadableContentListDelegates;
-  TArray_FOnlineStatusMapping StatusMappings;
+  void                        *CachedGameInt;
+  FString                      LocalProfileName;
+  FString                      LoggedInPlayerName;
+  FUniqueNetId                 LoggedInPlayerId;
+  int                          LoggedInPlayerNum;
+  FString                      ProfileDataDirectory;
+  FString                      ProfileDataExtension;
+  TArray_FScriptDelegate       WriteProfileSettingsDelegates;       /** delegate<OnWriteProfileSettingsComplete> */
+  UOnlineProfileSettings      *CachedProfile;
+  TArray_FScriptDelegate       LocalPlayerStorageReadDelegates;     /** delegate<OnReadPlayerStorageComplete> */
+  TArray_FScriptDelegate       LocalPlayerStorageWriteDelegates;    /** delegate<OnWritePlayerStorageComplete> */
+  TArray_FScriptDelegate       RemotePlayerStorageReadDelegates;    /** delegate<OnReadPlayerStorageForNetIdComplete> */
+  TArray_FScriptDelegate       SpeechRecognitionCompleteDelegates;  /** delegate<OnRecognitionComplete> */
+  TArray_FScriptDelegate       ReadFriendsDelegates;                /** delegate<OnReadFriendsComplete> */
+  TArray_FScriptDelegate       FriendsChangeDelegates;              /** delegate<OnFriendsChange> */
+  TArray_FScriptDelegate       MutingChangeDelegates;               /** delegate<OnMutingChange> */
+  TArray_FScriptDelegate       LoginChangeDelegates;                /** delegate<OnLoginChange> */
+  TArray_FScriptDelegate       LoginFailedDelegates;                /** delegate<OnLoginFailed> */
+  TArray_FScriptDelegate       LogoutCompletedDelegates;            /** delegate<OnLogoutCompleted> */
+  TArray_FScriptDelegate       GetUserAgeGroupCompletedDelegates;   /** delegate<OnGetUserAgeGroup> */
+  TArray_FScriptDelegate       LoginStatusChangeDelegates;          /** delegate<OnLoginStatusChange> */
+  TArray_FScriptDelegate       AccountCreateDelegates;              /** delegate<OnCreateOnlineAccountCompleted> */
+  TArray_FScriptDelegate       TalkingDelegates;                    /** delegate<OnPlayerTalkingStateChange> */
+  TArray_FScriptDelegate       ReadOnlineStatsCompleteDelegates;    /** delegate<OnReadOnlineStatsComplete> */
+  TArray_FScriptDelegate       FlushOnlineStatsDelegates;           /** delegate<OnFlushOnlineStatsComplete> */
+  TArray_FScriptDelegate       ConnectionStatusChangeDelegates;     /** delegate<OnConnectionStatusChange> */
+  TArray_FScriptDelegate       ControllerChangeDelegates;           /** delegate<OnControllerChange> */
+  TArray_FScriptDelegate       LinkStatusDelegates;                 /** delegate<OnLinkStatusChange> */
+  TArray_FScriptDelegate       ShareTitleFileCompleteDelegates;     /** delegate<OnShareTitleFileComplete> */
+  TArray_FScriptDelegate       ReadTitleFileCompleteDelegates;      /** delegate<OnReadTitleFileComplete> */
+  TArray_FScriptDelegate       AchievementDelegates;                /** delegate<OnUnlockAchievementComplete> */
+  TArray_FScriptDelegate       AchievementReadDelegates;            /** delegate<OnReadAchievementsComplete> */
+  TArray_FScriptDelegate       AnyContentChangeDelegates;           /** delegate<OnContentChange> */
+  FLocalTalker                 CurrentLocalTalker;
+  TArray_FRemoteTalker         RemoteTalkers;
+  int                          GameID;
+  UOnlineStatsRead            *CurrentStatsRead;
+  TArray_FPropertyToColumn     StatWriteKeyMapping;
+  TArray_FPendingPlayerStats   PendingStats;
+  FString                      KeyboardResultsString;
+  TArray_FScriptDelegate       KeyboardInputDelegates;            /** delegate<OnKeyboardInputComplete> */
+  TArray_FScriptDelegate       FriendInviteReceivedDelegates;     /** delegate<OnFriendInviteReceived> */
+  TArray_FScriptDelegate       AddFriendByNameCompleteDelegates;  /** delegate<OnAddFriendByNameComplete> */
+  FProfileSettingsCache        ProfileCache;
+  UOnlinePlayerStorage        *PlayerStorageCache;
+  FDeviceIdCache               DeviceCache;
+  FString                      LocationUrl;
+  TArray_FScriptDelegate       SentGameInviteDelegates;                     /** delegate<OnSentGameInvite> */
+  TArray_FScriptDelegate       ReceivedGameInviteDelegates;                 /** delegate<OnReceivedGameInvite> */
+  TArray_FScriptDelegate       JoinFriendGameCompleteDelegates;             /** delegate<OnJoinFriendGameComplete> */
+  TArray_FScriptDelegate       GetNumberOfCurrentPlayersCompleteDelegates;  /** delegate<OnGetNumberOfCurrentPlayersComplete> */
+  TArray_FScriptDelegate       RegisterHostStatGuidCompleteDelegates;       /** delegate<OnRegisterHostStatGuidComplete> */
+  TArray_FScriptDelegate       CheckDownloadableContentListDelegates;       /** delegate<OnCheckDownloadableContentList> */
+  TArray_FOnlineStatusMapping  StatusMappings;
   TArray_FOnlineStatusPropertyMapping StatusPropertyMappings;
   TArray_FOnlineStatusContextMapping StatusContextMappings;
   FString DefaultStatus;
@@ -6754,8 +6717,7 @@ struct UOnlineSubsystemSteamworks {
   /* TODO: OnlineAuthInterfaceSteamworks */
   void *CachedAuthInt;
   TArray_FIpAddr PendingRedirects;
-  /** delegate<OnExternalUIChange> */
-  TArray_FScriptDelegate ExternalUIChangeDelegates;
+  TArray_FScriptDelegate ExternalUIChangeDelegates;  /** delegate<OnExternalUIChange> */
   FMarketplaceListCache DLCListCache;
   TArray_FMarketplaceOfferData MarketplaceOffers;
   /* TODO: QoSHandlerSteamworks */
@@ -7014,6 +6976,12 @@ struct UDamageType {
   float                   FracturedMeshDamage;
 }; assert_size(UDamageType, 100);
 
+/* ---------------------------------------------------------- UKillZDamageType ---------------------------------------------------------- */
+
+struct UKillZDamageType {
+  UDamageType Super;
+}; assert_size(UKillZDamageType, 100);
+
 /* ---------------------------------------------------------- UWillowDamageType ---------------------------------------------------------- */
 
 struct UWillowDamageType {
@@ -7039,6 +7007,12 @@ struct UWillowDamageType {
 struct UWillowDamageSource {
   UWillowDamageType Super;
 }; assert_size(UWillowDamageSource, 128);
+
+/* ---------------------------------------------------------- UWillowDmgSource_Skill ---------------------------------------------------------- */
+
+struct UWillowDmgSource_Skill {
+  UWillowDamageSource Super;
+}; assert_size(UWillowDmgSource_Skill, 128);
 
 /* ---------------------------------------------------------- UWillowDmgSource_Bullet ---------------------------------------------------------- */
 
@@ -8193,6 +8167,12 @@ struct ACameraActor {
   UStaticMeshComponent  *MeshComp;
 }; assert_size(ACameraActor, 648);
 
+/* ---------------------------------------------------------- ADynamicCameraActor ---------------------------------------------------------- */
+
+struct ADynamicCameraActor {
+  ACameraActor Super;
+}; assert_size(ADynamicCameraActor, 648);
+
 /* ---------------------------------------------------------- AWillowSpectatorPoint ---------------------------------------------------------- */
 
 struct AWillowSpectatorPoint {
@@ -8980,55 +8960,53 @@ struct native FViewTargetTransitionParams {
   BITFIELD bLockOutgoing : 1;
 };
 struct ACamera {
-  AActor Super;
-  APlayerController *PCOwner;
-  FName CameraStyle;
-  float DefaultFOV;
-  BITFIELD bLockedFOV                        : 1;
-  BITFIELD bConstrainAspectRatio             : 1;
-  BITFIELD bEnableFading                     : 1;
-  BITFIELD bForceDisableTemporalAA           : 1;
-  BITFIELD bEnableColorScaling               : 1;
-  BITFIELD bEnableColorScaleInterp           : 1;
-  BITFIELD bUseClientSideCameraUpdates       : 1;
-  BITFIELD bDebugClientSideCamera            : 1;
-  BITFIELD bShouldSendClientSideCameraUpdate : 1;
-  float LockedFOV;
-  float ConstrainedAspectRatio;
-  float DefaultAspectRatio;
-  float OffAxisYawAngle;
-  float OffAxisPitchAngle;
-  FColor FadeColor;
-  float FadeAmount;
-  float CamOverridePostProcessAlpha;
-  FPostProcessSettings CamPostProcessSettings;
-  FRenderingPerformanceOverrides RenderingOverrides;
-  FVector ColorScale;
-  FVector DesiredColorScale;
-  FVector OriginalColorScale;
-  float ColorScaleInterpDuration;
-  float ColorScaleInterpStartTime;
-  FTCameraCache CameraCache;
-  FTCameraCache LastFrameCameraCache;
-  FTViewTarget ViewTarget;
-  FTViewTarget PendingViewTarget;
-  float BlendTimeToGo;
-  FViewTargetTransitionParams BlendParams;
-  TArray_UCameraModifierPtr ModifierList;
-  float FreeCamDistance;
-  FVector FreeCamOffset;
-  FVector2D FadeAlpha;
-  float FadeTime;
-  float FadeTimeRemaining;
-  /* TODO: TArray_EmitterCameraLensEffectBasePtr */
-  TArray_voidPtr CameraLensEffects;
-  UCameraModifier_CameraShake *CameraShakeCamMod;
-  UClass *CameraShakeCamModClass;
-  UCameraAnimInst *AnimInstPool[8];
-  TArray_UCameraAnimInstPtr ActiveAnims;
-  TArray_UCameraAnimInstPtr FreeAnims;
-  /* TODO: DynamicCameraActor */
-  void *AnimCameraActor;
+  AActor                                 Super;
+  APlayerController                     *PCOwner;
+  FName                                  CameraStyle;
+  float                                  DefaultFOV;
+  BITFIELD                               bLockedFOV                        : 1;
+  BITFIELD                               bConstrainAspectRatio             : 1;
+  BITFIELD                               bEnableFading                     : 1;
+  BITFIELD                               bForceDisableTemporalAA           : 1;
+  BITFIELD                               bEnableColorScaling               : 1;
+  BITFIELD                               bEnableColorScaleInterp           : 1;
+  BITFIELD                               bUseClientSideCameraUpdates       : 1;
+  BITFIELD                               bDebugClientSideCamera            : 1;
+  BITFIELD                               bShouldSendClientSideCameraUpdate : 1;
+  float                                  LockedFOV;
+  float                                  ConstrainedAspectRatio;
+  float                                  DefaultAspectRatio;
+  float                                  OffAxisYawAngle;
+  float                                  OffAxisPitchAngle;
+  FColor                                 FadeColor;
+  float                                  FadeAmount;
+  float                                  CamOverridePostProcessAlpha;
+  FPostProcessSettings                   CamPostProcessSettings;
+  FRenderingPerformanceOverrides         RenderingOverrides;
+  FVector                                ColorScale;
+  FVector                                DesiredColorScale;
+  FVector                                OriginalColorScale;
+  float                                  ColorScaleInterpDuration;
+  float                                  ColorScaleInterpStartTime;
+  FTCameraCache                          CameraCache;
+  FTCameraCache                          LastFrameCameraCache;
+  FTViewTarget                           ViewTarget;
+  FTViewTarget                           PendingViewTarget;
+  float                                  BlendTimeToGo;
+  FViewTargetTransitionParams            BlendParams;
+  TArray_UCameraModifierPtr              ModifierList;
+  float                                  FreeCamDistance;
+  FVector                                FreeCamOffset;
+  FVector2D                              FadeAlpha;
+  float                                  FadeTime;
+  float                                  FadeTimeRemaining;
+  TArray_AEmitterCameraLensEffectBasePtr CameraLensEffects;
+  UCameraModifier_CameraShake           *CameraShakeCamMod;
+  UClass                                *CameraShakeCamModClass;
+  UCameraAnimInst                       *AnimInstPool[8];
+  TArray_UCameraAnimInstPtr              ActiveAnims;
+  TArray_UCameraAnimInstPtr              FreeAnims;
+  ADynamicCameraActor                   *AnimCameraActor;
 }; assert_size(ACamera, 1020);
 
 /* ---------------------------------------------------------- AProjectile ---------------------------------------------------------- */
@@ -9075,29 +9053,22 @@ struct UWillowDamagePipeline {
   UClass                      *DamageSource;
   UWillowGlobals              *Globals;
   UGlobalsDefinition          *GlobalsDef;
-  AWorldInfo *WorldInfo;
-  AWillowGameReplicationInfo *WGRI;
-  AActor *DamagedActor;
-  APawn *DamagedPawnBase;
-  AWillowInteractiveObject *DamagedIO;
-  AWillowPawn *DamagedPawn;
-  AWillowAIPawn *DamagedAIPawn;
-  AWillowPlayerController *DamageInstigatorWPC;
-  UBodyHitRegionDefinition *HitRegionDef;
-  /** IDamageable */
-  FImplementedInterface DamageableInt;
-  /** IHitRegionConsumer */
-  FImplementedInterface HitRegionConsumerInt;
-  /** IProtectionTimer */
-  FImplementedInterface ProtectableInt;
-  /** IProjectileReflector */
-  FImplementedInterface DamagedReflectableInt;
-  /** IProjectileReflector */
-  FImplementedInterface InstigatorReflectableInt;
-  /** ITargetable */
-  FImplementedInterface DamagedTargetableInt;
-  /** ITargetable */
-  FImplementedInterface InstigatorTargetableInt;
+  AWorldInfo                  *WorldInfo;
+  AWillowGameReplicationInfo  *WGRI;
+  AActor                      *DamagedActor;
+  APawn                       *DamagedPawnBase;
+  AWillowInteractiveObject    *DamagedIO;
+  AWillowPawn                 *DamagedPawn;
+  AWillowAIPawn               *DamagedAIPawn;
+  AWillowPlayerController     *DamageInstigatorWPC;
+  UBodyHitRegionDefinition    *HitRegionDef;
+  FImplementedInterface DamageableInt;             /** IDamageable */
+  FImplementedInterface HitRegionConsumerInt;      /** IHitRegionConsumer */
+  FImplementedInterface ProtectableInt;            /** IProtectionTimer */
+  FImplementedInterface DamagedReflectableInt;     /** IProjectileReflector */
+  FImplementedInterface InstigatorReflectableInt;  /** IProjectileReflector */
+  FImplementedInterface DamagedTargetableInt;      /** ITargetable */
+  FImplementedInterface InstigatorTargetableInt;   /** ITargetable */
   BITFIELD bCanReflect : 1;
   /** EBulletFromClip */
   EBulletFromClip BulletFromClipType;
@@ -13016,6 +12987,22 @@ struct AActionSkill {
   int               TimeStarted;
 }; assert_size(AActionSkill, 564);
 
+/* ---------------------------------------------------------- ADeathtrapActionSkill ---------------------------------------------------------- */
+
+struct ADeathtrapActionSkill {
+  AActionSkill           Super;
+  AWillowAIPawn         *DeathTrap;
+  USkillDefinition      *ShareShieldsSkill;
+  AWillowPawn           *MedicBeamTarget;
+  EMedicBeamState        MedicBeamState;
+  FName                  MedicBeamSourceSocket;
+  FName                  MedicBeamTargetSocket;
+  float                  MedicBeamMaxDistance;
+  USkillDefinition      *MedicBeamSkill;
+  USkillDefinition      *MedicBeamTargetSkill;
+  UFiringModeDefinition *MedicBeamFiringMode;
+}; assert_size(ADeathtrapActionSkill, 612);
+
 /* ---------------------------------------------------------- AScorpioActionSkill ---------------------------------------------------------- */
 
 struct AScorpioActionSkill {
@@ -16756,12 +16743,12 @@ struct UInputDeviceCollectionDefinition {
 /* ---------------------------------------------------------- UDownloadableContentDefinition ---------------------------------------------------------- */
 
 struct UDownloadableContentDefinition {
-  UGBXDefinition Super;
-  void *VfTable_IIDlcLicenseObject;
+  UGBXDefinition                  Super;
+  void                           *VfTable_IIDlcLicenseObject;
   UDownloadablePackageDefinition *PackageDef;
-  int ContentId;
-  int LicenseMask;
-  FString ContentDisplayName;
+  int                             ContentId;
+  int                             LicenseMask;
+  FString                         ContentDisplayName;
 }; assert_size(UDownloadableContentDefinition, 88);
 
 /* ---------------------------------------------------------- UDownloadableCustomizationSetDefinition ---------------------------------------------------------- */
@@ -16801,10 +16788,10 @@ struct UDownloadableItemSetDefinition {
 /* ---------------------------------------------------------- UDownloadableBalanceModifierDefinition ---------------------------------------------------------- */
 
 struct UDownloadableBalanceModifierDefinition {
-  UDownloadableContentDefinition Super;
-  UBalanceModifierDefinition *BalanceModifier;
-  int LevelCapIncrease;
-  int OverpowerLevelCapIncrease;
+  UDownloadableContentDefinition  Super;
+  UBalanceModifierDefinition     *BalanceModifier;
+  int                             LevelCapIncrease;
+  int                             OverpowerLevelCapIncrease;
   UPlayerChallengeListDefinition *ChallengeList;
 }; assert_size(UDownloadableBalanceModifierDefinition, 104);
 
@@ -16815,22 +16802,22 @@ struct native FDlcLevelTravelPair {
   ULevelTravelStationDefinition *DlcStationDef;
 };
 struct UDownloadableExpansionDefinition {
-  UDownloadableContentDefinition  Super;
-  TArray_FDlcLevelTravelPair      LevelTravelPairs;
-  ULevelDependencyList           *LevelDependencyList;
-  UPlayerChallengeListDefinition *ChallengeList;
-  TArray_UGearboxDialogGroupPtr   NPCDialogGroups;
-  USwfMovie                      *FastTravelMapMovie;
-  EWillowAchievementList          AllSideMissionsCompleteAchievement;
-  UFastTravelStationDefinition   *GatewayStationDefinition;
-  TArray_FPlayThroughData         RegionBalanceData;
-  UCurrencyListDefinition        *Currencies;
-  int                             MissionNumberBase;
-  TArray_UMissionDefinitionPtr    SeasonalMissionList;
+  UDownloadableContentDefinition        Super;
+  TArray_FDlcLevelTravelPair            LevelTravelPairs;
+  ULevelDependencyList                 *LevelDependencyList;
+  UPlayerChallengeListDefinition       *ChallengeList;
+  TArray_UGearboxDialogGroupPtr         NPCDialogGroups;
+  USwfMovie                            *FastTravelMapMovie;
+  EWillowAchievementList                AllSideMissionsCompleteAchievement;
+  UFastTravelStationDefinition         *GatewayStationDefinition;
+  TArray_FPlayThroughData               RegionBalanceData;
+  UCurrencyListDefinition              *Currencies;
+  int                                   MissionNumberBase;
+  TArray_UMissionDefinitionPtr          SeasonalMissionList;
   UPlayerTrainingMessageListDefinition *TrainingMessageListDef;
-  FString AlwaysLoadedMapSoundBankName;
-  UAkBank *AlwaysLoadedSFXBank;
-  UAkBank *AlwaysLoadedVoiceBank;
+  FString                               AlwaysLoadedMapSoundBankName;
+  UAkBank                              *AlwaysLoadedSFXBank;
+  UAkBank                              *AlwaysLoadedVoiceBank;
 }; assert_size(UDownloadableExpansionDefinition, 188);
 
 /* ---------------------------------------------------------- URegionDefinition ---------------------------------------------------------- */
@@ -16842,14 +16829,14 @@ struct URegionDefinition {
 /* ---------------------------------------------------------- UWillowRegionDefinition ---------------------------------------------------------- */
 
 struct UWillowRegionDefinition {
-  URegionDefinition Super;
+  URegionDefinition                 Super;
   UDownloadableExpansionDefinition *DlcExpansion;
 }; assert_size(UWillowRegionDefinition, 64);
 
 /* ---------------------------------------------------------- UMissionDirectivesDefinition ---------------------------------------------------------- */
 
 struct UMissionDirectivesDefinition {
-  UGBXDefinition Super;
+  UGBXDefinition              Super;
   TArray_FMissionDirectorData MissionDirectives;
 }; assert_size(UMissionDirectivesDefinition, 72);
 
@@ -16878,7 +16865,7 @@ struct native FCoordinatedScalarParameter {
   BITFIELD          bConvertAxisToWorldSpace : 1;
 };
 struct native FCoordinatedVectorParameter {
-  FName ParamName;
+  FName              ParamName;
   FInterpCurveVector ParamValueOverTime;
 };
 struct native FCoordinatedParticleSystemDefinition {
@@ -16920,69 +16907,69 @@ struct UCoordinatedEffectDefinition {
 /* ---------------------------------------------------------- UPlayerEventProviderDefinition ---------------------------------------------------------- */
 
 struct UPlayerEventProviderDefinition {
-  UGBXDefinition Super;
-  void *VfTable_IIBehaviorProvider;
-  void *VfTable_IIConstructObject;
+  UGBXDefinition               Super;
+  void                        *VfTable_IIBehaviorProvider;
+  void                        *VfTable_IIConstructObject;
   UBehaviorProviderDefinition *BehaviorProviderDefinition;
 }; assert_size(UPlayerEventProviderDefinition, 72);
 
 /* ---------------------------------------------------------- UPlayerNameIdentifierDefinition ---------------------------------------------------------- */
 
 struct UPlayerNameIdentifierDefinition {
-  UGBXDefinition Super;
-  FString CharacterName;
-  FString LocalizedCharacterName;
-  FString LocalizedCharacterDescription;
-  FString LocalizedActionSkillDescription;
-  FString LocalizedPreferredWeaponDescription;
-  int XlastCharacterIdOffset;
+  UGBXDefinition                    Super;
+  FString                           CharacterName;
+  FString                           LocalizedCharacterName;
+  FString                           LocalizedCharacterDescription;
+  FString                           LocalizedActionSkillDescription;
+  FString                           LocalizedPreferredWeaponDescription;
+  int                               XlastCharacterIdOffset;
   UPlayerClassIdentifierDefinition *CharacterClassId;
-  UPlayerSaveGame *DefaultSaveGame;/* 128 */
-  int UISortOrder;
-  BITFIELD IsDefaultNewCharacter          : 1;
-  BITFIELD GFxActionSkillHasBar           : 1;
-  BITFIELD GFxActionSkillHasFade          : 1;
-  BITFIELD GFxActionSkillDeferTimeToSkill : 1;
-  BITFIELD GFxActionSkillGuideCanBeHidden : 1;
-  BITFIELD bShouldOwnDLCToBeVisible       : 1;
-  USwfMovie *StatusMenuGFxPortrait;
-  FString PlayerRegistrationPortraitName;
-  int CharacterSelectionGFxMovieId;
-  FString CharacterSelectionGFxMovieVarString;
-  USwfMovie *CharacterIconSwfMovie;
-  USwfMovie *CoopCharacterIconSwfMovie;
-  FString ScaleformSkillLeftBranchName;
-  FString ScaleformSkillMiddleBranchName;
-  FString ScaleformSkillRightBranchName;
-  FString GFxActionSkillBarPath;
-  FString GFxActionSkillStartPath;
-  FString GFxActionSkillStartString;
-  USwfMovie *GFxActionSkillStartExternalClip;
-  FString GFxActionSkillFadeGotoAndPlayString;
-  FString GFxActionSkillFadeString;
-  USwfMovie *GFxActionSkillPortrait;
-  FString GFxActionSkillTooltipPath;
-  FString GFxActionSkillActivateTooltipValue;
-  FString GFxActionSkillDisableTooltipValue;
-  FString GFxActionSkillTooltipStringPath;
-  FString GFxActionSkillTooltipString;
-  FString GFxActionSkillEnablePath;
-  FString GFxActionSkillEnableValue;
-  FString GFxActionSkillDisablePath;
-  FString GFxActionSkillDisableValue;
-  FString GFxActionSkillGuideHideGotoAndPlayString;
-  FString GFxActionSkillGuideHideStart;
-  FString GFxActionSkillGuideHideResume;
+  UPlayerSaveGame                  *DefaultSaveGame;/* 128 */
+  int                               UISortOrder;
+  BITFIELD                          IsDefaultNewCharacter          : 1;
+  BITFIELD                          GFxActionSkillHasBar           : 1;
+  BITFIELD                          GFxActionSkillHasFade          : 1;
+  BITFIELD                          GFxActionSkillDeferTimeToSkill : 1;
+  BITFIELD                          GFxActionSkillGuideCanBeHidden : 1;
+  BITFIELD                          bShouldOwnDLCToBeVisible       : 1;
+  USwfMovie                        *StatusMenuGFxPortrait;
+  FString                           PlayerRegistrationPortraitName;
+  int                               CharacterSelectionGFxMovieId;
+  FString                           CharacterSelectionGFxMovieVarString;
+  USwfMovie                        *CharacterIconSwfMovie;
+  USwfMovie                        *CoopCharacterIconSwfMovie;
+  FString                           ScaleformSkillLeftBranchName;
+  FString                           ScaleformSkillMiddleBranchName;
+  FString                           ScaleformSkillRightBranchName;
+  FString                           GFxActionSkillBarPath;
+  FString                           GFxActionSkillStartPath;
+  FString                           GFxActionSkillStartString;
+  USwfMovie                        *GFxActionSkillStartExternalClip;
+  FString                           GFxActionSkillFadeGotoAndPlayString;
+  FString                           GFxActionSkillFadeString;
+  USwfMovie                        *GFxActionSkillPortrait;
+  FString                           GFxActionSkillTooltipPath;
+  FString                           GFxActionSkillActivateTooltipValue;
+  FString                           GFxActionSkillDisableTooltipValue;
+  FString                           GFxActionSkillTooltipStringPath;
+  FString                           GFxActionSkillTooltipString;
+  FString                           GFxActionSkillEnablePath;
+  FString                           GFxActionSkillEnableValue;
+  FString                           GFxActionSkillDisablePath;
+  FString                           GFxActionSkillDisableValue;
+  FString                           GFxActionSkillGuideHideGotoAndPlayString;
+  FString                           GFxActionSkillGuideHideStart;
+  FString                           GFxActionSkillGuideHideResume;
   UDownloadableCharacterDefinition *DlcCharDef;
 }; assert_size(UPlayerNameIdentifierDefinition, 432);
 
 /* ---------------------------------------------------------- UGearboxDialogEventTag ---------------------------------------------------------- */
 
 struct UGearboxDialogEventTag {
-  UGBXDefinition Super;
-  BITFIELD bGroupEvent    : 1;
-  BITFIELD bSoundEffect   : 1;
-  BITFIELD bIsDeathScream : 1;
+  UGBXDefinition          Super;
+  BITFIELD                bGroupEvent    : 1;
+  BITFIELD                bSoundEffect   : 1;
+  BITFIELD                bIsDeathScream : 1;
   UGearboxDialogPriority *Priority;
 }; assert_size(UGearboxDialogEventTag, 68);
 
@@ -16999,18 +16986,18 @@ struct UWillowDialogEventTag {
 /* ---------------------------------------------------------- UWillowGFxUIManagerDefinition ---------------------------------------------------------- */
 
 struct UWillowGFxUIManagerDefinition {
-  UGBXDefinition Super;
-  FVector MeshTranslation[EUILayout__MAX];
-  FRotator MeshRotation;
-  FVector ViewOffsetClamp;
-  float ViewOffsetScale;
-  FName TextureParameterName;
+  UGBXDefinition       Super;
+  FVector              MeshTranslation[EUILayout__MAX];
+  FRotator             MeshRotation;
+  FVector              ViewOffsetClamp;
+  float                ViewOffsetScale;
+  FName                TextureParameterName;
   GFxRenderTextureMode RenderTextureMode;
   UGFxMovieDefinition *DialogBoxDefinition;
   UGFxMovieDefinition *TrainingDialogBoxDefinition;
   UGFxMovieDefinition *TrainingDialogBoxDefinition_NoPause;
   UGFxMovieDefinition *EditDialogBoxDefinition;
-  int RenderTextureSize;
+  int                  RenderTextureSize;
 }; assert_size(UWillowGFxUIManagerDefinition, 192);
 
 /* ---------------------------------------------------------- UTravelStationDefinition ---------------------------------------------------------- */
@@ -17184,10 +17171,8 @@ struct native FAkEventResolver {
 };
 struct UGFxManagerDefinition {
   UGBXDefinition          Super;
-  /** Class<GFxManager> */
-  UClass                 *ManagerClass;
-  /** IDialogBox */
-  FImplementedInterface   GFxDialogBox;
+  UClass                 *ManagerClass;  /** Class<GFxManager> */
+  FImplementedInterface   GFxDialogBox;  /** IDialogBox */
   TArray_FAkEventResolver InteractionSounds;
 }; assert_size(UGFxManagerDefinition, 84);
 
@@ -17242,30 +17227,30 @@ struct UWillowDialogNameTag {
 /* ---------------------------------------------------------- UPawnAllegiance ---------------------------------------------------------- */
 
 struct native FOpinionData {
-  EOpinion Opinion;
+  EOpinion         Opinion;
   UPawnAllegiance *Allegiance;
 };
 struct UPawnAllegiance {
-  UGBXDefinition Super;
-  EOpinion DefaultOpinion;
-  EOpinion SelfOpinion;
-  EOpinion ForcedOtherOpinion;
+  UGBXDefinition      Super;
+  EOpinion            DefaultOpinion;
+  EOpinion            SelfOpinion;
+  EOpinion            ForcedOtherOpinion;
   TArray_FOpinionData MyOpinions;
   TArray_FOpinionData OtherOpinions;
-  BITFIELD bForceAllOtherOpinions : 1;
-  FName AllegianceKilledStat;
+  BITFIELD            bForceAllOtherOpinions : 1;
+  FName               AllegianceKilledStat;
 }; assert_size(UPawnAllegiance, 100);
 
 /* ---------------------------------------------------------- UBadassRewardDefinition ---------------------------------------------------------- */
 
 struct UBadassRewardDefinition {
-  UGBXDefinition Super;
-  FString RewardName;
-  FString Description;
-  FString RewardString;
+  UGBXDefinition                      Super;
+  FString                             RewardName;
+  FString                             Description;
+  FString                             RewardString;
   UAttributeInitializationDefinition *AttrInitDef;
-  UAttributePresentationDefinition *Presentation;
-  int CachedRewardIndex;
+  UAttributePresentationDefinition   *Presentation;
+  int                                 CachedRewardIndex;
 }; assert_size(UBadassRewardDefinition, 108);
 
 /* ---------------------------------------------------------- UBaseHitRegionDefinition ---------------------------------------------------------- */
@@ -17277,7 +17262,7 @@ struct UBaseHitRegionDefinition {
 /* ---------------------------------------------------------- UBodyClassDefinition ---------------------------------------------------------- */
 
 struct native FTurnData {
-  float MinRepeatTime;
+  float              MinRepeatTime;
   USpecialMove_Turn *Left_45;
   USpecialMove_Turn *Right_45;
   USpecialMove_Turn *Left_90;
@@ -17313,8 +17298,8 @@ struct native FCustomCringeData {
 };
 struct native FBreathingLoopInfo {
   UExpressionEvaluator *Condition;
-  UAkEvent *StartAkEvent;
-  UAkEvent *StopAkEvent;
+  UAkEvent             *StartAkEvent;
+  UAkEvent             *StopAkEvent;
 };
 struct native FInjuredLoopOverride {
   UWillowDialogNameTag *NameTag;
@@ -17555,7 +17540,6 @@ struct UTurnDefinition {
 
 struct UInventoryPartListCollectionDefinition {
   UGBXDefinition                     Super;
-  /** EPartReplacementMode */
   EPartReplacementMode               PartReplacementMode;
   TArray_AttributeInitializationData ConsolidatedAttributeInitData;
 }; assert_size(UInventoryPartListCollectionDefinition, 76);
@@ -18772,7 +18756,6 @@ struct UWillowImpactDefinition {
 
 /* ---------------------------------------------------------- UWillowExplosionImpactDefinition ---------------------------------------------------------- */
 
-/* ----------------------------- FDecalData ----------------------------- */
 struct native FDecalData {
   TArray_UMaterialInterfacePtr Materials;
   float                        Width;
@@ -18835,6 +18818,41 @@ struct UAttributeInitializationDefinition {
   Variance                             RandomVariance;
   Range                                RangeRestriction;
 }; assert_size(UAttributeInitializationDefinition, 240);
+
+/* ---------------------------------------------------------- UBehavior_AttemptStatusEffect ---------------------------------------------------------- */
+
+struct UBehavior_AttemptStatusEffect {
+  UBehaviorBase               Super;
+  void                       *VfTable_IIDamageCauser;
+  UStatusEffectDefinition    *StatusEffect;
+  TArray_FBehaviorContextData TargetContext;
+  AttributeInitializationData InstigatorChanceModifier;
+  AttributeInitializationData StatusEffectDamage;
+  AttributeInitializationData StatusEffectChance;
+}; assert_size(UBehavior_AttemptStatusEffect, 144);
+
+
+/* ---------------------------------------------------------- UGameBalanceDefinition ---------------------------------------------------------- */
+
+struct native FMissionStateBalanceAdjustment {
+  UMissionDefinition         *Mission;
+  AttributeInitializationData MinGameStage;
+  AttributeInitializationData MaxGameStage;
+  AttributeInitializationData AwesomeLevel;
+};
+struct native FRegionBalanceData {
+  URegionDefinition                    *Region;
+  AttributeInitializationData           MinDefaultGameStage;
+  AttributeInitializationData           MaxDefaultGameStage;
+  AttributeInitializationData           DefaultAwesomeLevel;
+  BITFIELD                              bSpecifyBoostAbovePlayer : 1;
+  AttributeInitializationData           GameStageIncreaseAbovePlayer;
+  TArray_FMissionStateBalanceAdjustment MissionOverrides;
+};
+struct UGameBalanceDefinition {
+  UGBXDefinition            Super;
+  TArray_FRegionBalanceData BalanceByRegion;
+}; assert_size(UGameBalanceDefinition, 72);
 
 /* ---------------------------------------------------------- UAnemoneInfectionDefinition ---------------------------------------------------------- */
 
@@ -19544,7 +19562,7 @@ struct UAssetLibraryManager {
 /* ---------------------------------------------------------- UGlobalsDefinition ---------------------------------------------------------- */
 
 struct native FKillSkillDuration {
-  int Players;
+  int   Players;
   float Duration;
 };
 struct native FExpAwardWeight {
@@ -19582,9 +19600,8 @@ struct native FStatusEffectTypeCommonProperties {
   UAkEvent *EffectStopAkEvent;
 };
 struct native FPlayThroughData {
-  int PlayThroughNumber;
-  /* TODO: TArray_GameBalanceDefinitionPtr */
-  TArray_voidPtr BalanceDefinitions;
+  int                              PlayThroughNumber;
+  TArray_UGameBalanceDefinitionPtr BalanceDefinitions;
 };
 struct native FSlaughterMissionChain {
   TArray_UMissionDefinitionPtr SlaughterMissions;
@@ -19594,119 +19611,119 @@ struct native FInputContextData {
   UInputContextDefinition *Definition;
 };
 struct UGlobalsDefinition {
-  UGearboxGlobalsDefinition     Super;
-  int                           BulletReflectionRadius;
-  float                         BulletReflectionSpeedAdjustment;
-  UParticleSystem              *BulletReflectionParticle;
-  AttributeInitializationData   BulletReflectionInaccuracyFormula;
-  UParticleSystem              *BulletPenetratedEnemyParticle;
-  UAkEvent                     *BulletPenetratedEnemyAkEvent;
-  FName                         DualWieldSwitchName;
-  FName                         DualWieldSprintSwitchName;
-  FName                         DualWieldLeftSideControl;
-  TArray_FKillSkillDuration     KillSkillDurationsPerPlayers;
-  AttributeInitializationData   GeneralSkillPointsPerLevelUp;
-  AttributeInitializationData   GeneralSkillPointsTotalForCurrentLevel;
-  AttributeInitializationData   SpecialistSkillPointsPerLevelUp;
-  AttributeInitializationData   CostToResetSkillPoints;
-  TArray_USkillDefinitionPtr    WeaponProficiencySkills;
-  AttributeInitializationData   BaseEnemyExperienceFormula;
-  TArray_FDamageTypeExpModifier DamageTypeExpModifiers;
-  TArray_FLevelBasedExpScale    ExpScaleByLevelDifference;
-  TArray_FExpAwardWeight        ExpAwardWeights;
-  int                           ExpMaxPlayerLevel;
-  AttributeInitializationData   ExpPointsRequiredForLevel;
-  AttributeInitializationData   VehicleVSCharacterExpModifier;
-  AttributeInitializationData   WorldDiscoveryExperienceFormula;
-  UMissionObjectiveDefinition  *FastTravelObjective;
-  int                           TravelDelay;
-  UTravelStationDefinition     *DlcPreviousStation;
-  FName                         SanctuaryMapName;
-  FName                         SanctuaryAirMapName;
-  FName                         SanctuaryBackupMapName;
-  UMissionObjectiveDefinition  *SanctuaryInaccessibleObjective;
-  UMissionObjectiveDefinition  *SanctuaryFlyingObjective;
-  float                         MinTeleportTime;
-  UAkEvent                     *TeleporterStartAkEvent;
-  UAkEvent                     *TeleporterStopAkEvent;
-  UParticleSystem              *TeleporterHoldingCellPartSys;
-  UDesignerAttributeDefinition *StartupTeleporterAttribute;
-  AttributeInitializationData   TeleportCost;
-  UAkEvent                     *PauseAkEvent;
-  UAkEvent                     *UnpauseAkEvent;
-  UAkSwitch                    *DefaultMaterialAkSwitch;
-  UAkSwitch                    *FirstPersonAkSwitch;
-  UAkSwitch                    *ThirdPersonAkSwitch;
-  UAkEvent                     *EchoStartedAkEvent;
-  UAkEvent                     *EchoEndedAkEvent;
-  UAkRtpc                      *MasterVolumeAkRtpc;
-  UAkRtpc                      *UserVolumeMusicAkRtpc;
-  UAkRtpc                      *UserVolumeSfxAkRtpc;
-  UAkRtpc                      *UserVolumeVOAkRtpc;
-  UAkRtpc                      *ListenerDistanceAkRtpc;
-  UAkRtpc                      *ApproachSpeedAkRtpc;
-  UAkRtpc                      *SpeedAkRtpc;
-  UAkEvent                     *ResetStatesAkEvent;
-  UAkEvent                     *StartSplitScreenAkEvent;
-  UAkState                     *PlayerVoiceAkState;
-  UAkState                     *JackVoiceAkState;
-  UAkState                     *PlayerCalloutsDisabledAkState;
-  UAkState                     *PlayerCalloutsEnabledAkState;
-  UAkEvent                     *CinematicModePauseDialogAkEvent;
-  UAkEvent                     *CinematicModeResumeDialogAkEvent;
-  UAkEvent                     *ShieldLowWarningStartAkEvent;
-  UAkEvent                     *ShieldLowWarningStopAkEvent;
-  UAkEvent                     *ShieldRecoveringAkEvent;
-  UAkEvent                     *ShieldRecoveredAkEvent;
-  UAkEvent                     *ShieldDownAkEvent;
-  float                         TinnitusEffectDecayRate;
-  UAkRtpc                      *TinnitusEffectStrengthRTPC;
-  UAkRtpc                      *TinnitusSourcePannerRTPC;
-  UAkRtpc                      *TinnitusSourceStrengthRTPC;
-  UAkEvent                     *TinnitusAkEvent;
-  UAkEvent                     *LevelUpAkEvent;
-  UAkEvent                     *VOVolumeStartAkEvent;
-  UAkEvent                     *VOVolumeStopAkEvent;
-  UAkEvent                     *SFXVolumeStartAkEvent;
-  UAkEvent                     *SFXVolumeStopAkEvent;
-  UAkEvent                     *MusicVolumeStartAkEvent;
-  UAkEvent                     *MusicVolumeStopAkEvent;
-  USoundMode                   *LoadingSoundMode;
-  USoundMode                   *EchoSoundMode;
-  USoundMode                   *DefaultSoundMode;
-  TArray_UAkEventPtr            SoundsToAlwaysReference;
-  float                         PlayerInteractionDistance;
-  UResourceDefinition          *GrenadeAmmoDefinition;
-  UProjectileDefinition        *StandardGrenadeDefinition;
-  float                         ShowEchoTalkerDistance;
-  float                         HideEchoTalkerDistance;
-  UAkRtpc                      *EchoDistortionAkRtpc;
-  float                         MissionAcceptEchoDelay;
-  UResourceDefinition          *AmmoDefinition_RepeaterPistol;
-  UResourceDefinition          *AmmoDefinition_RevolverPistol;
-  UResourceDefinition          *AmmoDefinition_Shotgun;
-  UResourceDefinition          *AmmoDefinition_SMG;
-  UResourceDefinition          *AmmoDefinition_CombatRifle;
-  UResourceDefinition          *AmmoDefinition_SniperRifle;
-  UResourceDefinition          *AmmoDefinition_RocketLauncher;
-  float                         PlayerEventRetriggerDelaySeconds;
-  TArray_FRarityLevelColor      RarityLevelColors;
-  int                           MissionItemRarityLevel;
-  TArray_FPlayThroughData       RegionBalanceData;
-  AttributeInitializationData   GameStageIncreaseAbovePlayer;
-  float                         OtherPlayerDiedCostMultiplier;
-  AttributeInitializationData   GlobalAIDamageScale;
-  AttributeInitializationData   GlobalAIWeaponDamageScale;
-  AttributeInitializationData   GlobalAIPistolWeaponDamageScale;
-  AttributeInitializationData   GlobalAIShotgunWeaponDamageScale;
-  AttributeInitializationData   GlobalAISmgWeaponDamageScale;
-  AttributeInitializationData   GlobalAISniperWeaponDamageScale;
-  AttributeInitializationData   GlobalAIAssaultWeaponDamageScale;
-  AttributeInitializationData   GlobalAIRocketWeaponDamageScale;
-  TArray_FLevelBasedDamageScale PlayerDamageScaleByLevelDifference;
-  TArray_FLevelBasedDamageScale AIDamageScaleByLevelDifference;
-  float                         SelfInflictedDamageMultiplier;
-  AttributeInitializationData   GlobalFallingDamageScale;
+  UGearboxGlobalsDefinition                 Super;
+  int                                       BulletReflectionRadius;
+  float                                     BulletReflectionSpeedAdjustment;
+  UParticleSystem                          *BulletReflectionParticle;
+  AttributeInitializationData               BulletReflectionInaccuracyFormula;
+  UParticleSystem                          *BulletPenetratedEnemyParticle;
+  UAkEvent                                 *BulletPenetratedEnemyAkEvent;
+  FName                                     DualWieldSwitchName;
+  FName                                     DualWieldSprintSwitchName;
+  FName                                     DualWieldLeftSideControl;
+  TArray_FKillSkillDuration                 KillSkillDurationsPerPlayers;
+  AttributeInitializationData               GeneralSkillPointsPerLevelUp;
+  AttributeInitializationData               GeneralSkillPointsTotalForCurrentLevel;
+  AttributeInitializationData               SpecialistSkillPointsPerLevelUp;
+  AttributeInitializationData               CostToResetSkillPoints;
+  TArray_USkillDefinitionPtr                WeaponProficiencySkills;
+  AttributeInitializationData               BaseEnemyExperienceFormula;
+  TArray_FDamageTypeExpModifier             DamageTypeExpModifiers;
+  TArray_FLevelBasedExpScale                ExpScaleByLevelDifference;
+  TArray_FExpAwardWeight                    ExpAwardWeights;
+  int                                       ExpMaxPlayerLevel;
+  AttributeInitializationData               ExpPointsRequiredForLevel;
+  AttributeInitializationData               VehicleVSCharacterExpModifier;
+  AttributeInitializationData               WorldDiscoveryExperienceFormula;
+  UMissionObjectiveDefinition              *FastTravelObjective;
+  int                                       TravelDelay;
+  UTravelStationDefinition                 *DlcPreviousStation;
+  FName                                     SanctuaryMapName;
+  FName                                     SanctuaryAirMapName;
+  FName                                     SanctuaryBackupMapName;
+  UMissionObjectiveDefinition              *SanctuaryInaccessibleObjective;
+  UMissionObjectiveDefinition              *SanctuaryFlyingObjective;
+  float                                     MinTeleportTime;
+  UAkEvent                                 *TeleporterStartAkEvent;
+  UAkEvent                                 *TeleporterStopAkEvent;
+  UParticleSystem                          *TeleporterHoldingCellPartSys;
+  UDesignerAttributeDefinition             *StartupTeleporterAttribute;
+  AttributeInitializationData               TeleportCost;
+  UAkEvent                                 *PauseAkEvent;
+  UAkEvent                                 *UnpauseAkEvent;
+  UAkSwitch                                *DefaultMaterialAkSwitch;
+  UAkSwitch                                *FirstPersonAkSwitch;
+  UAkSwitch                                *ThirdPersonAkSwitch;
+  UAkEvent                                 *EchoStartedAkEvent;
+  UAkEvent                                 *EchoEndedAkEvent;
+  UAkRtpc                                  *MasterVolumeAkRtpc;
+  UAkRtpc                                  *UserVolumeMusicAkRtpc;
+  UAkRtpc                                  *UserVolumeSfxAkRtpc;
+  UAkRtpc                                  *UserVolumeVOAkRtpc;
+  UAkRtpc                                  *ListenerDistanceAkRtpc;
+  UAkRtpc                                  *ApproachSpeedAkRtpc;
+  UAkRtpc                                  *SpeedAkRtpc;
+  UAkEvent                                 *ResetStatesAkEvent;
+  UAkEvent                                 *StartSplitScreenAkEvent;
+  UAkState                                 *PlayerVoiceAkState;
+  UAkState                                 *JackVoiceAkState;
+  UAkState                                 *PlayerCalloutsDisabledAkState;
+  UAkState                                 *PlayerCalloutsEnabledAkState;
+  UAkEvent                                 *CinematicModePauseDialogAkEvent;
+  UAkEvent                                 *CinematicModeResumeDialogAkEvent;
+  UAkEvent                                 *ShieldLowWarningStartAkEvent;
+  UAkEvent                                 *ShieldLowWarningStopAkEvent;
+  UAkEvent                                 *ShieldRecoveringAkEvent;
+  UAkEvent                                 *ShieldRecoveredAkEvent;
+  UAkEvent                                 *ShieldDownAkEvent;
+  float                                     TinnitusEffectDecayRate;
+  UAkRtpc                                  *TinnitusEffectStrengthRTPC;
+  UAkRtpc                                  *TinnitusSourcePannerRTPC;
+  UAkRtpc                                  *TinnitusSourceStrengthRTPC;
+  UAkEvent                                 *TinnitusAkEvent;
+  UAkEvent                                 *LevelUpAkEvent;
+  UAkEvent                                 *VOVolumeStartAkEvent;
+  UAkEvent                                 *VOVolumeStopAkEvent;
+  UAkEvent                                 *SFXVolumeStartAkEvent;
+  UAkEvent                                 *SFXVolumeStopAkEvent;
+  UAkEvent                                 *MusicVolumeStartAkEvent;
+  UAkEvent                                 *MusicVolumeStopAkEvent;
+  USoundMode                               *LoadingSoundMode;
+  USoundMode                               *EchoSoundMode;
+  USoundMode                               *DefaultSoundMode;
+  TArray_UAkEventPtr                        SoundsToAlwaysReference;
+  float                                     PlayerInteractionDistance;
+  UResourceDefinition                      *GrenadeAmmoDefinition;
+  UProjectileDefinition                    *StandardGrenadeDefinition;
+  float                                     ShowEchoTalkerDistance;
+  float                                     HideEchoTalkerDistance;
+  UAkRtpc                                  *EchoDistortionAkRtpc;
+  float                                     MissionAcceptEchoDelay;
+  UResourceDefinition                      *AmmoDefinition_RepeaterPistol;
+  UResourceDefinition                      *AmmoDefinition_RevolverPistol;
+  UResourceDefinition                      *AmmoDefinition_Shotgun;
+  UResourceDefinition                      *AmmoDefinition_SMG;
+  UResourceDefinition                      *AmmoDefinition_CombatRifle;
+  UResourceDefinition                      *AmmoDefinition_SniperRifle;
+  UResourceDefinition                      *AmmoDefinition_RocketLauncher;
+  float                                     PlayerEventRetriggerDelaySeconds;
+  TArray_FRarityLevelColor                  RarityLevelColors;
+  int                                       MissionItemRarityLevel;
+  TArray_FPlayThroughData                   RegionBalanceData;
+  AttributeInitializationData               GameStageIncreaseAbovePlayer;
+  float                                     OtherPlayerDiedCostMultiplier;
+  AttributeInitializationData               GlobalAIDamageScale;
+  AttributeInitializationData               GlobalAIWeaponDamageScale;
+  AttributeInitializationData               GlobalAIPistolWeaponDamageScale;
+  AttributeInitializationData               GlobalAIShotgunWeaponDamageScale;
+  AttributeInitializationData               GlobalAISmgWeaponDamageScale;
+  AttributeInitializationData               GlobalAISniperWeaponDamageScale;
+  AttributeInitializationData               GlobalAIAssaultWeaponDamageScale;
+  AttributeInitializationData               GlobalAIRocketWeaponDamageScale;
+  TArray_FLevelBasedDamageScale             PlayerDamageScaleByLevelDifference;
+  TArray_FLevelBasedDamageScale             AIDamageScaleByLevelDifference;
+  float                                     SelfInflictedDamageMultiplier;
+  AttributeInitializationData               GlobalFallingDamageScale;
   float                                     FriendlyDamageModifier;
   TArray_FStatusEffectTypeCommonProperties  StatusEffectCommonProperties;
   TArray_FLevelBasedStatusEffectChanceScale StatusEffectChanceScales;
@@ -20849,25 +20866,25 @@ struct native UIStatData {
   UAttributeDefinition      *SupplementalAttributeToAppend;
 };
 struct native AttributeSlotEffectData {
-  FName SlotName;
-  BITFIELD bExternalSlot : 1;
-  BITFIELD bRunEffectsAsSkill : 1;
-  UAttributeDefinition *AttributeToModify;
-  UAttributeDefinition *ConstraintAttribute;
-  EModifierType ModifierType;
+  FName                       SlotName;
+  BITFIELD                    bExternalSlot      : 1;
+  BITFIELD                    bRunEffectsAsSkill : 1;
+  UAttributeDefinition       *AttributeToModify;
+  UAttributeDefinition       *ConstraintAttribute;
+  EModifierType               ModifierType;
   AttributeInitializationData BaseModifierValue;
   AttributeInitializationData PerGradeUpgrade;
-  BITFIELD bIncludeInFunStats : 1;
-  BITFIELD bIncludeAlliesAsTarget : 1;
-  BITFIELD bEnforceMinimumGrade : 1;
-  BITFIELD bEnforceMaximumGrade : 1;
-  INT MinimumGrade;
-  INT MaximumGrade;
-  FName TargetInstanceDataName;
+  BITFIELD                    bIncludeInFunStats     : 1;
+  BITFIELD                    bIncludeAlliesAsTarget : 1;
+  BITFIELD                    bEnforceMinimumGrade   : 1;
+  BITFIELD                    bEnforceMaximumGrade   : 1;
+  int                         MinimumGrade;
+  int                         MaximumGrade;
+  FName                       TargetInstanceDataName;
 };
 struct native AttributeSlotUpgradeData {
-  FName SlotName;
-  INT GradeIncrease;
+  FName    SlotName;
+  int      GradeIncrease;
   BITFIELD bActivateSlot : 1;
 };
 struct UWillowInventoryDefinition {
@@ -20913,16 +20930,16 @@ struct UWillowInventoryDefinition {
   FRotator                              UIMeshRotation;
   UInventoryCardPresentationDefinition *Presentation;
   UGearboxCalloutDefinition            *CalloutDefinition;
-  FName PickedUpStatID;
-  FName PurchasedStatID;
-  float FocusRadius;
-  FVector FocusOffset;
-  AttributeInitializationData AttributeSlotEffectSkillDuration;
-  AttributeInitializationData AttributeSlotBaseGrade;
-  INT AttributeSlotMaxActivated;
-  TArray_AttributeSlotEffectData AttributeSlotEffects;
-  TArray_AttributeSlotUpgradeData AttributeSlotUpgrades;
-  FColor LootBeamColorOverride;
+  FName                                 PickedUpStatID;
+  FName                                 PurchasedStatID;
+  float                                 FocusRadius;
+  FVector                               FocusOffset;
+  AttributeInitializationData           AttributeSlotEffectSkillDuration;
+  AttributeInitializationData           AttributeSlotBaseGrade;
+  int                                   AttributeSlotMaxActivated;
+  TArray_AttributeSlotEffectData        AttributeSlotEffects;
+  TArray_AttributeSlotUpgradeData       AttributeSlotUpgrades;
+  FColor                                LootBeamColorOverride;
 }; assert_size(UWillowInventoryDefinition, 384);
 
 /* ---------------------------------------------------------- UItemDefinition ---------------------------------------------------------- */
@@ -21225,7 +21242,7 @@ struct UItemPartListDefinition {
 /* ---------------------------------------------------------- UPlayerClassIdentifierDefinition ---------------------------------------------------------- */
 
 struct native FCustomizationItemData {
-  int ItemPoolKey;
+  int                  ItemPoolKey;
   UItemPoolDefinition *CustomizationItemPool;
 };
 struct UPlayerClassIdentifierDefinition {
@@ -21763,20 +21780,18 @@ struct native FItemDefinitionData {
 };
 struct native FItemMemento {
   FInventorySerialNumber SerialNumber;
-  BITFIELD bEquipped;
-  BITFIELD bDropOnDeath;
-  BITFIELD bShopsHaveInfiniteQuantity;
-  BITFIELD bGrenadeStored;
+  BITFIELD               bEquipped                  : 1;
+  BITFIELD               bDropOnDeath               : 1;
+  BITFIELD               bShopsHaveInfiniteQuantity : 1;
+  BITFIELD               bGrenadeStored             : 1;
 };
 struct native FReplicatedInventoryCardData {
   float ModifierValue;
-  int ModifierStatIndex;
+  int   ModifierStatIndex;
 };
-#pragma pack(push, 4)
 struct UWillowItemTypes {
   UObject Super;
 }; assert_size(UWillowItemTypes, 60);
-#pragma pack(pop)
 
 /* ---------------------------------------------------------- UWillowWeaponTypes ---------------------------------------------------------- */
 
@@ -22417,17 +22432,14 @@ struct UStatusMenuExGFxMovie {
 struct native FUIStatModifierData {
   UAttributePresentationDefinition *AttributePresentation;
   UAttributePresentationDefinition *ConstraintAttributePresentation;
-  /** EAttributeTranslationStyle */
   EAttributeTranslationStyle        AttributeStyle;
   float                             ModifierTotal;
   float                             CompareModifierTotal;
   int                               DefinitionIndex;
   UAttributePresentationDefinition *SupplementalAttributePresentation;
-  /** EAttributeTranslationStyle */
   EAttributeTranslationStyle        SupplementalAttributeStyle;
   float                             SupplementalModifierTotal;
   BITFIELD                          bUseSupplementalModifier : 1;
-  /** EStatCombinationMethod */
   EStatCombinationMethod            StatCombinationMethod;
 };
 struct AWillowItem {
@@ -23160,6 +23172,13 @@ struct APylon {
   float             PolyMergeThreshold;
   APylon           *OuterPylon;
 }; assert_size(APylon, 756);
+
+/* ---------------------------------------------------------- ADynamicPylon ---------------------------------------------------------- */
+
+struct ADynamicPylon {
+  APylon   Super;
+  BITFIELD bMoving : 1;
+}; assert_size(ADynamicPylon, 760);
 
 /* ---------------------------------------------------------- ALadder ---------------------------------------------------------- */
 
@@ -25861,7 +25880,6 @@ struct AWillowWorldSoundManager {
 
 /* ---------------------------------------------------------- AWillowBaseStats ---------------------------------------------------------- */
 
-CONST int DISPLAY_DEBUG_STATS_PER_PAGE = 10;
 struct native FWillowStatProperty {
   FName         Id;
   FSettingsData Data;
@@ -28760,11 +28778,11 @@ struct IInterface_Speaker {
 /* ---------------------------------------------------------- UBaseBalanceDefinition ---------------------------------------------------------- */
 
 struct native FGameStageRangeData {
-	INT MinGameStage;
-	INT MaxGameStage;
+	int MinGameStage;
+	int MaxGameStage;
 };
 struct native FGameStageGradeWeightData {
-  FGameStageRangeData GameStageRequirement;
+  FGameStageRangeData         GameStageRequirement;
   AttributeInitializationData MinSpawnProbabilityModifier;
   AttributeInitializationData MaxSpawnProbabilityModifier;
 };
@@ -28866,15 +28884,15 @@ struct UAIPawnBalanceDefinition {
 /* ---------------------------------------------------------- UInventoryBalanceDefinition ---------------------------------------------------------- */
 
 struct native FInventoryGradeModifierData {
-  int ExpLevel;
+  int                         ExpLevel;
   UWillowInventoryDefinition *CustomInventoryDefinition;
 };
 struct native FInventoryGameStageGradeWeightData {
-  FGameStageGradeWeightData Super;
+  FGameStageGradeWeightData   Super;
   FInventoryGradeModifierData GradeModifiers;
 };
 struct native FInventoryManufacturerBalanceData {
-  UManufacturerDefinition *Manufacturer;
+  UManufacturerDefinition                  *Manufacturer;
   TArray_FInventoryGameStageGradeWeightData Grades;
 };
 struct UInventoryBalanceDefinition {
@@ -28935,7 +28953,7 @@ struct native FBalanceDefSpawnedActorState {
 struct APawn {
   AActor                              Super;
   IInterface_Speaker                  Super_01;
-  void                               *VfTable_IIKilledBehavior;
+  void                               *VfTable_IIKilledBehavior;/* 396  */
   void                               *VfTable_IITargetable;
   float                               MaxStepHeight;
   float                               MaxJumpHeight;

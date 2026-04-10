@@ -1351,6 +1351,10 @@ _(UParticleSystem);
 
 _(UDamageType);
 
+/* ---------------------------------------------------------- UKillZDamageType ---------------------------------------------------------- */
+
+_(UKillZDamageType);
+
 /* ---------------------------------------------------------- UWillowDamageType ---------------------------------------------------------- */
 
 _(UWillowDamageType);
@@ -1358,6 +1362,10 @@ _(UWillowDamageType);
 /* ---------------------------------------------------------- UWillowDamageSource ---------------------------------------------------------- */
 
 _(UWillowDamageSource);
+
+/* ---------------------------------------------------------- UWillowDmgSource_Skill ---------------------------------------------------------- */
+
+_(UWillowDmgSource_Skill);
 
 /* ---------------------------------------------------------- UWillowDmgSource_Bullet ---------------------------------------------------------- */
 
@@ -1628,6 +1636,10 @@ _(AWillowRadarManager);
 
 _(ACameraActor);
 
+/* ---------------------------------------------------------- ADynamicCameraActor ---------------------------------------------------------- */
+
+_(ADynamicCameraActor);
+
 /* ---------------------------------------------------------- AWillowSpectatorPoint ---------------------------------------------------------- */
 
 _(AWillowSpectatorPoint);
@@ -1768,6 +1780,10 @@ _(ALadderVolume);
 _(FActionSkillCustomEventReplicationData);
 _(FCachedWeaponInfo);
 _(AActionSkill);
+
+/* ---------------------------------------------------------- ADeathtrapActionSkill ---------------------------------------------------------- */
+
+_(ADeathtrapActionSkill);
 
 /* ---------------------------------------------------------- AScorpioActionSkill ---------------------------------------------------------- */
 
@@ -3415,6 +3431,16 @@ _(ConditionalInitializationExpressions);
 _(AttributeBaseValueData);
 _(UAttributeInitializationDefinition);
 
+/* ---------------------------------------------------------- UBehavior_AttemptStatusEffect ---------------------------------------------------------- */
+
+_(UBehavior_AttemptStatusEffect);
+
+/* ---------------------------------------------------------- UGameBalanceDefinition ---------------------------------------------------------- */
+
+_(FMissionStateBalanceAdjustment);
+_(FRegionBalanceData);
+_(UGameBalanceDefinition);
+
 /* ---------------------------------------------------------- UAnemoneInfectionDefinition ---------------------------------------------------------- */
 
 _(UAnemoneInfectionDefinition);
@@ -3879,6 +3905,10 @@ _(APortalMarker);
 _(FNavMeshPathSize);
 _(FPolyReference);
 _(APylon);
+
+/* ---------------------------------------------------------- ADynamicPylon ---------------------------------------------------------- */
+
+_(ADynamicPylon);
 
 /* ---------------------------------------------------------- ALadder ---------------------------------------------------------- */
 

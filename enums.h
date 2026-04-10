@@ -8335,7 +8335,7 @@ typedef enum ENewsRetrievalResult : unsigned char {
 
 /* ---------------------------------------------------------- UParticleModuleRequired ---------------------------------------------------------- */
 
-typedef enum EParticleSortMode : unsigned char {
+typedef enum EParticleSortMode   : unsigned char {
   PSORTMODE_None,                 // 0
   PSORTMODE_ViewProjDepth,        // 1
   PSORTMODE_DistanceToView,       // 2
@@ -8382,3 +8382,13 @@ typedef enum EOrbitChainMode : unsigned char {
   EOChainMode_MAX                 // 3
 } EOrbitChainMode;
 #define EOrbitChainMode  EOrbitChainMode
+
+/* ---------------------------------------------------------- ADeathtrapActionSkill ---------------------------------------------------------- */
+
+typedef enum EMedicBeamState : unsigned char {
+  MedicBeam_Inactive,             // 0
+  MedicBeam_Active,               // 1
+  MedicBeam_Blocked,              // 2
+  MedicBeam_MAX                   // 3
+} EMedicBeamState;
+#define EMedicBeamState  EMedicBeamState

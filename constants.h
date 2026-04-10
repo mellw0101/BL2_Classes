@@ -552,3 +552,7 @@ static const int MAX_COLISEUM_PLAYERS    = 4;
 
 static const int MAX_APPLIED_CUSTOMIZATIONS = 5;
 static const int MAX_TRACKED_SKILLS = 17;
+
+/* ---------------------------------------------------------- AWillowBaseStats ---------------------------------------------------------- */
+
+static const int DISPLAY_DEBUG_STATS_PER_PAGE = 10;
