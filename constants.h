@@ -16,9 +16,9 @@ static const int LATENT_MOVETOWARD = 503;
 
 /* ---------------------------------------------------------- UWillowWeaponTypes ---------------------------------------------------------- */
 
-static const int HolsteredWeaponSize_Small = 1;
-static const int HolsteredWeaponSize_Medium = 2;
-static const int HolsteredWeaponSize_Large = 4;
+static const int HolsteredWeaponSize_Small      = 1;
+static const int HolsteredWeaponSize_Medium     = 2;
+static const int HolsteredWeaponSize_Large      = 4;
 static const int HolsteredWeaponSize_ExtraLarge = 8;
 
 /* ---------------------------------------------------------- UWillowInventoryDefinition ---------------------------------------------------------- */
@@ -101,21 +101,21 @@ static const int MAX_MISSION_SUB_OBJECTIVE_SETS = 4;
 
 /* ---------------------------------------------------------- UWillowUIInteraction ---------------------------------------------------------- */
 
-static const float MenuRefreshRate = 0.5;
-static const float SCROLL_ACCEL_RATE = 0.85f;
-static const float SCROLL_MIN_DELAY = 0.02f;
-static const float SCROLL_INITIAL_DELAY = 0.1f;
-static const float INTERRUPT_FADE_OUT_TIME = 0.1f;
-static const float CLOSE_FADE_OUT_TIME = 0.3f;
-static const char *TOOLTIP_SPACING = "    ";
-static const int   GEARBUILDER_MAX_CONFIGURABLE_ITEM_PARTS = 9;
+static const float MenuRefreshRate                           = 0.5;
+static const float SCROLL_ACCEL_RATE                         = 0.85f;
+static const float SCROLL_MIN_DELAY                          = 0.02f;
+static const float SCROLL_INITIAL_DELAY                      = 0.1f;
+static const float INTERRUPT_FADE_OUT_TIME                   = 0.1f;
+static const float CLOSE_FADE_OUT_TIME                       = 0.3f;
+static const char *TOOLTIP_SPACING                           = "    ";
+static const int   GEARBUILDER_MAX_CONFIGURABLE_ITEM_PARTS   = 9;
 static const int   GEARBUILDER_MAX_CONFIGURABLE_WEAPON_PARTS = 9;
-static const int   InProgressMenu = 0;
-static const int   NotStartedMenu = 1;
-static const int   CompletedMenu = 2;
-static const int   IneligibleMenu = 3;
-static const int   FastTravelMenu = 0;
-static const int   LevelTravelMenu = 1;
+static const int   InProgressMenu                            = 0;
+static const int   NotStartedMenu                            = 1;
+static const int   CompletedMenu                             = 2;
+static const int   IneligibleMenu                            = 3;
+static const int   FastTravelMenu                            = 0;
+static const int   LevelTravelMenu                           = 1;
 
 /* ---------------------------------------------------------- UFastTravelStationGFxMovie ---------------------------------------------------------- */
 
@@ -185,10 +185,10 @@ static const int INFINITE_PATH_COST = 10000000;
 
 /* ---------------------------------------------------------- ACoverLink ---------------------------------------------------------- */
 
-static const float COVERLINK_ExposureDot = 0.4f;
-static const float COVERLINK_EdgeCheckDot = 0.25f;
-static const float COVERLINK_EdgeExposureDot = 0.85f;
-static const float COVERLINK_DangerDist = 1536.f;
+static const float COVERLINK_ExposureDot     = .4f;
+static const float COVERLINK_EdgeCheckDot    = .25f;
+static const float COVERLINK_EdgeExposureDot = .85f;
+static const float COVERLINK_DangerDist      = 1536.f;
 
 /* ---------------------------------------------------------- AGearboxMind ---------------------------------------------------------- */
 
@@ -209,7 +209,7 @@ static const int BADASS_REWARD_CHOICES = 5;
 /* ---------------------------------------------------------- AWillowLightProjectileManager ---------------------------------------------------------- */
 
 static const int MAX_PROJECTILES = 16;
-static const int MAX_BEAMS = 20;
+static const int MAX_BEAMS       = 20;
 
 /* ---------------------------------------------------------- AWillowPawn ---------------------------------------------------------- */
 
@@ -224,7 +224,7 @@ static const int    MAX_REPLICATED_NOUNS           = 20;
 /* ---------------------------------------------------------- AWillowItem ---------------------------------------------------------- */
 
 static const int MAX_ITEM_CARD_MODIFIER_STATS = 5;
-static const int USE_FAILURE_CHARACTER = 16;
+static const int USE_FAILURE_CHARACTER        = 16;
 
 /* ---------------------------------------------------------- AWillowPickup ---------------------------------------------------------- */
 
@@ -434,30 +434,30 @@ static const int   MAX_POLY_POINT_CHECKS            = 10;
 
 /* ---------------------------------------------------------- UGameStatsAggregator ---------------------------------------------------------- */
 
-static const int GAMEEVENT_AGGREGATED_DATA = 10000;
-static const int GAMEEVENT_AGGREGATED_PLAYER_TIMEALIVE = 10001;
-static const int GAMEEVENT_AGGREGATED_PLAYER_KILLS = 10002;
-static const int GAMEEVENT_AGGREGATED_PLAYER_DEATHS = 10003;
-static const int GAMEEVENT_AGGREGATED_PLAYER_MATCH_WON = 10004;
-static const int GAMEEVENT_AGGREGATED_PLAYER_ROUND_WON = 10005;
-static const int GAMEEVENT_AGGREGATED_DAMAGE_DEALT_NORMALKILL = 10006;
+static const int GAMEEVENT_AGGREGATED_DATA                          = 10000;
+static const int GAMEEVENT_AGGREGATED_PLAYER_TIMEALIVE              = 10001;
+static const int GAMEEVENT_AGGREGATED_PLAYER_KILLS                  = 10002;
+static const int GAMEEVENT_AGGREGATED_PLAYER_DEATHS                 = 10003;
+static const int GAMEEVENT_AGGREGATED_PLAYER_MATCH_WON              = 10004;
+static const int GAMEEVENT_AGGREGATED_PLAYER_ROUND_WON              = 10005;
+static const int GAMEEVENT_AGGREGATED_DAMAGE_DEALT_NORMALKILL       = 10006;
 static const int GAMEEVENT_AGGREGATED_DAMAGE_RECEIVED_WASNORMALKILL = 10007;
-static const int GAMEEVENT_AGGREGATED_TEAM_KILLS = 10100;
-static const int GAMEEVENT_AGGREGATED_TEAM_DEATHS = 10101;
-static const int GAMEEVENT_AGGREGATED_TEAM_GAME_SCORE = 10102;
-static const int GAMEEVENT_AGGREGATED_TEAM_MATCH_WON = 10103;
-static const int GAMEEVENT_AGGREGATED_TEAM_ROUND_WON = 10104;
-static const int GAMEEVENT_AGGREGATED_DAMAGE_KILLS = 10200;
-static const int GAMEEVENT_AGGREGATED_DAMAGE_DEATHS = 10201;
-static const int GAMEEVENT_AGGREGATED_DAMAGE_DEALT_WEAPON_DAMAGE = 10202;
-static const int GAMEEVENT_AGGREGATED_DAMAGE_DEALT_MELEE_DAMAGE = 10203;
+static const int GAMEEVENT_AGGREGATED_TEAM_KILLS                    = 10100;
+static const int GAMEEVENT_AGGREGATED_TEAM_DEATHS                   = 10101;
+static const int GAMEEVENT_AGGREGATED_TEAM_GAME_SCORE               = 10102;
+static const int GAMEEVENT_AGGREGATED_TEAM_MATCH_WON                = 10103;
+static const int GAMEEVENT_AGGREGATED_TEAM_ROUND_WON                = 10104;
+static const int GAMEEVENT_AGGREGATED_DAMAGE_KILLS                  = 10200;
+static const int GAMEEVENT_AGGREGATED_DAMAGE_DEATHS                 = 10201;
+static const int GAMEEVENT_AGGREGATED_DAMAGE_DEALT_WEAPON_DAMAGE    = 10202;
+static const int GAMEEVENT_AGGREGATED_DAMAGE_DEALT_MELEE_DAMAGE     = 10203;
 static const int GAMEEVENT_AGGREGATED_DAMAGE_RECEIVED_WEAPON_DAMAGE = 10204;
-static const int GAMEEVENT_AGGREGATED_DAMAGE_RECEIVED_MELEE_DAMAGE = 10205;
-static const int GAMEEVENT_AGGREGATED_DAMAGE_DEALT_MELEEHITS = 10206;
-static const int GAMEEVENT_AGGREGATED_DAMAGE_RECEIVED_WASMELEEHIT = 10207;
-static const int GAMEEVENT_AGGREGATED_WEAPON_FIRED = 10300;
-static const int GAMEEVENT_AGGREGATED_PAWN_SPAWN = 10400;
-static const int GAMEEVENT_AGGREGATED_GAME_SPECIFIC = 11000;
+static const int GAMEEVENT_AGGREGATED_DAMAGE_RECEIVED_MELEE_DAMAGE  = 10205;
+static const int GAMEEVENT_AGGREGATED_DAMAGE_DEALT_MELEEHITS        = 10206;
+static const int GAMEEVENT_AGGREGATED_DAMAGE_RECEIVED_WASMELEEHIT   = 10207;
+static const int GAMEEVENT_AGGREGATED_WEAPON_FIRED                  = 10300;
+static const int GAMEEVENT_AGGREGATED_PAWN_SPAWN                    = 10400;
+static const int GAMEEVENT_AGGREGATED_GAME_SPECIFIC                 = 11000;
 
 /* ---------------------------------------------------------- UCustomizationDefinition ---------------------------------------------------------- */
 
@@ -551,8 +551,24 @@ static const int MAX_COLISEUM_PLAYERS    = 4;
 /* ---------------------------------------------------------- AWillowPlayerReplicationInfo ---------------------------------------------------------- */
 
 static const int MAX_APPLIED_CUSTOMIZATIONS = 5;
-static const int MAX_TRACKED_SKILLS = 17;
+static const int MAX_TRACKED_SKILLS         = 17;
 
 /* ---------------------------------------------------------- AWillowBaseStats ---------------------------------------------------------- */
 
 static const int DISPLAY_DEBUG_STATS_PER_PAGE = 10;
+
+/* ---------------------------------------------------------- UWillowInventoryPartDefinition ---------------------------------------------------------- */
+
+static const int MAX_ADDITIONAL_GESTALT_MODE_MESHES = 2;
+
+/* ---------------------------------------------------------- UItemPool ---------------------------------------------------------- */
+
+static const double SELECTION_WEIGHT_THRESHOLD = 0.00000001;
+
+/* ---------------------------------------------------------- URecentDropList ---------------------------------------------------------- */
+
+static const int RECENT_DROP_CAP = 200;
+
+/* ---------------------------------------------------------- AWillowPersonalTeleporter ---------------------------------------------------------- */
+
+static const int MAX_EXIT_POINTS = 4;

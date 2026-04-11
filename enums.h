@@ -2417,12 +2417,18 @@ typedef enum EDoubleClickDir   : unsigned char {
 /* ---------------------------------------------------------- ABrush ---------------------------------------------------------- */
 
 typedef enum ECsgOper : unsigned char {
-  CSG_Active = 0,
-  CSG_Add = 1,
-  CSG_Subtract = 2,
-  CSG_Intersect = 3,
+  CSG_Active      = 0,
+  CSG_Add         = 1,
+  CSG_Subtract    = 2,
+  CSG_Intersect   = 3,
   CSG_Deintersect = 4,
-  CSG_MAX = 5
+  CSG_MAX         = 5
+  #define CSG_Active       CSG_Active
+  #define CSG_Add          CSG_Add
+  #define CSG_Subtract     CSG_Subtract
+  #define CSG_Intersect    CSG_Intersect
+  #define CSG_Deintersect  CSG_Deintersect
+  #define CSG_MAX          CSG_MAX
 } ECsgOper;
 #define ECsgOper  ECsgOper
 
@@ -3531,6 +3537,15 @@ typedef enum EStatusEffectType : unsigned char {
   STATUS_EFFECT_Slow,             // 5
   STATUS_EFFECT_Healing,          // 6
   STATUS_EFFECT_MAX               // 7
+  #define STATUS_EFFECT_Unknown    STATUS_EFFECT_Unknown
+  #define STATUS_EFFECT_Ignite     STATUS_EFFECT_Ignite
+  #define STATUS_EFFECT_Corrosive  STATUS_EFFECT_Corrosive
+  #define STATUS_EFFECT_Shock      STATUS_EFFECT_Shock
+  #define STATUS_EFFECT_Amp        STATUS_EFFECT_Amp
+  #define STATUS_EFFECT_Slow       STATUS_EFFECT_Slow
+  #define STATUS_EFFECT_Healing    STATUS_EFFECT_Healing
+  #define STATUS_EFFECT_MAX        STATUS_EFFECT_MAX
+  #define EStatusEffectType__MAX   STATUS_EFFECT_MAX
 } EStatusEffectType;
 #define EStatusEffectType  EStatusEffectType
 
@@ -8025,10 +8040,6 @@ typedef enum EScriptedKillType : unsigned char {
 } EScriptedKillType;
 #define EScriptedKillType  EScriptedKillType
 
-/* ---------------------------------------------------------- AWillowPersonalTeleporter ---------------------------------------------------------- */
-
-static const int MAX_EXIT_POINTS = 4;
-
 /* ---------------------------------------------------------- UGlobalAttributeValueResolver ---------------------------------------------------------- */
 
 typedef enum EGlobalAttributes : unsigned char {
@@ -8045,6 +8056,10 @@ typedef enum ESaveVersionType : unsigned char {
   ESVT_Player,                    // 1
   ESVT_Graveyard,                 // 2
   ESVT_MAX                        // 3
+  #define ESVT_File      ESVT_File
+  #define ESVT_Player    ESVT_Player
+  #define ESVT_Graveyard ESVT_Graveyard
+  #define ESVT_MAX       ESVT_MAX
 } ESaveVersionType;
 typedef enum CPAsync : unsigned char {
   WORKRESULT_NONE,                // 0
@@ -8053,6 +8068,12 @@ typedef enum CPAsync : unsigned char {
   WORKRESULT_FAIL,                // 3
   WORKRESULT_FILENOTFOUND,        // 4
   WORKRESULT_MAX                  // 5
+  #define WORKRESULT_NONE          WORKRESULT_NONE
+  #define WORKRESULT_PENDING       WORKRESULT_PENDING
+  #define WORKRESULT_SUCCESS       WORKRESULT_SUCCESS
+  #define WORKRESULT_FAIL          WORKRESULT_FAIL
+  #define WORKRESULT_FILENOTFOUND  WORKRESULT_FILENOTFOUND
+  #define WORKRESULT_MAX           WORKRESULT_MAX
 } CPAsync;
 typedef enum ESaveGameManagerState : unsigned char {
   ESGMS_Idle,                     // 0
@@ -8064,11 +8085,23 @@ typedef enum ESaveGameManagerState : unsigned char {
   ESGMS_SavingProfile,            // 6
   ESGMS_CountingCrossTitleSaveGames,// 7
   ESGMS_MAX                       // 8
+  #define ESGMS_Idle                         ESGMS_Idle
+  #define ESGMS_Saving                       ESGMS_Saving
+  #define ESGMS_Deleting                     ESGMS_Deleting
+  #define ESGMS_Loading                      ESGMS_Loading
+  #define ESGMS_ListLoading                  ESGMS_ListLoading
+  #define ESGMS_LoadingWillowOneSave         ESGMS_LoadingWillowOneSave
+  #define ESGMS_SavingProfile                ESGMS_SavingProfile
+  #define ESGMS_CountingCrossTitleSaveGames  ESGMS_CountingCrossTitleSaveGames
+  #define ESGMS_MAX                          ESGMS_MAX
 } ESaveGameManagerState;
 typedef enum ELoadPlayerBehavior : unsigned char {
   ELPB_LoadOnly,                  // 0
   ELPB_LoadAndCache,              // 1
   ELPB_MAX                        // 2
+  #define ELPB_LoadOnly      ELPB_LoadOnly
+  #define ELPB_LoadAndCache  ELPB_LoadAndCache
+  #define ELPB_MAX           ELPB_MAX
 } ELoadPlayerBehavior;
 #define ESaveVersionType       ESaveVersionType
 #define CPAsync                CPAsync
@@ -8109,10 +8142,6 @@ typedef enum ELandmarkType : unsigned char {
   LANDMARK_MAX                    // 2
 } ELandmarkType;
 #define ELandmarkType  ELandmarkType
-
-/* ---------------------------------------------------------- URecentDropList ---------------------------------------------------------- */
-
-static const int RECENT_DROP_CAP = 200;
 
 /* ---------------------------------------------------------- AInternetLink ---------------------------------------------------------- */
 
@@ -8380,6 +8409,10 @@ typedef enum EOrbitChainMode : unsigned char {
   EOChainMode_Scale,              // 1
   EOChainMode_Link,               // 2
   EOChainMode_MAX                 // 3
+  #define EOChainMode_Add    EOChainMode_Add
+  #define EOChainMode_Scale  EOChainMode_Scale
+  #define EOChainMode_Link   EOChainMode_Link
+  #define EOChainMode_MAX    EOChainMode_MAX
 } EOrbitChainMode;
 #define EOrbitChainMode  EOrbitChainMode
 
@@ -8390,5 +8423,45 @@ typedef enum EMedicBeamState : unsigned char {
   MedicBeam_Active,               // 1
   MedicBeam_Blocked,              // 2
   MedicBeam_MAX                   // 3
+  #define MedicBeam_Inactive  MedicBeam_Inactive
+  #define MedicBeam_Active    MedicBeam_Active
+  #define MedicBeam_Blocked   MedicBeam_Blocked
+  #define MedicBeam_MAX       MedicBeam_MAX
 } EMedicBeamState;
 #define EMedicBeamState  EMedicBeamState
+
+/* ---------------------------------------------------------- UBehavior_StatusEffectSwitch ---------------------------------------------------------- */
+
+typedef enum EStatusEffectSwitchValues : unsigned char {
+  OUTPUT_None,                    // 0
+  OUTPUT_Ignite,                  // 1
+  OUTPUT_Corrosive,               // 2
+  OUTPUT_Shock,                   // 3
+  OUTPUT_Amp,                     // 4
+  OUTPUT_Slow,                    // 5
+  OUTPUT_Healing,                 // 6
+  OUTPUT_MAX                      // 7
+  #define OUTPUT_None       OUTPUT_None
+  #define OUTPUT_Ignite     OUTPUT_Ignite
+  #define OUTPUT_Corrosive  OUTPUT_Corrosive
+  #define OUTPUT_Shock      OUTPUT_Shock
+  #define OUTPUT_Amp        OUTPUT_Amp
+  #define OUTPUT_Slow       OUTPUT_Slow
+  #define OUTPUT_Healing    OUTPUT_Healing
+  #define OUTPUT_MAX        OUTPUT_MAX
+} EStatusEffectSwitchValues;
+#define EStatusEffectSwitchValues  EStatusEffectSwitchValues
+
+/* ---------------------------------------------------------- UWillowPreviewComponent ---------------------------------------------------------- */
+
+typedef enum EPreviewStyle : unsigned char {
+  EPS_None,                       // 0
+  EPS_Still,                      // 1
+  EPS_Playing,                    // 2
+  EPS_MAX                         // 3
+  #define EPS_None     EPS_None
+  #define EPS_Still    EPS_Still
+  #define EPS_Playing  EPS_Playing
+  #define EPS_MAX      EPS_MAX
+} EPreviewStyle;
+#define EPreviewStyle  EPreviewStyle
