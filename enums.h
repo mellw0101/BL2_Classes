@@ -789,8 +789,8 @@ typedef enum EContentBrowserRefreshFlag {
 
 // Define a message as an enumeration.
 #ifndef REGISTER_NAME
-  #define REGISTER_NAME(num,name) NAME_##name = num,
-  #define REGISTERING_ENUM
+# define REGISTER_NAME(num,name) NAME_##name = num,
+# define REGISTERING_ENUM
   typedef enum EName {
 #endif
 
@@ -2353,6 +2353,38 @@ typedef enum EPhysics          : unsigned char {
   PHYS_Unused,                    // 13
   PHYS_Custom,                    // 14
   PHYS_MAX                        // 15
+  #define PHYS_None                PHYS_None
+  #define PHYS_Walking             PHYS_Walking
+  #define PHYS_Falling             PHYS_Falling
+  #define PHYS_Swimming            PHYS_Swimming
+  #define PHYS_Flying              PHYS_Flying
+  #define PHYS_Rotating            PHYS_Rotating
+  #define PHYS_Projectile          PHYS_Projectile
+  #define PHYS_Interpolating       PHYS_Interpolating
+  #define PHYS_Spider              PHYS_Spider
+  #define PHYS_Ladder              PHYS_Ladder
+  #define PHYS_RigidBody           PHYS_RigidBody
+  #define PHYS_SoftBody            PHYS_SoftBody
+  #define PHYS_NavMeshWalking      PHYS_NavMeshWalking
+  #define PHYS_Unused              PHYS_Unused
+  #define PHYS_Custom              PHYS_Custom
+  #define PHYS_MAX                 PHYS_MAX
+  #define EPhysics_None            PHYS_None
+  #define EPhysics_Walking         PHYS_Walking
+  #define EPhysics_Falling         PHYS_Falling
+  #define EPhysics_Swimming        PHYS_Swimming
+  #define EPhysics_Flying          PHYS_Flying
+  #define EPhysics_Rotating        PHYS_Rotating
+  #define EPhysics_Projectile      PHYS_Projectile
+  #define EPhysics_Interpolating   PHYS_Interpolating
+  #define EPhysics_Spider          PHYS_Spider
+  #define EPhysics_Ladder          PHYS_Ladder
+  #define EPhysics_RigidBody       PHYS_RigidBody
+  #define EPhysics_SoftBody        PHYS_SoftBody
+  #define EPhysics_NavMeshWalking  PHYS_NavMeshWalking
+  #define EPhysics_Unused          PHYS_Unused
+  #define EPhysics_Custom          PHYS_Custom
+  #define EPhysics_MAX             PHYS_MAX
 } EPhysics;
 typedef enum EMoveDir          : unsigned char {
   MD_Stationary,                  // 0
@@ -2363,12 +2395,36 @@ typedef enum EMoveDir          : unsigned char {
   MD_Up,                          // 5
   MD_Down,                        // 6
   MD_MAX                          // 7
+  #define MD_Stationary        MD_Stationary
+  #define MD_Forward           MD_Forward
+  #define MD_Backward          MD_Backward
+  #define MD_Left              MD_Left
+  #define MD_Right             MD_Right
+  #define MD_Up                MD_Up
+  #define MD_Down              MD_Down
+  #define MD_MAX               MD_MAX
+  #define EMoveDir_Stationary  MD_Stationary
+  #define EMoveDir_Forward     MD_Forward
+  #define EMoveDir_Backward    MD_Backward
+  #define EMoveDir_Left        MD_Left
+  #define EMoveDir_Right       MD_Right
+  #define EMoveDir_Up          MD_Up
+  #define EMoveDir_Down        MD_Down
+  #define EMoveDir_MAX         MD_MAX
 } EMoveDir;
 typedef enum EActorMetricsType : unsigned char {
   METRICS_VERTS,                  // 0
   METRICS_TRIS,                   // 1
   METRICS_SECTIONS,               // 2
   METRICS_MAX                     // 3
+  #define METRICS_VERTS               METRICS_VERTS
+  #define METRICS_TRIS                METRICS_TRIS
+  #define METRICS_SECTIONS            METRICS_SECTIONS
+  #define METRICS_MAX                 METRICS_MAX
+  #define EActorMetricsType_VERTS     METRICS_VERTS
+  #define EActorMetricsType_TRIS      METRICS_TRIS
+  #define EActorMetricsType_SECTIONS  METRICS_SECTIONS
+  #define EActorMetricsType_MAX       METRICS_MAX
 } EActorMetricsType;
 typedef enum ENetRole          : unsigned char {
   ROLE_None,                      // 0
@@ -2376,6 +2432,16 @@ typedef enum ENetRole          : unsigned char {
   ROLE_AutonomousProxy,           // 2
   ROLE_Authority,                 // 3
   ROLE_MAX                        // 4
+  #define ROLE_None                 ROLE_None
+  #define ROLE_SimulatedProxy       ROLE_SimulatedProxy
+  #define ROLE_AutonomousProxy      ROLE_AutonomousProxy
+  #define ROLE_Authority            ROLE_Authority
+  #define ROLE_MAX                  ROLE_MAX
+  #define ENetRole_None             ROLE_None
+  #define ENetRole_SimulatedProxy   ROLE_SimulatedProxy
+  #define ENetRole_AutonomousProxy  ROLE_AutonomousProxy
+  #define ENetRole_Authority        ROLE_Authority
+  #define ENetRole_MAX              ROLE_MAX
 } ENetRole;
 typedef enum ECollisionType    : unsigned char {
   COLLIDE_CustomDefault,          // 0
@@ -2389,12 +2455,42 @@ typedef enum ECollisionType    : unsigned char {
   COLLIDE_BlockWeaponsKickable,   // 8
   COLLIDE_BlockAllButVehicles,    // 9
   COLLIDE_MAX                     // 10
+  #define COLLIDE_CustomDefault                COLLIDE_CustomDefault
+  #define COLLIDE_NoCollision                  COLLIDE_NoCollision
+  #define COLLIDE_BlockAll                     COLLIDE_BlockAll
+  #define COLLIDE_BlockWeapons                 COLLIDE_BlockWeapons
+  #define COLLIDE_TouchAll                     COLLIDE_TouchAll
+  #define COLLIDE_TouchWeapons                 COLLIDE_TouchWeapons
+  #define COLLIDE_BlockAllButWeapons           COLLIDE_BlockAllButWeapons
+  #define COLLIDE_TouchAllButWeapons           COLLIDE_TouchAllButWeapons
+  #define COLLIDE_BlockWeaponsKickable         COLLIDE_BlockWeaponsKickable
+  #define COLLIDE_BlockAllButVehicles          COLLIDE_BlockAllButVehicles
+  #define COLLIDE_MAX                          COLLIDE_MAX
+  #define ECollisionType_CustomDefault         COLLIDE_CustomDefault
+  #define ECollisionType_NoCollision           COLLIDE_NoCollision
+  #define ECollisionType_BlockAll              COLLIDE_BlockAll
+  #define ECollisionType_BlockWeapons          COLLIDE_BlockWeapons
+  #define ECollisionType_TouchAll              COLLIDE_TouchAll
+  #define ECollisionType_TouchWeapons          COLLIDE_TouchWeapons
+  #define ECollisionType_BlockAllButWeapons    COLLIDE_BlockAllButWeapons
+  #define ECollisionType_TouchAllButWeapons    COLLIDE_TouchAllButWeapons
+  #define ECollisionType_BlockWeaponsKickable  COLLIDE_BlockWeaponsKickable
+  #define ECollisionType_BlockAllButVehicles   COLLIDE_BlockAllButVehicles
+  #define ECollisionType_MAX                   COLLIDE_MAX
 } ECollisionType;
 typedef enum ETravelType       : unsigned char {
   TRAVEL_Absolute,                // 0
   TRAVEL_Partial,                 // 1
   TRAVEL_Relative,                // 2
   TRAVEL_MAX                      // 3
+  #define TRAVEL_Absolute       TRAVEL_Absolute
+  #define TRAVEL_Partial        TRAVEL_Partial
+  #define TRAVEL_Relative       TRAVEL_Relative
+  #define TRAVEL_MAX            TRAVEL_MAX
+  #define ETravelType_Absolute  TRAVEL_Absolute
+  #define ETravelType_Partial   TRAVEL_Partial
+  #define ETravelType_Relative  TRAVEL_Relative
+  #define ETravelType_MAX       TRAVEL_MAX
 } ETravelType;
 typedef enum EDoubleClickDir   : unsigned char {
   DCLICK_None,                    // 0
@@ -2405,6 +2501,22 @@ typedef enum EDoubleClickDir   : unsigned char {
   DCLICK_Active,                  // 5
   DCLICK_Done,                    // 6
   DCLICK_MAX                      // 7
+  #define DCLICK_None              DCLICK_None
+  #define DCLICK_Left              DCLICK_Left
+  #define DCLICK_Right             DCLICK_Right
+  #define DCLICK_Forward           DCLICK_Forward
+  #define DCLICK_Back              DCLICK_Back
+  #define DCLICK_Active            DCLICK_Active
+  #define DCLICK_Done              DCLICK_Done
+  #define DCLICK_MAX               DCLICK_MAX
+  #define EDoubleClickDir_None     DCLICK_None
+  #define EDoubleClickDir_Left     DCLICK_Left
+  #define EDoubleClickDir_Right    DCLICK_Right
+  #define EDoubleClickDir_Forward  DCLICK_Forward
+  #define EDoubleClickDir_Back     DCLICK_Back
+  #define EDoubleClickDir_Active   DCLICK_Active
+  #define EDoubleClickDir_Done     DCLICK_Done
+  #define EDoubleClickDir_MAX      DCLICK_MAX
 } EDoubleClickDir;
 #define EPhysics           EPhysics
 #define EMoveDir           EMoveDir
@@ -2802,6 +2914,18 @@ typedef enum EInputEvent                : unsigned char {
   IE_DoubleClick,                 // 3
   IE_Axis,                        // 4
   IE_MAX                          // 5
+  #define IE_Pressed               IE_Pressed
+  #define IE_Released              IE_Released
+  #define IE_Repeat                IE_Repeat
+  #define IE_DoubleClick           IE_DoubleClick
+  #define IE_Axis                  IE_Axis
+  #define IE_MAX                   IE_MAX
+  #define EInputEvent_Pressed      IE_Pressed
+  #define EInputEvent_Released     IE_Released
+  #define EInputEvent_Repeat       IE_Repeat
+  #define EInputEvent_DoubleClick  IE_DoubleClick
+  #define EInputEvent_Axis         IE_Axis
+  #define EInputEvent_MAX          IE_MAX
 } EInputEvent;
 typedef enum EAspectRatioAxisConstraint : unsigned char {
   AspectRatio_MaintainYFOV,       // 0
@@ -2874,16 +2998,42 @@ typedef enum EComparisonOperator       : unsigned char {
   OPERATOR_GreaterThan,           // 4
   OPERATOR_GreaterThanOrEqual,    // 5
   OPERATOR_MAX                    // 6
+  #define OPERATOR_EqualTo                        OPERATOR_EqualTo
+  #define OPERATOR_NotEqualTo                     OPERATOR_NotEqualTo
+  #define OPERATOR_LessThan                       OPERATOR_LessThan
+  #define OPERATOR_LessThanOrEqual                OPERATOR_LessThanOrEqual
+  #define OPERATOR_GreaterThan                    OPERATOR_GreaterThan
+  #define OPERATOR_GreaterThanOrEqual             OPERATOR_GreaterThanOrEqual
+  #define OPERATOR_MAX                            OPERATOR_MAX
+  #define EComparisonOperator_EqualTo             OPERATOR_EqualTo
+  #define EComparisonOperator_NotEqualTo          OPERATOR_NotEqualTo
+  #define EComparisonOperator_LessThan            OPERATOR_LessThan
+  #define EComparisonOperator_LessThanOrEqual     OPERATOR_LessThanOrEqual
+  #define EComparisonOperator_GreaterThan         OPERATOR_GreaterThan
+  #define EComparisonOperator_GreaterThanOrEqual  OPERATOR_GreaterThanOrEqual
+  #define EComparisonOperator_MAX                 OPERATOR_MAX
 } EComparisonOperator;
 typedef enum EOperandUsage             : unsigned char {
   OPERAND_PreferAttribute,        // 0
   OPERAND_Multiply,               // 1
   OPERAND_MAX                     // 2
+  #define OPERAND_PreferAttribute        OPERAND_PreferAttribute
+  #define OPERAND_Multiply               OPERAND_Multiply
+  #define OPERAND_MAX                    OPERAND_MAX
+  #define EOperandUsage_PreferAttribute  OPERAND_PreferAttribute
+  #define EOperandUsage_Multiply         OPERAND_Multiply
+  #define EOperandUsage_MAX              OPERAND_MAX
 } EOperandUsage;
 typedef enum EExpressionEvaluationMode : unsigned char {
   EXPRMODE_And,                   // 0
   EXPRMODE_Or,                    // 1
   EXPRMODE_MAX                    // 2
+  #define EXPRMODE_And                   EXPRMODE_And
+  #define EXPRMODE_Or                    EXPRMODE_Or
+  #define EXPRMODE_MAX                   EXPRMODE_MAX
+  #define EExpressionEvaluationMode_And  EXPRMODE_And
+  #define EExpressionEvaluationMode_Or   EXPRMODE_Or
+  #define EExpressionEvaluationMode_MAX  EXPRMODE_MAX
 } EExpressionEvaluationMode;
 #define EComparisonOperator        EComparisonOperator
 #define EOperandUsage              EOperandUsage
@@ -2897,6 +3047,16 @@ typedef enum EBaseValueMode                   : unsigned char {
   BASEVALUE_InitializationDefScalesBaseValue,// 2
   BASEVALUE_InitializationDefOffsetByBaseValue,// 3
   BASEVALUE_MAX                   // 4
+  #define BASEVALUE_InitializationDefSetsBaseValue           BASEVALUE_InitializationDefSetsBaseValue
+  #define BASEVALUE_InitializationDefAddsToBaseValue         BASEVALUE_InitializationDefAddsToBaseValue
+  #define BASEVALUE_InitializationDefScalesBaseValue         BASEVALUE_InitializationDefScalesBaseValue
+  #define BASEVALUE_InitializationDefOffsetByBaseValue       BASEVALUE_InitializationDefOffsetByBaseValue
+  #define BASEVALUE_MAX                                      BASEVALUE_MAX
+  #define EBaseValueMode_InitializationDefSetsBaseValue      BASEVALUE_InitializationDefSetsBaseValue
+  #define EBaseValueMode_InitializationDefAddsToBaseValue    BASEVALUE_InitializationDefAddsToBaseValue
+  #define EBaseValueMode_InitializationDefScalesBaseValue    BASEVALUE_InitializationDefScalesBaseValue
+  #define EBaseValueMode_InitializationDefOffsetByBaseValue  BASEVALUE_InitializationDefOffsetByBaseValue
+  #define EBaseValueMode_MAX                                 BASEVALUE_MAX
 } EBaseValueMode;
 typedef enum EAttributeInitializationRounding : unsigned char {
   ATTRROUNDING_Float,             // 0
@@ -2904,6 +3064,16 @@ typedef enum EAttributeInitializationRounding : unsigned char {
   ATTRROUNDING_IntFloor,          // 2
   ATTRROUNDING_IntCeil,           // 3
   ATTRROUNDING_MAX                // 4
+  #define ATTRROUNDING_Float                         ATTRROUNDING_Float
+  #define ATTRROUNDING_IntRound                      ATTRROUNDING_IntRound
+  #define ATTRROUNDING_IntFloor                      ATTRROUNDING_IntFloor
+  #define ATTRROUNDING_IntCeil                       ATTRROUNDING_IntCeil
+  #define ATTRROUNDING_MAX                           ATTRROUNDING_MAX
+  #define EAttributeInitializationRounding_Float     ATTRROUNDING_Float
+  #define EAttributeInitializationRounding_IntRound  ATTRROUNDING_IntRound
+  #define EAttributeInitializationRounding_IntFloor  ATTRROUNDING_IntFloor
+  #define EAttributeInitializationRounding_IntCeil   ATTRROUNDING_IntCeil
+  #define EAttributeInitializationRounding_MAX       ATTRROUNDING_MAX
 } EAttributeInitializationRounding;
 #define EBaseValueMode                    EBaseValueMode
 #define EAttributeInitializationRounding  EAttributeInitializationRounding
@@ -2915,6 +3085,14 @@ typedef enum EModifierType : unsigned char {
   MT_PreAdd,                      // 1
   MT_PostAdd,                     // 2
   MT_MAX                          // 3
+  #define MT_Scale               MT_Scale
+  #define MT_PreAdd              MT_PreAdd
+  #define MT_PostAdd             MT_PostAdd
+  #define MT_MAX                 MT_MAX
+  #define EModifierType_Scale    MT_Scale
+  #define EModifierType_PreAdd   MT_PreAdd
+  #define EModifierType_PostAdd  MT_PostAdd
+  #define EModifierType_MAX      MT_MAX
 } EModifierType;
 #define EModifierType  EModifierType
 
@@ -2925,17 +3103,32 @@ typedef enum EAttributeDataType : unsigned char {
   ADT_Int,                        // 1
   ADT_Bool,                       // 2
   ADT_MAX                         // 3
+  #define ADT_Float                 ADT_Float
+  #define ADT_Int                   ADT_Int
+  #define ADT_Bool                  ADT_Bool
+  #define ADT_MAX                   ADT_MAX
+  #define EAttributeDataType_Float  ADT_Float
+  #define EAttributeDataType_Int    ADT_Int
+  #define EAttributeDataType_Bool   ADT_Bool
+  #define EAttributeDataType_MAX    ADT_MAX
 } EAttributeDataType;
 #define EAttributeDataType  EAttributeDataType
 
 /* ---------------------------------------------------------- AWillowInventory ---------------------------------------------------------- */
 
-/* Enums */
 typedef enum PlayerMark        : unsigned char {
   PM_Trash,                       // 0
   PM_Standard,                    // 1
   PM_Favorite,                    // 2
   PM_MAX                          // 3
+  #define PM_Trash             PM_Trash
+  #define PM_Standard          PM_Standard
+  #define PM_Favorite          PM_Favorite
+  #define PM_MAX               PM_MAX
+  #define PlayerMark_Trash     PM_Trash
+  #define PlayerMark_Standard  PM_Standard
+  #define PlayerMark_Favorite  PM_Favorite
+  #define PlayerMark_MAX       PM_MAX
 } PlayerMark;
 typedef enum SerialNumberState : unsigned char {
   SNS_Empty,                      // 0
@@ -2944,10 +3137,26 @@ typedef enum SerialNumberState : unsigned char {
   SNS_Reading,                    // 3
   SNS_Encrypted,                  // 4
   SNS_MAX                         // 5
+  #define SNS_Empty                    SNS_Empty
+  #define SNS_Writing                  SNS_Writing
+  #define SNS_Full                     SNS_Full
+  #define SNS_Reading                  SNS_Reading
+  #define SNS_Encrypted                SNS_Encrypted
+  #define SNS_MAX                      SNS_MAX
+  #define SerialNumberState_Empty      SNS_Empty
+  #define SerialNumberState_Writing    SNS_Writing
+  #define SerialNumberState_Full       SNS_Full
+  #define SerialNumberState_Reading    SNS_Reading
+  #define SerialNumberState_Encrypted  SNS_Encrypted
+  #define SerialNumberState_MAX        SNS_MAX
 } SerialNumberState;
 typedef enum EncryptedSerial   : unsigned char {
   ES_Encrypted,                   // 0
   ES_MAX                          // 1
+  #define ES_Encrypted               ES_Encrypted
+  #define ES_MAX                     ES_MAX
+  #define EncryptedSerial_Encrypted  ES_Encrypted
+  #define EncryptedSerial_MAX        ES_MAX
 } EncryptedSerial;
 #define PlayerMark         PlayerMark
 #define SerialNumberState  SerialNumberState
@@ -2962,8 +3171,21 @@ typedef enum EWeaponFireType : unsigned char {
   EWFT_Custom,                    // 3
   EWFT_None,                      // 4
   EWFT_MAX                        // 5
+  #define EWFT_InstantHit             EWFT_InstantHit
+  #define EWFT_Projectile             EWFT_Projectile
+  #define EWFT_Beam                   EWFT_Beam
+  #define EWFT_Custom                 EWFT_Custom
+  #define EWFT_None                   EWFT_None
+  #define EWFT_MAX                    EWFT_MAX
+  #define EWeaponFireType_InstantHit  EWFT_InstantHit
+  #define EWeaponFireType_Projectile  EWFT_Projectile
+  #define EWeaponFireType_Beam        EWFT_Beam
+  #define EWeaponFireType_Custom      EWFT_Custom
+  #define EWeaponFireType_None        EWFT_None
+  #define EWeaponFireType_MAX         EWFT_MAX
 } EWeaponFireType;
 #define EWeaponFireType  EWeaponFireType
+_DECL_TARRAY(EWeaponFireType);
 
 /* ---------------------------------------------------------- UFontImportOptions ---------------------------------------------------------- */
 
@@ -2972,18 +3194,32 @@ typedef enum EFontImportCharacterSet : unsigned char {
   FontICS_Ansi,     /* 1 */
   FontICS_Symbol,   /* 2 */
   FontICS_MAX       /* 3 */
+  #define FontICS_Default                 FontICS_Default
+  #define FontICS_Ansi                    FontICS_Ansi
+  #define FontICS_Symbol                  FontICS_Symbol
+  #define FontICS_MAX                     FontICS_MAX
+  #define EFontImportCharacterSet_Default FontICS_Default
+  #define EFontImportCharacterSet_Ansi    FontICS_Ansi
+  #define EFontImportCharacterSet_Symbol  FontICS_Symbol
+  #define EFontImportCharacterSet_MAX     FontICS_MAX
 } EFontImportCharacterSet;
 #define EFontImportCharacterSet  EFontImportCharacterSet
 
 /* ---------------------------------------------------------- AWillowWeapon ---------------------------------------------------------- */
 
-static const signed char ZoomedFireModeNum              = 1;
-static const signed char MAX_WEAPON_CARD_MODIFIER_STATS = 5;
 typedef enum EWeaponReloadState      : unsigned char {
   RELOADSTATE_None,               // 0
   RELOADSTATE_Reloading,          // 1
   RELOADSTATE_Aborted,            // 2
   RELOADSTATE_MAX                 // 3
+  #define RELOADSTATE_None              RELOADSTATE_None
+  #define RELOADSTATE_Reloading         RELOADSTATE_Reloading
+  #define RELOADSTATE_Aborted           RELOADSTATE_Aborted
+  #define RELOADSTATE_MAX               RELOADSTATE_MAX
+  #define EWeaponReloadState_None       RELOADSTATE_None
+  #define EWeaponReloadState_Reloading  RELOADSTATE_Reloading
+  #define EWeaponReloadState_Aborted    RELOADSTATE_Aborted
+  #define EWeaponReloadState_MAX        RELOADSTATE_MAX
 } EWeaponReloadState;
 typedef enum EZoomState              : unsigned char {
   ZST_NotZoomed,                  // 0
@@ -2991,17 +3227,41 @@ typedef enum EZoomState              : unsigned char {
   ZST_Zoomed,                     // 2
   ZST_ZoomingOut,                 // 3
   ZST_MAX                         // 4
+  #define ZST_NotZoomed          ZST_NotZoomed
+  #define ZST_ZoomingIn          ZST_ZoomingIn
+  #define ZST_Zoomed             ZST_Zoomed
+  #define ZST_ZoomingOut         ZST_ZoomingOut
+  #define ZST_MAX                ZST_MAX
+  #define EZoomState_NotZoomed   ZST_NotZoomed
+  #define EZoomState_ZoomingIn   ZST_ZoomingIn
+  #define EZoomState_Zoomed      ZST_Zoomed
+  #define EZoomState_ZoomingOut  ZST_ZoomingOut
+  #define EZoomState_MAX         ZST_MAX
 } EZoomState;
 typedef enum EWeaponSpinState        : unsigned char {
   SPIN_STATE_None,                // 0
   SPIN_STATE_SpinningUp,          // 1
   SPIN_STATE_FullySpunUp,         // 2
   SPIN_STATE_MAX                  // 3
+  #define SPIN_STATE_None               SPIN_STATE_None
+  #define SPIN_STATE_SpinningUp         SPIN_STATE_SpinningUp
+  #define SPIN_STATE_FullySpunUp        SPIN_STATE_FullySpunUp
+  #define SPIN_STATE_MAX                SPIN_STATE_MAX
+  #define EWeaponSpinState_None         SPIN_STATE_None
+  #define EWeaponSpinState_SpinningUp   SPIN_STATE_SpinningUp
+  #define EWeaponSpinState_FullySpunUp  SPIN_STATE_FullySpunUp
+  #define EWeaponSpinState_MAX          SPIN_STATE_MAX
 } EWeaponSpinState;
 typedef enum EWeaponAnimation        : unsigned char {
   WEAPON_ANIM_Weapon,             // 0
   WEAPON_ANIM_Arm,                // 1
   WEAPON_ANIM_MAX                 // 2
+  #define WEAPON_ANIM_Weapon       WEAPON_ANIM_Weapon
+  #define WEAPON_ANIM_Arm          WEAPON_ANIM_Arm
+  #define WEAPON_ANIM_MAX          WEAPON_ANIM_MAX
+  #define EWeaponAnimation_Weapon  WEAPON_ANIM_Weapon
+  #define EWeaponAnimation_Arm     WEAPON_ANIM_Arm
+  #define EWeaponAnimation_MAX     WEAPON_ANIM_MAX
 } EWeaponAnimation;
 typedef enum EWeaponAnimPutDownState : unsigned char {
   WAPDS_None,                     // 0
@@ -3009,6 +3269,16 @@ typedef enum EWeaponAnimPutDownState : unsigned char {
   WAPDS_PutDownSwap,              // 2
   WAPDS_PutDownInterrupted,       // 3
   WAPDS_MAX                       // 4
+  #define WAPDS_None                                  WAPDS_None
+  #define WAPDS_PutDown                               WAPDS_PutDown
+  #define WAPDS_PutDownSwap                           WAPDS_PutDownSwap
+  #define WAPDS_PutDownInterrupted                    WAPDS_PutDownInterrupted
+  #define WAPDS_MAX                                   WAPDS_MAX
+  #define EWeaponAnimPutDownState_None                WAPDS_None
+  #define EWeaponAnimPutDownState_PutDown             WAPDS_PutDown
+  #define EWeaponAnimPutDownState_PutDownSwap         WAPDS_PutDownSwap
+  #define EWeaponAnimPutDownState_PutDownInterrupted  WAPDS_PutDownInterrupted
+  #define EWeaponAnimPutDownState_MAX                 WAPDS_MAX
 } EWeaponAnimPutDownState;
 #define EWeaponReloadState  		 EWeaponReloadState
 #define EZoomState 				  		 EZoomState
@@ -3026,14 +3296,20 @@ typedef enum EWeaponType               : unsigned char {
   WT_AssaultRifle,                // 4
   WT_RocketLauncher,              // 5
   WT_MAX                          // 6
-  #define WT_Pistol          WT_Pistol
-  #define WT_Shotgun         WT_Shotgun
-  #define WT_SMG             WT_SMG
-  #define WT_SniperRifle     WT_SniperRifle
-  #define WT_AssaultRifle    WT_AssaultRifle
-  #define WT_RocketLauncher  WT_RocketLauncher
-  #define WT_MAX             WT_MAX
-  #define EWeaponType__MAX   WT_MAX
+  #define WT_Pistol                   WT_Pistol
+  #define WT_Shotgun                  WT_Shotgun
+  #define WT_SMG                      WT_SMG
+  #define WT_SniperRifle              WT_SniperRifle
+  #define WT_AssaultRifle             WT_AssaultRifle
+  #define WT_RocketLauncher           WT_RocketLauncher
+  #define WT_MAX                      WT_MAX
+  #define EWeaponType_Pistol          WT_Pistol
+  #define EWeaponType_Shotgun         WT_Shotgun
+  #define EWeaponType_SMG             WT_SMG
+  #define EWeaponType_SniperRifle     WT_SniperRifle
+  #define EWeaponType_AssaultRifle    WT_AssaultRifle
+  #define EWeaponType_RocketLauncher  WT_RocketLauncher
+  #define EWeaponType_MAX             WT_MAX
 } EWeaponType;
 typedef enum EWeaponPartType           : unsigned char {
   WP_Body,                        // 0
@@ -3048,6 +3324,30 @@ typedef enum EWeaponPartType           : unsigned char {
   WP_Prefix,                      // 9
   WP_Title,                       // 10
   WP_MAX                          // 11
+  #define WP_Body                     WP_Body
+  #define WP_Grip                     WP_Grip
+  #define WP_Barrel                   WP_Barrel
+  #define WP_Sight                    WP_Sight
+  #define WP_Stock                    WP_Stock
+  #define WP_Elemental                WP_Elemental
+  #define WP_Accessory1               WP_Accessory1
+  #define WP_Accessory2               WP_Accessory2
+  #define WP_Material                 WP_Material
+  #define WP_Prefix                   WP_Prefix
+  #define WP_Title                    WP_Title
+  #define WP_MAX                      WP_MAX
+  #define EWeaponPartType_Body        WP_Body
+  #define EWeaponPartType_Grip        WP_Grip
+  #define EWeaponPartType_Barrel      WP_Barrel
+  #define EWeaponPartType_Sight       WP_Sight
+  #define EWeaponPartType_Stock       WP_Stock
+  #define EWeaponPartType_Elemental   WP_Elemental
+  #define EWeaponPartType_Accessory1  WP_Accessory1
+  #define EWeaponPartType_Accessory2  WP_Accessory2
+  #define EWeaponPartType_Material    WP_Material
+  #define EWeaponPartType_Prefix      WP_Prefix
+  #define EWeaponPartType_Title       WP_Title
+  #define EWeaponPartType_MAX         WP_MAX
 } EWeaponPartType;
 typedef enum EWeaponPartVariation      : unsigned char {
   WeaponPartVar_Default,          // 0
@@ -3055,6 +3355,16 @@ typedef enum EWeaponPartVariation      : unsigned char {
   WeaponPartVar_Two,              // 2
   WeaponPartVar_Three,            // 3
   WeaponPartVar_MAX               // 4
+  #define WeaponPartVar_Default         WeaponPartVar_Default
+  #define WeaponPartVar_One             WeaponPartVar_One
+  #define WeaponPartVar_Two             WeaponPartVar_Two
+  #define WeaponPartVar_Three           WeaponPartVar_Three
+  #define WeaponPartVar_MAX             WeaponPartVar_MAX
+  #define EWeaponPartVariation_Default  WeaponPartVar_Default
+  #define EWeaponPartVariation_One      WeaponPartVar_One
+  #define EWeaponPartVariation_Two      WeaponPartVar_Two
+  #define EWeaponPartVariation_Three    WeaponPartVar_Three
+  #define EWeaponPartVariation_MAX      WeaponPartVar_MAX
 } EWeaponPartVariation;
 typedef enum EWeaponEventType          : unsigned char {
   WEAPONEVENT_Advance,            // 0
@@ -3062,6 +3372,16 @@ typedef enum EWeaponEventType          : unsigned char {
   WEAPONEVENT_Pause,              // 2
   WEAPONEVENT_UnPause,            // 3
   WEAPONEVENT_MAX                 // 4
+  #define WEAPONEVENT_Advance       WEAPONEVENT_Advance
+  #define WEAPONEVENT_Stop          WEAPONEVENT_Stop
+  #define WEAPONEVENT_Pause         WEAPONEVENT_Pause
+  #define WEAPONEVENT_UnPause       WEAPONEVENT_UnPause
+  #define WEAPONEVENT_MAX           WEAPONEVENT_MAX
+  #define EWeaponEventType_Advance  WEAPONEVENT_Advance
+  #define EWeaponEventType_Stop     WEAPONEVENT_Stop
+  #define EWeaponEventType_Pause    WEAPONEVENT_Pause
+  #define EWeaponEventType_UnPause  WEAPONEVENT_UnPause
+  #define EWeaponEventType_MAX      WEAPONEVENT_MAX
 } EWeaponEventType;
 typedef enum EWeaponBoneControllerType : unsigned char {
   WEAP_BONE_CONTROL_General,      // 0
@@ -3069,6 +3389,16 @@ typedef enum EWeaponBoneControllerType : unsigned char {
   WEAP_BONE_CONTROL_MagazineSpinner,// 2
   WEAP_BONE_CONTROL_Flap,         // 3
   WEAP_BONE_CONTROL_MAX           // 4
+  #define WEAP_BONE_CONTROL_General                  WEAP_BONE_CONTROL_General
+  #define WEAP_BONE_CONTROL_BarrelSpinner            WEAP_BONE_CONTROL_BarrelSpinner
+  #define WEAP_BONE_CONTROL_MagazineSpinner          WEAP_BONE_CONTROL_MagazineSpinner
+  #define WEAP_BONE_CONTROL_Flap                     WEAP_BONE_CONTROL_Flap
+  #define WEAP_BONE_CONTROL_MAX                      WEAP_BONE_CONTROL_MAX
+  #define EWeaponBoneControllerType_General          WEAP_BONE_CONTROL_General
+  #define EWeaponBoneControllerType_BarrelSpinner    WEAP_BONE_CONTROL_BarrelSpinner
+  #define EWeaponBoneControllerType_MagazineSpinner  WEAP_BONE_CONTROL_MagazineSpinner
+  #define EWeaponBoneControllerType_Flap             WEAP_BONE_CONTROL_Flap
+  #define EWeaponBoneControllerType_MAX              WEAP_BONE_CONTROL_MAX
 } EWeaponBoneControllerType;
 typedef enum EWeaponHand               : unsigned char {
   HAND_Right,                     // 0
@@ -3076,11 +3406,27 @@ typedef enum EWeaponHand               : unsigned char {
   HAND_Centered,                  // 2
   HAND_Hidden,                    // 3
   HAND_MAX                        // 4
+  #define HAND_Right            HAND_Right
+  #define HAND_Left             HAND_Left
+  #define HAND_Centered         HAND_Centered
+  #define HAND_Hidden           HAND_Hidden
+  #define HAND_MAX              HAND_MAX
+  #define EWeaponHand_Right     HAND_Right
+  #define EWeaponHand_Left      HAND_Left
+  #define EWeaponHand_Centered  HAND_Centered
+  #define EWeaponHand_Hidden    HAND_Hidden
+  #define EWeaponHand_MAX       HAND_MAX
 } EWeaponHand;
 typedef enum EWeaponVisibleAmmoState   : unsigned char {
   VISIBLE_AMMO_STATE_Default,     // 0
   VISIBLE_AMMO_STATE_PendingReload,// 1
   VISIBLE_AMMO_STATE_MAX          // 2
+  #define VISIBLE_AMMO_STATE_Default             VISIBLE_AMMO_STATE_Default
+  #define VISIBLE_AMMO_STATE_PendingReload       VISIBLE_AMMO_STATE_PendingReload
+  #define VISIBLE_AMMO_STATE_MAX                 VISIBLE_AMMO_STATE_MAX
+  #define EWeaponVisibleAmmoState_Default        VISIBLE_AMMO_STATE_Default
+  #define EWeaponVisibleAmmoState_PendingReload  VISIBLE_AMMO_STATE_PendingReload
+  #define EWeaponVisibleAmmoState_MAX            VISIBLE_AMMO_STATE_MAX
 } EWeaponVisibleAmmoState;
 #define EWeaponType                EWeaponType
 #define EWeaponPartType            EWeaponPartType
@@ -3097,6 +3443,14 @@ typedef enum EPlayerDroppability      : unsigned char {
   EPD_Sellable,                   // 1
   EPD_CannotDropOrSell,           // 2
   EPD_MAX                         // 3
+  #define EPD_Droppable                         EPD_Droppable
+  #define EPD_Sellable                          EPD_Sellable
+  #define EPD_CannotDropOrSell                  EPD_CannotDropOrSell
+  #define EPD_MAX                               EPD_MAX
+  #define EPlayerDroppability_Droppable         EPD_Droppable
+  #define EPlayerDroppability_Sellable          EPD_Sellable
+  #define EPlayerDroppability_CannotDropOrSell  EPD_CannotDropOrSell
+  #define EPlayerDroppability_MAX               EPD_MAX
 } EPlayerDroppability;
 typedef enum ECurrencyType            : unsigned char {
   CURRENCY_Credits,               // 0
@@ -3113,21 +3467,34 @@ typedef enum ECurrencyType            : unsigned char {
   CURRENCY_Reserved_I,            // 11
   CURRENCY_Reserved_J,            // 12
   CURRENCY_MAX                    // 13
-  #define CURRENCY_Credits         CURRENCY_Credits
-  #define CURRENCY_Eridium         CURRENCY_Eridium
-  #define CURRENCY_SeraphCrystals  CURRENCY_SeraphCrystals
-  #define CURRENCY_Reserved_A      CURRENCY_Reserved_A
-  #define CURRENCY_Reserved_B      CURRENCY_Reserved_B
-  #define CURRENCY_Reserved_C      CURRENCY_Reserved_C
-  #define CURRENCY_Reserved_D      CURRENCY_Reserved_D
-  #define CURRENCY_Reserved_E      CURRENCY_Reserved_E
-  #define CURRENCY_Reserved_F      CURRENCY_Reserved_F
-  #define CURRENCY_Reserved_G      CURRENCY_Reserved_G
-  #define CURRENCY_Reserved_H      CURRENCY_Reserved_H
-  #define CURRENCY_Reserved_I      CURRENCY_Reserved_I
-  #define CURRENCY_Reserved_J      CURRENCY_Reserved_J
-  #define CURRENCY_MAX             CURRENCY_MAX
-  #define ECurrencyType__MAX       CURRENCY_MAX
+  #define CURRENCY_Credits              CURRENCY_Credits
+  #define CURRENCY_Eridium              CURRENCY_Eridium
+  #define CURRENCY_SeraphCrystals       CURRENCY_SeraphCrystals
+  #define CURRENCY_Reserved_A           CURRENCY_Reserved_A
+  #define CURRENCY_Reserved_B           CURRENCY_Reserved_B
+  #define CURRENCY_Reserved_C           CURRENCY_Reserved_C
+  #define CURRENCY_Reserved_D           CURRENCY_Reserved_D
+  #define CURRENCY_Reserved_E           CURRENCY_Reserved_E
+  #define CURRENCY_Reserved_F           CURRENCY_Reserved_F
+  #define CURRENCY_Reserved_G           CURRENCY_Reserved_G
+  #define CURRENCY_Reserved_H           CURRENCY_Reserved_H
+  #define CURRENCY_Reserved_I           CURRENCY_Reserved_I
+  #define CURRENCY_Reserved_J           CURRENCY_Reserved_J
+  #define CURRENCY_MAX                  CURRENCY_MAX
+  #define ECurrencyType_Credits         CURRENCY_Credits
+  #define ECurrencyType_Eridium         CURRENCY_Eridium
+  #define ECurrencyType_SeraphCrystals  CURRENCY_SeraphCrystals
+  #define ECurrencyType_Reserved_A      CURRENCY_Reserved_A
+  #define ECurrencyType_Reserved_B      CURRENCY_Reserved_B
+  #define ECurrencyType_Reserved_C      CURRENCY_Reserved_C
+  #define ECurrencyType_Reserved_D      CURRENCY_Reserved_D
+  #define ECurrencyType_Reserved_E      CURRENCY_Reserved_E
+  #define ECurrencyType_Reserved_F      CURRENCY_Reserved_F
+  #define ECurrencyType_Reserved_G      CURRENCY_Reserved_G
+  #define ECurrencyType_Reserved_H      CURRENCY_Reserved_H
+  #define ECurrencyType_Reserved_I      CURRENCY_Reserved_I
+  #define ECurrencyType_Reserved_J      CURRENCY_Reserved_J
+  #define ECurrencyType_MAX             CURRENCY_MAX
 } ECurrencyType;
 typedef enum EStatCombinationMethod   : unsigned char {
   SCM_Multiply,                   // 0
@@ -3136,12 +3503,32 @@ typedef enum EStatCombinationMethod   : unsigned char {
   SCM_Subtract,                   // 3
   SCM_DontCombine,                // 4
   SCM_MAX                         // 5
+  #define SCM_Multiply                        SCM_Multiply
+  #define SCM_Divide                          SCM_Divide
+  #define SCM_Add                             SCM_Add
+  #define SCM_Subtract                        SCM_Subtract
+  #define SCM_DontCombine                     SCM_DontCombine
+  #define SCM_MAX                             SCM_MAX
+  #define EStatCombinationMethod_Multiply     SCM_Multiply
+  #define EStatCombinationMethod_Divide       SCM_Divide
+  #define EStatCombinationMethod_Add          SCM_Add
+  #define EStatCombinationMethod_Subtract     SCM_Subtract
+  #define EStatCombinationMethod_DontCombine  SCM_DontCombine
+  #define EStatCombinationMethod_MAX          SCM_MAX
 } EStatCombinationMethod;
 typedef enum EAttributeSlotEffectMode : unsigned char {
   ATTRSLOTEFFECTMODE_Default,     // 0
   ATTRSLOTEFFECTMODE_Timed,       // 1
   ATTRSLOTEFFECTMODE_Custom,      // 2
   ATTRSLOTEFFECTMODE_MAX          // 3
+  #define ATTRSLOTEFFECTMODE_Default        ATTRSLOTEFFECTMODE_Default
+  #define ATTRSLOTEFFECTMODE_Timed          ATTRSLOTEFFECTMODE_Timed
+  #define ATTRSLOTEFFECTMODE_Custom         ATTRSLOTEFFECTMODE_Custom
+  #define ATTRSLOTEFFECTMODE_MAX            ATTRSLOTEFFECTMODE_MAX
+  #define EAttributeSlotEffectMode_Default  ATTRSLOTEFFECTMODE_Default
+  #define EAttributeSlotEffectMode_Timed    ATTRSLOTEFFECTMODE_Timed
+  #define EAttributeSlotEffectMode_Custom   ATTRSLOTEFFECTMODE_Custom
+  #define EAttributeSlotEffectMode_MAX      ATTRSLOTEFFECTMODE_MAX
 } EAttributeSlotEffectMode;
 #define EPlayerDroppability       EPlayerDroppability
 #define ECurrencyType             ECurrencyType
@@ -3155,21 +3542,27 @@ typedef enum EBarrelSpinMode : unsigned char {
   BSM_SpinUpToFullFireRate,       // 1
   BSM_SpinBarrelWithEachShot,     // 2
   BSM_MAX                         // 3
-  #define BSM_None  BSM_None
-  #define BSM_SpinUpToFullFireRate  BSM_SpinUpToFullFireRate
-  #define BSM_SpinBarrelWithEachShot  BSM_SpinBarrelWithEachShot
-  #define BSM_MAX BSM_MAX
-  #define EBarrelSpinMode__MAX BSM_MAX
+  #define BSM_None                                BSM_None
+  #define BSM_SpinUpToFullFireRate                BSM_SpinUpToFullFireRate
+  #define BSM_SpinBarrelWithEachShot              BSM_SpinBarrelWithEachShot
+  #define BSM_MAX                                 BSM_MAX
+  #define EBarrelSpinMode_None                    BSM_None
+  #define EBarrelSpinMode_SpinUpToFullFireRate    BSM_SpinUpToFullFireRate
+  #define EBarrelSpinMode_SpinBarrelWithEachShot  BSM_SpinBarrelWithEachShot
+  #define EBarrelSpinMode_MAX                     BSM_MAX
 } EBarrelSpinMode;
-typedef enum EGbxWeaponLock : unsigned char {
+typedef enum EGbxWeaponLock  : unsigned char {
   GBXWEAPLOCK_None,               // 0
   GBXWEAPLOCK_PaintAndHold,       // 1
   GBXWEAPLOCK_MAX                 // 2
-  #define GBXWEAPLOCK_None          GBXWEAPLOCK_None
-  #define GBXWEAPLOCK_PaintAndHold  GBXWEAPLOCK_PaintAndHold
-  #define GBXWEAPLOCK_MAX           GBXWEAPLOCK_MAX
-  #define EGbxWeaponLock__MAX       GBXWEAPLOCK_MAX
+  #define GBXWEAPLOCK_None             GBXWEAPLOCK_None
+  #define GBXWEAPLOCK_PaintAndHold     GBXWEAPLOCK_PaintAndHold
+  #define GBXWEAPLOCK_MAX              GBXWEAPLOCK_MAX
+  #define EGbxWeaponLock_None          GBXWEAPLOCK_None
+  #define EGbxWeaponLock_PaintAndHold  GBXWEAPLOCK_PaintAndHold
+  #define EGbxWeaponLock_MAX           GBXWEAPLOCK_MAX
 } EGbxWeaponLock;
+#define EBarrelSpinMode  EBarrelSpinMode
 #define EGbxWeaponLock   EGbxWeaponLock
 
 /* ---------------------------------------------------------- UAttributeDefinition ---------------------------------------------------------- */
@@ -3609,11 +4002,14 @@ typedef enum EImpactUsage       : unsigned char {
   IU_Footstep,                    // 1
   IU_Bullet,                      // 2
   IU_MAX                          // 3
-  #define IU_None            IU_None
-  #define IU_Footstep        IU_Footstep
-  #define IU_Bullet          IU_Bullet
-  #define IU_MAX             IU_MAX
-  #define EImpactUsage__MAX  IU_MAX
+  #define IU_None                IU_None
+  #define IU_Footstep            IU_Footstep
+  #define IU_Bullet              IU_Bullet
+  #define IU_MAX                 IU_MAX
+  #define EImpactUsage_None      IU_None
+  #define EImpactUsage_Footstep  IU_Footstep
+  #define EImpactUsage_Bullet    IU_Bullet
+  #define EImpactUsage_MAX       IU_MAX
 } EImpactUsage;
 typedef enum EDamageSurfaceType : unsigned char {
   DMGSURFACE_Generic,             // 0
@@ -3621,12 +4017,16 @@ typedef enum EDamageSurfaceType : unsigned char {
   DMGSURFACE_Armor,               // 2
   DMGSURFACE_Shield,              // 3
   DMGSURFACE_MAX                  // 4
-  #define DMGSURFACE_Generic       DMGSURFACE_Generic
-  #define DMGSURFACE_Flesh         DMGSURFACE_Flesh
-  #define DMGSURFACE_Armor         DMGSURFACE_Armor
-  #define DMGSURFACE_Shield        DMGSURFACE_Shield
-  #define DMGSURFACE_MAX           DMGSURFACE_MAX
-  #define EDamageSurfaceType__MAX  DMGSURFACE_MAX
+  #define DMGSURFACE_Generic          DMGSURFACE_Generic
+  #define DMGSURFACE_Flesh            DMGSURFACE_Flesh
+  #define DMGSURFACE_Armor            DMGSURFACE_Armor
+  #define DMGSURFACE_Shield           DMGSURFACE_Shield
+  #define DMGSURFACE_MAX              DMGSURFACE_MAX
+  #define EDamageSurfaceType_Generic  DMGSURFACE_Generic
+  #define EDamageSurfaceType_Flesh    DMGSURFACE_Flesh
+  #define EDamageSurfaceType_Armor    DMGSURFACE_Armor
+  #define EDamageSurfaceType_Shield   DMGSURFACE_Shield
+  #define EDamageSurfaceType_MAX      DMGSURFACE_MAX
 } EDamageSurfaceType;
 #define EImpactUsage        EImpactUsage
 #define EDamageSurfaceType  EDamageSurfaceType
@@ -4032,12 +4432,48 @@ typedef enum EInstanceDataType : unsigned char {
   IDT_CustomHead,                 // 11
   IDT_CustomSkin,                 // 12
   IDT_MAX                         // 13
+  #define IDT_Bool                          IDT_Bool
+  #define IDT_Int                           IDT_Int
+  #define IDT_Float                         IDT_Float
+  #define IDT_Vector                        IDT_Vector
+  #define IDT_Object                        IDT_Object
+  #define IDT_ActorComponent                IDT_ActorComponent
+  #define IDT_Actor                         IDT_Actor
+  #define IDT_ActorTemplate                 IDT_ActorTemplate
+  #define IDT_String                        IDT_String
+  #define IDT_Switch                        IDT_Switch
+  #define IDT_PickupTemplate                IDT_PickupTemplate
+  #define IDT_CustomHead                    IDT_CustomHead
+  #define IDT_CustomSkin                    IDT_CustomSkin
+  #define IDT_MAX                           IDT_MAX
+  #define EInstanceDataType_Bool            IDT_Bool
+  #define EInstanceDataType_Int             IDT_Int
+  #define EInstanceDataType_Float           IDT_Float
+  #define EInstanceDataType_Vector          IDT_Vector
+  #define EInstanceDataType_Object          IDT_Object
+  #define EInstanceDataType_ActorComponent  IDT_ActorComponent
+  #define EInstanceDataType_Actor           IDT_Actor
+  #define EInstanceDataType_ActorTemplate   IDT_ActorTemplate
+  #define EInstanceDataType_String          IDT_String
+  #define EInstanceDataType_Switch          IDT_Switch
+  #define EInstanceDataType_PickupTemplate  IDT_PickupTemplate
+  #define EInstanceDataType_CustomHead      IDT_CustomHead
+  #define EInstanceDataType_CustomSkin      IDT_CustomSkin
+  #define EInstanceDataType_MAX             IDT_MAX
 } EInstanceDataType;
 typedef enum EReplicationType  : unsigned char {
   IDR_Server,                     // 0
   IDR_Client,                     // 1
   IDR_Local,                      // 2
   IDR_MAX                         // 3
+  #define IDR_Server               IDR_Server
+  #define IDR_Client               IDR_Client
+  #define IDR_Local                IDR_Local
+  #define IDR_MAX                  IDR_MAX
+  #define EReplicationType_Server  IDR_Server
+  #define EReplicationType_Client  IDR_Client
+  #define EReplicationType_Local   IDR_Local
+  #define EReplicationType_MAX     IDR_MAX
 } EReplicationType;
 #define EInstanceDataType  EInstanceDataType
 #define EReplicationType   EReplicationType
@@ -4462,6 +4898,42 @@ typedef enum EDamageCauserType : unsigned char {
   DAMAGE_CAUSER_TYPE_ExtraWeapon3,// 15
   DAMAGE_CAUSER_TYPE_ExtraWeapon4,// 16
   DAMAGE_CAUSER_TYPE_MAX          // 17
+  #define DAMAGE_CAUSER_TYPE_Unknown          DAMAGE_CAUSER_TYPE_Unknown
+  #define DAMAGE_CAUSER_TYPE_Pistol           DAMAGE_CAUSER_TYPE_Pistol
+  #define DAMAGE_CAUSER_TYPE_Shotgun          DAMAGE_CAUSER_TYPE_Shotgun
+  #define DAMAGE_CAUSER_TYPE_AssaultRifle     DAMAGE_CAUSER_TYPE_AssaultRifle
+  #define DAMAGE_CAUSER_TYPE_SniperRifle      DAMAGE_CAUSER_TYPE_SniperRifle
+  #define DAMAGE_CAUSER_TYPE_SMG              DAMAGE_CAUSER_TYPE_SMG
+  #define DAMAGE_CAUSER_TYPE_Frag_Grenade     DAMAGE_CAUSER_TYPE_Frag_Grenade
+  #define DAMAGE_CAUSER_TYPE_Protean_Grenade  DAMAGE_CAUSER_TYPE_Protean_Grenade
+  #define DAMAGE_CAUSER_TYPE_Vehicle          DAMAGE_CAUSER_TYPE_Vehicle
+  #define DAMAGE_CAUSER_TYPE_VehicleWeapon    DAMAGE_CAUSER_TYPE_VehicleWeapon
+  #define DAMAGE_CAUSER_TYPE_Melee            DAMAGE_CAUSER_TYPE_Melee
+  #define DAMAGE_CAUSER_TYPE_Turret           DAMAGE_CAUSER_TYPE_Turret
+  #define DAMAGE_CAUSER_TYPE_Launcher         DAMAGE_CAUSER_TYPE_Launcher
+  #define DAMAGE_CAUSER_TYPE_ExtraWeapon1     DAMAGE_CAUSER_TYPE_ExtraWeapon1
+  #define DAMAGE_CAUSER_TYPE_ExtraWeapon2     DAMAGE_CAUSER_TYPE_ExtraWeapon2
+  #define DAMAGE_CAUSER_TYPE_ExtraWeapon3     DAMAGE_CAUSER_TYPE_ExtraWeapon3
+  #define DAMAGE_CAUSER_TYPE_ExtraWeapon4     DAMAGE_CAUSER_TYPE_ExtraWeapon4
+  #define DAMAGE_CAUSER_TYPE_MAX              DAMAGE_CAUSER_TYPE_MAX
+  #define EDamageCauserType_Unknown           DAMAGE_CAUSER_TYPE_Unknown
+  #define EDamageCauserType_Pistol            DAMAGE_CAUSER_TYPE_Pistol
+  #define EDamageCauserType_Shotgun           DAMAGE_CAUSER_TYPE_Shotgun
+  #define EDamageCauserType_AssaultRifle      DAMAGE_CAUSER_TYPE_AssaultRifle
+  #define EDamageCauserType_SniperRifle       DAMAGE_CAUSER_TYPE_SniperRifle
+  #define EDamageCauserType_SMG               DAMAGE_CAUSER_TYPE_SMG
+  #define EDamageCauserType_Frag_Grenade      DAMAGE_CAUSER_TYPE_Frag_Grenade
+  #define EDamageCauserType_Protean_Grenade   DAMAGE_CAUSER_TYPE_Protean_Grenade
+  #define EDamageCauserType_Vehicle           DAMAGE_CAUSER_TYPE_Vehicle
+  #define EDamageCauserType_VehicleWeapon     DAMAGE_CAUSER_TYPE_VehicleWeapon
+  #define EDamageCauserType_Melee             DAMAGE_CAUSER_TYPE_Melee
+  #define EDamageCauserType_Turret            DAMAGE_CAUSER_TYPE_Turret
+  #define EDamageCauserType_Launcher          DAMAGE_CAUSER_TYPE_Launcher
+  #define EDamageCauserType_ExtraWeapon1      DAMAGE_CAUSER_TYPE_ExtraWeapon1
+  #define EDamageCauserType_ExtraWeapon2      DAMAGE_CAUSER_TYPE_ExtraWeapon2
+  #define EDamageCauserType_ExtraWeapon3      DAMAGE_CAUSER_TYPE_ExtraWeapon3
+  #define EDamageCauserType_ExtraWeapon4      DAMAGE_CAUSER_TYPE_ExtraWeapon4
+  #define EDamageCauserType_MAX               DAMAGE_CAUSER_TYPE_MAX
 } EDamageCauserType;
 #define EDamageCauserType  EDamageCauserType
 
@@ -5051,17 +5523,26 @@ typedef enum EFlashCardIndex : unsigned char {
   FCI_Artifact,                   // 7
   FCI_MissionItem,                // 8
   FCI_MAX                         // 9
-  #define FCI_None              FCI_None
-  #define FCI_Weapon            FCI_Weapon
-  #define FCI_Shield            FCI_Shield
-  #define FCI_GrenadeMod        FCI_GrenadeMod
-  #define FCI_ClassMod          FCI_ClassMod
-  #define FCI_Item              FCI_Item
-  #define FCI_Blank             FCI_Blank
-  #define FCI_Artifact          FCI_Artifact
-  #define FCI_MissionItem       FCI_MissionItem
-  #define FCI_MAX               FCI_MAX
-  #define EFlashCardIndex__MAX  FCI_MAX
+  #define FCI_None                     FCI_None
+  #define FCI_Weapon                   FCI_Weapon
+  #define FCI_Shield                   FCI_Shield
+  #define FCI_GrenadeMod               FCI_GrenadeMod
+  #define FCI_ClassMod                 FCI_ClassMod
+  #define FCI_Item                     FCI_Item
+  #define FCI_Blank                    FCI_Blank
+  #define FCI_Artifact                 FCI_Artifact
+  #define FCI_MissionItem              FCI_MissionItem
+  #define FCI_MAX                      FCI_MAX
+  #define EFlashCardIndex_None         FCI_None
+  #define EFlashCardIndex_Weapon       FCI_Weapon
+  #define EFlashCardIndex_Shield       FCI_Shield
+  #define EFlashCardIndex_GrenadeMod   FCI_GrenadeMod
+  #define EFlashCardIndex_ClassMod     FCI_ClassMod
+  #define EFlashCardIndex_Item         FCI_Item
+  #define EFlashCardIndex_Blank        FCI_Blank
+  #define EFlashCardIndex_Artifact     FCI_Artifact
+  #define EFlashCardIndex_MissionItem  FCI_MissionItem
+  #define EFlashCardIndex_MAX          FCI_MAX
 } EFlashCardIndex;
 #define EItemPartType    EItemPartType
 #define EFlashCardIndex  EFlashCardIndex
@@ -5087,6 +5568,17 @@ typedef enum EQuickWeaponSlot        : unsigned char {
   QuickSelectLeft,                // 3
   QuickSelectRight,               // 4
   EQuickWeaponSlot_MAX            // 5
+  #define QuickSelectNone         QuickSelectNone
+  #define QuickSelectUp           QuickSelectUp
+  #define QuickSelectDown         QuickSelectDown
+  #define QuickSelectLeft         QuickSelectLeft
+  #define QuickSelectRight        QuickSelectRight
+  #define EQuickWeaponSlot_None   QuickSelectNone
+  #define EQuickWeaponSlot_Up     QuickSelectUp
+  #define EQuickWeaponSlot_Down   QuickSelectDown
+  #define EQuickWeaponSlot_Left   QuickSelectLeft
+  #define EQuickWeaponSlot_Right  QuickSelectRight
+  #define EQuickWeaponSlot_MAX    EQuickWeaponSlot_MAX
 } EQuickWeaponSlot;
 typedef enum EStoragePanelBackground : unsigned char {
   ESPB_Inventory,                 // 0
@@ -5098,6 +5590,23 @@ typedef enum EStoragePanelBackground : unsigned char {
   EPSB_Blackmarket,               // 6
   EPSB_Custom,                    // 7
   EStoragePanelBackground_MAX     // 8
+  #define ESPB_Inventory                       ESPB_Inventory
+  #define ESPB_Health                          ESPB_Health
+  #define ESPB_Weapons                         ESPB_Weapons
+  #define ESPB_Ammo                            ESPB_Ammo
+  #define ESPB_Bank                            ESPB_Bank
+  #define ESPB_Stash                           ESPB_Stash
+  #define EPSB_Blackmarket                     EPSB_Blackmarket
+  #define EPSB_Custom                          EPSB_Custom
+  #define EStoragePanelBackground_Inventory    ESPB_Inventory
+  #define EStoragePanelBackground_Health       ESPB_Health
+  #define EStoragePanelBackground_Weapons      ESPB_Weapons
+  #define EStoragePanelBackground_Ammo         ESPB_Ammo
+  #define EStoragePanelBackground_Bank         ESPB_Bank
+  #define EStoragePanelBackground_Stash        ESPB_Stash
+  #define EStoragePanelBackground_Blackmarket  EPSB_Blackmarket
+  #define EStoragePanelBackground_Custom       EPSB_Custom
+  #define EStoragePanelBackground_MAX          EStoragePanelBackground_MAX
 } EStoragePanelBackground;
 typedef enum EEquipmentLoc           : unsigned char {
   EQUIPLOC_Shield,                // 0
@@ -5106,6 +5615,18 @@ typedef enum EEquipmentLoc           : unsigned char {
   EQUIPLOC_Artifact,              // 3
   EQUIPLOC_None,                  // 4
   EQUIPLOC_MAX                    // 5
+  #define EQUIPLOC_Shield           EQUIPLOC_Shield
+  #define EQUIPLOC_GrenadeMod       EQUIPLOC_GrenadeMod
+  #define EQUIPLOC_ClassMod         EQUIPLOC_ClassMod
+  #define EQUIPLOC_Artifact         EQUIPLOC_Artifact
+  #define EQUIPLOC_None             EQUIPLOC_None
+  #define EQUIPLOC_MAX              EQUIPLOC_MAX
+  #define EEquipmentLoc_Shield      EQUIPLOC_Shield
+  #define EEquipmentLoc_GrenadeMod  EQUIPLOC_GrenadeMod
+  #define EEquipmentLoc_ClassMod    EQUIPLOC_ClassMod
+  #define EEquipmentLoc_Artifact    EQUIPLOC_Artifact
+  #define EEquipmentLoc_None        EQUIPLOC_None
+  #define EEquipmentLoc_MAX         EQUIPLOC_MAX
 } EEquipmentLoc;
 typedef enum ERewardPopup            : unsigned char {
   ERP_BadassToken,                // 0
@@ -5113,6 +5634,16 @@ typedef enum ERewardPopup            : unsigned char {
   ERP_CharacterSkin,              // 2
   ERP_VehicleSkin,                // 3
   ERP_MAX                         // 4
+  #define ERP_BadassToken             ERP_BadassToken
+  #define ERP_CharacterHead           ERP_CharacterHead
+  #define ERP_CharacterSkin           ERP_CharacterSkin
+  #define ERP_VehicleSkin             ERP_VehicleSkin
+  #define ERP_MAX                     ERP_MAX
+  #define ERewardPopup_BadassToken    ERP_BadassToken
+  #define ERewardPopup_CharacterHead  ERP_CharacterHead
+  #define ERewardPopup_CharacterSkin  ERP_CharacterSkin
+  #define ERewardPopup_VehicleSkin    ERP_VehicleSkin
+  #define ERewardPopup_MAX            ERP_MAX
 } ERewardPopup;
 #define EQuickWeaponSlot         EQuickWeaponSlot
 #define EStoragePanelBackground  EStoragePanelBackground
@@ -5355,6 +5886,24 @@ typedef enum EResurrectReason    : unsigned char {
   ERR_OutsideWorldBounds,         // 6
   ERR_LevelTravel,                // 7
   ERR_MAX                         // 8
+  #define ERR_Unknown                          ERR_Unknown
+  #define ERR_IDied                            ERR_IDied
+  #define ERR_OtherDied                        ERR_OtherDied
+  #define ERR_FellOutOfWorld                   ERR_FellOutOfWorld
+  #define ERR_LDRes                            ERR_LDRes
+  #define ERR_Gibbed                           ERR_Gibbed
+  #define ERR_OutsideWorldBounds               ERR_OutsideWorldBounds
+  #define ERR_LevelTravel                      ERR_LevelTravel
+  #define ERR_MAX                              ERR_MAX
+  #define EResurrectReason_Unknown             ERR_Unknown
+  #define EResurrectReason_IDied               ERR_IDied
+  #define EResurrectReason_OtherDied           ERR_OtherDied
+  #define EResurrectReason_FellOutOfWorld      ERR_FellOutOfWorld
+  #define EResurrectReason_LDRes               ERR_LDRes
+  #define EResurrectReason_Gibbed              ERR_Gibbed
+  #define EResurrectReason_OutsideWorldBounds  ERR_OutsideWorldBounds
+  #define EResurrectReason_LevelTravel         ERR_LevelTravel
+  #define EResurrectReason_MAX                 ERR_MAX
 } EResurrectReason;
 typedef enum ESecondWindReason   : unsigned char {
   ESECONDWIND_None,               // 0
@@ -5374,6 +5923,40 @@ typedef enum ESecondWindReason   : unsigned char {
   ESECONDWIND_ReasonExtension_4,  // 14
   ESECONDWIND_ReasonExtension_5,  // 15
   ESECONDWIND_MAX                 // 16
+  #define ESECONDWIND_None                     ESECONDWIND_None
+  #define ESECONDWIND_KilledEnemy              ESECONDWIND_KilledEnemy
+  #define ESECONDWIND_LeveledUp                ESECONDWIND_LeveledUp
+  #define ESECONDWIND_PartnerRevived           ESECONDWIND_PartnerRevived
+  #define ESECONDWIND_Skill_Res                ESECONDWIND_Skill_Res
+  #define ESECONDWIND_AutoRevive               ESECONDWIND_AutoRevive
+  #define ESECONDWIND_UNUSED_6                 ESECONDWIND_UNUSED_6
+  #define ESECONDWIND_UNUSED_7                 ESECONDWIND_UNUSED_7
+  #define ESECONDWIND_UNUSED_8                 ESECONDWIND_UNUSED_8
+  #define ESECONDWIND_UNUSED_9                 ESECONDWIND_UNUSED_9
+  #define ESECONDWIND_UNUSED_10                ESECONDWIND_UNUSED_10
+  #define ESECONDWIND_ReasonExtension_1        ESECONDWIND_ReasonExtension_1
+  #define ESECONDWIND_ReasonExtension_2        ESECONDWIND_ReasonExtension_2
+  #define ESECONDWIND_ReasonExtension_3        ESECONDWIND_ReasonExtension_3
+  #define ESECONDWIND_ReasonExtension_4        ESECONDWIND_ReasonExtension_4
+  #define ESECONDWIND_ReasonExtension_5        ESECONDWIND_ReasonExtension_5
+  #define ESECONDWIND_MAX                      ESECONDWIND_MAX
+  #define ESecondWindReason_None               ESECONDWIND_None
+  #define ESecondWindReason_KilledEnemy        ESECONDWIND_KilledEnemy
+  #define ESecondWindReason_LeveledUp          ESECONDWIND_LeveledUp
+  #define ESecondWindReason_PartnerRevived     ESECONDWIND_PartnerRevived
+  #define ESecondWindReason_Skill_Res          ESECONDWIND_Skill_Res
+  #define ESecondWindReason_AutoRevive         ESECONDWIND_AutoRevive
+  #define ESecondWindReason_UNUSED_6           ESECONDWIND_UNUSED_6
+  #define ESecondWindReason_UNUSED_7           ESECONDWIND_UNUSED_7
+  #define ESecondWindReason_UNUSED_8           ESECONDWIND_UNUSED_8
+  #define ESecondWindReason_UNUSED_9           ESECONDWIND_UNUSED_9
+  #define ESecondWindReason_UNUSED_10          ESECONDWIND_UNUSED_10
+  #define ESecondWindReason_ReasonExtension_1  ESECONDWIND_ReasonExtension_1
+  #define ESecondWindReason_ReasonExtension_2  ESECONDWIND_ReasonExtension_2
+  #define ESecondWindReason_ReasonExtension_3  ESECONDWIND_ReasonExtension_3
+  #define ESecondWindReason_ReasonExtension_4  ESECONDWIND_ReasonExtension_4
+  #define ESecondWindReason_ReasonExtension_5  ESECONDWIND_ReasonExtension_5
+  #define ESecondWindReason_MAX                ESECONDWIND_MAX
 } ESecondWindReason;
 typedef enum EHolsteredGearState : unsigned char {
   HGS_None,                       // 0
@@ -5381,6 +5964,16 @@ typedef enum EHolsteredGearState : unsigned char {
   HGS_FadingIn,                   // 2
   HGS_FadingOut,                  // 3
   HGS_MAX                         // 4
+  #define HGS_None                           HGS_None
+  #define HGS_PendingFadeIn                  HGS_PendingFadeIn
+  #define HGS_FadingIn                       HGS_FadingIn
+  #define HGS_FadingOut                      HGS_FadingOut
+  #define HGS_MAX                            HGS_MAX
+  #define EHolsteredGearState_None           HGS_None
+  #define EHolsteredGearState_PendingFadeIn  HGS_PendingFadeIn
+  #define EHolsteredGearState_FadingIn       HGS_FadingIn
+  #define EHolsteredGearState_FadingOut      HGS_FadingOut
+  #define EHolsteredGearState_MAX            HGS_MAX
 } EHolsteredGearState;
 typedef enum EInjuredStage       : unsigned char {
   INJURED_Not,                    // 0
@@ -5388,6 +5981,16 @@ typedef enum EInjuredStage       : unsigned char {
   INJURED_Targeted,               // 2
   INJURED_MostlyDead,             // 3
   INJURED_MAX                     // 4
+  #define INJURED_Not               INJURED_Not
+  #define INJURED_Injured           INJURED_Injured
+  #define INJURED_Targeted          INJURED_Targeted
+  #define INJURED_MostlyDead        INJURED_MostlyDead
+  #define INJURED_MAX               INJURED_MAX
+  #define EInjuredStage_Not         INJURED_Not
+  #define EInjuredStage_Injured     INJURED_Injured
+  #define EInjuredStage_Targeted    INJURED_Targeted
+  #define EInjuredStage_MostlyDead  INJURED_MostlyDead
+  #define EInjuredStage_MAX         INJURED_MAX
 } EInjuredStage;
 typedef enum EInjuredDeadState   : unsigned char {
   INJUREDDEAD_None,               // 0
@@ -5396,12 +5999,32 @@ typedef enum EInjuredDeadState   : unsigned char {
   INJUREDDEAD_StartKillVolume,    // 3
   INJUREDDEAD_InitRagdoll,        // 4
   INJUREDDEAD_MAX                 // 5
+  #define INJUREDDEAD_None                         INJUREDDEAD_None
+  #define INJUREDDEAD_Start                        INJUREDDEAD_Start
+  #define INJUREDDEAD_StartCausePlayerDeath        INJUREDDEAD_StartCausePlayerDeath
+  #define INJUREDDEAD_StartKillVolume              INJUREDDEAD_StartKillVolume
+  #define INJUREDDEAD_InitRagdoll                  INJUREDDEAD_InitRagdoll
+  #define INJUREDDEAD_MAX                          INJUREDDEAD_MAX
+  #define EInjuredDeadState_None                   INJUREDDEAD_None
+  #define EInjuredDeadState_Start                  INJUREDDEAD_Start
+  #define EInjuredDeadState_StartCausePlayerDeath  INJUREDDEAD_StartCausePlayerDeath
+  #define EInjuredDeadState_StartKillVolume        INJUREDDEAD_StartKillVolume
+  #define EInjuredDeadState_InitRagdoll            INJUREDDEAD_InitRagdoll
+  #define EInjuredDeadState_MAX                    INJUREDDEAD_MAX
 } EInjuredDeadState;
 typedef enum EInterpMode         : unsigned char {
   EIM_None,                       // 0
   EIM_Linear,                     // 1
   EIM_NonLinear,                  // 2
   EIM_MAX                         // 3
+  #define EIM_None               EIM_None
+  #define EIM_Linear             EIM_Linear
+  #define EIM_NonLinear          EIM_NonLinear
+  #define EIM_MAX                EIM_MAX
+  #define EInterpMode_None       EIM_None
+  #define EInterpMode_Linear     EIM_Linear
+  #define EInterpMode_NonLinear  EIM_NonLinear
+  #define EInterpMode_MAX        EIM_MAX
 } EInterpMode;
 #define EResurrectReason     EResurrectReason
 #define ESecondWindReason    ESecondWindReason
@@ -5417,6 +6040,14 @@ typedef enum ENounReplicationStrategy : unsigned char {
   NOUNREP_RepToOwnerOnly,         // 1
   NOUNREP_RepToEveryone,          // 2
   NOUNREP_MAX                     // 3
+  #define NOUNREP_NoReplication                    NOUNREP_NoReplication
+  #define NOUNREP_RepToOwnerOnly                   NOUNREP_RepToOwnerOnly
+  #define NOUNREP_RepToEveryone                    NOUNREP_RepToEveryone
+  #define NOUNREP_MAX                              NOUNREP_MAX
+  #define ENounReplicationStrategy_NoReplication   NOUNREP_NoReplication
+  #define ENounReplicationStrategy_RepToOwnerOnly  NOUNREP_RepToOwnerOnly
+  #define ENounReplicationStrategy_RepToEveryone   NOUNREP_RepToEveryone
+  #define ENounReplicationStrategy_MAX             NOUNREP_MAX
 } ENounReplicationStrategy;
 #define ENounReplicationStrategy  ENounReplicationStrategy
 
@@ -5533,12 +6164,28 @@ typedef enum EBulletFromClip : unsigned char {
   BFC_First,                      // 1
   BFC_Last,                       // 2
   BFC_MAX                         // 3
+  #define BFC_Other              BFC_Other
+  #define BFC_First              BFC_First
+  #define BFC_Last               BFC_Last
+  #define BFC_MAX                BFC_MAX
+  #define EBulletFromClip_Other  BFC_Other
+  #define EBulletFromClip_First  BFC_First
+  #define EBulletFromClip_Last   BFC_Last
+  #define EBulletFromClip_MAX    BFC_MAX
 } EBulletFromClip;
 typedef enum EBeamSource     : unsigned char {
   EBS_Weapon,                     // 0
   EBS_Pawn,                       // 1
   EBS_WorldBody,                  // 2
   EBS_MAX                         // 3
+  #define EBS_Weapon             EBS_Weapon
+  #define EBS_Pawn               EBS_Pawn
+  #define EBS_WorldBody          EBS_WorldBody
+  #define EBS_MAX                EBS_MAX
+  #define EBeamSource_Weapon     EBS_Weapon
+  #define EBeamSource_Pawn       EBS_Pawn
+  #define EBeamSource_WorldBody  EBS_WorldBody
+  #define EBeamSource_MAX        EBS_MAX
 } EBeamSource;
 #define EBulletFromClip  EBulletFromClip
 #define EBeamSource      EBeamSource
@@ -5550,11 +6197,14 @@ typedef enum EPartReplacementMode : unsigned char {
   EPRM_Selective,                 // 1
   EPRM_Complete,                  // 2
   EPRM_MAX                        // 3
-  #define EPRM_Additive              EPRM_Additive
-  #define EPRM_Selective             EPRM_Selective
-  #define EPRM_Complete              EPRM_Complete
-  #define EPRM_MAX                   EPRM_MAX
-  #define EPartReplacementMode__MAX  EPRM_MAX
+  #define EPRM_Additive                   EPRM_Additive
+  #define EPRM_Selective                  EPRM_Selective
+  #define EPRM_Complete                   EPRM_Complete
+  #define EPRM_MAX                        EPRM_MAX
+  #define EPartReplacementMode_Additive   EPRM_Additive
+  #define EPartReplacementMode_Selective  EPRM_Selective
+  #define EPartReplacementMode_Complete   EPRM_Complete
+  #define EPartReplacementMode_MAX        EPRM_MAX
 } EPartReplacementMode;
 #define EPartReplacementMode  EPartReplacementMode
 
@@ -5567,6 +6217,18 @@ typedef enum EFlinchSeverity : unsigned char {
   EF_LargeFlinch,                 // 3
   EF_CriticalFlinch,              // 4
   EF_MAX                          // 5
+  #define EF_NoFlinch                     EF_NoFlinch
+  #define EF_SmallFlinch                  EF_SmallFlinch
+  #define EF_MediumFlinch                 EF_MediumFlinch
+  #define EF_LargeFlinch                  EF_LargeFlinch
+  #define EF_CriticalFlinch               EF_CriticalFlinch
+  #define EF_MAX                          EF_MAX
+  #define EFlinchSeverity_NoFlinch        EF_NoFlinch
+  #define EFlinchSeverity_SmallFlinch     EF_SmallFlinch
+  #define EFlinchSeverity_MediumFlinch    EF_MediumFlinch
+  #define EFlinchSeverity_LargeFlinch     EF_LargeFlinch
+  #define EFlinchSeverity_CriticalFlinch  EF_CriticalFlinch
+  #define EFlinchSeverity_MAX             EF_MAX
 } EFlinchSeverity;
 typedef enum ECloakType      : unsigned char {
   CLOAK_Spawn,                    // 0
@@ -5581,6 +6243,30 @@ typedef enum ECloakType      : unsigned char {
   CLOAK_SpawnAnim,                // 9
   CLOAK_PhysicsJump,              // 10
   CLOAK_MAX                       // 11
+  #define CLOAK_Spawn              CLOAK_Spawn
+  #define CLOAK_AttackMove         CLOAK_AttackMove
+  #define CLOAK_AttackAnim         CLOAK_AttackAnim
+  #define CLOAK_PatrolPath         CLOAK_PatrolPath
+  #define CLOAK_PatrolPerch        CLOAK_PatrolPerch
+  #define CLOAK_PatrolRandom       CLOAK_PatrolRandom
+  #define CLOAK_RunHome            CLOAK_RunHome
+  #define CLOAK_Unprovoked         CLOAK_Unprovoked
+  #define CLOAK_ScriptedMove       CLOAK_ScriptedMove
+  #define CLOAK_SpawnAnim          CLOAK_SpawnAnim
+  #define CLOAK_PhysicsJump        CLOAK_PhysicsJump
+  #define CLOAK_MAX                CLOAK_MAX
+  #define ECloakType_Spawn         CLOAK_Spawn
+  #define ECloakType_AttackMove    CLOAK_AttackMove
+  #define ECloakType_AttackAnim    CLOAK_AttackAnim
+  #define ECloakType_PatrolPath    CLOAK_PatrolPath
+  #define ECloakType_PatrolPerch   CLOAK_PatrolPerch
+  #define ECloakType_PatrolRandom  CLOAK_PatrolRandom
+  #define ECloakType_RunHome       CLOAK_RunHome
+  #define ECloakType_Unprovoked    CLOAK_Unprovoked
+  #define ECloakType_ScriptedMove  CLOAK_ScriptedMove
+  #define ECloakType_SpawnAnim     CLOAK_SpawnAnim
+  #define ECloakType_PhysicsJump   CLOAK_PhysicsJump
+  #define ECloakType_MAX           CLOAK_MAX
 } ECloakType;
 typedef enum ECloakStyle     : unsigned char {
   CLOAKSTYLE_None,                // 0
@@ -5588,6 +6274,16 @@ typedef enum ECloakStyle     : unsigned char {
   CLOAKSTYLE_Visible,             // 2
   CLOAKSTYLE_VisibleHUD,          // 3
   CLOAKSTYLE_MAX                  // 4
+  #define CLOAKSTYLE_None         CLOAKSTYLE_None
+  #define CLOAKSTYLE_Hide         CLOAKSTYLE_Hide
+  #define CLOAKSTYLE_Visible      CLOAKSTYLE_Visible
+  #define CLOAKSTYLE_VisibleHUD   CLOAKSTYLE_VisibleHUD
+  #define CLOAKSTYLE_MAX          CLOAKSTYLE_MAX
+  #define ECloakStyle_None        CLOAKSTYLE_None
+  #define ECloakStyle_Hide        CLOAKSTYLE_Hide
+  #define ECloakStyle_Visible     CLOAKSTYLE_Visible
+  #define ECloakStyle_VisibleHUD  CLOAKSTYLE_VisibleHUD
+  #define ECloakStyle_MAX         CLOAKSTYLE_MAX
 } ECloakStyle;
 #define EFlinchSeverity  EFlinchSeverity
 #define ECloakType       ECloakType
@@ -5600,6 +6296,12 @@ typedef enum EGoreMode : unsigned char {
   GORE_Full,                      // 0
   GORE_None,                      // 1
   GORE_MAX                        // 2
+  #define GORE_Full       GORE_Full
+  #define GORE_None       GORE_None
+  #define GORE_MAX        GORE_MAX
+  #define EGoreMode_Full  GORE_Full
+  #define EGoreMode_None  GORE_None
+  #define EGoreMode_MAX   GORE_MAX
 } EGoreMode;
 #define EGoreMode  EGoreMode
 
@@ -5610,6 +6312,14 @@ typedef enum EDlcEnumerationState : unsigned char {
   DLC_ENUM_EnumeratingFiles,      // 1
   DLC_ENUM_EnumerationComplete,   // 2
   DLC_ENUM_MAX                    // 3
+  #define DLC_ENUM_None                             DLC_ENUM_None
+  #define DLC_ENUM_EnumeratingFiles                 DLC_ENUM_EnumeratingFiles
+  #define DLC_ENUM_EnumerationComplete              DLC_ENUM_EnumerationComplete
+  #define DLC_ENUM_MAX                              DLC_ENUM_MAX
+  #define EDlcEnumerationState_None                 DLC_ENUM_None
+  #define EDlcEnumerationState_EnumeratingFiles     DLC_ENUM_EnumeratingFiles
+  #define EDlcEnumerationState_EnumerationComplete  DLC_ENUM_EnumerationComplete
+  #define EDlcEnumerationState_MAX                  DLC_ENUM_MAX
 } EDlcEnumerationState;
 #define EDlcEnumerationState  EDlcEnumerationState
 
@@ -5907,12 +6617,26 @@ typedef enum EInterpTrackMoveFrame   : unsigned char {
   IMF_World,                      // 0
   IMF_RelativeToInitial,          // 1
   IMF_MAX                         // 2
+  #define IMF_World                               IMF_World
+  #define IMF_RelativeToInitial                   IMF_RelativeToInitial
+  #define IMF_MAX                                 IMF_MAX
+  #define EInterpTrackMoveFrame_World             IMF_World
+  #define EInterpTrackMoveFrame_RelativeToInitial IMF_RelativeToInitial
+  #define EInterpTrackMoveFrame_MAX               IMF_MAX
 } EInterpTrackMoveFrame;
 typedef enum EInterpTrackMoveRotMode : unsigned char {
   IMR_Keyframed,                  // 0
   IMR_LookAtGroup,                // 1
   IMR_Ignore,                     // 2
   IMR_MAX                         // 3
+  #define IMR_Keyframed                        IMR_Keyframed
+  #define IMR_LookAtGroup                      IMR_LookAtGroup
+  #define IMR_Ignore                           IMR_Ignore
+  #define IMR_MAX                              IMR_MAX
+  #define EInterpTrackMoveRotMode_Keyframed    IMR_Keyframed
+  #define EInterpTrackMoveRotMode_LookAtGroup  IMR_LookAtGroup
+  #define EInterpTrackMoveRotMode_Ignore       IMR_Ignore
+  #define EInterpTrackMoveRotMode_MAX          IMR_MAX
 } EInterpTrackMoveRotMode;
 #define EInterpTrackMoveFrame    EInterpTrackMoveFrame
 #define EInterpTrackMoveRotMode  EInterpTrackMoveRotMode
@@ -5924,12 +6648,28 @@ typedef enum ERootBoneAxis       : unsigned char {
   RBA_Discard,                    // 1
   RBA_Translate,                  // 2
   RBA_MAX                         // 3
+  #define RBA_Default              RBA_Default
+  #define RBA_Discard              RBA_Discard
+  #define RBA_Translate            RBA_Translate
+  #define RBA_MAX                  RBA_MAX
+  #define ERootBoneAxis_Default    RBA_Default
+  #define ERootBoneAxis_Discard    RBA_Discard
+  #define ERootBoneAxis_Translate  RBA_Translate
+  #define ERootBoneAxis_MAX        RBA_MAX
 } ERootBoneAxis;
 typedef enum ERootRotationOption : unsigned char {
   RRO_Default,                    // 0
   RRO_Discard,                    // 1
   RRO_Extract,                    // 2
   RRO_MAX                         // 3
+  #define RRO_Default                  RRO_Default
+  #define RRO_Discard                  RRO_Discard
+  #define RRO_Extract                  RRO_Extract
+  #define RRO_MAX                      RRO_MAX
+  #define ERootRotationOption_Default  RRO_Default
+  #define ERootRotationOption_Discard  RRO_Discard
+  #define ERootRotationOption_Extract  RRO_Extract
+  #define ERootRotationOption_MAX      RRO_MAX
 } ERootRotationOption;
 #define ERootBoneAxis        ERootBoneAxis
 #define ERootRotationOption  ERootRotationOption
@@ -5966,6 +6706,28 @@ typedef enum EGameStatGroups : unsigned char {
   GSG_GameSpecific,               // 8
   GSG_Aggregate,                  // 9
   GSG_MAX                         // 10
+  #define GSG_EngineStats               GSG_EngineStats
+  #define GSG_Game                      GSG_Game
+  #define GSG_Team                      GSG_Team
+  #define GSG_Player                    GSG_Player
+  #define GSG_Weapon                    GSG_Weapon
+  #define GSG_Damage                    GSG_Damage
+  #define GSG_Projectile                GSG_Projectile
+  #define GSG_Pawn                      GSG_Pawn
+  #define GSG_GameSpecific              GSG_GameSpecific
+  #define GSG_Aggregate                 GSG_Aggregate
+  #define GSG_MAX                       GSG_MAX
+  #define EGameStatGroups_EngineStats   GSG_EngineStats
+  #define EGameStatGroups_Game          GSG_Game
+  #define EGameStatGroups_Team          GSG_Team
+  #define EGameStatGroups_Player        GSG_Player
+  #define EGameStatGroups_Weapon        GSG_Weapon
+  #define EGameStatGroups_Damage        GSG_Damage
+  #define EGameStatGroups_Projectile    GSG_Projectile
+  #define EGameStatGroups_Pawn          GSG_Pawn
+  #define EGameStatGroups_GameSpecific  GSG_GameSpecific
+  #define EGameStatGroups_Aggregate     GSG_Aggregate
+  #define EGameStatGroups_MAX           GSG_MAX
 } EGameStatGroups;
 #define EGameStatGroups  EGameStatGroups
 
@@ -6000,6 +6762,60 @@ typedef enum EGameplayEventType {
 	GET_ProjectileAggregate,
 	GET_PawnAggregate,
 	GET_GameType = 1000 // Game Specific Values start after this
+  #define GET_GameString                          GET_GameString
+  #define GET_GameInt                             GET_GameInt
+  #define GET_TeamInt                             GET_TeamInt
+  #define GET_PlayerInt                           GET_PlayerInt
+  #define GET_PlayerFloat                         GET_PlayerFloat
+  #define GET_PlayerString                        GET_PlayerString
+  #define GET_PlayerSpawn                         GET_PlayerSpawn
+  #define GET_PlayerLogin                         GET_PlayerLogin
+  #define GET_PlayerLocationPoll                  GET_PlayerLocationPoll
+  #define GET_PlayerKillDeath                     GET_PlayerKillDeath
+  #define GET_PlayerPlayer                        GET_PlayerPlayer
+  #define GET_WeaponInt                           GET_WeaponInt
+  #define GET_DamageInt                           GET_DamageInt
+  #define GET_ProjectileInt                       GET_ProjectileInt
+  #define GET_GenericParamList                    GET_GenericParamList
+  #define GET_GameFloat                           GET_GameFloat
+  #define GET_TeamString                          GET_TeamString
+  #define GET_TeamFloat                           GET_TeamFloat
+  #define GET_GamePosition                        GET_GamePosition
+  #define GET_GameAggregate                       GET_GameAggregate
+  #define GET_TeamAggregate                       GET_TeamAggregate
+  #define GET_PlayerAggregate                     GET_PlayerAggregate
+  #define GET_WeaponAggregate                     GET_WeaponAggregate
+  #define GET_DamageAggregate                     GET_DamageAggregate
+  #define GET_ProjectileAggregate                 GET_ProjectileAggregate
+  #define GET_PawnAggregate                       GET_PawnAggregate
+  #define GET_GameType                            GET_GameType
+  #define EGameplayEventType_GameString           GET_GameString
+  #define EGameplayEventType_GameInt              GET_GameInt
+  #define EGameplayEventType_TeamInt              GET_TeamInt
+  #define EGameplayEventType_PlayerInt            GET_PlayerInt
+  #define EGameplayEventType_PlayerFloat          GET_PlayerFloat
+  #define EGameplayEventType_PlayerString         GET_PlayerString
+  #define EGameplayEventType_PlayerSpawn          GET_PlayerSpawn
+  #define EGameplayEventType_PlayerLogin          GET_PlayerLogin
+  #define EGameplayEventType_PlayerLocationPoll   GET_PlayerLocationPoll
+  #define EGameplayEventType_PlayerKillDeath      GET_PlayerKillDeath
+  #define EGameplayEventType_PlayerPlayer         GET_PlayerPlayer
+  #define EGameplayEventType_WeaponInt            GET_WeaponInt
+  #define EGameplayEventType_DamageInt            GET_DamageInt
+  #define EGameplayEventType_ProjectileInt        GET_ProjectileInt
+  #define EGameplayEventType_GenericParamList     GET_GenericParamList
+  #define EGameplayEventType_GameFloat            GET_GameFloat
+  #define EGameplayEventType_TeamString           GET_TeamString
+  #define EGameplayEventType_TeamFloat            GET_TeamFloat
+  #define EGameplayEventType_GamePosition         GET_GamePosition
+  #define EGameplayEventType_GameAggregate        GET_GameAggregate
+  #define EGameplayEventType_TeamAggregate        GET_TeamAggregate
+  #define EGameplayEventType_PlayerAggregate      GET_PlayerAggregate
+  #define EGameplayEventType_WeaponAggregate      GET_WeaponAggregate
+  #define EGameplayEventType_DamageAggregate      GET_DamageAggregate
+  #define EGameplayEventType_ProjectileAggregate  GET_ProjectileAggregate
+  #define EGameplayEventType_PawnAggregate        GET_PawnAggregate
+  #define EGameplayEventType_GameType             GET_GameType
 } EGameplayEventType;
 #define EGameplayEventType  EGameplayEventType
 
@@ -6015,6 +6831,24 @@ typedef enum ELocalMessageType : unsigned char {
   LMT_OpenedChest,                // 6
   LMT_Chat,                       // 7
   LMT_MAX                         // 8
+  #define LMT_Training                    LMT_Training
+  #define LMT_ContextHint                 LMT_ContextHint
+  #define LMT_XP                          LMT_XP
+  #define LMT_Player                      LMT_Player
+  #define LMT_System                      LMT_System
+  #define LMT_ReceivedLoot                LMT_ReceivedLoot
+  #define LMT_OpenedChest                 LMT_OpenedChest
+  #define LMT_Chat                        LMT_Chat
+  #define LMT_MAX                         LMT_MAX
+  #define ELocalMessageType_Training      LMT_Training
+  #define ELocalMessageType_ContextHint   LMT_ContextHint
+  #define ELocalMessageType_XP            LMT_XP
+  #define ELocalMessageType_Player        LMT_Player
+  #define ELocalMessageType_System        LMT_System
+  #define ELocalMessageType_ReceivedLoot  LMT_ReceivedLoot
+  #define ELocalMessageType_OpenedChest   LMT_OpenedChest
+  #define ELocalMessageType_Chat          LMT_Chat
+  #define ELocalMessageType_MAX           LMT_MAX
 } ELocalMessageType;
 #define ELocalMessageType  ELocalMessageType
 
@@ -6030,6 +6864,24 @@ typedef enum EAmmoMessageSwitch : unsigned char {
   RECEIVEDAMMO_Rocket,            // 6
   RECEIVEDAMMO_Grenade,           // 7
   RECEIVEDAMMO_MAX                // 8
+  #define RECEIVEDAMMO_CombatRifle        RECEIVEDAMMO_CombatRifle
+  #define RECEIVEDAMMO_SMG                RECEIVEDAMMO_SMG
+  #define RECEIVEDAMMO_Revolver           RECEIVEDAMMO_Revolver
+  #define RECEIVEDAMMO_Repeater           RECEIVEDAMMO_Repeater
+  #define RECEIVEDAMMO_Shotgun            RECEIVEDAMMO_Shotgun
+  #define RECEIVEDAMMO_SniperRifle        RECEIVEDAMMO_SniperRifle
+  #define RECEIVEDAMMO_Rocket             RECEIVEDAMMO_Rocket
+  #define RECEIVEDAMMO_Grenade            RECEIVEDAMMO_Grenade
+  #define RECEIVEDAMMO_MAX                RECEIVEDAMMO_MAX
+  #define EAmmoMessageSwitch_CombatRifle  RECEIVEDAMMO_CombatRifle
+  #define EAmmoMessageSwitch_SMG          RECEIVEDAMMO_SMG
+  #define EAmmoMessageSwitch_Revolver     RECEIVEDAMMO_Revolver
+  #define EAmmoMessageSwitch_Repeater     RECEIVEDAMMO_Repeater
+  #define EAmmoMessageSwitch_Shotgun      RECEIVEDAMMO_Shotgun
+  #define EAmmoMessageSwitch_SniperRifle  RECEIVEDAMMO_SniperRifle
+  #define EAmmoMessageSwitch_Rocket       RECEIVEDAMMO_Rocket
+  #define EAmmoMessageSwitch_Grenade      RECEIVEDAMMO_Grenade
+  #define EAmmoMessageSwitch_MAX          RECEIVEDAMMO_MAX
 } EAmmoMessageSwitch;
 #define EAmmoMessageSwitch  EAmmoMessageSwitch
 
@@ -6044,11 +6896,33 @@ typedef enum EModuleType : unsigned char {
   EPMT_Required,                  // 5
   EPMT_Event,                     // 6
   EPMT_MAX                        // 7
+  #define EPMT_General          EPMT_General
+  #define EPMT_TypeData         EPMT_TypeData
+  #define EPMT_Beam             EPMT_Beam
+  #define EPMT_Trail            EPMT_Trail
+  #define EPMT_Spawn            EPMT_Spawn
+  #define EPMT_Required         EPMT_Required
+  #define EPMT_Event            EPMT_Event
+  #define EPMT_MAX              EPMT_MAX
+  #define EModuleType_General   EPMT_General
+  #define EModuleType_TypeData  EPMT_TypeData
+  #define EModuleType_Beam      EPMT_Beam
+  #define EModuleType_Trail     EPMT_Trail
+  #define EModuleType_Spawn     EPMT_Spawn
+  #define EModuleType_Required  EPMT_Required
+  #define EModuleType_Event     EPMT_Event
+  #define EModuleType_MAX       EPMT_MAX
 } EModuleType;
 typedef enum EParticleSourceSelectionMethod : unsigned char {
   EPSSM_Random,                   // 0
   EPSSM_Sequential,               // 1
   EPSSM_MAX                       // 2
+  #define EPSSM_Random                               EPSSM_Random
+  #define EPSSM_Sequential                           EPSSM_Sequential
+  #define EPSSM_MAX                                  EPSSM_MAX
+  #define EParticleSourceSelectionMethod_Random      EPSSM_Random
+  #define EParticleSourceSelectionMethod_Sequential  EPSSM_Sequential
+  #define EParticleSourceSelectionMethod_MAX         EPSSM_MAX
 } EParticleSourceSelectionMethod;
 #define EModuleType                     EModuleType
 #define EParticleSourceSelectionMethod  EParticleSourceSelectionMethod
@@ -6059,6 +6933,12 @@ typedef enum EParticleBurstMethod       : unsigned char {
   EPBM_Instant,                   // 0
   EPBM_Interpolated,              // 1
   EPBM_MAX                        // 2
+  #define EPBM_Instant                       EPBM_Instant
+  #define EPBM_Interpolated                  EPBM_Interpolated
+  #define EPBM_MAX                           EPBM_MAX
+  #define EParticleBurstMethod_Instant       EPBM_Instant
+  #define EParticleBurstMethod_Interpolated  EPBM_Interpolated
+  #define EParticleBurstMethod_MAX           EPBM_MAX
 } EParticleBurstMethod;
 typedef enum EParticleSubUVInterpMethod : unsigned char {
   PSUVIM_None,                    // 0
@@ -6067,6 +6947,18 @@ typedef enum EParticleSubUVInterpMethod : unsigned char {
   PSUVIM_Random,                  // 3
   PSUVIM_Random_Blend,            // 4
   PSUVIM_MAX                      // 5
+  #define PSUVIM_None                              PSUVIM_None
+  #define PSUVIM_Linear                            PSUVIM_Linear
+  #define PSUVIM_Linear_Blend                      PSUVIM_Linear_Blend
+  #define PSUVIM_Random                            PSUVIM_Random
+  #define PSUVIM_Random_Blend                      PSUVIM_Random_Blend
+  #define PSUVIM_MAX                               PSUVIM_MAX
+  #define EParticleSubUVInterpMethod_None          PSUVIM_None
+  #define EParticleSubUVInterpMethod_Linear        PSUVIM_Linear
+  #define EParticleSubUVInterpMethod_Linear_Blend  PSUVIM_Linear_Blend
+  #define EParticleSubUVInterpMethod_Random        PSUVIM_Random
+  #define EParticleSubUVInterpMethod_Random_Blend  PSUVIM_Random_Blend
+  #define EParticleSubUVInterpMethod_MAX           PSUVIM_MAX
 } EParticleSubUVInterpMethod;
 typedef enum EEmitterRenderMode         : unsigned char {
   ERM_Normal,                     // 0
@@ -6074,6 +6966,16 @@ typedef enum EEmitterRenderMode         : unsigned char {
   ERM_Cross,                      // 2
   ERM_None,                       // 3
   ERM_MAX                         // 4
+  #define ERM_Normal                 ERM_Normal
+  #define ERM_Point                  ERM_Point
+  #define ERM_Cross                  ERM_Cross
+  #define ERM_None                   ERM_None
+  #define ERM_MAX                    ERM_MAX
+  #define EEmitterRenderMode_Normal  ERM_Normal
+  #define EEmitterRenderMode_Point   ERM_Point
+  #define EEmitterRenderMode_Cross   ERM_Cross
+  #define EEmitterRenderMode_None    ERM_None
+  #define EEmitterRenderMode_MAX     ERM_MAX
 } EEmitterRenderMode;
 #define EParticleBurstMethod        EParticleBurstMethod
 #define EParticleSubUVInterpMethod  EParticleSubUVInterpMethod
@@ -6108,6 +7010,12 @@ typedef enum EElementType      : unsigned char {
   ET_Line,
   ET_Triangle,
   ET_MAX
+  #define ET_Line                ET_Line
+  #define ET_Triangle            ET_Triangle
+  #define ET_MAX                 ET_MAX
+  #define EElementType_Line      ET_Line
+  #define EElementType_Triangle  ET_Triangle
+  #define EElementType_MAX       ET_MAX
 } EElementType;
 /** Enum for canvas features that are allowed. */
 typedef enum ECanvasAllowModes : unsigned char {
@@ -6138,6 +7046,12 @@ typedef enum EEffectDurationType       : unsigned char {
   DURATION_Infinite,              // 0
   DURATION_Timed,                 // 1
   DURATION_MAX                    // 2
+  #define DURATION_Infinite             DURATION_Infinite
+  #define DURATION_Timed                DURATION_Timed
+  #define DURATION_MAX                  DURATION_MAX
+  #define EEffectDurationType_Infinite  DURATION_Infinite
+  #define EEffectDurationType_Timed     DURATION_Timed
+  #define EEffectDurationType_MAX       DURATION_MAX
 } EEffectDurationType;
 typedef enum EEffectTarget             : unsigned char {
   TARGET_None,                    // 0
@@ -6147,17 +7061,45 @@ typedef enum EEffectTarget             : unsigned char {
   TARGET_All,                     // 4
   TARGET_Pets,                    // 5
   TARGET_MAX                      // 6
+  #define TARGET_None            TARGET_None
+  #define TARGET_Self            TARGET_Self
+  #define TARGET_Allies          TARGET_Allies
+  #define TARGET_Enemies         TARGET_Enemies
+  #define TARGET_All             TARGET_All
+  #define TARGET_Pets            TARGET_Pets
+  #define TARGET_MAX             TARGET_MAX
+  #define EEffectTarget_None     TARGET_None
+  #define EEffectTarget_Self     TARGET_Self
+  #define EEffectTarget_Allies   TARGET_Allies
+  #define EEffectTarget_Enemies  TARGET_Enemies
+  #define EEffectTarget_All      TARGET_All
+  #define EEffectTarget_Pets     TARGET_Pets
+  #define EEffectTarget_MAX      TARGET_MAX
 } EEffectTarget;
 typedef enum ETargetCriteria           : unsigned char {
   CRITERIA_None,                  // 0
   CRITERIA_Nearest,               // 1
   CRITERIA_MAX                    // 2
+  #define CRITERIA_None            CRITERIA_None
+  #define CRITERIA_Nearest         CRITERIA_Nearest
+  #define CRITERIA_MAX             CRITERIA_MAX
+  #define ETargetCriteria_None     CRITERIA_None
+  #define ETargetCriteria_Nearest  CRITERIA_Nearest
+  #define ETargetCriteria_MAX      CRITERIA_MAX
 } ETargetCriteria;
 typedef enum ESkillState               : unsigned char {
   SKILL_Deactivated,              // 0
   SKILL_Active,                   // 1
   SKILL_Paused,                   // 2
   SKILL_MAX                       // 3
+  #define SKILL_Deactivated        SKILL_Deactivated
+  #define SKILL_Active             SKILL_Active
+  #define SKILL_Paused             SKILL_Paused
+  #define SKILL_MAX                SKILL_MAX
+  #define ESkillState_Deactivated  SKILL_Deactivated
+  #define ESkillState_Active       SKILL_Active
+  #define ESkillState_Paused       SKILL_Paused
+  #define ESkillState_MAX          SKILL_MAX
 } ESkillState;
 typedef enum ESkillType                : unsigned char {
   SKILL_TYPE_Passive,             // 0
@@ -6166,6 +7108,18 @@ typedef enum ESkillType                : unsigned char {
   SKILL_TYPE_Kill,                // 3
   SKILL_TYPE_Proficiency,         // 4
   SKILL_TYPE_MAX                  // 5
+  #define SKILL_TYPE_Passive        SKILL_TYPE_Passive
+  #define SKILL_TYPE_Action         SKILL_TYPE_Action
+  #define SKILL_TYPE_ActionAugment  SKILL_TYPE_ActionAugment
+  #define SKILL_TYPE_Kill           SKILL_TYPE_Kill
+  #define SKILL_TYPE_Proficiency    SKILL_TYPE_Proficiency
+  #define SKILL_TYPE_MAX            SKILL_TYPE_MAX
+  #define ESkillType_Passive        SKILL_TYPE_Passive
+  #define ESkillType_Action         SKILL_TYPE_Action
+  #define ESkillType_ActionAugment  SKILL_TYPE_ActionAugment
+  #define ESkillType_Kill           SKILL_TYPE_Kill
+  #define ESkillType_Proficiency    SKILL_TYPE_Proficiency
+  #define ESkillType_MAX                               SKILL_TYPE_MAX
 } ESkillType;
 typedef enum ESkillEventType           : unsigned char {
   SEVT_SkillActivated,            // 0
@@ -6212,6 +7166,94 @@ typedef enum ESkillEventType           : unsigned char {
   SEVT_OnStatusEffectTypeEnd,     // 41
   SEVT_MeleeAttack,               // 42
   SEVT_MAX                        // 43
+  #define SEVT_SkillActivated                                  SEVT_SkillActivated
+  #define SEVT_SkillDeactivated                                SEVT_SkillDeactivated
+  #define SEVT_SkillPaused                                     SEVT_SkillPaused
+  #define SEVT_SkillResumed                                    SEVT_SkillResumed
+  #define SEVT_DamagedEnemy                                    SEVT_DamagedEnemy
+  #define SEVT_DamagedFriendly                                 SEVT_DamagedFriendly
+  #define SEVT_DamagedNeutral                                  SEVT_DamagedNeutral
+  #define SEVT_DamagedByEnemy                                  SEVT_DamagedByEnemy
+  #define SEVT_DamagedByFriendly                               SEVT_DamagedByFriendly
+  #define SEVT_DamagedByNeutral                                SEVT_DamagedByNeutral
+  #define SEVT_ShieldDepletedAfterBeingFull                    SEVT_ShieldDepletedAfterBeingFull
+  #define SEVT_KilledEnemy                                     SEVT_KilledEnemy
+  #define SEVT_KilledFriendly                                  SEVT_KilledFriendly
+  #define SEVT_KilledNeutral                                   SEVT_KilledNeutral
+  #define SEVT_KilledByEnemy                                   SEVT_KilledByEnemy
+  #define SEVT_KilledByFriendly                                SEVT_KilledByFriendly
+  #define SEVT_KilledByNeutral                                 SEVT_KilledByNeutral
+  #define SEVT_WeaponZoomed                                    SEVT_WeaponZoomed
+  #define SEVT_WeaponUnzoomed                                  SEVT_WeaponUnzoomed
+  #define SEVT_WeaponShotMissed                                SEVT_WeaponShotMissed
+  #define SEVT_WeaponFired                                     SEVT_WeaponFired
+  #define SEVT_WeaponReloaded                                  SEVT_WeaponReloaded
+  #define SEVT_PlayerDeathAverted                              SEVT_PlayerDeathAverted
+  #define SEVT_ActionSkillCooldownAbilityActivated             SEVT_ActionSkillCooldownAbilityActivated
+  #define SEVT_ActionSkillActiveAbilityActivated               SEVT_ActionSkillActiveAbilityActivated
+  #define SEVT_DamagedUnawareEnemy                             SEVT_DamagedUnawareEnemy
+  #define SEVT_DamagedEnemyWithMeleeFromBehind                 SEVT_DamagedEnemyWithMeleeFromBehind
+  #define SEVT_MeleeOverrideSkillActivated                     SEVT_MeleeOverrideSkillActivated
+  #define SEVT_ThrowGrenadeOverrideSkillActivated              SEVT_ThrowGrenadeOverrideSkillActivated
+  #define SEVT_WeaponSwapped                                   SEVT_WeaponSwapped
+  #define SEVT_PlayerRecoveredFromDownState                    SEVT_PlayerRecoveredFromDownState
+  #define SEVT_ShieldDepleted                                  SEVT_ShieldDepleted
+  #define SEVT_ShieldFull                                      SEVT_ShieldFull
+  #define SEVT_WeaponStartReload                               SEVT_WeaponStartReload
+  #define SEVT_PlayerResurrected                               SEVT_PlayerResurrected
+  #define SEVT_WeaponManuallyReloaded                          SEVT_WeaponManuallyReloaded
+  #define SEVT_AppliedStatusEffectToEnemy                      SEVT_AppliedStatusEffectToEnemy
+  #define SEVT_DownStateBegin                                  SEVT_DownStateBegin
+  #define SEVT_DownStateEnd                                    SEVT_DownStateEnd
+  #define SEVT_BledOut                                         SEVT_BledOut
+  #define SEVT_OnStatusEffectTypeBegin                         SEVT_OnStatusEffectTypeBegin
+  #define SEVT_OnStatusEffectTypeEnd                           SEVT_OnStatusEffectTypeEnd
+  #define SEVT_MeleeAttack                                     SEVT_MeleeAttack
+  #define SEVT_MAX                                             SEVT_MAX
+  #define ESkillEventType_SkillActivated                       SEVT_SkillActivated
+  #define ESkillEventType_SkillDeactivated                     SEVT_SkillDeactivated
+  #define ESkillEventType_SkillPaused                          SEVT_SkillPaused
+  #define ESkillEventType_SkillResumed                         SEVT_SkillResumed
+  #define ESkillEventType_DamagedEnemy                         SEVT_DamagedEnemy
+  #define ESkillEventType_DamagedFriendly                      SEVT_DamagedFriendly
+  #define ESkillEventType_DamagedNeutral                       SEVT_DamagedNeutral
+  #define ESkillEventType_DamagedByEnemy                       SEVT_DamagedByEnemy
+  #define ESkillEventType_DamagedByFriendly                    SEVT_DamagedByFriendly
+  #define ESkillEventType_DamagedByNeutral                     SEVT_DamagedByNeutral
+  #define ESkillEventType_ShieldDepletedAfterBeingFull         SEVT_ShieldDepletedAfterBeingFull
+  #define ESkillEventType_KilledEnemy                          SEVT_KilledEnemy
+  #define ESkillEventType_KilledFriendly                       SEVT_KilledFriendly
+  #define ESkillEventType_KilledNeutral                        SEVT_KilledNeutral
+  #define ESkillEventType_KilledByEnemy                        SEVT_KilledByEnemy
+  #define ESkillEventType_KilledByFriendly                     SEVT_KilledByFriendly
+  #define ESkillEventType_KilledByNeutral                      SEVT_KilledByNeutral
+  #define ESkillEventType_WeaponZoomed                         SEVT_WeaponZoomed
+  #define ESkillEventType_WeaponUnzoomed                       SEVT_WeaponUnzoomed
+  #define ESkillEventType_WeaponShotMissed                     SEVT_WeaponShotMissed
+  #define ESkillEventType_WeaponFired                          SEVT_WeaponFired
+  #define ESkillEventType_WeaponReloaded                       SEVT_WeaponReloaded
+  #define ESkillEventType_PlayerDeathAverted                   SEVT_PlayerDeathAverted
+  #define ESkillEventType_ActionSkillCooldownAbilityActivated  SEVT_ActionSkillCooldownAbilityActivated
+  #define ESkillEventType_ActionSkillActiveAbilityActivated    SEVT_ActionSkillActiveAbilityActivated
+  #define ESkillEventType_DamagedUnawareEnemy                  SEVT_DamagedUnawareEnemy
+  #define ESkillEventType_DamagedEnemyWithMeleeFromBehind      SEVT_DamagedEnemyWithMeleeFromBehind
+  #define ESkillEventType_MeleeOverrideSkillActivated          SEVT_MeleeOverrideSkillActivated
+  #define ESkillEventType_ThrowGrenadeOverrideSkillActivated   SEVT_ThrowGrenadeOverrideSkillActivated
+  #define ESkillEventType_WeaponSwapped                        SEVT_WeaponSwapped
+  #define ESkillEventType_PlayerRecoveredFromDownState         SEVT_PlayerRecoveredFromDownState
+  #define ESkillEventType_ShieldDepleted                       SEVT_ShieldDepleted
+  #define ESkillEventType_ShieldFull                           SEVT_ShieldFull
+  #define ESkillEventType_WeaponStartReload                    SEVT_WeaponStartReload
+  #define ESkillEventType_PlayerResurrected                    SEVT_PlayerResurrected
+  #define ESkillEventType_WeaponManuallyReloaded               SEVT_WeaponManuallyReloaded
+  #define ESkillEventType_AppliedStatusEffectToEnemy           SEVT_AppliedStatusEffectToEnemy
+  #define ESkillEventType_DownStateBegin                       SEVT_DownStateBegin
+  #define ESkillEventType_DownStateEnd                         SEVT_DownStateEnd
+  #define ESkillEventType_BledOut                              SEVT_BledOut
+  #define ESkillEventType_OnStatusEffectTypeBegin              SEVT_OnStatusEffectTypeBegin
+  #define ESkillEventType_OnStatusEffectTypeEnd                SEVT_OnStatusEffectTypeEnd
+  #define ESkillEventType_MeleeAttack                          SEVT_MeleeAttack
+  #define ESkillEventType_MAX                                  SEVT_MAX
 } ESkillEventType;
 typedef enum ESkillDamagedEventType    : unsigned char {
   SDEVT_DamagedEnemy,             // 0
@@ -6222,6 +7264,22 @@ typedef enum ESkillDamagedEventType    : unsigned char {
   SDEVT_DamagedByNeutral,         // 5
   SDEVT_ShieldDepletedAfterBeingFull,// 6
   SDEVT_MAX                       // 7
+  #define SDEVT_DamagedEnemy                                   SDEVT_DamagedEnemy
+  #define SDEVT_DamagedFriendly                                SDEVT_DamagedFriendly
+  #define SDEVT_DamagedNeutral                                 SDEVT_DamagedNeutral
+  #define SDEVT_DamagedByEnemy                                 SDEVT_DamagedByEnemy
+  #define SDEVT_DamagedByFriendly                              SDEVT_DamagedByFriendly
+  #define SDEVT_DamagedByNeutral                               SDEVT_DamagedByNeutral
+  #define SDEVT_ShieldDepletedAfterBeingFull                   SDEVT_ShieldDepletedAfterBeingFull
+  #define SDEVT_MAX                                            SDEVT_MAX
+  #define ESkillDamagedEventType_DamagedEnemy                  SDEVT_DamagedEnemy
+  #define ESkillDamagedEventType_DamagedFriendly               SDEVT_DamagedFriendly
+  #define ESkillDamagedEventType_DamagedNeutral                SDEVT_DamagedNeutral
+  #define ESkillDamagedEventType_DamagedByEnemy                SDEVT_DamagedByEnemy
+  #define ESkillDamagedEventType_DamagedByFriendly             SDEVT_DamagedByFriendly
+  #define ESkillDamagedEventType_DamagedByNeutral              SDEVT_DamagedByNeutral
+  #define ESkillDamagedEventType_ShieldDepletedAfterBeingFull  SDEVT_ShieldDepletedAfterBeingFull
+  #define ESkillDamagedEventType_MAX                           SDEVT_MAX
 } ESkillDamagedEventType;
 typedef enum ESkillKilledEventType     : unsigned char {
   SKEVT_KilledEnemy,              // 0
@@ -6231,12 +7289,34 @@ typedef enum ESkillKilledEventType     : unsigned char {
   SKEVT_KilledByFriendly,         // 4
   SKEVT_KilledByNeutral,          // 5
   SKEVT_MAX                       // 6
+  #define SKEVT_KilledEnemy                       SKEVT_KilledEnemy
+  #define SKEVT_KilledFriendly                    SKEVT_KilledFriendly
+  #define SKEVT_KilledNeutral                     SKEVT_KilledNeutral
+  #define SKEVT_KilledByEnemy                     SKEVT_KilledByEnemy
+  #define SKEVT_KilledByFriendly                  SKEVT_KilledByFriendly
+  #define SKEVT_KilledByNeutral                   SKEVT_KilledByNeutral
+  #define SKEVT_MAX                               SKEVT_MAX
+  #define ESkillKilledEventType_KilledEnemy       SKEVT_KilledEnemy
+  #define ESkillKilledEventType_KilledFriendly    SKEVT_KilledFriendly
+  #define ESkillKilledEventType_KilledNeutral     SKEVT_KilledNeutral
+  #define ESkillKilledEventType_KilledByEnemy     SKEVT_KilledByEnemy
+  #define ESkillKilledEventType_KilledByFriendly  SKEVT_KilledByFriendly
+  #define ESkillKilledEventType_KilledByNeutral   SKEVT_KilledByNeutral
+  #define ESkillKilledEventType_MAX               SKEVT_MAX
 } ESkillKilledEventType;
 typedef enum ESkillEventGradeType      : unsigned char {
   SEVG_PlayerSkillGrade,          // 0
   SEVG_HardcodedGrade,            // 1
   SEVG_SameAsThisSkillGrade,      // 2
   SEVG_MAX                        // 3
+  #define SEVG_PlayerSkillGrade                      SEVG_PlayerSkillGrade
+  #define SEVG_HardcodedGrade                        SEVG_HardcodedGrade
+  #define SEVG_SameAsThisSkillGrade                  SEVG_SameAsThisSkillGrade
+  #define SEVG_MAX                                   SEVG_MAX
+  #define ESkillEventGradeType_PlayerSkillGrade      SEVG_PlayerSkillGrade
+  #define ESkillEventGradeType_HardcodedGrade        SEVG_HardcodedGrade
+  #define ESkillEventGradeType_SameAsThisSkillGrade  SEVG_SameAsThisSkillGrade
+  #define ESkillEventGradeType_MAX                   SEVG_MAX
 } ESkillEventGradeType;
 typedef enum ETrackedSkillType         : unsigned char {
   TRACKEDSKILL_Untracked,         // 0
@@ -6247,12 +7327,36 @@ typedef enum ETrackedSkillType         : unsigned char {
   TRACKEDSKILL_MeleeOverride,     // 5
   TRACKEDSKILL_TriggeredNotSkillTree,// 6
   TRACKEDSKILL_MAX                // 7
+  #define TRACKEDSKILL_Untracked                   TRACKEDSKILL_Untracked
+  #define TRACKEDSKILL_Kill                        TRACKEDSKILL_Kill
+  #define TRACKEDSKILL_Triggered                   TRACKEDSKILL_Triggered
+  #define TRACKEDSKILL_Respond                     TRACKEDSKILL_Respond
+  #define TRACKEDSKILL_ConsumableBuff              TRACKEDSKILL_ConsumableBuff
+  #define TRACKEDSKILL_MeleeOverride               TRACKEDSKILL_MeleeOverride
+  #define TRACKEDSKILL_TriggeredNotSkillTree       TRACKEDSKILL_TriggeredNotSkillTree
+  #define TRACKEDSKILL_MAX                         TRACKEDSKILL_MAX
+  #define ETrackedSkillType_Untracked              TRACKEDSKILL_Untracked
+  #define ETrackedSkillType_Kill                   TRACKEDSKILL_Kill
+  #define ETrackedSkillType_Triggered              TRACKEDSKILL_Triggered
+  #define ETrackedSkillType_Respond                TRACKEDSKILL_Respond
+  #define ETrackedSkillType_ConsumableBuff         TRACKEDSKILL_ConsumableBuff
+  #define ETrackedSkillType_MeleeOverride          TRACKEDSKILL_MeleeOverride
+  #define ETrackedSkillType_TriggeredNotSkillTree  TRACKEDSKILL_TriggeredNotSkillTree
+  #define ETrackedSkillType_MAX                    TRACKEDSKILL_MAX
 } ETrackedSkillType;
 typedef enum ERequiredActionSkillState : unsigned char {
   ERASS_Ignore,                   // 0
   ERASS_MustBeRunning,            // 1
   ERASS_MustNotBeRunning,         // 2
   ERASS_MAX                       // 3
+  #define ERASS_Ignore                                ERASS_Ignore
+  #define ERASS_MustBeRunning                         ERASS_MustBeRunning
+  #define ERASS_MustNotBeRunning                      ERASS_MustNotBeRunning
+  #define ERASS_MAX                                   ERASS_MAX
+  #define ERequiredActionSkillState_Ignore            ERASS_Ignore
+  #define ERequiredActionSkillState_MustBeRunning     ERASS_MustBeRunning
+  #define ERequiredActionSkillState_MustNotBeRunning  ERASS_MustNotBeRunning
+  #define ERequiredActionSkillState_MAX               ERASS_MAX
 } ERequiredActionSkillState;
 typedef enum ESkillDamageEvents        : unsigned char {
   SDE_DamagedEnemy,               // 0
@@ -6265,11 +7369,37 @@ typedef enum ESkillDamageEvents        : unsigned char {
   SDE_DamagedEnemyWithMeleeFromBehind,// 7
   SDE_DamagedEnemyExposeDamageSurfaceType,// 8
   SDE_MAX                         // 9
+  #define SDE_DamagedEnemy                                        SDE_DamagedEnemy
+  #define SDE_DamagedFriendly                                     SDE_DamagedFriendly
+  #define SDE_DamagedByEnemy                                      SDE_DamagedByEnemy
+  #define SDE_DamagedByFriendly                                   SDE_DamagedByFriendly
+  #define SDE_DamagedNeutral_Deprecated                           SDE_DamagedNeutral_Deprecated
+  #define SDE_DamagedByNeutral_Deprecated                         SDE_DamagedByNeutral_Deprecated
+  #define SDE_DamagedUnawareEnemy                                 SDE_DamagedUnawareEnemy
+  #define SDE_DamagedEnemyWithMeleeFromBehind                     SDE_DamagedEnemyWithMeleeFromBehind
+  #define SDE_DamagedEnemyExposeDamageSurfaceType                 SDE_DamagedEnemyExposeDamageSurfaceType
+  #define SDE_MAX                                                 SDE_MAX
+  #define ESkillDamageEvents_DamagedEnemy                         SDE_DamagedEnemy
+  #define ESkillDamageEvents_DamagedFriendly                      SDE_DamagedFriendly
+  #define ESkillDamageEvents_DamagedByEnemy                       SDE_DamagedByEnemy
+  #define ESkillDamageEvents_DamagedByFriendly                    SDE_DamagedByFriendly
+  #define ESkillDamageEvents_DamagedNeutral_Deprecated            SDE_DamagedNeutral_Deprecated
+  #define ESkillDamageEvents_DamagedByNeutral_Deprecated          SDE_DamagedByNeutral_Deprecated
+  #define ESkillDamageEvents_DamagedUnawareEnemy                  SDE_DamagedUnawareEnemy
+  #define ESkillDamageEvents_DamagedEnemyWithMeleeFromBehind      SDE_DamagedEnemyWithMeleeFromBehind
+  #define ESkillDamageEvents_DamagedEnemyExposeDamageSurfaceType  SDE_DamagedEnemyExposeDamageSurfaceType
+  #define ESkillDamageEvents_MAX                                  SDE_MAX
 } ESkillDamageEvents;
 typedef enum ESkillKillEvents          : unsigned char {
   SKE_KilledEnemy,                // 0
   SKE_KilledByEnemy,              // 1
   SKE_MAX                         // 2
+  #define SKE_KilledEnemy                 SKE_KilledEnemy
+  #define SKE_KilledByEnemy               SKE_KilledByEnemy
+  #define SKE_MAX                         SKE_MAX
+  #define ESkillKillEvents_KilledEnemy    SKE_KilledEnemy
+  #define ESkillKillEvents_KilledByEnemy  SKE_KilledByEnemy
+  #define ESkillKillEvents_MAX            SKE_MAX
 } ESkillKillEvents;
 #define EEffectDurationType        EEffectDurationType
 #define EEffectTarget              EEffectTarget
@@ -6389,6 +7519,208 @@ typedef enum EWillowAchievementList : unsigned char {
   WA_DLCReserved_48,              // 98
   WA_DLCReserved_49,              // 99
   WA_MAX                          // 100
+  #define WA_Invalid                                         WA_Invalid
+  #define WA_PlotMission1                                    WA_PlotMission1
+  #define WA_PlotMission2                                    WA_PlotMission2
+  #define WA_PlotMission3                                    WA_PlotMission3
+  #define WA_PlotMission4                                    WA_PlotMission4
+  #define WA_PlotMission5                                    WA_PlotMission5
+  #define WA_PlotMission6                                    WA_PlotMission6
+  #define WA_PlotMission7                                    WA_PlotMission7
+  #define WA_PlotMission8                                    WA_PlotMission8
+  #define WA_PlotMission9                                    WA_PlotMission9
+  #define WA_PlotMission10                                   WA_PlotMission10
+  #define WA_PlotMission11                                   WA_PlotMission11
+  #define WA_PlotMission12                                   WA_PlotMission12
+  #define WA_PlotMission13                                   WA_PlotMission13
+  #define WA_PlotMission14                                   WA_PlotMission14
+  #define WA_PlotMission15                                   WA_PlotMission15
+  #define WA_PlotMission16                                   WA_PlotMission16
+  #define WA_ChallengeAccepted                               WA_ChallengeAccepted
+  #define WA_GoliathMeetDavid                                WA_GoliathMeetDavid
+  #define WA_WentFiveRounds                                  WA_WentFiveRounds
+  #define WA_NotQuiteDead                                    WA_NotQuiteDead
+  #define WA_BetterThanYouWere                               WA_BetterThanYouWere
+  #define WA_AlwaysImproving                                 WA_AlwaysImproving
+  #define WA_CappedOutForNow                                 WA_CappedOutForNow
+  #define WA_ArcticExplorer                                  WA_ArcticExplorer
+  #define WA_UrbanExplorer                                   WA_UrbanExplorer
+  #define WA_HighlandsExplorer                               WA_HighlandsExplorer
+  #define WA_BlightExplorer                                  WA_BlightExplorer
+  #define WA_WorldTraveler                                   WA_WorldTraveler
+  #define WA_SugarDaddy                                      WA_SugarDaddy
+  #define WA_DeckedOut                                       WA_DeckedOut
+  #define WA_SabreRattler                                    WA_SabreRattler
+  #define WA_PhasedAndConfused                               WA_PhasedAndConfused
+  #define WA_SoMuchBlood                                     WA_SoMuchBlood
+  #define WA_CuteLoot                                        WA_CuteLoot
+  #define WA_TributeToAVaultHunter                           WA_TributeToAVaultHunter
+  #define WA_DefinitelyAnItalianPlumber                      WA_DefinitelyAnItalianPlumber
+  #define WA_HighFlyingHurler                                WA_HighFlyingHurler
+  #define WA_TokenGesture                                    WA_TokenGesture
+  #define WA_WhatDoesItMean                                  WA_WhatDoesItMean
+  #define WA_UnseenPredator                                  WA_UnseenPredator
+  #define WA_BuildBuster                                     WA_BuildBuster
+  #define WA_WellThatWasEasy                                 WA_WellThatWasEasy
+  #define WA_HowDoILook                                      WA_HowDoILook
+  #define WA_ThresherThrashed                                WA_ThresherThrashed
+  #define WA_FriendshipRules                                 WA_FriendshipRules
+  #define WA_BetterThanMoney                                 WA_BetterThanMoney
+  #define WA_UpHighDownLow                                   WA_UpHighDownLow
+  #define WA_BountyHunter                                    WA_BountyHunter
+  #define WA_DidItAll                                        WA_DidItAll
+  #define WA_FeelsLikeTheFirstTime                           WA_FeelsLikeTheFirstTime
+  #define WA_DLC1_Achievement1                               WA_DLC1_Achievement1
+  #define WA_DLC1_Achievement2                               WA_DLC1_Achievement2
+  #define WA_DLC1_Achievement3                               WA_DLC1_Achievement3
+  #define WA_Iris_CompleteMainCampaign                       WA_Iris_CompleteMainCampaign
+  #define WA_Iris_CompleteSideMissions                       WA_Iris_CompleteSideMissions
+  #define WA_Iris_CollectItems                               WA_Iris_CollectItems
+  #define WA_Sage_CompleteMainCampaign                       WA_Sage_CompleteMainCampaign
+  #define WA_Sage_CompleteSideMissions                       WA_Sage_CompleteSideMissions
+  #define WA_Sage_DiscoverAllAreas                           WA_Sage_DiscoverAllAreas
+  #define WA_DLCReserved_10                                  WA_DLCReserved_10
+  #define WA_DLCReserved_11                                  WA_DLCReserved_11
+  #define WA_DLCReserved_12                                  WA_DLCReserved_12
+  #define WA_DLCReserved_13                                  WA_DLCReserved_13
+  #define WA_DLCReserved_14                                  WA_DLCReserved_14
+  #define WA_DLCReserved_15                                  WA_DLCReserved_15
+  #define WA_DLCReserved_16                                  WA_DLCReserved_16
+  #define WA_DLCReserved_17                                  WA_DLCReserved_17
+  #define WA_DLCReserved_18                                  WA_DLCReserved_18
+  #define WA_DLCReserved_19                                  WA_DLCReserved_19
+  #define WA_DLCReserved_20                                  WA_DLCReserved_20
+  #define WA_DLCReserved_21                                  WA_DLCReserved_21
+  #define WA_DLCReserved_22                                  WA_DLCReserved_22
+  #define WA_DLCReserved_23                                  WA_DLCReserved_23
+  #define WA_DLCReserved_24                                  WA_DLCReserved_24
+  #define WA_DLCReserved_25                                  WA_DLCReserved_25
+  #define WA_DLCReserved_26                                  WA_DLCReserved_26
+  #define WA_DLCReserved_27                                  WA_DLCReserved_27
+  #define WA_DLCReserved_28                                  WA_DLCReserved_28
+  #define WA_DLCReserved_29                                  WA_DLCReserved_29
+  #define WA_DLCReserved_30                                  WA_DLCReserved_30
+  #define WA_DLCReserved_31                                  WA_DLCReserved_31
+  #define WA_DLCReserved_32                                  WA_DLCReserved_32
+  #define WA_DLCReserved_33                                  WA_DLCReserved_33
+  #define WA_DLCReserved_34                                  WA_DLCReserved_34
+  #define WA_DLCReserved_35                                  WA_DLCReserved_35
+  #define WA_DLCReserved_36                                  WA_DLCReserved_36
+  #define WA_DLCReserved_37                                  WA_DLCReserved_37
+  #define WA_DLCReserved_38                                  WA_DLCReserved_38
+  #define WA_DLCReserved_39                                  WA_DLCReserved_39
+  #define WA_DLCReserved_40                                  WA_DLCReserved_40
+  #define WA_DLCReserved_41                                  WA_DLCReserved_41
+  #define WA_DLCReserved_42                                  WA_DLCReserved_42
+  #define WA_DLCReserved_43                                  WA_DLCReserved_43
+  #define WA_DLCReserved_44                                  WA_DLCReserved_44
+  #define WA_DLCReserved_45                                  WA_DLCReserved_45
+  #define WA_DLCReserved_46                                  WA_DLCReserved_46
+  #define WA_DLCReserved_47                                  WA_DLCReserved_47
+  #define WA_DLCReserved_48                                  WA_DLCReserved_48
+  #define WA_DLCReserved_49                                  WA_DLCReserved_49
+  #define WA_MAX                                             WA_MAX
+  #define EWillowAchievementList_Invalid                     WA_Invalid
+  #define EWillowAchievementList_PlotMission1                WA_PlotMission1
+  #define EWillowAchievementList_PlotMission2                WA_PlotMission2
+  #define EWillowAchievementList_PlotMission3                WA_PlotMission3
+  #define EWillowAchievementList_PlotMission4                WA_PlotMission4
+  #define EWillowAchievementList_PlotMission5                WA_PlotMission5
+  #define EWillowAchievementList_PlotMission6                WA_PlotMission6
+  #define EWillowAchievementList_PlotMission7                WA_PlotMission7
+  #define EWillowAchievementList_PlotMission8                WA_PlotMission8
+  #define EWillowAchievementList_PlotMission9                WA_PlotMission9
+  #define EWillowAchievementList_PlotMission10               WA_PlotMission10
+  #define EWillowAchievementList_PlotMission11               WA_PlotMission11
+  #define EWillowAchievementList_PlotMission12               WA_PlotMission12
+  #define EWillowAchievementList_PlotMission13               WA_PlotMission13
+  #define EWillowAchievementList_PlotMission14               WA_PlotMission14
+  #define EWillowAchievementList_PlotMission15               WA_PlotMission15
+  #define EWillowAchievementList_PlotMission16               WA_PlotMission16
+  #define EWillowAchievementList_ChallengeAccepted           WA_ChallengeAccepted
+  #define EWillowAchievementList_GoliathMeetDavid            WA_GoliathMeetDavid
+  #define EWillowAchievementList_WentFiveRounds              WA_WentFiveRounds
+  #define EWillowAchievementList_NotQuiteDead                WA_NotQuiteDead
+  #define EWillowAchievementList_BetterThanYouWere           WA_BetterThanYouWere
+  #define EWillowAchievementList_AlwaysImproving             WA_AlwaysImproving
+  #define EWillowAchievementList_CappedOutForNow             WA_CappedOutForNow
+  #define EWillowAchievementList_ArcticExplorer              WA_ArcticExplorer
+  #define EWillowAchievementList_UrbanExplorer               WA_UrbanExplorer
+  #define EWillowAchievementList_HighlandsExplorer           WA_HighlandsExplorer
+  #define EWillowAchievementList_BlightExplorer              WA_BlightExplorer
+  #define EWillowAchievementList_WorldTraveler               WA_WorldTraveler
+  #define EWillowAchievementList_SugarDaddy                  WA_SugarDaddy
+  #define EWillowAchievementList_DeckedOut                   WA_DeckedOut
+  #define EWillowAchievementList_SabreRattler                WA_SabreRattler
+  #define EWillowAchievementList_PhasedAndConfused           WA_PhasedAndConfused
+  #define EWillowAchievementList_SoMuchBlood                 WA_SoMuchBlood
+  #define EWillowAchievementList_CuteLoot                    WA_CuteLoot
+  #define EWillowAchievementList_TributeToAVaultHunter       WA_TributeToAVaultHunter
+  #define EWillowAchievementList_DefinitelyAnItalianPlumber  WA_DefinitelyAnItalianPlumber
+  #define EWillowAchievementList_HighFlyingHurler            WA_HighFlyingHurler
+  #define EWillowAchievementList_TokenGesture                WA_TokenGesture
+  #define EWillowAchievementList_WhatDoesItMean              WA_WhatDoesItMean
+  #define EWillowAchievementList_UnseenPredator              WA_UnseenPredator
+  #define EWillowAchievementList_BuildBuster                 WA_BuildBuster
+  #define EWillowAchievementList_WellThatWasEasy             WA_WellThatWasEasy
+  #define EWillowAchievementList_HowDoILook                  WA_HowDoILook
+  #define EWillowAchievementList_ThresherThrashed            WA_ThresherThrashed
+  #define EWillowAchievementList_FriendshipRules             WA_FriendshipRules
+  #define EWillowAchievementList_BetterThanMoney             WA_BetterThanMoney
+  #define EWillowAchievementList_UpHighDownLow               WA_UpHighDownLow
+  #define EWillowAchievementList_BountyHunter                WA_BountyHunter
+  #define EWillowAchievementList_DidItAll                    WA_DidItAll
+  #define EWillowAchievementList_FeelsLikeTheFirstTime       WA_FeelsLikeTheFirstTime
+  #define EWillowAchievementList_DLC1_Achievement1           WA_DLC1_Achievement1
+  #define EWillowAchievementList_DLC1_Achievement2           WA_DLC1_Achievement2
+  #define EWillowAchievementList_DLC1_Achievement3           WA_DLC1_Achievement3
+  #define EWillowAchievementList_Iris_CompleteMainCampaign   WA_Iris_CompleteMainCampaign
+  #define EWillowAchievementList_Iris_CompleteSideMissions   WA_Iris_CompleteSideMissions
+  #define EWillowAchievementList_Iris_CollectItems           WA_Iris_CollectItems
+  #define EWillowAchievementList_Sage_CompleteMainCampaign   WA_Sage_CompleteMainCampaign
+  #define EWillowAchievementList_Sage_CompleteSideMissions   WA_Sage_CompleteSideMissions
+  #define EWillowAchievementList_Sage_DiscoverAllAreas       WA_Sage_DiscoverAllAreas
+  #define EWillowAchievementList_DLCReserved_10              WA_DLCReserved_10
+  #define EWillowAchievementList_DLCReserved_11              WA_DLCReserved_11
+  #define EWillowAchievementList_DLCReserved_12              WA_DLCReserved_12
+  #define EWillowAchievementList_DLCReserved_13              WA_DLCReserved_13
+  #define EWillowAchievementList_DLCReserved_14              WA_DLCReserved_14
+  #define EWillowAchievementList_DLCReserved_15              WA_DLCReserved_15
+  #define EWillowAchievementList_DLCReserved_16              WA_DLCReserved_16
+  #define EWillowAchievementList_DLCReserved_17              WA_DLCReserved_17
+  #define EWillowAchievementList_DLCReserved_18              WA_DLCReserved_18
+  #define EWillowAchievementList_DLCReserved_19              WA_DLCReserved_19
+  #define EWillowAchievementList_DLCReserved_20              WA_DLCReserved_20
+  #define EWillowAchievementList_DLCReserved_21              WA_DLCReserved_21
+  #define EWillowAchievementList_DLCReserved_22              WA_DLCReserved_22
+  #define EWillowAchievementList_DLCReserved_23              WA_DLCReserved_23
+  #define EWillowAchievementList_DLCReserved_24              WA_DLCReserved_24
+  #define EWillowAchievementList_DLCReserved_25              WA_DLCReserved_25
+  #define EWillowAchievementList_DLCReserved_26              WA_DLCReserved_26
+  #define EWillowAchievementList_DLCReserved_27              WA_DLCReserved_27
+  #define EWillowAchievementList_DLCReserved_28              WA_DLCReserved_28
+  #define EWillowAchievementList_DLCReserved_29              WA_DLCReserved_29
+  #define EWillowAchievementList_DLCReserved_30              WA_DLCReserved_30
+  #define EWillowAchievementList_DLCReserved_31              WA_DLCReserved_31
+  #define EWillowAchievementList_DLCReserved_32              WA_DLCReserved_32
+  #define EWillowAchievementList_DLCReserved_33              WA_DLCReserved_33
+  #define EWillowAchievementList_DLCReserved_34              WA_DLCReserved_34
+  #define EWillowAchievementList_DLCReserved_35              WA_DLCReserved_35
+  #define EWillowAchievementList_DLCReserved_36              WA_DLCReserved_36
+  #define EWillowAchievementList_DLCReserved_37              WA_DLCReserved_37
+  #define EWillowAchievementList_DLCReserved_38              WA_DLCReserved_38
+  #define EWillowAchievementList_DLCReserved_39              WA_DLCReserved_39
+  #define EWillowAchievementList_DLCReserved_40              WA_DLCReserved_40
+  #define EWillowAchievementList_DLCReserved_41              WA_DLCReserved_41
+  #define EWillowAchievementList_DLCReserved_42              WA_DLCReserved_42
+  #define EWillowAchievementList_DLCReserved_43              WA_DLCReserved_43
+  #define EWillowAchievementList_DLCReserved_44              WA_DLCReserved_44
+  #define EWillowAchievementList_DLCReserved_45              WA_DLCReserved_45
+  #define EWillowAchievementList_DLCReserved_46              WA_DLCReserved_46
+  #define EWillowAchievementList_DLCReserved_47              WA_DLCReserved_47
+  #define EWillowAchievementList_DLCReserved_48              WA_DLCReserved_48
+  #define EWillowAchievementList_DLCReserved_49              WA_DLCReserved_49
+  #define EWillowAchievementList_MAX                         WA_MAX
 } EWillowAchievementList;
 typedef enum EAchievementUnlockType : unsigned char {
   AUT_ZoneIn,                     // 0
@@ -6410,6 +7742,44 @@ typedef enum EAchievementUnlockType : unsigned char {
   AUT_SideMissionsCompleted,      // 16
   AUT_PurchasedBlackMarketItem,   // 17
   AUT_MAX                         // 18
+  #define AUT_ZoneIn                                       AUT_ZoneIn
+  #define AUT_EarnMoney                                    AUT_EarnMoney
+  #define AUT_LeveledUp                                    AUT_LeveledUp
+  #define AUT_InstinctUp                                   AUT_InstinctUp
+  #define AUT_FallHeight                                   AUT_FallHeight
+  #define AUT_HangTime                                     AUT_HangTime
+  #define AUT_QuestCompleted                               AUT_QuestCompleted
+  #define AUT_ActionSkillKill                              AUT_ActionSkillKill
+  #define AUT_QuestCompletedCoOp                           AUT_QuestCompletedCoOp
+  #define AUT_SpeedyTravel                                 AUT_SpeedyTravel
+  #define AUT_SpeedyKills                                  AUT_SpeedyKills
+  #define AUT_RushTime                                     AUT_RushTime
+  #define AUT_InventorySlotChange                          AUT_InventorySlotChange
+  #define AUT_KilledLeveledUpPawn                          AUT_KilledLeveledUpPawn
+  #define AUT_TokensSpent                                  AUT_TokensSpent
+  #define AUT_CustomizationsUnlocks                        AUT_CustomizationsUnlocks
+  #define AUT_SideMissionsCompleted                        AUT_SideMissionsCompleted
+  #define AUT_PurchasedBlackMarketItem                     AUT_PurchasedBlackMarketItem
+  #define AUT_MAX                                          AUT_MAX
+  #define EAchievementUnlockType_ZoneIn                    AUT_ZoneIn
+  #define EAchievementUnlockType_EarnMoney                 AUT_EarnMoney
+  #define EAchievementUnlockType_LeveledUp                 AUT_LeveledUp
+  #define EAchievementUnlockType_InstinctUp                AUT_InstinctUp
+  #define EAchievementUnlockType_FallHeight                AUT_FallHeight
+  #define EAchievementUnlockType_HangTime                  AUT_HangTime
+  #define EAchievementUnlockType_QuestCompleted            AUT_QuestCompleted
+  #define EAchievementUnlockType_ActionSkillKill           AUT_ActionSkillKill
+  #define EAchievementUnlockType_QuestCompletedCoOp        AUT_QuestCompletedCoOp
+  #define EAchievementUnlockType_SpeedyTravel              AUT_SpeedyTravel
+  #define EAchievementUnlockType_SpeedyKills               AUT_SpeedyKills
+  #define EAchievementUnlockType_RushTime                  AUT_RushTime
+  #define EAchievementUnlockType_InventorySlotChange       AUT_InventorySlotChange
+  #define EAchievementUnlockType_KilledLeveledUpPawn       AUT_KilledLeveledUpPawn
+  #define EAchievementUnlockType_TokensSpent               AUT_TokensSpent
+  #define EAchievementUnlockType_CustomizationsUnlocks     AUT_CustomizationsUnlocks
+  #define EAchievementUnlockType_SideMissionsCompleted     AUT_SideMissionsCompleted
+  #define EAchievementUnlockType_PurchasedBlackMarketItem  AUT_PurchasedBlackMarketItem
+  #define EAchievementUnlockType_MAX                       AUT_MAX
 } EAchievementUnlockType;
 #define EWillowAchievementList  EWillowAchievementList
 #define EAchievementUnlockType  EAchievementUnlockType
@@ -6481,6 +7851,32 @@ typedef enum TextureCompressionSettings : unsigned char {
   TC_SimpleLightmapModification,  // 10
   TC_VectorDisplacementmap,       // 11
   TC_MAX                          // 12
+  #define TC_Default                                             TC_Default
+  #define TC_Normalmap                                           TC_Normalmap
+  #define TC_Displacementmap                                     TC_Displacementmap
+  #define TC_NormalmapAlpha                                      TC_NormalmapAlpha
+  #define TC_Grayscale                                           TC_Grayscale
+  #define TC_HighDynamicRange                                    TC_HighDynamicRange
+  #define TC_OneBitAlpha                                         TC_OneBitAlpha
+  #define TC_NormalmapUncompressed                               TC_NormalmapUncompressed
+  #define TC_NormalmapBC5                                        TC_NormalmapBC5
+  #define TC_OneBitMonochrome                                    TC_OneBitMonochrome
+  #define TC_SimpleLightmapModification                          TC_SimpleLightmapModification
+  #define TC_VectorDisplacementmap                               TC_VectorDisplacementmap
+  #define TC_MAX                                                 TC_MAX
+  #define TextureCompressionSettings_Default                     TC_Default
+  #define TextureCompressionSettings_Normalmap                   TC_Normalmap
+  #define TextureCompressionSettings_Displacementmap             TC_Displacementmap
+  #define TextureCompressionSettings_NormalmapAlpha              TC_NormalmapAlpha
+  #define TextureCompressionSettings_Grayscale                   TC_Grayscale
+  #define TextureCompressionSettings_HighDynamicRange            TC_HighDynamicRange
+  #define TextureCompressionSettings_OneBitAlpha                 TC_OneBitAlpha
+  #define TextureCompressionSettings_NormalmapUncompressed       TC_NormalmapUncompressed
+  #define TextureCompressionSettings_NormalmapBC5                TC_NormalmapBC5
+  #define TextureCompressionSettings_OneBitMonochrome            TC_OneBitMonochrome
+  #define TextureCompressionSettings_SimpleLightmapModification  TC_SimpleLightmapModification
+  #define TextureCompressionSettings_VectorDisplacementmap       TC_VectorDisplacementmap
+  #define TextureCompressionSettings_MAX                         TC_MAX
 } TextureCompressionSettings;
 typedef enum EPixelFormat               : unsigned char {
   PF_Unknown,                     // 0
@@ -6512,6 +7908,64 @@ typedef enum EPixelFormat               : unsigned char {
   PF_A1,                          // 26
   PF_FloatR11G11B10,              // 27
   PF_MAX                          // 28
+  #define PF_Unknown                        PF_Unknown
+  #define PF_A32B32G32R32F                  PF_A32B32G32R32F
+  #define PF_A8R8G8B8                       PF_A8R8G8B8
+  #define PF_G8                             PF_G8
+  #define PF_G16                            PF_G16
+  #define PF_DXT1                           PF_DXT1
+  #define PF_DXT3                           PF_DXT3
+  #define PF_DXT5                           PF_DXT5
+  #define PF_UYVY                           PF_UYVY
+  #define PF_FloatRGB                       PF_FloatRGB
+  #define PF_FloatRGBA                      PF_FloatRGBA
+  #define PF_DepthStencil                   PF_DepthStencil
+  #define PF_ShadowDepth                    PF_ShadowDepth
+  #define PF_FilteredShadowDepth            PF_FilteredShadowDepth
+  #define PF_R32F                           PF_R32F
+  #define PF_G16R16                         PF_G16R16
+  #define PF_G16R16F                        PF_G16R16F
+  #define PF_G16R16F_FILTER                 PF_G16R16F_FILTER
+  #define PF_G32R32F                        PF_G32R32F
+  #define PF_A2B10G10R10                    PF_A2B10G10R10
+  #define PF_A16B16G16R16                   PF_A16B16G16R16
+  #define PF_D24                            PF_D24
+  #define PF_R16F                           PF_R16F
+  #define PF_R16F_FILTER                    PF_R16F_FILTER
+  #define PF_BC5                            PF_BC5
+  #define PF_V8U8                           PF_V8U8
+  #define PF_A1                             PF_A1
+  #define PF_FloatR11G11B10                 PF_FloatR11G11B10
+  #define PF_MAX                            PF_MAX
+  #define EPixelFormat_Unknown              PF_Unknown
+  #define EPixelFormat_A32B32G32R32F        PF_A32B32G32R32F
+  #define EPixelFormat_A8R8G8B8             PF_A8R8G8B8
+  #define EPixelFormat_G8                   PF_G8
+  #define EPixelFormat_G16                  PF_G16
+  #define EPixelFormat_DXT1                 PF_DXT1
+  #define EPixelFormat_DXT3                 PF_DXT3
+  #define EPixelFormat_DXT5                 PF_DXT5
+  #define EPixelFormat_UYVY                 PF_UYVY
+  #define EPixelFormat_FloatRGB             PF_FloatRGB
+  #define EPixelFormat_FloatRGBA            PF_FloatRGBA
+  #define EPixelFormat_DepthStencil         PF_DepthStencil
+  #define EPixelFormat_ShadowDepth          PF_ShadowDepth
+  #define EPixelFormat_FilteredShadowDepth  PF_FilteredShadowDepth
+  #define EPixelFormat_R32F                 PF_R32F
+  #define EPixelFormat_G16R16               PF_G16R16
+  #define EPixelFormat_G16R16F              PF_G16R16F
+  #define EPixelFormat_G16R16F_FILTER       PF_G16R16F_FILTER
+  #define EPixelFormat_G32R32F              PF_G32R32F
+  #define EPixelFormat_A2B10G10R10          PF_A2B10G10R10
+  #define EPixelFormat_A16B16G16R16         PF_A16B16G16R16
+  #define EPixelFormat_D24                  PF_D24
+  #define EPixelFormat_R16F                 PF_R16F
+  #define EPixelFormat_R16F_FILTER          PF_R16F_FILTER
+  #define EPixelFormat_BC5                  PF_BC5
+  #define EPixelFormat_V8U8                 PF_V8U8
+  #define EPixelFormat_A1                   PF_A1
+  #define EPixelFormat_FloatR11G11B10       PF_FloatR11G11B10
+  #define EPixelFormat_MAX                  PF_MAX
 } EPixelFormat;
 typedef enum TextureFilter              : unsigned char {
   TF_Nearest,                     // 0
@@ -6636,6 +8090,18 @@ typedef enum EDropLifeSpanType : unsigned char {
   DROP_LiveForever,               // 3
   DROP_LiveAsLongAsLevel,         // 4
   DROP_MAX                        // 5
+  #define DROP_VeryShortLived                  DROP_VeryShortLived
+  #define DROP_ShortLived                      DROP_ShortLived
+  #define DROP_LongLived                       DROP_LongLived
+  #define DROP_LiveForever                     DROP_LiveForever
+  #define DROP_LiveAsLongAsLevel               DROP_LiveAsLongAsLevel
+  #define DROP_MAX                             DROP_MAX
+  #define EDropLifeSpanType_VeryShortLived     DROP_VeryShortLived
+  #define EDropLifeSpanType_ShortLived         DROP_ShortLived
+  #define EDropLifeSpanType_LongLived          DROP_LongLived
+  #define EDropLifeSpanType_LiveForever        DROP_LiveForever
+  #define EDropLifeSpanType_LiveAsLongAsLevel  DROP_LiveAsLongAsLevel
+  #define EDropLifeSpanType_MAX                DROP_MAX
 } EDropLifeSpanType;
 typedef enum EItemRarity       : unsigned char {
   RARITY_Unknown,                 // 0
@@ -6647,6 +8113,24 @@ typedef enum EItemRarity       : unsigned char {
   RARITY_Seraph,                  // 6
   RARITY_Rainbow,                 // 7
   RARITY_MAX                      // 8
+  #define RARITY_Unknown         RARITY_Unknown
+  #define RARITY_Common          RARITY_Common
+  #define RARITY_Uncommon        RARITY_Uncommon
+  #define RARITY_Rare            RARITY_Rare
+  #define RARITY_VeryRare        RARITY_VeryRare
+  #define RARITY_Legendary       RARITY_Legendary
+  #define RARITY_Seraph          RARITY_Seraph
+  #define RARITY_Rainbow         RARITY_Rainbow
+  #define RARITY_MAX             RARITY_MAX
+  #define EItemRarity_Unknown    RARITY_Unknown
+  #define EItemRarity_Common     RARITY_Common
+  #define EItemRarity_Uncommon   RARITY_Uncommon
+  #define EItemRarity_Rare       RARITY_Rare
+  #define EItemRarity_VeryRare   RARITY_VeryRare
+  #define EItemRarity_Legendary  RARITY_Legendary
+  #define EItemRarity_Seraph     RARITY_Seraph
+  #define EItemRarity_Rainbow    RARITY_Rainbow
+  #define EItemRarity_MAX        RARITY_MAX
 } EItemRarity;
 typedef enum ENumClassPlayers  : unsigned char {
   NCP_OnePlayer,                  // 0
@@ -6654,7 +8138,16 @@ typedef enum ENumClassPlayers  : unsigned char {
   NCP_ThreePlayers,               // 2
   NCP_FourPlayers,                // 3
   NCP_MAX                         // 4
-#define ENumClassPlayers__MAX  (NCP_MAX)
+  #define NCP_OnePlayer                  NCP_OnePlayer
+  #define NCP_TwoPlayers                 NCP_TwoPlayers
+  #define NCP_ThreePlayers               NCP_ThreePlayers
+  #define NCP_FourPlayers                NCP_FourPlayers
+  #define NCP_MAX                        NCP_MAX
+  #define ENumClassPlayers_OnePlayer     NCP_OnePlayer
+  #define ENumClassPlayers_TwoPlayers    NCP_TwoPlayers
+  #define ENumClassPlayers_ThreePlayers  NCP_ThreePlayers
+  #define ENumClassPlayers_FourPlayers   NCP_FourPlayers
+  #define ENumClassPlayers_MAX           NCP_MAX
 } ENumClassPlayers;
 #define EDropLifeSpanType  EDropLifeSpanType
 #define EItemRarity        EItemRarity
@@ -6680,7 +8173,12 @@ typedef enum EHUDOrientation : unsigned char {
   HO_Horizontal,                  // 0
   HO_Vertical,                    // 1
   HO_MAX                          // 2
-#define EHUDOrientation__MAX  (HO_MAX)
+  #define HO_Horizontal               HO_Horizontal
+  #define HO_Vertical                 HO_Vertical
+  #define HO_MAX                      HO_MAX
+  #define EHUDOrientation_Horizontal  HO_Horizontal
+  #define EHUDOrientation_Vertical    HO_Vertical
+  #define EHUDOrientation_MAX         HO_MAX
 } EHUDOrientation;
 typedef enum EHUDAnchorPoint : unsigned char {
   HAP_None,                       // 0
@@ -6717,6 +8215,20 @@ typedef enum ELocationMissionStatus : unsigned char {
   LMS_AndMuchMore,                // 4
   LMS_Invalid,                    // 5
   LMS_MAX                         // 6
+  #define LMS_ReadyToTurnIn                       LMS_ReadyToTurnIn
+  #define LMS_New                                 LMS_New
+  #define LMS_InProgress                          LMS_InProgress
+  #define LMS_InProgressStory                     LMS_InProgressStory
+  #define LMS_AndMuchMore                         LMS_AndMuchMore
+  #define LMS_Invalid                             LMS_Invalid
+  #define LMS_MAX                                 LMS_MAX
+  #define ELocationMissionStatus_ReadyToTurnIn    LMS_ReadyToTurnIn
+  #define ELocationMissionStatus_New              LMS_New
+  #define ELocationMissionStatus_InProgress       LMS_InProgress
+  #define ELocationMissionStatus_InProgressStory  LMS_InProgressStory
+  #define ELocationMissionStatus_AndMuchMore      LMS_AndMuchMore
+  #define ELocationMissionStatus_Invalid          LMS_Invalid
+  #define ELocationMissionStatus_MAX              LMS_MAX
 } ELocationMissionStatus;
 #define ELocationMissionStatus  ELocationMissionStatus
 
@@ -6728,6 +8240,16 @@ typedef enum EFastTravelAccessibilityTime : unsigned char {
   FTAT_Thanksgiving,              // 2
   FTAT_Christmas,                 // 3
   FTAT_MAX                        // 4
+  #define FTAT_Always                                FTAT_Always
+  #define FTAT_Halloween                             FTAT_Halloween
+  #define FTAT_Thanksgiving                          FTAT_Thanksgiving
+  #define FTAT_Christmas                             FTAT_Christmas
+  #define FTAT_MAX                                   FTAT_MAX
+  #define EFastTravelAccessibilityTime_Always        FTAT_Always
+  #define EFastTravelAccessibilityTime_Halloween     FTAT_Halloween
+  #define EFastTravelAccessibilityTime_Thanksgiving  FTAT_Thanksgiving
+  #define EFastTravelAccessibilityTime_Christmas     FTAT_Christmas
+  #define EFastTravelAccessibilityTime_MAX           FTAT_MAX
 } EFastTravelAccessibilityTime;
 #define EFastTravelAccessibilityTime  EFastTravelAccessibilityTime
 _DECL_TARRAY(EFastTravelAccessibilityTime);
@@ -6825,6 +8347,14 @@ typedef enum EChallengeType : unsigned char {
   ECT_LevelObject,                // 1
   ECT_DesignerTriggered,          // 2
   ECT_MAX                         // 3
+  #define ECT_Stat                         ECT_Stat
+  #define ECT_LevelObject                  ECT_LevelObject
+  #define ECT_DesignerTriggered            ECT_DesignerTriggered
+  #define ECT_MAX                          ECT_MAX
+  #define EChallengeType_Stat              ECT_Stat
+  #define EChallengeType_LevelObject       ECT_LevelObject
+  #define EChallengeType_DesignerTriggered ECT_DesignerTriggered
+  #define EChallengeType_MAX               ECT_MAX
 } EChallengeType;
 #define EChallengeType  EChallengeType
 
@@ -6927,6 +8457,14 @@ typedef enum EDefendMission : unsigned char {
   EDM_NoFail,                     // 1
   EDM_Failable,                   // 2
   EDM_MAX                         // 3
+  #define EDM_None                 EDM_None
+  #define EDM_NoFail               EDM_NoFail
+  #define EDM_Failable             EDM_Failable
+  #define EDM_MAX                  EDM_MAX
+  #define EDefendMission_None      EDM_None
+  #define EDefendMission_NoFail    EDM_NoFail
+  #define EDefendMission_Failable  EDM_Failable
+  #define EDefendMission_MAX       EDM_MAX
 } EDefendMission;
 #define EDefendMission  EDefendMission
 
@@ -6942,6 +8480,24 @@ typedef enum ETextListMoveDir : unsigned char {
   TLMD_PreviousCategory,          // 6
   TLMD_NextCategory,              // 7
   TLMD_MAX                        // 8
+  #define TLMD_Up                            TLMD_Up
+  #define TLMD_Down                          TLMD_Down
+  #define TLMD_PageUp                        TLMD_PageUp
+  #define TLMD_PageDown                      TLMD_PageDown
+  #define TLMD_First                         TLMD_First
+  #define TLMD_Last                          TLMD_Last
+  #define TLMD_PreviousCategory              TLMD_PreviousCategory
+  #define TLMD_NextCategory                  TLMD_NextCategory
+  #define TLMD_MAX                           TLMD_MAX
+  #define ETextListMoveDir_Up                TLMD_Up
+  #define ETextListMoveDir_Down              TLMD_Down
+  #define ETextListMoveDir_PageUp            TLMD_PageUp
+  #define ETextListMoveDir_PageDown          TLMD_PageDown
+  #define ETextListMoveDir_First             TLMD_First
+  #define ETextListMoveDir_Last              TLMD_Last
+  #define ETextListMoveDir_PreviousCategory  TLMD_PreviousCategory
+  #define ETextListMoveDir_NextCategory      TLMD_NextCategory
+  #define ETextListMoveDir_MAX               TLMD_MAX
 } ETextListMoveDir;
 typedef enum EArrayKind       : unsigned char {
   EAK_Source,                     // 0
@@ -6949,6 +8505,16 @@ typedef enum EArrayKind       : unsigned char {
   EAK_InvalidEntry,               // 2
   EAK_Unloadable,                 // 3
   EAK_MAX                         // 4
+  #define EAK_Source               EAK_Source
+  #define EAK_Categories           EAK_Categories
+  #define EAK_InvalidEntry         EAK_InvalidEntry
+  #define EAK_Unloadable           EAK_Unloadable
+  #define EAK_MAX                  EAK_MAX
+  #define EArrayKind_Source        EAK_Source
+  #define EArrayKind_Categories    EAK_Categories
+  #define EArrayKind_InvalidEntry  EAK_InvalidEntry
+  #define EArrayKind_Unloadable    EAK_Unloadable
+  #define EArrayKind_MAX           EAK_MAX
 } EArrayKind;
 #define ETextListMoveDir  ETextListMoveDir
 #define EArrayKind        EArrayKind
@@ -6963,6 +8529,20 @@ typedef enum EMissionStatus             : unsigned char {
   MS_Complete,                    // 4
   MS_Failed,                      // 5
   MS_MAX                          // 6
+  #define MS_NotStarted                              MS_NotStarted
+  #define MS_Active                                  MS_Active
+  #define MS_RequiredObjectivesComplete              MS_RequiredObjectivesComplete
+  #define MS_ReadyToTurnIn                           MS_ReadyToTurnIn
+  #define MS_Complete                                MS_Complete
+  #define MS_Failed                                  MS_Failed
+  #define MS_MAX                                     MS_MAX
+  #define EMissionStatus_NotStarted                  MS_NotStarted
+  #define EMissionStatus_Active                      MS_Active
+  #define EMissionStatus_RequiredObjectivesComplete  MS_RequiredObjectivesComplete
+  #define EMissionStatus_ReadyToTurnIn               MS_ReadyToTurnIn
+  #define EMissionStatus_Complete                    MS_Complete
+  #define EMissionStatus_Failed                      MS_Failed
+  #define EMissionStatus_MAX                         MS_MAX
 } EMissionStatus;
 typedef enum EMissionReaction           : unsigned char {
   MR_NotStarted,                  // 0
@@ -6970,11 +8550,27 @@ typedef enum EMissionReaction           : unsigned char {
   MR_ReadyToTurnIn,               // 2
   MR_Complete,                    // 3
   MR_MAX                          // 4
+  #define MR_NotStarted                   MR_NotStarted
+  #define MR_Active                       MR_Active
+  #define MR_ReadyToTurnIn                MR_ReadyToTurnIn
+  #define MR_Complete                     MR_Complete
+  #define MR_MAX                          MR_MAX
+  #define EMissionReaction_NotStarted     MR_NotStarted
+  #define EMissionReaction_Active         MR_Active
+  #define EMissionReaction_ReadyToTurnIn  MR_ReadyToTurnIn
+  #define EMissionReaction_Complete       MR_Complete
+  #define EMissionReaction_MAX            MR_MAX
 } EMissionReaction;
 typedef enum EObjectiveDependencyStatus : unsigned char {
   EODS_Complete,                  // 0
   EODS_Active,                    // 1
   EODS_MAX                        // 2
+  #define EODS_Complete                        EODS_Complete
+  #define EODS_Active                          EODS_Active
+  #define EODS_MAX                             EODS_MAX
+  #define EObjectiveDependencyStatus_Complete  EODS_Complete
+  #define EObjectiveDependencyStatus_Active    EODS_Active
+  #define EObjectiveDependencyStatus_MAX       EODS_MAX
 } EObjectiveDependencyStatus;
 typedef enum EMissionEvent              : unsigned char {
   ME_LevelLoad,                   // 0
@@ -6986,6 +8582,24 @@ typedef enum EMissionEvent              : unsigned char {
   ME_ActiveMission,               // 6
   ME_NoLongerActiveMission,       // 7
   ME_MAX                          // 8
+  #define ME_LevelLoad                         ME_LevelLoad
+  #define ME_StatusChanged                     ME_StatusChanged
+  #define ME_ObjectiveSetChanged               ME_ObjectiveSetChanged
+  #define ME_ObjectiveUpdated                  ME_ObjectiveUpdated
+  #define ME_ObjectiveCleared                  ME_ObjectiveCleared
+  #define ME_ObjectiveComplete                 ME_ObjectiveComplete
+  #define ME_ActiveMission                     ME_ActiveMission
+  #define ME_NoLongerActiveMission             ME_NoLongerActiveMission
+  #define ME_MAX                               ME_MAX
+  #define EMissionEvent_LevelLoad              ME_LevelLoad
+  #define EMissionEvent_StatusChanged          ME_StatusChanged
+  #define EMissionEvent_ObjectiveSetChanged    ME_ObjectiveSetChanged
+  #define EMissionEvent_ObjectiveUpdated       ME_ObjectiveUpdated
+  #define EMissionEvent_ObjectiveCleared       ME_ObjectiveCleared
+  #define EMissionEvent_ObjectiveComplete      ME_ObjectiveComplete
+  #define EMissionEvent_ActiveMission          ME_ActiveMission
+  #define EMissionEvent_NoLongerActiveMission  ME_NoLongerActiveMission
+  #define EMissionEvent_MAX                    ME_MAX
 } EMissionEvent;
 #define EMissionStatus              EMissionStatus
 #define EMissionReaction            EMissionReaction
@@ -6999,6 +8613,14 @@ typedef enum EMissionBranchEnding : unsigned char {
   EMBE_PathA,                     // 1
   EMBE_PathB,                     // 2
   EMBE_MAX                        // 3
+  #define EMBE_None                   EMBE_None
+  #define EMBE_PathA                  EMBE_PathA
+  #define EMBE_PathB                  EMBE_PathB
+  #define EMBE_MAX                    EMBE_MAX
+  #define EMissionBranchEnding_None   EMBE_None
+  #define EMissionBranchEnding_PathA  EMBE_PathA
+  #define EMissionBranchEnding_PathB  EMBE_PathB
+  #define EMissionBranchEnding_MAX    EMBE_MAX
 } EMissionBranchEnding;
 #define EMissionBranchEnding  EMissionBranchEnding
 
@@ -7769,6 +9391,14 @@ typedef enum ELockoutStyle : unsigned char {
   LOCKOUT_NextDay,                // 1
   LOCKOUT_NextWeek,               // 2
   LOCKOUT_MAX                     // 3
+  #define LOCKOUT_Relative        LOCKOUT_Relative
+  #define LOCKOUT_NextDay         LOCKOUT_NextDay
+  #define LOCKOUT_NextWeek        LOCKOUT_NextWeek
+  #define LOCKOUT_MAX             LOCKOUT_MAX
+  #define ELockoutStyle_Relative  LOCKOUT_Relative
+  #define ELockoutStyle_NextDay   LOCKOUT_NextDay
+  #define ELockoutStyle_NextWeek  LOCKOUT_NextWeek
+  #define ELockoutStyle_MAX       LOCKOUT_MAX
 } ELockoutStyle;
 #define ELockoutStyle  ELockoutStyle
 
@@ -8031,11 +9661,31 @@ typedef enum EAITransformed       : unsigned char {
   EAIT_Custom,                    // 4
   EAIT_Slagged,                   // 5
   EAIT_MAX                        // 6
+  #define EAIT_None                 EAIT_None
+  #define EAIT_Fire                 EAIT_Fire
+  #define EAIT_Shock                EAIT_Shock
+  #define EAIT_Corrosive            EAIT_Corrosive
+  #define EAIT_Custom               EAIT_Custom
+  #define EAIT_Slagged              EAIT_Slagged
+  #define EAIT_MAX                  EAIT_MAX
+  #define EAITransformed_None       EAIT_None
+  #define EAITransformed_Fire       EAIT_Fire
+  #define EAITransformed_Shock      EAIT_Shock
+  #define EAITransformed_Corrosive  EAIT_Corrosive
+  #define EAITransformed_Custom     EAIT_Custom
+  #define EAITransformed_Slagged    EAIT_Slagged
+  #define EAITransformed_MAX        EAIT_MAX
 } EAITransformed;
 typedef enum EItemGameStageSource : unsigned char {
   IGSS_ExpLevelOfBalancedActor,   // 0
   IGSS_GameStageOfBalancedActor,  // 1
   IGSS_MAX                        // 2
+  #define IGSS_ExpLevelOfBalancedActor                   IGSS_ExpLevelOfBalancedActor
+  #define IGSS_GameStageOfBalancedActor                  IGSS_GameStageOfBalancedActor
+  #define IGSS_MAX                                       IGSS_MAX
+  #define EItemGameStageSource_ExpLevelOfBalancedActor   IGSS_ExpLevelOfBalancedActor
+  #define EItemGameStageSource_GameStageOfBalancedActor  IGSS_GameStageOfBalancedActor
+  #define EItemGameStageSource_MAX                       IGSS_MAX
 } EItemGameStageSource;
 #define EAITransformed        EAITransformed
 #define EItemGameStageSource  EItemGameStageSource
@@ -8427,107 +10077,271 @@ typedef enum SparkRequestState : unsigned char {
 
 /* ---------------------------------------------------------- FFrame ---------------------------------------------------------- */
 
-//
-// Evaluatable expression item types.
-//
-enum EExprToken {
-	// Variable references.
-	EX_LocalVariable		= 0x00,	// A local variable.
-	EX_InstanceVariable		= 0x01,	// An object variable.
-	EX_DefaultVariable		= 0x02,	// Default variable for a concrete object.
-
-	// Tokens.
-	EX_Return				= 0x04,	// Return from function.
-	EX_Switch				= 0x05,	// Switch.
-	EX_Jump					= 0x06,	// Goto a local address in code.
-	EX_JumpIfNot			= 0x07,	// Goto if not expression.
-	EX_Stop					= 0x08,	// Stop executing state code.
-	EX_Assert				= 0x09,	// Assertion.
-	EX_Case					= 0x0A,	// Case.
-	EX_Nothing				= 0x0B,	// No operation.
-	EX_LabelTable			= 0x0C,	// Table of labels.
-	EX_GotoLabel			= 0x0D,	// Goto a label.
-	EX_EatReturnValue       = 0x0E, // destroy an unused return value
-	EX_Let					= 0x0F,	// Assign an arbitrary size value to a variable.
-	EX_DynArrayElement      = 0x10, // Dynamic array element.!!
-	EX_New                  = 0x11, // New object allocation.
-	EX_ClassContext         = 0x12, // Class default metaobject context.
-	EX_MetaCast             = 0x13, // Metaclass cast.
-	EX_LetBool				= 0x14, // Let boolean variable.
-	EX_EndParmValue			= 0x15,	// end of default value for optional function parameter
-	EX_EndFunctionParms		= 0x16,	// End of function call parameters.
-	EX_Self					= 0x17,	// Self object.
-	EX_Skip					= 0x18,	// Skippable expression.
-	EX_Context				= 0x19,	// Call a function through an object context.
-	EX_ArrayElement			= 0x1A,	// Array element.
-	EX_VirtualFunction		= 0x1B,	// A function call with parameters.
-	EX_FinalFunction		= 0x1C,	// A prebound function call with parameters.
-	EX_IntConst				= 0x1D,	// Int constant.
-	EX_FloatConst			= 0x1E,	// Floating point constant.
-	EX_StringConst			= 0x1F,	// String constant.
-	EX_ObjectConst		    = 0x20,	// An object constant.
-	EX_NameConst			= 0x21,	// A name constant.
-	EX_RotationConst		= 0x22,	// A rotation constant.
-	EX_VectorConst			= 0x23,	// A vector constant.
-	EX_ByteConst			= 0x24,	// A byte constant.
-	EX_IntZero				= 0x25,	// Zero.
-	EX_IntOne				= 0x26,	// One.
-	EX_True					= 0x27,	// Bool True.
-	EX_False				= 0x28,	// Bool False.
-	EX_NativeParm           = 0x29, // Native function parameter offset.
-	EX_NoObject				= 0x2A,	// NoObject.
-
-	EX_IntConstByte			= 0x2C,	// Int constant that requires 1 byte.
-	EX_BoolVariable			= 0x2D,	// A bool variable which requires a bitmask.
-	EX_DynamicCast			= 0x2E,	// Safe dynamic class casting.
-	EX_Iterator             = 0x2F, // Begin an iterator operation.
-	EX_IteratorPop          = 0x30, // Pop an iterator level.
-	EX_IteratorNext         = 0x31, // Go to next iteration.
-	EX_StructCmpEq          = 0x32,	// Struct binary compare-for-equal.
-	EX_StructCmpNe          = 0x33,	// Struct binary compare-for-unequal.
-	EX_UnicodeStringConst   = 0x34, // Unicode string constant.
-	EX_StructMember         = 0x35, // Struct member.
-	EX_DynArrayLength		= 0x36,	// A dynamic array length for setting/getting
-	EX_GlobalFunction		= 0x37, // Call non-state version of a function.
-	EX_PrimitiveCast		= 0x38,	// A casting operator for primitives which reads the type as the subsequent byte
-	EX_DynArrayInsert		= 0x39,	// Inserts into a dynamic array
-	EX_ReturnNothing		= 0x3A, // failsafe for functions that return a value - returns the zero value for a property and logs that control reached the end of a non-void function
-	EX_EqualEqual_DelDel	= 0x3B,	// delegate comparison for equality
-	EX_NotEqual_DelDel		= 0x3C, // delegate comparison for inequality
-	EX_EqualEqual_DelFunc	= 0x3D,	// delegate comparison for equality against a function
-	EX_NotEqual_DelFunc		= 0x3E,	// delegate comparison for inequality against a function
-	EX_EmptyDelegate		= 0x3F,	// delegate 'None'
-	EX_DynArrayRemove		= 0x40,	// Removes from a dynamic array
-	EX_DebugInfo			= 0x41,	//DEBUGGER Debug information
-	EX_DelegateFunction		= 0x42, // Call to a delegate function
-	EX_DelegateProperty		= 0x43, // Delegate expression
-	EX_LetDelegate			= 0x44, // Assignment to a delegate
-	EX_Conditional			= 0x45, // tertiary operator support
-	EX_DynArrayFind			= 0x46, // dynarray search for item index
-	EX_DynArrayFindStruct	= 0x47, // dynarray<struct> search for item index
-	EX_LocalOutVariable		= 0x48, // local out (pass by reference) function parameter
-	EX_DefaultParmValue		= 0x49,	// default value of optional function parameter
-	EX_EmptyParmValue		= 0x4A,	// unspecified value for optional function parameter
-	EX_InstanceDelegate		= 0x4B,	// const reference to a delegate or normal function object
-
-
-
-
-	EX_InterfaceContext		= 0x51,	// Call a function through a native interface variable
-	EX_InterfaceCast		= 0x52,	// Converting an object reference to native interface variable
-	EX_EndOfScript			= 0x53, // Last byte in script code
-	EX_DynArrayAdd			= 0x54, // Add to a dynamic array
-	EX_DynArrayAddItem		= 0x55, // Add an item to a dynamic array
-	EX_DynArrayRemoveItem	= 0x56, // Remove an item from a dynamic array
-	EX_DynArrayInsertItem	= 0x57, // Insert an item into a dynamic array
-	EX_DynArrayIterator		= 0x58, // Iterate through a dynamic array
-	EX_DynArraySort			= 0x59,	// Sort a list in place
-
-	// Natives.
-	EX_ExtendedNative		= 0x60,
-	EX_FirstNative			= 0x70,
-	EX_Max					= 0x1000,
-};
+/* Evaluatable expression item types. */
+typedef enum EExprToken {
+	/* Variable references. */
+	EX_LocalVariable       = 0x00,  /** A local variable. */
+	EX_InstanceVariable    = 0x01,  /** An object variable. */
+	EX_DefaultVariable     = 0x02,  /** Default variable for a concrete object. */
+	/* Tokens. */
+	EX_Return              = 0x04,  /** Return from function. */
+	EX_Switch              = 0x05,  /** Switch. */
+	EX_Jump                = 0x06,  /** Goto a local address in code. */
+	EX_JumpIfNot           = 0x07,  /** Goto if not expression. */
+	EX_Stop                = 0x08,  /** Stop executing state code. */
+	EX_Assert              = 0x09,  /** Assertion. */
+	EX_Case                = 0x0A,  /** Case. */
+	EX_Nothing             = 0x0B,  /** No operation. */
+	EX_LabelTable          = 0x0C,  /** Table of labels. */
+	EX_GotoLabel           = 0x0D,  /** Goto a label. */
+	EX_EatReturnValue      = 0x0E,  /** destroy an unused return value */
+	EX_Let                 = 0x0F,  /** Assign an arbitrary size value to a variable. */
+	EX_DynArrayElement     = 0x10,  /** Dynamic array element.!! */
+	EX_New                 = 0x11,  /** New object allocation. */
+	EX_ClassContext        = 0x12,  /** Class default metaobject context. */
+	EX_MetaCast            = 0x13,  /** Metaclass cast. */
+	EX_LetBool             = 0x14,  /** Let boolean variable. */
+	EX_EndParmValue        = 0x15,  /** end of default value for optional function parameter */
+	EX_EndFunctionParms    = 0x16,  /** End of function call parameters. */
+	EX_Self                = 0x17,  /** Self object. */
+	EX_Skip                = 0x18,  /** Skippable expression. */
+	EX_Context             = 0x19,  /** Call a function through an object context. */
+	EX_ArrayElement        = 0x1A,  /** Array element. */
+	EX_VirtualFunction     = 0x1B,  /** A function call with parameters. */
+	EX_FinalFunction       = 0x1C,  /** A prebound function call with parameters. */
+	EX_IntConst            = 0x1D,  /** Int constant. */
+	EX_FloatConst          = 0x1E,  /** Floating point constant. */
+	EX_StringConst         = 0x1F,  /** String constant. */
+	EX_ObjectConst         = 0x20,  /** An object constant. */
+	EX_NameConst           = 0x21,  /** A name constant. */
+	EX_RotationConst       = 0x22,  /** A rotation constant. */
+	EX_VectorConst         = 0x23,  /** A vector constant. */
+	EX_ByteConst           = 0x24,  /** A byte constant. */
+	EX_IntZero             = 0x25,  /** Zero. */
+	EX_IntOne              = 0x26,  /** One. */
+	EX_True                = 0x27,  /** Bool True. */
+	EX_False               = 0x28,  /** Bool False. */
+	EX_NativeParm          = 0x29,  /** Native function parameter offset. */
+	EX_NoObject            = 0x2A,  /** NoObject. */
+	EX_IntConstByte			   = 0x2C,  /** Int constant that requires 1 byte. */
+	EX_BoolVariable			   = 0x2D,  /** A bool variable which requires a bitmask. */
+	EX_DynamicCast			   = 0x2E,  /** Safe dynamic class casting. */
+	EX_Iterator            = 0x2F,  /** Begin an iterator operation. */
+	EX_IteratorPop         = 0x30,  /** Pop an iterator level. */
+	EX_IteratorNext        = 0x31,  /** Go to next iteration. */
+	EX_StructCmpEq         = 0x32,  /** Struct binary compare-for-equal. */
+	EX_StructCmpNe         = 0x33,  /** Struct binary compare-for-unequal. */
+	EX_UnicodeStringConst  = 0x34,  /** Unicode string constant. */
+	EX_StructMember        = 0x35,  /** Struct member. */
+	EX_DynArrayLength      = 0x36,  /** A dynamic array length for setting/getting */
+	EX_GlobalFunction      = 0x37,  /** Call non-state version of a function. */
+	EX_PrimitiveCast       = 0x38,  /** A casting operator for primitives which reads the type as the subsequent byte */
+	EX_DynArrayInsert      = 0x39,  /** Inserts into a dynamic array */
+	EX_ReturnNothing       = 0x3A,  /** failsafe for functions that return a value - returns the zero value for a property and logs that control reached the end of a non-void function */
+	EX_EqualEqual_DelDel   = 0x3B,  /** delegate comparison for equality */
+	EX_NotEqual_DelDel     = 0x3C,  /** delegate comparison for inequality */
+	EX_EqualEqual_DelFunc  = 0x3D,  /** delegate comparison for equality against a function */
+	EX_NotEqual_DelFunc    = 0x3E,  /** delegate comparison for inequality against a function */
+	EX_EmptyDelegate       = 0x3F,  /** delegate 'None' */
+	EX_DynArrayRemove      = 0x40,  /** Removes from a dynamic array */
+	EX_DebugInfo           = 0x41,  /** DEBUGGER Debug information */
+	EX_DelegateFunction    = 0x42,  /** Call to a delegate function */
+	EX_DelegateProperty    = 0x43,  /** Delegate expression */
+	EX_LetDelegate         = 0x44,  /** Assignment to a delegate */
+	EX_Conditional         = 0x45,  /** tertiary operator support */
+	EX_DynArrayFind        = 0x46,  /** dynarray search for item index */
+	EX_DynArrayFindStruct  = 0x47,  /** dynarray<struct> search for item index */
+	EX_LocalOutVariable    = 0x48,  /** local out (pass by reference) function parameter */
+	EX_DefaultParmValue    = 0x49,  /** default value of optional function parameter */
+	EX_EmptyParmValue      = 0x4A,  /** unspecified value for optional function parameter */
+	EX_InstanceDelegate    = 0x4B,  /** const reference to a delegate or normal function object */
+	EX_InterfaceContext    = 0x51,  /** Call a function through a native interface variable */
+	EX_InterfaceCast       = 0x52,  /** Converting an object reference to native interface variable */
+	EX_EndOfScript         = 0x53,  /** Last byte in script code */
+	EX_DynArrayAdd         = 0x54,  /** Add to a dynamic array */
+	EX_DynArrayAddItem     = 0x55,  /** Add an item to a dynamic array */
+	EX_DynArrayRemoveItem  = 0x56,  /** Remove an item from a dynamic array */
+	EX_DynArrayInsertItem  = 0x57,  /** Insert an item into a dynamic array */
+	EX_DynArrayIterator    = 0x58,  /** Iterate through a dynamic array */
+	EX_DynArraySort        = 0x59,  /** Sort a list in place */
+	/* Natives. */
+	EX_ExtendedNative      = 0x60,
+	EX_FirstNative         = 0x70,
+	EX_Max                 = 0x1000,
+  #define EX_LocalVariable               EX_LocalVariable
+  #define EX_InstanceVariable            EX_InstanceVariable
+  #define EX_DefaultVariable             EX_DefaultVariable
+  #define EX_Return                      EX_Return
+  #define EX_Switch                      EX_Switch
+  #define EX_Jump                        EX_Jump
+  #define EX_JumpIfNot                   EX_JumpIfNot
+  #define EX_Stop                        EX_Stop
+  #define EX_Assert                      EX_Assert
+  #define EX_Case                        EX_Case
+  #define EX_Nothing                     EX_Nothing
+  #define EX_LabelTable                  EX_LabelTable
+  #define EX_GotoLabel                   EX_GotoLabel
+  #define EX_EatReturnValue              EX_EatReturnValue
+  #define EX_Let                         EX_Let
+  #define EX_DynArrayElement             EX_DynArrayElement
+  #define EX_New                         EX_New
+  #define EX_ClassContext                EX_ClassContext
+  #define EX_MetaCast                    EX_MetaCast
+  #define EX_LetBool                     EX_LetBool
+  #define EX_EndParmValue                EX_EndParmValue
+  #define EX_EndFunctionParms            EX_EndFunctionParms
+  #define EX_Self                        EX_Self
+  #define EX_Skip                        EX_Skip
+  #define EX_Context                     EX_Context
+  #define EX_ArrayElement                EX_ArrayElement
+  #define EX_VirtualFunction             EX_VirtualFunction
+  #define EX_FinalFunction               EX_FinalFunction
+  #define EX_IntConst                    EX_IntConst
+  #define EX_FloatConst                  EX_FloatConst
+  #define EX_StringConst                 EX_StringConst
+  #define EX_ObjectConst                 EX_ObjectConst
+  #define EX_NameConst                   EX_NameConst
+  #define EX_RotationConst               EX_RotationConst
+  #define EX_VectorConst                 EX_VectorConst
+  #define EX_ByteConst                   EX_ByteConst
+  #define EX_IntZero                     EX_IntZero
+  #define EX_IntOne                      EX_IntOne
+  #define EX_True                        EX_True
+  #define EX_False                       EX_False
+  #define EX_NativeParm                  EX_NativeParm
+  #define EX_NoObject                    EX_NoObject
+  #define EX_IntConstByte                EX_IntConstByte
+  #define EX_BoolVariable                EX_BoolVariable
+  #define EX_DynamicCast                 EX_DynamicCast
+  #define EX_Iterator                    EX_Iterator
+  #define EX_IteratorPop                 EX_IteratorPop
+  #define EX_IteratorNext                EX_IteratorNext
+  #define EX_StructCmpEq                 EX_StructCmpEq
+  #define EX_StructCmpNe                 EX_StructCmpNe
+  #define EX_UnicodeStringConst          EX_UnicodeStringConst
+  #define EX_StructMember                EX_StructMember
+  #define EX_DynArrayLength              EX_DynArrayLength
+  #define EX_GlobalFunction              EX_GlobalFunction
+  #define EX_PrimitiveCast               EX_PrimitiveCast
+  #define EX_DynArrayInsert              EX_DynArrayInsert
+  #define EX_ReturnNothing               EX_ReturnNothing
+  #define EX_EqualEqual_DelDel           EX_EqualEqual_DelDel
+  #define EX_NotEqual_DelDel             EX_NotEqual_DelDel
+  #define EX_EqualEqual_DelFunc          EX_EqualEqual_DelFunc
+  #define EX_NotEqual_DelFunc            EX_NotEqual_DelFunc
+  #define EX_EmptyDelegate               EX_EmptyDelegate
+  #define EX_DynArrayRemove              EX_DynArrayRemove
+  #define EX_DebugInfo                   EX_DebugInfo
+  #define EX_DelegateFunction            EX_DelegateFunction
+  #define EX_DelegateProperty            EX_DelegateProperty
+  #define EX_LetDelegate                 EX_LetDelegate
+  #define EX_Conditional                 EX_Conditional
+  #define EX_DynArrayFind                EX_DynArrayFind
+  #define EX_DynArrayFindStruct          EX_DynArrayFindStruct
+  #define EX_LocalOutVariable            EX_LocalOutVariable
+  #define EX_DefaultParmValue            EX_DefaultParmValue
+  #define EX_EmptyParmValue              EX_EmptyParmValue
+  #define EX_InstanceDelegate            EX_InstanceDelegate
+  #define EX_InterfaceContext            EX_InterfaceContext
+  #define EX_InterfaceCast               EX_InterfaceCast
+  #define EX_EndOfScript                 EX_EndOfScript
+  #define EX_DynArrayAdd                 EX_DynArrayAdd
+  #define EX_DynArrayAddItem             EX_DynArrayAddItem
+  #define EX_DynArrayRemoveItem          EX_DynArrayRemoveItem
+  #define EX_DynArrayInsertItem          EX_DynArrayInsertItem
+  #define EX_DynArrayIterator            EX_DynArrayIterator
+  #define EX_DynArraySort                EX_DynArraySort
+  #define EX_ExtendedNative              EX_ExtendedNative
+  #define EX_FirstNative                 EX_FirstNative
+  #define EX_Max                         EX_Max
+  #define EExprToken_LocalVariable       EX_LocalVariable
+  #define EExprToken_InstanceVariable    EX_InstanceVariable
+  #define EExprToken_DefaultVariable     EX_DefaultVariable
+  #define EExprToken_Return              EX_Return
+  #define EExprToken_Switch              EX_Switch
+  #define EExprToken_Jump                EX_Jump
+  #define EExprToken_JumpIfNot           EX_JumpIfNot
+  #define EExprToken_Stop                EX_Stop
+  #define EExprToken_Assert              EX_Assert
+  #define EExprToken_Case                EX_Case
+  #define EExprToken_Nothing             EX_Nothing
+  #define EExprToken_LabelTable          EX_LabelTable
+  #define EExprToken_GotoLabel           EX_GotoLabel
+  #define EExprToken_EatReturnValue      EX_EatReturnValue
+  #define EExprToken_Let                 EX_Let
+  #define EExprToken_DynArrayElement     EX_DynArrayElement
+  #define EExprToken_New                 EX_New
+  #define EExprToken_ClassContext        EX_ClassContext
+  #define EExprToken_MetaCast            EX_MetaCast
+  #define EExprToken_LetBool             EX_LetBool
+  #define EExprToken_EndParmValue        EX_EndParmValue
+  #define EExprToken_EndFunctionParms    EX_EndFunctionParms
+  #define EExprToken_Self                EX_Self
+  #define EExprToken_Skip                EX_Skip
+  #define EExprToken_Context             EX_Context
+  #define EExprToken_ArrayElement        EX_ArrayElement
+  #define EExprToken_VirtualFunction     EX_VirtualFunction
+  #define EExprToken_FinalFunction       EX_FinalFunction
+  #define EExprToken_IntConst            EX_IntConst
+  #define EExprToken_FloatConst          EX_FloatConst
+  #define EExprToken_StringConst         EX_StringConst
+  #define EExprToken_ObjectConst         EX_ObjectConst
+  #define EExprToken_NameConst           EX_NameConst
+  #define EExprToken_RotationConst       EX_RotationConst
+  #define EExprToken_VectorConst         EX_VectorConst
+  #define EExprToken_ByteConst           EX_ByteConst
+  #define EExprToken_IntZero             EX_IntZero
+  #define EExprToken_IntOne              EX_IntOne
+  #define EExprToken_True                EX_True
+  #define EExprToken_False               EX_False
+  #define EExprToken_NativeParm          EX_NativeParm
+  #define EExprToken_NoObject            EX_NoObject
+  #define EExprToken_IntConstByte        EX_IntConstByte
+  #define EExprToken_BoolVariable        EX_BoolVariable
+  #define EExprToken_DynamicCast         EX_DynamicCast
+  #define EExprToken_Iterator            EX_Iterator
+  #define EExprToken_IteratorPop         EX_IteratorPop
+  #define EExprToken_IteratorNext        EX_IteratorNext
+  #define EExprToken_StructCmpEq         EX_StructCmpEq
+  #define EExprToken_StructCmpNe         EX_StructCmpNe
+  #define EExprToken_UnicodeStringConst  EX_UnicodeStringConst
+  #define EExprToken_StructMember        EX_StructMember
+  #define EExprToken_DynArrayLength      EX_DynArrayLength
+  #define EExprToken_GlobalFunction      EX_GlobalFunction
+  #define EExprToken_PrimitiveCast       EX_PrimitiveCast
+  #define EExprToken_DynArrayInsert      EX_DynArrayInsert
+  #define EExprToken_ReturnNothing       EX_ReturnNothing
+  #define EExprToken_EqualEqual_DelDel   EX_EqualEqual_DelDel
+  #define EExprToken_NotEqual_DelDel     EX_NotEqual_DelDel
+  #define EExprToken_EqualEqual_DelFunc  EX_EqualEqual_DelFunc
+  #define EExprToken_NotEqual_DelFunc    EX_NotEqual_DelFunc
+  #define EExprToken_EmptyDelegate       EX_EmptyDelegate
+  #define EExprToken_DynArrayRemove      EX_DynArrayRemove
+  #define EExprToken_DebugInfo           EX_DebugInfo
+  #define EExprToken_DelegateFunction    EX_DelegateFunction
+  #define EExprToken_DelegateProperty    EX_DelegateProperty
+  #define EExprToken_LetDelegate         EX_LetDelegate
+  #define EExprToken_Conditional         EX_Conditional
+  #define EExprToken_DynArrayFind        EX_DynArrayFind
+  #define EExprToken_DynArrayFindStruct  EX_DynArrayFindStruct
+  #define EExprToken_LocalOutVariable    EX_LocalOutVariable
+  #define EExprToken_DefaultParmValue    EX_DefaultParmValue
+  #define EExprToken_EmptyParmValue      EX_EmptyParmValue
+  #define EExprToken_InstanceDelegate    EX_InstanceDelegate
+  #define EExprToken_InterfaceContext    EX_InterfaceContext
+  #define EExprToken_InterfaceCast       EX_InterfaceCast
+  #define EExprToken_EndOfScript         EX_EndOfScript
+  #define EExprToken_DynArrayAdd         EX_DynArrayAdd
+  #define EExprToken_DynArrayAddItem     EX_DynArrayAddItem
+  #define EExprToken_DynArrayRemoveItem  EX_DynArrayRemoveItem
+  #define EExprToken_DynArrayInsertItem  EX_DynArrayInsertItem
+  #define EExprToken_DynArrayIterator    EX_DynArrayIterator
+  #define EExprToken_DynArraySort        EX_DynArraySort
+  #define EExprToken_ExtendedNative      EX_ExtendedNative
+  #define EExprToken_FirstNative         EX_FirstNative
+  #define EExprToken_Max                 EX_Max
+} EExprToken;
+#define EExprToken  EExprToken
 
 /* ---------------------------------------------------------- UTradingPanelGFxObject ---------------------------------------------------------- */
 
@@ -8535,6 +10349,12 @@ typedef enum ETradingPanel : unsigned char {
   ETP_Backpack,                   // 0
   ETP_Offers,                     // 1
   ETP_MAX                         // 2
+  #define ETP_Backpack            ETP_Backpack
+  #define ETP_Offers              ETP_Offers
+  #define ETP_MAX                 ETP_MAX
+  #define ETradingPanel_Backpack  ETP_Backpack
+  #define ETradingPanel_Offers    ETP_Offers
+  #define ETradingPanel_MAX       ETP_MAX
 } ETradingPanel;
 #define ETradingPanel  ETradingPanel
 
@@ -8546,6 +10366,16 @@ typedef enum ENewsRetrievalResult : unsigned char {
   NEWSRETRIEVE_NetworkFailure,    // 2
   NEWSRETRIEVE_Timeout,           // 3
   NEWSRETRIEVE_MAX                // 4
+  #define NEWSRETRIEVE_Success                 NEWSRETRIEVE_Success
+  #define NEWSRETRIEVE_GeneralFailure          NEWSRETRIEVE_GeneralFailure
+  #define NEWSRETRIEVE_NetworkFailure          NEWSRETRIEVE_NetworkFailure
+  #define NEWSRETRIEVE_Timeout                 NEWSRETRIEVE_Timeout
+  #define NEWSRETRIEVE_MAX                     NEWSRETRIEVE_MAX
+  #define ENewsRetrievalResult_Success         NEWSRETRIEVE_Success
+  #define ENewsRetrievalResult_GeneralFailure  NEWSRETRIEVE_GeneralFailure
+  #define ENewsRetrievalResult_NetworkFailure  NEWSRETRIEVE_NetworkFailure
+  #define ENewsRetrievalResult_Timeout         NEWSRETRIEVE_Timeout
+  #define ENewsRetrievalResult_MAX             NEWSRETRIEVE_MAX
 } ENewsRetrievalResult;
 #define ENewsRetrievalResult  ENewsRetrievalResult
 
@@ -8558,12 +10388,32 @@ typedef enum EParticleSortMode   : unsigned char {
   PSORTMODE_Age_OldestFirst,      // 3
   PSORTMODE_Age_NewestFirst,      // 4
   PSORTMODE_MAX                   // 5
+  #define PSORTMODE_None                     PSORTMODE_None
+  #define PSORTMODE_ViewProjDepth            PSORTMODE_ViewProjDepth
+  #define PSORTMODE_DistanceToView           PSORTMODE_DistanceToView
+  #define PSORTMODE_Age_OldestFirst          PSORTMODE_Age_OldestFirst
+  #define PSORTMODE_Age_NewestFirst          PSORTMODE_Age_NewestFirst
+  #define PSORTMODE_MAX                      PSORTMODE_MAX
+  #define EParticleSortMode_None             PSORTMODE_None
+  #define EParticleSortMode_ViewProjDepth    PSORTMODE_ViewProjDepth
+  #define EParticleSortMode_DistanceToView   PSORTMODE_DistanceToView
+  #define EParticleSortMode_Age_OldestFirst  PSORTMODE_Age_OldestFirst
+  #define EParticleSortMode_Age_NewestFirst  PSORTMODE_Age_NewestFirst
+  #define EParticleSortMode_MAX              PSORTMODE_MAX
 } EParticleSortMode;
 typedef enum EEmitterNormalsMode : unsigned char {
   ENM_CameraFacing,               // 0
   ENM_Spherical,                  // 1
   ENM_Cylindrical,                // 2
   ENM_MAX                         // 3
+  #define ENM_CameraFacing                  ENM_CameraFacing
+  #define ENM_Spherical                     ENM_Spherical
+  #define ENM_Cylindrical                   ENM_Cylindrical
+  #define ENM_MAX                           ENM_MAX
+  #define EEmitterNormalsMode_CameraFacing  ENM_CameraFacing
+  #define EEmitterNormalsMode_Spherical     ENM_Spherical
+  #define EEmitterNormalsMode_Cylindrical   ENM_Cylindrical
+  #define EEmitterNormalsMode_MAX           ENM_MAX
 } EEmitterNormalsMode;
 #define EParticleSortMode    EParticleSortMode
 #define EEmitterNormalsMode  EEmitterNormalsMode
@@ -8576,6 +10426,16 @@ typedef enum EParticleScreenAlignment : unsigned char {
   PSA_Velocity,                   // 2
   PSA_TypeSpecific,               // 3
   PSA_MAX                         // 4
+  #define PSA_Square                             PSA_Square
+  #define PSA_Rectangle                          PSA_Rectangle
+  #define PSA_Velocity                           PSA_Velocity
+  #define PSA_TypeSpecific                       PSA_TypeSpecific
+  #define PSA_MAX                                PSA_MAX
+  #define EParticleScreenAlignment_Square        PSA_Square
+  #define EParticleScreenAlignment_Rectangle     PSA_Rectangle
+  #define EParticleScreenAlignment_Velocity      PSA_Velocity
+  #define EParticleScreenAlignment_TypeSpecific  PSA_TypeSpecific
+  #define EParticleScreenAlignment_MAX           PSA_MAX
 } EParticleScreenAlignment;
 #define EParticleScreenAlignment  EParticleScreenAlignment
 
@@ -8586,6 +10446,14 @@ typedef enum EExecuteSkillSequenceInput : unsigned char {
   SEQUENCE_DeactivateSkill,       // 1
   SEQUENCE_ToggleSkill,           // 2
   SEQUENCE_MAX                    // 3
+  #define SEQUENCE_ActivateSkill                      SEQUENCE_ActivateSkill
+  #define SEQUENCE_DeactivateSkill                    SEQUENCE_DeactivateSkill
+  #define SEQUENCE_ToggleSkill                        SEQUENCE_ToggleSkill
+  #define SEQUENCE_MAX                                SEQUENCE_MAX
+  #define EExecuteSkillSequenceInput_ActivateSkill    SEQUENCE_ActivateSkill
+  #define EExecuteSkillSequenceInput_DeactivateSkill  SEQUENCE_DeactivateSkill
+  #define EExecuteSkillSequenceInput_ToggleSkill      SEQUENCE_ToggleSkill
+  #define EExecuteSkillSequenceInput_MAX              SEQUENCE_MAX
 } EExecuteSkillSequenceInput;
 #define EExecuteSkillSequenceInput  EExecuteSkillSequenceInput
 
@@ -8596,10 +10464,14 @@ typedef enum EOrbitChainMode : unsigned char {
   EOChainMode_Scale,              // 1
   EOChainMode_Link,               // 2
   EOChainMode_MAX                 // 3
-  #define EOChainMode_Add    EOChainMode_Add
-  #define EOChainMode_Scale  EOChainMode_Scale
-  #define EOChainMode_Link   EOChainMode_Link
-  #define EOChainMode_MAX    EOChainMode_MAX
+  #define EOChainMode_Add        EOChainMode_Add
+  #define EOChainMode_Scale      EOChainMode_Scale
+  #define EOChainMode_Link       EOChainMode_Link
+  #define EOChainMode_MAX        EOChainMode_MAX
+  #define EOrbitChainMode_Add    EOChainMode_Add
+  #define EOrbitChainMode_Scale  EOChainMode_Scale
+  #define EOrbitChainMode_Link   EOChainMode_Link
+  #define EOrbitChainMode_MAX    EOChainMode_MAX
 } EOrbitChainMode;
 #define EOrbitChainMode  EOrbitChainMode
 
@@ -8610,10 +10482,14 @@ typedef enum EMedicBeamState : unsigned char {
   MedicBeam_Active,               // 1
   MedicBeam_Blocked,              // 2
   MedicBeam_MAX                   // 3
-  #define MedicBeam_Inactive  MedicBeam_Inactive
-  #define MedicBeam_Active    MedicBeam_Active
-  #define MedicBeam_Blocked   MedicBeam_Blocked
-  #define MedicBeam_MAX       MedicBeam_MAX
+  #define MedicBeam_Inactive        MedicBeam_Inactive
+  #define MedicBeam_Active          MedicBeam_Active
+  #define MedicBeam_Blocked         MedicBeam_Blocked
+  #define MedicBeam_MAX             MedicBeam_MAX
+  #define EMedicBeamState_Inactive  MedicBeam_Inactive
+  #define EMedicBeamState_Active    MedicBeam_Active
+  #define EMedicBeamState_Blocked   MedicBeam_Blocked
+  #define EMedicBeamState_MAX       MedicBeam_MAX
 } EMedicBeamState;
 #define EMedicBeamState  EMedicBeamState
 
@@ -8628,14 +10504,22 @@ typedef enum EStatusEffectSwitchValues : unsigned char {
   OUTPUT_Slow,                    // 5
   OUTPUT_Healing,                 // 6
   OUTPUT_MAX                      // 7
-  #define OUTPUT_None       OUTPUT_None
-  #define OUTPUT_Ignite     OUTPUT_Ignite
-  #define OUTPUT_Corrosive  OUTPUT_Corrosive
-  #define OUTPUT_Shock      OUTPUT_Shock
-  #define OUTPUT_Amp        OUTPUT_Amp
-  #define OUTPUT_Slow       OUTPUT_Slow
-  #define OUTPUT_Healing    OUTPUT_Healing
-  #define OUTPUT_MAX        OUTPUT_MAX
+  #define OUTPUT_None                          OUTPUT_None
+  #define OUTPUT_Ignite                        OUTPUT_Ignite
+  #define OUTPUT_Corrosive                     OUTPUT_Corrosive
+  #define OUTPUT_Shock                         OUTPUT_Shock
+  #define OUTPUT_Amp                           OUTPUT_Amp
+  #define OUTPUT_Slow                          OUTPUT_Slow
+  #define OUTPUT_Healing                       OUTPUT_Healing
+  #define OUTPUT_MAX                           OUTPUT_MAX
+  #define EStatusEffectSwitchValues_None       OUTPUT_None
+  #define EStatusEffectSwitchValues_Ignite     OUTPUT_Ignite
+  #define EStatusEffectSwitchValues_Corrosive  OUTPUT_Corrosive
+  #define EStatusEffectSwitchValues_Shock      OUTPUT_Shock
+  #define EStatusEffectSwitchValues_Amp        OUTPUT_Amp
+  #define EStatusEffectSwitchValues_Slow       OUTPUT_Slow
+  #define EStatusEffectSwitchValues_Healing    OUTPUT_Healing
+  #define EStatusEffectSwitchValues_MAX        OUTPUT_MAX
 } EStatusEffectSwitchValues;
 #define EStatusEffectSwitchValues  EStatusEffectSwitchValues
 
@@ -8646,10 +10530,14 @@ typedef enum EPreviewStyle : unsigned char {
   EPS_Still,                      // 1
   EPS_Playing,                    // 2
   EPS_MAX                         // 3
-  #define EPS_None     EPS_None
-  #define EPS_Still    EPS_Still
-  #define EPS_Playing  EPS_Playing
-  #define EPS_MAX      EPS_MAX
+  #define EPS_None               EPS_None
+  #define EPS_Still              EPS_Still
+  #define EPS_Playing            EPS_Playing
+  #define EPS_MAX                EPS_MAX
+  #define EPreviewStyle_None     EPS_None
+  #define EPreviewStyle_Still    EPS_Still
+  #define EPreviewStyle_Playing  EPS_Playing
+  #define EPreviewStyle_MAX      EPS_MAX
 } EPreviewStyle;
 #define EPreviewStyle  EPreviewStyle
 
@@ -8659,10 +10547,12 @@ typedef enum EUseBehaviorContext : unsigned char {
   EUBC_ActorSkelMeshIsAttachedTo, // 0
   EUBC_ObjectSkelMeshWasCreatedBy,// 1
   EUBC_MAX                        // 2
-  #define EUBC_ActorSkelMeshIsAttachedTo   EUBC_ActorSkelMeshIsAttachedTo
-  #define EUBC_ObjectSkelMeshWasCreatedBy  EUBC_ObjectSkelMeshWasCreatedBy
-  #define EUBC_MAX                         EUBC_MAX
-  #define EUseBehaviorContext__MAX         EUBC_MAX
+  #define EUBC_ActorSkelMeshIsAttachedTo                  EUBC_ActorSkelMeshIsAttachedTo
+  #define EUBC_ObjectSkelMeshWasCreatedBy                 EUBC_ObjectSkelMeshWasCreatedBy
+  #define EUBC_MAX                                        EUBC_MAX
+  #define EUseBehaviorContext_ActorSkelMeshIsAttachedTo   EUBC_ActorSkelMeshIsAttachedTo
+  #define EUseBehaviorContext_ObjectSkelMeshWasCreatedBy  EUBC_ObjectSkelMeshWasCreatedBy
+  #define EUseBehaviorContext_MAX                         EUBC_MAX
 } EUseBehaviorContext;
 #define EUseBehaviorContext  EUseBehaviorContext
 
@@ -8676,20 +10566,26 @@ typedef enum EArtifactPartType {
   ARTIFACT_PART_UpgradeEffect,    // 4
   ARTIFACT_PART_Body,             // 5
   ARTIFACT_PART_MAX               // 6
-  #define ARTIFACT_PART_EnableFirstEffect   ARTIFACT_PART_EnableFirstEffect
-  #define ARTIFACT_PART_EnableSecondEffect  ARTIFACT_PART_EnableSecondEffect
-  #define ARTIFACT_PART_EnableThirdEffect   ARTIFACT_PART_EnableThirdEffect
-  #define ARTIFACT_PART_EnableFourthEffect  ARTIFACT_PART_EnableFourthEffect
-  #define ARTIFACT_PART_UpgradeEffect       ARTIFACT_PART_UpgradeEffect
-  #define ARTIFACT_PART_Body                ARTIFACT_PART_Body
-  #define ARTIFACT_PART_MAX                 ARTIFACT_PART_MAX
-  #define EArtifactPartType__MAX            ARTIFACT_PART_MAX
+  #define ARTIFACT_PART_EnableFirstEffect       ARTIFACT_PART_EnableFirstEffect
+  #define ARTIFACT_PART_EnableSecondEffect      ARTIFACT_PART_EnableSecondEffect
+  #define ARTIFACT_PART_EnableThirdEffect       ARTIFACT_PART_EnableThirdEffect
+  #define ARTIFACT_PART_EnableFourthEffect      ARTIFACT_PART_EnableFourthEffect
+  #define ARTIFACT_PART_UpgradeEffect           ARTIFACT_PART_UpgradeEffect
+  #define ARTIFACT_PART_Body                    ARTIFACT_PART_Body
+  #define ARTIFACT_PART_MAX                     ARTIFACT_PART_MAX
+  #define EArtifactPartType_EnableFirstEffect   ARTIFACT_PART_EnableFirstEffect
+  #define EArtifactPartType_EnableSecondEffect  ARTIFACT_PART_EnableSecondEffect
+  #define EArtifactPartType_EnableThirdEffect   ARTIFACT_PART_EnableThirdEffect
+  #define EArtifactPartType_EnableFourthEffect  ARTIFACT_PART_EnableFourthEffect
+  #define EArtifactPartType_UpgradeEffect       ARTIFACT_PART_UpgradeEffect
+  #define EArtifactPartType_Body                ARTIFACT_PART_Body
+  #define EArtifactPartType_MAX                 ARTIFACT_PART_MAX
 } EArtifactPartType;
 #define EArtifactPartType  EArtifactPartType
 
 /* ---------------------------------------------------------- UIPopulationSpawnPoint ---------------------------------------------------------- */
 
-typedef enum ESpawnStyleType     : unsigned char {
+typedef enum ESpawnStyleType    : unsigned char {
   ENTRANCE_None,                  // 0
   ENTRANCE_WalkOut,               // 1
   ENTRANCE_CrawlOut,              // 2
@@ -8724,7 +10620,7 @@ typedef enum ESpawnStyleType     : unsigned char {
   #define ESpawnStyleType_PerchedRight    ENTRANCE_PerchedRight
   #define ESpawnStyleType_MAX             ENTRANCE_MAX
 } ESpawnStyleType;
-typedef enum EInitialActionType      : unsigned char {
+typedef enum EInitialActionType : unsigned char {
   INITIALACTION_None,             // 0
   INITIALACTION_MoveForward,      // 1
   INITIALACTION_MoveToActor,      // 2
@@ -8746,3 +10642,21 @@ typedef enum EInitialActionType      : unsigned char {
 } EInitialActionType;
 #define ESpawnStyleType     ESpawnStyleType
 #define EInitialActionType  EInitialActionType
+
+/* ---------------------------------------------------------- AWillowDamageArea ---------------------------------------------------------- */
+
+typedef enum ECollisionPrimitive {
+  CP_StaticMesh,                  // 0
+  CP_Cylinder,                    // 1
+  CP_Sphere,                      // 2
+  CP_MAX                          // 3
+  #define CP_StaticMesh                   CP_StaticMesh
+  #define CP_Cylinder                     CP_Cylinder
+  #define CP_Sphere                       CP_Sphere
+  #define CP_MAX                          CP_MAX
+  #define ECollisionPrimitive_StaticMesh  CP_StaticMesh
+  #define ECollisionPrimitive_Cylinder    CP_Cylinder
+  #define ECollisionPrimitive_Sphere      CP_Sphere
+  #define ECollisionPrimitive_MAX         CP_MAX
+} ECollisionPrimitive;
+#define ECollisionPrimitive  ECollisionPrimitive

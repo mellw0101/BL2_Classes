@@ -180,6 +180,23 @@ _(FScriptDelegate);
 
 _(FImplementedInterface);
 
+/* ---------------------------------------------------------- UUBMGraveyardSaveData ---------------------------------------------------------- */
+
+_(FTombstoneData);
+_(UUBMGraveyardSaveData);
+
+/* ---------------------------------------------------------- ULocationFilter ---------------------------------------------------------- */
+
+_(ULocationFilter);
+
+/* ---------------------------------------------------------- USearchOrigin ---------------------------------------------------------- */
+
+_(USearchOrigin);
+
+/* ---------------------------------------------------------- USearchDirection ---------------------------------------------------------- */
+
+_(USearchDirection);
+
 /* ---------------------------------------------------------- UPlayerInteractionClient ---------------------------------------------------------- */
 
 _(UPlayerInteractionClient);
@@ -950,6 +967,10 @@ _(UParticleModuleLocation);
 
 _(ULocalMessage);
 
+/* ---------------------------------------------------------- UWeaponProficiencyFeedbackMessage ---------------------------------------------------------- */
+
+_(UWeaponProficiencyFeedbackMessage);
+
 /* ---------------------------------------------------------- UWillowLocalMessage ---------------------------------------------------------- */
 
 _(UWillowLocalMessage);
@@ -1024,6 +1045,14 @@ _(UAnimNodeSequence);
 
 _(FAnimBlendChild);
 _(UAnimNodeBlendBase);
+
+/* ---------------------------------------------------------- UWillowAnimNode_Prism ---------------------------------------------------------- */
+
+_(FBoneRotateData);
+_(FAnimDeltaDataList);
+_(FAnimSwapData);
+_(FPrismDataContainer);
+_(UWillowAnimNode_Prism);
 
 /* ---------------------------------------------------------- UAnimNodeBlend ---------------------------------------------------------- */
 
@@ -2412,6 +2441,10 @@ _(UHUDWidget_Crosshairs);
 
 _(UBaseInventoryPanelGFxObject);
 
+/* ---------------------------------------------------------- UTradingOffersPanelGFxObject ---------------------------------------------------------- */
+
+_(UTradingOffersPanelGFxObject);
+
 /* ---------------------------------------------------------- UStatusMenuEquippedPanelGFxObject ---------------------------------------------------------- */
 
 _(UStatusMenuEquippedPanelGFxObject);
@@ -2674,6 +2707,10 @@ _(FSceneInterface);
 /* ---------------------------------------------------------- UActorComponent ---------------------------------------------------------- */
 
 _(UActorComponent);
+
+/* ---------------------------------------------------------- UWaypointComponent ---------------------------------------------------------- */
+
+_(UWaypointComponent);
 
 /* ---------------------------------------------------------- UWillowCoverComponent ---------------------------------------------------------- */
 
@@ -3522,6 +3559,10 @@ _(ConditionalInitializationExpressions);
 _(AttributeBaseValueData);
 _(UAttributeInitializationDefinition);
 
+/* ---------------------------------------------------------- AWillowDamageArea ---------------------------------------------------------- */
+
+_(AWillowDamageArea);
+
 /* ---------------------------------------------------------- UBehavior_AttemptStatusEffect ---------------------------------------------------------- */
 
 _(UBehavior_AttemptStatusEffect);
@@ -3981,11 +4022,16 @@ _(ADirectionalLightToggleable);
 _(ADominantDirectionalLight);
 _(ADominantDirectionalLightMovable);
 
+/* ---------------------------------------------------------- AHUD ---------------------------------------------------------- */
 
 _(FConsoleMessage);
 _(FKismetDrawTextInfo);
 _(AHUD);
+
+/* ---------------------------------------------------------- AGearboxHUD ---------------------------------------------------------- */
+
 _(AGearboxHUD);
+
 _(IInterface_NavigationHandle);
 _(FBox);
 
@@ -4179,6 +4225,8 @@ _(FLevelGuids);
 /* ---------------------------------------------------------- UMetaData ---------------------------------------------------------- */
 
 _(UMetaData);
+
+/* ---------------------------------------------------------- ATeamInfo ---------------------------------------------------------- */
 
 _(ATeamInfo);
 
@@ -4552,6 +4600,8 @@ _(FResourcePoolIdentityState);
 _(FRarelyChangedPoolState);
 _(AResourcePoolManager);
 
+/* ---------------------------------------------------------- AGameReplicationInfo ---------------------------------------------------------- */
+
 _(AGameReplicationInfo);
 
 /* ---------------------------------------------------------- AWillowGameReplicationInfo ---------------------------------------------------------- */
@@ -4561,6 +4611,8 @@ _(FActiveAreaWaypointData);
 _(AWillowGameReplicationInfo);
 
 _(ACrowdPopulationManagerBase);
+
+/* ---------------------------------------------------------- FArchive ---------------------------------------------------------- */
 
 _(FArchive);
 

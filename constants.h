@@ -572,3 +572,8 @@ static const int RECENT_DROP_CAP = 200;
 /* ---------------------------------------------------------- AWillowPersonalTeleporter ---------------------------------------------------------- */
 
 static const int MAX_EXIT_POINTS = 4;
+
+/* ---------------------------------------------------------- AWillowWeapon ---------------------------------------------------------- */
+
+static const signed char ZoomedFireModeNum              = 1;
+static const signed char MAX_WEAPON_CARD_MODIFIER_STATS = 5;
