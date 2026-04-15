@@ -180,6 +180,14 @@ _(FScriptDelegate);
 
 _(FImplementedInterface);
 
+/* ---------------------------------------------------------- URB_ConstraintInstance ---------------------------------------------------------- */
+
+_(URB_ConstraintInstance);
+
+/* ---------------------------------------------------------- UInstancedDesignerAttribute ---------------------------------------------------------- */
+
+_(UInstancedDesignerAttribute);
+
 /* ---------------------------------------------------------- UUBMGraveyardSaveData ---------------------------------------------------------- */
 
 _(FTombstoneData);
@@ -226,6 +234,10 @@ _(UActorFactory);
 /* ---------------------------------------------------------- UActorFactoryInteractiveObject ---------------------------------------------------------- */
 
 _(UActorFactoryInteractiveObject);
+
+/* ---------------------------------------------------------- UActorFactoryWillowElevatorButton ---------------------------------------------------------- */
+
+_(UActorFactoryWillowElevatorButton);
 
 /* ---------------------------------------------------------- UFaceFXAnimSet ---------------------------------------------------------- */
 
@@ -504,10 +516,6 @@ _(FFOscillator);
 _(FROscillator);
 _(FVOscillator);
 _(UCameraShake);
-
-/* ---------------------------------------------------------- UIManager ---------------------------------------------------------- */
-
-_(UIManager);
 
 /* ---------------------------------------------------------- UGFxActorMoviePool ---------------------------------------------------------- */
 
@@ -1824,6 +1832,11 @@ _(FLeaf);
 
 _(AVolume);
 
+/* ---------------------------------------------------------- ALevelStreamingVolume ---------------------------------------------------------- */
+
+_(ALevelStreamingVolume__FCheckpointRecord);
+_(ALevelStreamingVolume);
+
 /* ---------------------------------------------------------- AWillowTacticalMapVolume ---------------------------------------------------------- */
 
 _(AWillowTacticalMapVolume);
@@ -1888,6 +1901,10 @@ _(FBehaviorParameters);
 _(FBehaviorContextData);
 _(FBehaviorOutputLinkDescriptionData);
 _(UBehaviorBase);
+
+/* ---------------------------------------------------------- UBehavior_AICloak ---------------------------------------------------------- */
+
+_(UBehavior_AICloak);
 
 /* ---------------------------------------------------------- UBehavior_StatusEffectSwitch ---------------------------------------------------------- */
 
@@ -2557,6 +2574,11 @@ _(UWeaponActionAvailableExpressionEvaluator);
 
 _(UKMeshProps);
 
+/* ---------------------------------------------------------- ALevelGridVolume ---------------------------------------------------------- */
+
+_(FLevelGridCellCoordinate);
+_(ALevelGridVolume);
+
 /* ---------------------------------------------------------- URB_BodySetup ---------------------------------------------------------- */
 
 _(FKCachedConvexDataElement);
@@ -2707,6 +2729,10 @@ _(FSceneInterface);
 /* ---------------------------------------------------------- UActorComponent ---------------------------------------------------------- */
 
 _(UActorComponent);
+
+/* ---------------------------------------------------------- URB_Handle ---------------------------------------------------------- */
+
+_(URB_Handle);
 
 /* ---------------------------------------------------------- UWaypointComponent ---------------------------------------------------------- */
 
@@ -3558,6 +3584,11 @@ _(ConditionalValueExpression);
 _(ConditionalInitializationExpressions);
 _(AttributeBaseValueData);
 _(UAttributeInitializationDefinition);
+
+/* ---------------------------------------------------------- ALiftActionSkill ---------------------------------------------------------- */
+
+_(FLiftBodyPair);
+_(ALiftActionSkill);
 
 /* ---------------------------------------------------------- AWillowDamageArea ---------------------------------------------------------- */
 
@@ -5387,6 +5418,9 @@ _(FGameplayProfiler);
 _(ConsoleCommandLibrary);
 _(FGPPFrameMarker);
 _(FSceneViewFamily);
+
+/* ---------------------------------------------------------- ULevelStreaming ---------------------------------------------------------- */
+
 _(ULevelStreaming);
 
 _(FPoly);

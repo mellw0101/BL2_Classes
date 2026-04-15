@@ -196,6 +196,7 @@ static const double TimeToMarkTargetsWhoShotAtMe = 10.0;
 
 /* ---------------------------------------------------------- UConsole ---------------------------------------------------------- */
 
+/* TODO: This needs to be fucking changed. */
 static const int MaxHistory = 16;
 
 /* ---------------------------------------------------------- UReachSpec ---------------------------------------------------------- */
@@ -210,6 +211,10 @@ static const int BADASS_REWARD_CHOICES = 5;
 
 static const int MAX_PROJECTILES = 16;
 static const int MAX_BEAMS       = 20;
+
+/* ---------------------------------------------------------- APawn ---------------------------------------------------------- */
+
+static const int MAX_FLASHLOCATIONS = 10;
 
 /* ---------------------------------------------------------- AWillowPawn ---------------------------------------------------------- */
 
@@ -577,3 +582,7 @@ static const int MAX_EXIT_POINTS = 4;
 
 static const signed char ZoomedFireModeNum              = 1;
 static const signed char MAX_WEAPON_CARD_MODIFIER_STATS = 5;
+
+/* ---------------------------------------------------------- AWorldDiscoveryArea ---------------------------------------------------------- */
+
+static const float DETECTION_TIME_INTERVAL = 0.5f;
