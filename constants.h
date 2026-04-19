@@ -586,3 +586,15 @@ static const signed char MAX_WEAPON_CARD_MODIFIER_STATS = 5;
 /* ---------------------------------------------------------- AWorldDiscoveryArea ---------------------------------------------------------- */
 
 static const float DETECTION_TIME_INTERVAL = 0.5f;
+
+/* ---------------------------------------------------------- AWillowVendingMachine ---------------------------------------------------------- */
+
+static const int MaxItemsInShop = 30;
+
+/* ---------------------------------------------------------- USnapshotRecord ---------------------------------------------------------- */
+
+static const int MaxContainedRules = 45;
+
+/* ---------------------------------------------------------- ULeviathanService ---------------------------------------------------------- */
+
+static const int SPLITSCREEN_CHARACTER_COUNT = 2;
