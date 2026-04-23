@@ -598,3 +598,40 @@ static const int MaxContainedRules = 45;
 /* ---------------------------------------------------------- ULeviathanService ---------------------------------------------------------- */
 
 static const int SPLITSCREEN_CHARACTER_COUNT = 2;
+
+/* ---------------------------------------------------------- UCharacterSelectionReduxGFxMovie ---------------------------------------------------------- */
+
+static const int STATE_INIT                     = 0;
+static const int STATE_CHOOSE_CHARACTER         = 1;
+static const int STATE_CUSTOMIZE_CHARACTER      = 2;
+static const int STATE_CHOOSE_CUSTOMIZATION     = 3;
+static const int STATE_CHARACTER_CONFIRMED      = 4;
+static const int STATE_LOADING_CUSTOMIZATIONS   = 5;
+static const int ENTRY_IDX_HEADS                = 0;
+static const int ENTRY_IDX_SKINS                = 1;
+static const int ENTRY_IDX_NAME                 = 2;
+static const int ENTRY_IDX_CONFIRM              = 3;
+static const int CHARACTER_GRID_DIRECTION_UP    = 0;
+static const int CHARACTER_GRID_DIRECTION_DOWN  = 1;
+static const int CHARACTER_GRID_DIRECTION_LEFT  = 2;
+static const int CHARACTER_GRID_DIRECTION_RIGHT = 3;
+
+/* ---------------------------------------------------------- UWillowGFxLobbyLoadCharacter ---------------------------------------------------------- */
+
+static const int PS3_CHOOSE_CHAR_ID = -999;
+
+/* ---------------------------------------------------------- UWillowGFxDialogBox ---------------------------------------------------------- */
+
+static const int MaxButtons = 5;
+
+/* ---------------------------------------------------------- AMatineeActor ---------------------------------------------------------- */
+
+static const int MAX_AIGROUP_NUMBER = 10;
+
+/* ---------------------------------------------------------- UWillowGFxColiseumOverlayMovie ---------------------------------------------------------- */
+
+static const int NUM_RULE_SLOTS = 4;
+
+/* ---------------------------------------------------------- AWillowMissionPickupFailsafe ---------------------------------------------------------- */
+
+static const int FailsafeCheckPeriod = 5;

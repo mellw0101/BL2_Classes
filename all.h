@@ -55,6 +55,7 @@ DECLARE_A_TMAP(FName, INT);
 DECLARE_A_TMAP(FName, UINT);
 DECLARE_A_TMAP(FName, voidPtr);
 DECLARE_A_TMAP(FName, UGFxObjectPtr);
+DECLARE_A_TMAP(FName, _TMAP_NAME(FName, INT));
 
 /* A global name, as stored in the global name table. */
 struct FNameEntry {
@@ -1732,6 +1733,127 @@ struct FImplementedInterface {
   UProperty *PointerProperty;           ///< the pointer property that is located at the offset of the interface's vtable
 };
 
+/* ---------------------------------------------------------- UOnlineGameInterfaceImpl ---------------------------------------------------------- */
+
+struct UOnlineGameInterfaceImpl {
+  UObject                     Super;
+  UOnlineSubsystemCommonImpl *OwningSubsystem;
+  UOnlineGameSettings        *GameSettings;
+  UOnlineGameSearch          *GameSearch;
+  EOnlineGameState            CurrentGameState;
+  ELanBeaconState             LanBeaconState;
+  BYTE                        LanNonce[8];
+  TArray_FScriptDelegate      CreateOnlineGameCompleteDelegates;        /** delegate<OnCreateOnlineGameComplete> */
+  TArray_FScriptDelegate      UpdateOnlineGameCompleteDelegates;        /** delegate<OnUpdateOnlineGameComplete> */
+  TArray_FScriptDelegate      DestroyOnlineGameCompleteDelegates;       /** delegate<OnDestroyOnlineGameComplete> */
+  TArray_FScriptDelegate      JoinOnlineGameCompleteDelegates;          /** delegate<OnJoinOnlineGameComplete> */
+  TArray_FScriptDelegate      MigrateOnlineGameCompleteDelegates;       /** delegate<OnMigrateOnlineGameComplete> */
+  TArray_FScriptDelegate      JoinMigratedOnlineGameCompleteDelegates;  /** delegate<OnJoinMigratedOnlineGameComplete> */
+  TArray_FScriptDelegate      RecalculateSkillRatingCompleteDelegates;  /** delegate<OnRecalculateSkillRatingComplete> */
+  TArray_FScriptDelegate      StartOnlineGameCompleteDelegates;         /** delegate<OnStartOnlineGameComplete> */
+  TArray_FScriptDelegate      EndOnlineGameCompleteDelegates;           /** delegate<OnEndOnlineGameComplete> */
+  TArray_FScriptDelegate      FindOnlineGamesCompleteDelegates;         /** delegate<OnFindOnlineGamesComplete> */
+  TArray_FScriptDelegate      CancelFindOnlineGamesCompleteDelegates;   /** delegate<OnCancelFindOnlineGamesComplete> */
+  int                         LanAnnouncePort;
+  int                         LanGameUniqueId;
+  int                         LanPacketPlatformMask;
+  float                       LanQueryTimeLeft;
+  float                       LanQueryTimeout;
+  void                       *LanBeacon;
+  void                       *SessionInfo;
+  int                         NATResolutionTimeout;
+  FScriptDelegate             __OnFindOnlineGamesComplete__Delegate;
+  FScriptDelegate             __OnCreateOnlineGameComplete__Delegate;
+  FScriptDelegate             __OnUpdateOnlineGameComplete__Delegate;
+  FScriptDelegate             __OnDestroyOnlineGameComplete__Delegate;
+  FScriptDelegate             __OnCancelFindOnlineGamesComplete__Delegate;
+  FScriptDelegate             __OnJoinOnlineGameComplete__Delegate;
+  FScriptDelegate             __OnRegisterPlayerComplete__Delegate;
+  FScriptDelegate             __OnUnregisterPlayerComplete__Delegate;
+  FScriptDelegate             __OnStartOnlineGameComplete__Delegate;
+  FScriptDelegate             __OnEndOnlineGameComplete__Delegate;
+  FScriptDelegate             __OnArbitrationRegistrationComplete__Delegate;
+  FScriptDelegate             __OnGameInviteAccepted__Delegate;
+  FScriptDelegate             __OnGameInviteProcessingStarted__Delegate;
+  FScriptDelegate             __OnRecalculateSkillRatingComplete__Delegate;
+  FScriptDelegate             __OnMigrateOnlineGameComplete__Delegate;
+  FScriptDelegate             __OnJoinMigratedOnlineGameComplete__Delegate;
+  FScriptDelegate             __OnQosStatusChanged__Delegate;
+}; assert_size(UOnlineGameInterfaceImpl, 452);
+
+/* ---------------------------------------------------------- UEdCoordSystem ---------------------------------------------------------- */
+
+struct UEdCoordSystem {
+  UObject Super; __ALIGN(16)
+  FMatrix M;
+  FString Desc;
+}; assert_size(UEdCoordSystem, 144);
+
+/* ---------------------------------------------------------- UFractureMaterial ---------------------------------------------------------- */
+
+struct UFractureMaterial {
+  UObject          Super;
+  UParticleSystem *FractureEffect;
+  USoundCue       *FractureSound;
+}; assert_size(UFractureMaterial, 68);
+
+/* ---------------------------------------------------------- UVertex ---------------------------------------------------------- */
+
+struct UVertex {
+  UObject    Super;
+  ULine     *ParentLine;
+  FVector    Position;
+  UMaterial *Material;
+  UMaterial *Material_Selected;
+  BITFIELD   bIsSelected : 1;
+  FColor     cColor;
+}; assert_size(UVertex, 92);
+
+/* ---------------------------------------------------------- ULineSegment ---------------------------------------------------------- */
+
+struct ULineSegment {
+  UObject              Super;
+  ULine               *ParentLine;
+  UVertex             *Verts[2];
+  FVector              Direction;
+  FVector              NormalLine[2];
+  BITFIELD             RightNormal : 1;
+  BITFIELD             bIsSelected : 1;
+  BITFIELD             bDelete     : 1;
+  float                Size;
+  ELineSegmentType     SegmentType;
+  ELineSegmentMaterial SegmentMaterial;
+  int                  SegmentID;
+  FColor               LineColor;
+  FColor               NormalColor;
+  FColor               SelectedColor;
+  FColor               VulnerableColor;
+  FColor               VantageColor;
+  FColor               SIColor;
+  FColor               RetreatColor;
+  FColor               StealthColor;
+}; assert_size(ULineSegment, 156);
+
+/* ---------------------------------------------------------- UShadowMap2D ---------------------------------------------------------- */
+
+struct UShadowMap2D {
+  UObject                        Super;
+  UShadowMapTexture2D           *Texture;
+  FVector2D                      CoordinateScale;
+  FVector2D                      CoordinateBias;
+  FGuid                          LightGuid;
+  BITFIELD                       bIsShadowFactorTexture : 1;
+  UInstancedStaticMeshComponent *Component;
+  int                            InstanceIndex;
+}; assert_size(UShadowMap2D, 108);
+
+/* ---------------------------------------------------------- UAttackLocation ---------------------------------------------------------- */
+
+struct UAttackLocation {
+  UObject  Super;
+  BITFIELD bRequired : 1;
+}; assert_size(UAttackLocation, 64);
+
 /* ---------------------------------------------------------- ULineData ---------------------------------------------------------- */
 
 struct ULineData {
@@ -1757,22 +1879,20 @@ struct ULineData {
 /* ---------------------------------------------------------- ULine ---------------------------------------------------------- */
 
 struct ULine {
-  UObject        Super;
-  ULineData     *Parent;
-  /* TODO: TArray_LineSegmentPtr */
-  TArray_voidPtr LineSegments;
-  /* TODO: TArray_VertexPtr */
-  TArray_voidPtr Verts;
-  UMaterial     *RegionMaterial;
-  UMaterial     *SIZoneMaterial;
-  UMaterial     *SIRetreatMaterial;
-  UMaterial     *SIStealthMaterial;
-  BITFIELD       bMakeRegion : 1;
-  BITFIELD       bIsCircular : 1;
-  BITFIELD       bIsMoving   : 1;
-  int            CombatZoneID;
-  FString        CombatZoneName;
-  TArray_FVector RegionData;
+  UObject                Super;
+  ULineData             *Parent;
+  TArray_ULineSegmentPtr LineSegments;
+  TArray_UVertexPtr      Verts;
+  UMaterial             *RegionMaterial;
+  UMaterial             *SIZoneMaterial;
+  UMaterial             *SIRetreatMaterial;
+  UMaterial             *SIStealthMaterial;
+  BITFIELD               bMakeRegion : 1;
+  BITFIELD               bIsCircular : 1;
+  BITFIELD               bIsMoving   : 1;
+  int                    CombatZoneID;
+  FString                CombatZoneName;
+  TArray_FVector         RegionData;
 }; assert_size(ULine, 136);
 
 /* ---------------------------------------------------------- UTerrainMaterial ---------------------------------------------------------- */
@@ -2292,15 +2412,14 @@ struct native FVelocityObstacle {
   FObstacleSegment Segments[3];
 };
 struct UWillowObstacleUtility {
-  UObject Super;
-  BITFIELD bDebug  : 1;
-  BITFIELD bActive : 1;
-  int GridSize;
-  float MaxTime;
-  float MaxDist;
-  float LastPointBonus;
-  /* TODO: TArray_ObstacleData */
-  TArray_void Obstacles;
+  UObject               Super;
+  BITFIELD              bDebug  : 1;
+  BITFIELD              bActive : 1;
+  int                   GridSize;
+  float                 MaxTime;
+  float                 MaxDist;
+  float                 LastPointBonus;
+  TArray_FObstacleData  Obstacles;
   TArray_FObstaclePoint ObstaclePoints;
 }; assert_size(UWillowObstacleUtility, 104);
 
@@ -2340,7 +2459,7 @@ struct UWillowSystemSettings {
 /* ---------------------------------------------------------- UGBXCrossLevelReferenceContainer ---------------------------------------------------------- */
 
 struct UGBXCrossLevelReferenceContainer {
-  UObject Super;
+  UObject  Super;
   UObject *CrossLevelObjectRef;
 }; assert_size(UGBXCrossLevelReferenceContainer, 64);
 
@@ -2375,7 +2494,7 @@ struct native FLoadInfo {
 };
 struct UWillowSaveGameManager {
   UObject                Super;
-  VfTable                VfTable_FTickableObject;
+  VfTable                FTickableObject;
   int                    AsyncResult[4];
   ESaveGameManagerState  CurrentState[4];
   FLoadInfo              PendingLoadInfo;
@@ -2689,6 +2808,33 @@ struct UPopulationAspect {
   UObject Super;
 }; assert_size(UPopulationAspect, 60);
 
+/* ---------------------------------------------------------- UMissionPopulationAspect ---------------------------------------------------------- */
+
+struct native FMissionItemPoolData {
+  BITFIELD                     bItemAlwaysGranted : 1;
+  UMissionObjectiveDefinition *ItemObjective;
+  UMissionDefinition          *DirectiveDefinition;
+  UItemPoolDefinition         *ItemPool;
+};
+struct UMissionPopulationAspect {
+  UPopulationAspect                        Super;
+  VfTable                                  IIMission;
+  UMissionObjectiveDefinition             *MissionObjective;
+  EObjectivePopulationActivation           Activation;
+  EObjectiveUpdateSetting                  ObjectiveUpdateSetting;
+  EPopulationWaypointSetting               WaypointSetting;
+  EPopulationWaypointActorSetting          WaypointActorSetting;
+  UMissionObjectiveDefinition             *OverrideObjective;
+  BITFIELD                                 bDefendTarget                             : 1;
+  BITFIELD                                 bApplyObjectiveSetRestrictionToActivation : 1;
+  BITFIELD                                 bActiveWaypoint                           : 1;
+  BITFIELD                                 bInitialized                              : 1;
+  TArray_UMissionObjectiveSetDefinitionPtr WaypointObjectiveSetRestrictions;
+  int                                      AreaRadius;
+  TArray_UItemPoolDefinitionPtr            ItemPools;
+  AWillowMissionPickupFailsafe            *PickupFailsafe;
+}; assert_size(UMissionPopulationAspect, 112);
+
 /* ---------------------------------------------------------- USparkTypes ---------------------------------------------------------- */
 
 struct native FSparkResult {
@@ -2848,6 +2994,16 @@ struct UPathConstraint {
   int              CacheIdx;
   UPathConstraint *NextConstraint;
 }; assert_size(UPathConstraint, 68);
+
+/* ---------------------------------------------------------- UPath_AvoidInEscapableNodes ---------------------------------------------------------- */
+
+struct UPath_AvoidInEscapableNodes {
+  UPathConstraint Super;
+  int             Radius;
+  int             Height;
+  int             MaxFallSpeed;
+  int             MoveFlags;
+}; assert_size(UPath_AvoidInEscapableNodes, 84);
 
 /* ---------------------------------------------------------- UWillowAutoAimStrategy ---------------------------------------------------------- */
 
@@ -4443,22 +4599,21 @@ struct FColorVertexBuffer {
 /** FStaticMeshRenderData - All data to define rendering properties for a certain LOD model for a mesh. */
 struct FStaticMeshRenderData {
 	/** The buffer containing vertex data. */
-	FStaticMeshVertexBuffer VertexBuffer;
+	FStaticMeshVertexBuffer     VertexBuffer;
 	/** The buffer containing the position vertex data. */
-	FPositionVertexBuffer PositionVertexBuffer;
+	FPositionVertexBuffer       PositionVertexBuffer;
 	/** The buffer containing the vertex color data. */
-	FColorVertexBuffer ColorVertexBuffer;
-
+	FColorVertexBuffer          ColorVertexBuffer;
 	/** The number of vertices in the LOD. */
-	UINT NumVertices;
+	UINT                        NumVertices;
 	/** Index buffer resource for rendering */
-	FRawStaticIndexBuffer					IndexBuffer;
+	FRawStaticIndexBuffer	      IndexBuffer;
 	/** Index buffer resource for rendering wireframe mode */
-	FRawIndexBuffer							WireframeIndexBuffer;
+	FRawIndexBuffer				      WireframeIndexBuffer;
 	/** Index buffer resource for rendering wireframe mode */
-	TArray_FStaticMeshElement				Elements;
+	TArray_FStaticMeshElement   Elements;
 	/** Source data for mesh */
-	FStaticMeshTriangleBulkData				RawTriangles;
+	FStaticMeshTriangleBulkData RawTriangles;
 };
 __declspec(align(16))
 struct UStaticMesh {
@@ -4473,7 +4628,6 @@ struct UStaticMesh {
 	FLOAT LODMaxRange;
 	FRotator ThumbnailAngle;
 	FLOAT ThumbnailDistance;
-
 	INT LightMapResolution;
 	INT LightMapCoordinateIndex;
 
@@ -4490,6 +4644,8 @@ struct UStaticMesh {
 	/* LegacykDOPTreeType * */
   void *LegacykDOPTree;  // this is only used temporarily during the loading process, usually NULL
 
+  BYTE unknown_00[176 - 128];
+  /* 176 */
 	URB_BodySetup    *BodySetup;
 	FBoxSphereBounds  Bounds;
 
@@ -4580,7 +4736,7 @@ struct UStaticMesh {
 	 * This is useful to disregard automatically generated vertex data which breaks texture factor heuristics.
 	 */
 	INT	ElementToIgnoreForTexFactor;
-}; assert_size(UStaticMesh, 304);
+}; /* assert_size(UStaticMesh, 304); */
 
 /* ---------------------------------------------------------- UPlayerStatsNotifier ---------------------------------------------------------- */
 
@@ -5326,6 +5482,24 @@ struct UMorphNodeBase {
   BITFIELD    bDrawSlider : 1;
 }; assert_size(UMorphNodeBase, 76);
 
+/* ---------------------------------------------------------- UMorphNodePose ---------------------------------------------------------- */
+
+struct UMorphNodePose {
+  UMorphNodeBase Super;
+  UMorphTarget  *Target;
+  FName          MorphName;
+  float          Weight;
+}; assert_size(UMorphNodePose, 92);
+
+/* ---------------------------------------------------------- UMorphNodeMultiPose ---------------------------------------------------------- */
+
+struct UMorphNodeMultiPose {
+  UMorphNodeBase         Super;
+  TArray_UMorphTargetPtr Targets;
+  TArray_FName           MorphNames;
+  TArray_FLOAT           Weights;
+}; assert_size(UMorphNodeMultiPose, 112);
+
 /* ---------------------------------------------------------- UMorphNodeWeightBase ---------------------------------------------------------- */
 
 struct native FMorphNodeConn {
@@ -5377,6 +5551,47 @@ struct USkelControlBase {
   int                 ControlPosX;
   int                 ControlPosY;
 }; assert_size(USkelControlBase, 156);
+
+/* ---------------------------------------------------------- USkelControlLookAt ---------------------------------------------------------- */
+
+struct USkelControlLookAt {
+  USkelControlBase  Super;
+  FVector           TargetLocation;
+  EBoneControlSpace TargetLocationSpace;
+  EAxis             LookAtAxis;
+  EAxis             UpAxis;
+  EBoneControlSpace AllowRotationSpace;
+  FName             TargetSpaceBoneName;
+  BITFIELD          bInvertLookAtAxis    : 1;
+  BITFIELD          bDefineUpAxis        : 1;
+  BITFIELD          bInvertUpAxis        : 1;
+  BITFIELD          bEnableLimit         : 1;
+  BITFIELD          bLimitBasedOnRefPose : 1;
+  BITFIELD          bDisableBeyondLimit  : 1;
+  BITFIELD          bNotifyBeyondLimit   : 1;
+  BITFIELD          bShowLimit           : 1;
+  BITFIELD          bAllowRotationX      : 1;
+  BITFIELD          bAllowRotationY      : 1;
+  BITFIELD          bAllowRotationZ      : 1;
+  float             TargetLocationInterpSpeed;
+  FVector           DesiredTargetLocation;
+  FVector           ActorSpaceLookAtTarget;
+  float             MaxAngle;
+  float             OuterMaxAngle;
+  float             DeadZoneAngle;
+  FVector2D         RotationAngleRangeX;
+  FVector2D         RotationAngleRangeY;
+  FVector2D         RotationAngleRangeZ;
+  FName             AllowRotationOtherBoneName;
+  float             LookAtAlpha;
+  float             LookAtAlphaTarget;
+  float             LookAtAlphaBlendTimeToGo;
+  FVector           LimitLookDir;
+  FVector           BaseLookDir;
+  FVector           BaseBonePos;
+  float             LastCalcTime;
+  int               ControlBoneIndex;
+}; assert_size(USkelControlLookAt, 312);
 
 /* ---------------------------------------------------------- USkelControlLimb ---------------------------------------------------------- */
 
@@ -5499,6 +5714,43 @@ struct UAnimNodeSequence {
   TArray_USkelControlBasePtr MetaDataSkelControlList;
 }; assert_size(UAnimNodeSequence, /* 288 */ 276);
 
+/* ---------------------------------------------------------- UAnimNodeSequenceBlendBase ---------------------------------------------------------- */
+
+struct native FAnimInfo {
+  FName          AnimSeqName;
+  UAnimSequence *AnimSeq;
+  int            AnimLinkupIndex;
+};
+struct native FAnimBlendInfo {
+  FName     AnimName;
+  FAnimInfo AnimInfo;
+  float     Weight;
+};
+struct UAnimNodeSequenceBlendBase {
+  UAnimNodeSequence     Super;
+  TArray_FAnimBlendInfo Anims;
+}; assert_size(UAnimNodeSequenceBlendBase, 288);
+
+/* ---------------------------------------------------------- UAnimNodeSequenceBlendByAim ---------------------------------------------------------- */
+
+struct UAnimNodeSequenceBlendByAim {
+  UAnimNodeSequenceBlendBase Super;
+  FVector2D                  Aim;
+  FVector2D                  PreviousAim;
+  FVector2D                  HorizontalRange;
+  FVector2D                  VerticalRange;
+  FVector2D                  AngleOffset;
+  FName                      AnimName_LU;
+  FName                      AnimName_LC;
+  FName                      AnimName_LD;
+  FName                      AnimName_CU;
+  FName                      AnimName_CC;
+  FName                      AnimName_CD;
+  FName                      AnimName_RU;
+  FName                      AnimName_RC;
+  FName                      AnimName_RD;
+}; assert_size(UAnimNodeSequenceBlendByAim, 400);
+
 /* ---------------------------------------------------------- UAnimNodeBlendBase ---------------------------------------------------------- */
 
 struct native FAnimBlendChild {
@@ -5516,6 +5768,85 @@ struct UAnimNodeBlendBase {
   BITFIELD               bFixNumChildren : 1;
   AlphaBlendType         BlendType;
 }; assert_size(UAnimNodeBlendBase, /* 208 */ 200);
+
+/* ---------------------------------------------------------- UAnimNodeBlendMultiBone ---------------------------------------------------------- */
+
+struct native FChildBoneBlendInfo {
+  TArray_FLOAT TargetPerBoneWeight;
+  FName        InitTargetStartBone;
+  float        InitPerBoneIncrease;
+  FName        OldStartBone;
+  float        OldBoneIncrease;
+  TArray_BYTE  TargetRequiredBones;
+};
+struct UAnimNodeBlendMultiBone {
+  UAnimNodeBlendBase         Super;
+  TArray_FChildBoneBlendInfo BlendTargetList;
+  TArray_BYTE                SourceRequiredBones;
+}; assert_size(UAnimNodeBlendMultiBone, 224);
+
+/* ---------------------------------------------------------- UAnimNodeBlendList ---------------------------------------------------------- */
+
+/* __ALIGN(16) */
+struct UAnimNodeBlendList {
+  UAnimNodeBlendBase Super;
+  TArray_FLOAT       TargetWeight;
+  float              BlendTimeToGo;
+  int                ActiveChildIndex;
+  BITFIELD           bPlayActiveChild                          : 1;
+  BITFIELD           bForceChildFullWeightWhenBecomingRelevant : 1;
+  BITFIELD           bSkipBlendWhenNotRendered                 : 1;
+  float              SliderPosition;
+}; assert_size(UAnimNodeBlendList, /* 240 */ 228);
+
+/* ---------------------------------------------------------- UAnimNodeBlendByBase ---------------------------------------------------------- */
+
+__ALIGN(16)
+struct UAnimNodeBlendByBase {
+  UAnimNodeBlendList Super;
+  EBaseBlendType     Type;
+  FName              ActorTag;
+  UClass            *ActorClass;  /** Class<Actor> */
+  float              BlendTime;
+  AActor            *CachedBase;
+}; assert_size(UAnimNodeBlendByBase, 256);
+
+/* ---------------------------------------------------------- UAnimNode_MultiBlendPerBone ---------------------------------------------------------- */
+
+struct native FWeightNodeRule {
+  FName               NodeName;
+  UAnimNodeBlendBase *CachedNode;
+  UAnimNodeSlot      *CachedSlotNode;
+  EWeightCheck        WeightCheck;
+  int                 ChildIndex;
+};
+struct native FWeightRule {
+  FWeightNodeRule FirstNode;
+  FWeightNodeRule SecondNode;
+};
+struct native FBranchInfo {
+  FName BoneName;
+  float PerBoneWeightIncrease;
+};
+struct native FPerBoneMaskInfo {
+  TArray_FBranchInfo BranchList;
+  float              DesiredWeight;
+  float              BlendTimeToGo;
+  TArray_FWeightRule WeightRuleList;
+  BITFIELD           bWeightBasedOnNodeRules         : 1;
+  BITFIELD           bDisableForNonLocalHumanPlayers : 1;
+  BITFIELD           bPendingBlend                   : 1;
+  TArray_FLOAT       PerBoneWeights;
+  TArray_BYTE        TransformReqBone;
+  int                TransformReqBoneIndex;
+};
+__ALIGN(16)
+struct UAnimNode_MultiBlendPerBone {
+  UAnimNodeBlendBase      Super;
+  APawn                  *PawnOwner;
+  TArray_FPerBoneMaskInfo MaskList;
+  EBlendType              RotationBlendType;
+}; assert_size(UAnimNode_MultiBlendPerBone, 224);
 
 /* ---------------------------------------------------------- UWillowStaggerAnimNodeBlend ---------------------------------------------------------- */
 
@@ -5601,6 +5932,24 @@ struct UAnimNodeBlend {
   float              BlendTimeToGo;
   BITFIELD           bSkipBlendWhenNotRendered : 1;
 }; assert_size(UAnimNodeBlend, /* 224 */ 216);
+
+/* ---------------------------------------------------------- UAnimNodePlayCustomAnim ---------------------------------------------------------- */
+
+struct UAnimNodePlayCustomAnim {
+  UAnimNodeBlend Super;
+  BITFIELD       bIsPlayingCustomAnim : 1;
+  float          CustomPendingBlendOutTime;
+}; assert_size(UAnimNodePlayCustomAnim, 224);
+
+/* ---------------------------------------------------------- UAnimNodeCrossfader ---------------------------------------------------------- */
+
+__ALIGN(16)
+struct UAnimNodeCrossfader {
+  UAnimNodeBlend Super;
+  FName          DefaultAnimSeqName;
+  BITFIELD       bDontBlendOutOneShot : 1;
+  float          PendingBlendOutTimeOneShot;
+}; assert_size(UAnimNodeCrossfader, 240);
 
 /* ---------------------------------------------------------- UAnimNodeAdditiveBlending ---------------------------------------------------------- */
 
@@ -6003,28 +6352,28 @@ struct native FLensFlareElement {
   FRawDistributionFloat DistMap_Alpha;
 };
 struct ULensFlare {
-  UObject Super;
-  FLensFlareElement SourceElement;
-  UStaticMesh *SourceMesh;
+  UObject                  Super;
+  FLensFlareElement        SourceElement;
+  UStaticMesh             *SourceMesh;
   ESceneDepthPriorityGroup SourceDPG;
   ESceneDepthPriorityGroup ReflectionsDPG;
   TArray_FLensFlareElement Reflections;
-  float OuterCone;
-  float InnerCone;
-  float ConeFudgeFactor;
-  float Radius;
-  BITFIELD bUseTrueConeCalculation      : 1;
-  BITFIELD bUseFixedRelativeBoundingBox : 1;
-  BITFIELD bRenderDebugLines            : 1;
-  BITFIELD ThumbnailImageOutOfDate      : 1;
-  float MinStrength;
-  FRawDistributionFloat ScreenPercentageMap;
-  FBox FixedRelativeBoundingBox;
-  UInterpCurveEdSetup *CurveEdSetup;
-  int ReflectionCount;
-  FRotator ThumbnailAngle;
-  float ThumbnailDistance;
-  UTexture2D *ThumbnailImage;
+  float                    OuterCone;
+  float                    InnerCone;
+  float                    ConeFudgeFactor;
+  float                    Radius;
+  BITFIELD                 bUseTrueConeCalculation      : 1;
+  BITFIELD                 bUseFixedRelativeBoundingBox : 1;
+  BITFIELD                 bRenderDebugLines            : 1;
+  BITFIELD                 ThumbnailImageOutOfDate      : 1;
+  float                    MinStrength;
+  FRawDistributionFloat    ScreenPercentageMap;
+  FBox                     FixedRelativeBoundingBox;
+  UInterpCurveEdSetup     *CurveEdSetup;
+  int                      ReflectionCount;
+  FRotator                 ThumbnailAngle;
+  float                    ThumbnailDistance;
+  UTexture2D              *ThumbnailImage;
 }; assert_size(ULensFlare, 512);
 
 /* ---------------------------------------------------------- UForceFeedbackWaveform ---------------------------------------------------------- */
@@ -6293,15 +6642,13 @@ struct UOnlineSubsystem {
 /* ---------------------------------------------------------- UOnlineSubsystemCommonImpl ---------------------------------------------------------- */
 
 struct UOnlineSubsystemCommonImpl {
-  UOnlineSubsystem Super;
-  void            *VoiceEngine;
-  int              MaxLocalTalkers;
-  int              MaxRemoteTalkers;
-  BITFIELD         bIsUsingSpeechRecognition : 1;
-  /* TODO: OnlineGameInterfaceImpl */
-  void            *GameInterfaceImpl;
-  /* TODO: OnlineAuthInterfaceImpl */
-  void            *AuthInterfaceImpl;
+  UOnlineSubsystem          Super;
+  void                     *VoiceEngine;
+  int                       MaxLocalTalkers;
+  int                       MaxRemoteTalkers;
+  BITFIELD                  bIsUsingSpeechRecognition : 1;
+  UOnlineGameInterfaceImpl *GameInterfaceImpl;
+  UOnlineAuthInterfaceImpl *AuthInterfaceImpl;
 }; assert_size(UOnlineSubsystemCommonImpl, 248);
 
 /* ---------------------------------------------------------- UMeshBeacon ---------------------------------------------------------- */
@@ -6318,7 +6665,7 @@ struct native FPlayerMember {
 };
 struct UMeshBeacon {
   UObject  Super;
-  void    *VfTable_FTickableObject;
+  VfTable  FTickableObject;
   int      MeshBeaconPort;
   void    *Socket;
   BITFIELD bIsInTick             : 1;
@@ -6339,18 +6686,18 @@ struct UMeshBeacon {
 /* ---------------------------------------------------------- UOnlineAuthInterfaceBaseImpl ---------------------------------------------------------- */
 
 struct native FBaseAuthSession {
-  int EndPointIP;
-  int EndPointPort;
+  int          EndPointIP;
+  int          EndPointPort;
   FUniqueNetId EndPointUID;
 };
 struct native FLocalAuthSession {
   FBaseAuthSession Super;
-  int SessionUID;
+  int              SessionUID;
 };
 struct native FAuthSession {
   FBaseAuthSession Super;
-  EAuthStatus AuthStatus;
-  int AuthBlobUID;
+  EAuthStatus      AuthStatus;
+  int              AuthBlobUID;
 };
 struct UOnlineAuthInterfaceBaseImpl {
   UObject                  Super;
@@ -6373,6 +6720,24 @@ struct UOnlineAuthInterfaceBaseImpl {
   FScriptDelegate          __OnClientConnectionClose__Delegate;
   FScriptDelegate          __OnServerConnectionClose__Delegate;
 }; assert_size(UOnlineAuthInterfaceBaseImpl, 268);
+
+/* ---------------------------------------------------------- UOnlineAuthInterfaceImpl ---------------------------------------------------------- */
+
+struct UOnlineAuthInterfaceImpl {
+  UOnlineAuthInterfaceBaseImpl Super;
+  UOnlineSubsystemCommonImpl  *OwningSubsystem;
+  TArray_FScriptDelegate       AuthReadyDelegates;               /** delegate<OnAuthRequestClient> */
+  TArray_FScriptDelegate       AuthRequestClientDelegates;       /** delegate<OnAuthRequestClient> */
+  TArray_FScriptDelegate       AuthRequestServerDelegates;       /** delegate<OnAuthRequestServer> */
+  TArray_FScriptDelegate       AuthBlobReceivedClientDelegates;  /** delegate<OnAuthBlobReceivedClient> */
+  TArray_FScriptDelegate       AuthBlobReceivedServerDelegates;  /** delegate<OnAuthBlobReceivedServer> */
+  TArray_FScriptDelegate       AuthCompleteClientDelegates;      /** delegate<OnAuthCompleteClient> */
+  TArray_FScriptDelegate       AuthCompleteServerDelegates;      /** delegate<OnAuthCompleteServer> */
+  TArray_FScriptDelegate       AuthKillClientDelegates;          /** delegate<OnAuthKillClient> */
+  TArray_FScriptDelegate       AuthRetryServerDelegates;         /** delegate<OnAuthRetryServer> */
+  TArray_FScriptDelegate       ClientConnectionCloseDelegates;   /** delegate<OnClientConnectionClose> */
+  TArray_FScriptDelegate       ServerConnectionCloseDelegates;   /** delegate<OnServerConnectionClose> */
+}; assert_size(UOnlineAuthInterfaceImpl, 404);
 
 /* ---------------------------------------------------------- UGameplayEvents ---------------------------------------------------------- */
 
@@ -6458,7 +6823,7 @@ struct UGameplayEvents {
 /* ---------------------------------------------------------- UGameplayEventsReader ---------------------------------------------------------- */
 
 struct UGameplayEventsReader {
-  UGameplayEvents Super;
+  UGameplayEvents                  Super;
   TArray_UGameplayEventsHandlerPtr RegisteredHandlers;
 }; assert_size(UGameplayEventsReader, 368);
 
@@ -7635,6 +8000,19 @@ struct UInterpTrackInst {
   UObject Super;
 };
 
+/* ---------------------------------------------------------- UInterpTrackInstHeadTracking ---------------------------------------------------------- */
+
+struct UInterpTrackInstHeadTracking {
+  UInterpTrackInst Super;
+  /* TODO: InterpTrackHeadTracking.EHeadTrackingAction */
+  BYTE Action;
+  /* native const transient map{VOID,VOID} */
+  _TMAP_NAME(INT, INT) CurrentActorMap;
+  USkeletalMeshComponent *Mesh;
+  TArray_USkelControlLookAtPtr TrackControls;
+  float LastUpdatePosition;
+}; assert_size(UInterpTrackInstHeadTracking, 144);
+
 /* ---------------------------------------------------------- UInterpTrackInstDirector ---------------------------------------------------------- */
 
 struct UInterpTrackInstDirector {
@@ -8114,6 +8492,219 @@ struct AActor {
 	TArray_USeqAct_LatentPtr  LatentActions;
 	float                     MostRecentDamageTaken;/* 388 */
 }; assert_size(AActor, 392);
+
+/* ---------------------------------------------------------- AWillowMissionPickupSpawner ---------------------------------------------------------- */
+
+struct AWillowMissionPickupSpawner {
+  AActor                  Super;
+  VfTable                 IIMission;
+  UMissionItemDefinition *MissionItemDef;
+  AWillowWaypoint        *LinkedAreaWaypoint;
+  int                     ObjectiveBit;
+  AWillowPickup          *MissionPickup;
+  USpriteComponent       *Sprite;
+}; assert_size(AWillowMissionPickupSpawner, 416);
+
+/* ---------------------------------------------------------- AWillowMissionPickupFailsafe ---------------------------------------------------------- */
+
+struct AWillowMissionPickupFailsafe {
+  AWillowMissionPickupSpawner     Super;
+  UMissionPopulationAspect       *LinkedAspect;
+  UMissionObjectiveDefinition    *CompletedObjective;
+  UMissionObjectiveSetDefinition *ObjectiveSet;
+  float                           TimeToTriggerFailsafe;
+  AWillowMissionItem             *MissionItem;
+}; assert_size(AWillowMissionPickupFailsafe, 436);
+
+/* ---------------------------------------------------------- ARigidBodyBase ---------------------------------------------------------- */
+
+struct ARigidBodyBase {
+  AActor Super;
+}; assert_size(ARigidBodyBase, 392);
+
+/* ---------------------------------------------------------- ARB_ConstraintActor ---------------------------------------------------------- */
+
+struct ARB_ConstraintActor {
+  ARigidBodyBase          Super;
+  AActor                 *ConstraintActor1;
+  AActor                 *ConstraintActor2;
+  URB_ConstraintSetup    *ConstraintSetup;
+  URB_ConstraintInstance *ConstraintInstance;
+  BITFIELD                bDisableCollision     : 1;
+  BITFIELD                bUpdateActor1RefFrame : 1;
+  BITFIELD                bUpdateActor2RefFrame : 1;
+  AActor                 *PulleyPivotActor1;
+  AActor                 *PulleyPivotActor2;
+}; assert_size(ARB_ConstraintActor, 420);
+
+/* ---------------------------------------------------------- ARB_LineImpulseActor ---------------------------------------------------------- */
+
+struct ARB_LineImpulseActor {
+  ARigidBodyBase   Super;
+  float            ImpulseStrength;
+  float            ImpulseRange;
+  BITFIELD         bVelChange      : 1;
+  BITFIELD         bStopAtFirstHit : 1;
+  BITFIELD         bCauseFracture  : 1;
+  UArrowComponent *Arrow;
+  BYTE             ImpulseCount;
+}; assert_size(ARB_LineImpulseActor, 412);
+
+/* ---------------------------------------------------------- ASkeletalMeshActor ---------------------------------------------------------- */
+
+struct ASkeletalMeshActor__FCheckpointRecord {
+  BITFIELD bReplicated    : 1;
+  BITFIELD bHidden        : 1;
+  BITFIELD bSavedPosition : 1;
+  FVector  Location;
+  FRotator Rotation;
+};
+struct native FSkelMeshActorControlTarget {
+  FName   ControlName;
+  AActor *TargetActor;
+};
+struct ASkeletalMeshActor {
+  AActor                             Super;
+  VfTable                            IIFaceFXActor;
+  BITFIELD                           bDamageAppliesImpulse                : 1;
+  BITFIELD                           bShouldDoAnimNotifies                : 1;
+  BITFIELD                           FaceFXSpeechPending                  : 1;
+  BITFIELD                           bForceSaveInCheckpoint               : 1;
+  BITFIELD                           bCollideActors_OldValue              : 1;
+  BITFIELD                           bShouldShadowParentAllAttachedActors : 1;
+  USkeletalMeshComponent            *SkeletalMeshComponent;
+  ULightEnvironmentComponent        *LightEnvironment;
+  UAudioComponent                   *FacialAudioComp;
+  USkeletalMesh                     *ReplicatedMesh;
+  UMaterialInterface                *ReplicatedMaterial0;
+  UMaterialInterface                *ReplicatedMaterial1;
+  TArray_FSkelMeshActorControlTarget ControlTargets;
+  TArray_UInterpGroupPtr             InterpGroupList;
+  FName                              SavedAnimSeqName;
+  float                              SavedCurrentTime;
+}; assert_size(ASkeletalMeshActor, 460);
+
+/* ---------------------------------------------------------- ASkeletalMeshActorBasedOnExtremeContent ---------------------------------------------------------- */
+
+struct native FSkelMaterialSetterDatum {
+  int                 MaterialIndex;
+  UMaterialInterface *TheMaterial;
+};
+struct ASkeletalMeshActorBasedOnExtremeContent {
+  ASkeletalMeshActor Super;
+  TArray_FSkelMaterialSetterDatum ExtremeContent;
+  TArray_FSkelMaterialSetterDatum NonExtremeContent;
+}; assert_size(ASkeletalMeshActorBasedOnExtremeContent, 484);
+
+/* ---------------------------------------------------------- APrefabInstance ---------------------------------------------------------- */
+
+struct APrefabInstance {
+  AActor Super;
+  /* TODO: Prefab */
+  void *TemplatePrefab;
+  int TemplateVersion;
+  /* native const map{VOID,VOID} */
+  _TMAP_NAME(INT, INT) ArchetypeToInstanceMap;
+  UPrefabSequence *SequenceInstance;
+  int PI_PackageVersion;
+  int PI_LicenseePackageVersion;
+  int PI_GamePackageVersion;
+  TArray_BYTE PI_Bytes;
+  TArray_UObjectPtr PI_CompleteObjects;
+  TArray_UObjectPtr PI_ReferencedObjects;
+  TArray_FString PI_SavedNames;
+  /* native const map{VOID,VOID} */
+  _TMAP_NAME(INT, INT) PI_ObjectMap;
+}; assert_size(APrefabInstance, 584);
+
+/* ---------------------------------------------------------- AMatineeActor ---------------------------------------------------------- */
+
+struct AMatineeActor {
+  AActor          Super;
+  USeqAct_Interp *InterpAction;
+  BITFIELD        bIsPlaying             : 1;
+  BITFIELD        bReversePlayback       : 1;
+  BITFIELD        bPaused                : 1;
+  BITFIELD        AllAIGroupsInitialized : 1;
+  float           PlayRate;
+  float           Position;
+  FName           AIGroupNames[10];
+  APawn          *AIGroupPawns[10];
+  int             AIGroupInitStage[10];
+  float           ClientSidePositionErrorTolerance;
+}; assert_size(AMatineeActor, 572);
+
+/* ---------------------------------------------------------- ARallyPoint ---------------------------------------------------------- */
+
+struct ARallyPoint {
+  AActor Super;
+}; assert_size(ARallyPoint, 392);
+
+/* ---------------------------------------------------------- AApexDestructibleActor ---------------------------------------------------------- */
+
+struct native transient F_ModifyHealthParams {
+  BITFIELD               bHeal : 1;
+  float                  DamageAmount;
+  AController           *EventInstigator;
+  FVector                HitLocation;
+  FVector                Momentum;
+  UClass                *DamageType;  /** Class<DamageType> */
+  UDamageTypeDefinition *DamageTypeDefinition;
+  UImpactDefinition     *ImpactDefinition;
+};
+struct AApexDestructibleActor {
+  AActor                             Super;
+  UDynamicLightEnvironmentComponent *LightEnvironment;
+  BITFIELD                           bFractureMaterialOverride : 1;
+  TArray_UFractureMaterialPtr        FractureMaterials;
+  UApexStaticDestructibleComponent  *StaticDestructibleComponent;
+  TArray_BYTE                        VisibilityFactors;
+  TArray_USoundCuePtr                FractureSounds;
+  TArray_UParticleSystemPtr          FractureParticleEffects;
+  F_ModifyHealthParams               ModifyHealthParams;
+}; assert_size(AApexDestructibleActor, 500);
+
+/* ---------------------------------------------------------- ALensFlareSource ---------------------------------------------------------- */
+
+struct ALensFlareSource {
+  AActor               Super;
+  ULensFlareComponent *LensFlareComp;
+  BITFIELD             bCurrentlyActive : 1;
+}; assert_size(ALensFlareSource, 400);
+
+/* ---------------------------------------------------------- AStaticMeshActorBase ---------------------------------------------------------- */
+
+struct AStaticMeshActorBase {
+  AActor Super;
+}; assert_size(AStaticMeshActorBase, 392);
+
+/* ---------------------------------------------------------- AStaticMeshActor ---------------------------------------------------------- */
+
+struct AStaticMeshActor {
+  AStaticMeshActorBase  Super;
+  UStaticMeshComponent *StaticMeshComponent;
+  BITFIELD              bDisableAutoBaseOnProcBuilding : 1;
+}; assert_size(AStaticMeshActor, 400);
+
+/* ---------------------------------------------------------- AInteractiveFoliageActor ---------------------------------------------------------- */
+
+struct AInteractiveFoliageActor {
+  AStaticMeshActor    Super;
+  UCylinderComponent *CylinderComponent;
+  FVector             TouchingActorEntryPosition;
+  FVector             FoliageVelocity;
+  FVector             FoliageForce;
+  FVector             FoliagePosition;
+  float               FoliageDamageImpulseScale;
+  float               FoliageTouchImpulseScale;
+  float               FoliageStiffness;
+  float               FoliageStiffnessQuadratic;
+  float               FoliageDamping;
+  float               MaxDamageImpulse;
+  float               MaxTouchImpulse;
+  float               MaxForce;
+  float               Mass;
+}; assert_size(AInteractiveFoliageActor, 488);
 
 /* ---------------------------------------------------------- ASplineActor ---------------------------------------------------------- */
 
@@ -9223,6 +9814,12 @@ struct AVolume {
 	BITFIELD         bPawnsOnly        : 1; /* 000 */
 }; assert_size(AVolume, 444);
 
+/* ---------------------------------------------------------- ATriggerVolume ---------------------------------------------------------- */
+
+struct ATriggerVolume {
+  AVolume Super;
+}; assert_size(ATriggerVolume, 444);
+
 /* ---------------------------------------------------------- AEnvironmentVolume ---------------------------------------------------------- */
 
 struct AEnvironmentVolume {
@@ -9960,8 +10557,7 @@ struct native FInputKeyAction {
   TArray_USequenceOpPtr        ActionsToExecute;
 };
 struct native FUIDataStoreBinding {
-  /** UIDataStoreSubscriber */
-  FImplementedInterface    Subscriber;
+  FImplementedInterface    Subscriber;  /** UIDataStoreSubscriber */
   EUIDataProviderFieldType RequiredFieldType;
   FString                  MarkupString;
   int                      BindingIndex;
@@ -10291,6 +10887,42 @@ struct UUIDataStore {
   FScriptDelegate        __OnDataStoreValueUpdated__Delegate;
 }; assert_size(UUIDataStore, 132);
 
+/* ---------------------------------------------------------- UUIDataStore_StringBase ---------------------------------------------------------- */
+
+struct UUIDataStore_StringBase {
+  UUIDataStore Super;
+}; assert_size(UUIDataStore_StringBase, 132);
+
+/* ---------------------------------------------------------- UUIDataStore_InputAlias ---------------------------------------------------------- */
+
+struct native FUIInputKeyData {
+  FRawInputKeyEventData InputKeyData;
+  FString               ButtonFontMarkupString;
+};
+struct native FUIDataStoreInputAlias {
+  FName           AliasName;
+  FUIInputKeyData PlatformInputKeys[EInputPlatformType_MAX];
+};
+struct UUIDataStore_InputAlias {
+  UUIDataStore_StringBase       Super;
+  TArray_FUIDataStoreInputAlias InputAliases;
+  _TMAP_NAME(FName, INT)        InputAliasLookupMap;
+}; assert_size(UUIDataStore_InputAlias, 204);
+
+/* ---------------------------------------------------------- UUIDataStore_StringAliasMap ---------------------------------------------------------- */
+
+struct native FUIMenuInputMap {
+  FName   FieldName;
+  FName   Set;
+  FString MappedText;
+};
+struct UUIDataStore_StringAliasMap {
+  UUIDataStore_StringBase                   Super;
+  TArray_FUIMenuInputMap                    MenuInputMapArray;
+  _TMAP_NAME(FName, _TMAP_NAME(FName, INT)) MenuInputSets;
+  int                                       PlayerIndex;
+}; assert_size(UUIDataStore_StringAliasMap, 208);
+
 /* ---------------------------------------------------------- UUIDataStore_GameResource ---------------------------------------------------------- */
 
 struct native FGameResourceDataProvider {
@@ -10339,6 +10971,32 @@ struct UUIDataStore_DynamicResource {
 struct UUIDataStore_Remote {
   UUIDataStore Super;
 }; assert_size(UUIDataStore_Remote, 132);
+
+/* ---------------------------------------------------------- UUIDataStore_OnlineStats ---------------------------------------------------------- */
+
+struct native FPlayerNickMetaData {
+  FName   PlayerNickName;
+  FString PlayerNickColumnName;
+};
+struct native FRankMetaData {
+  FName   RankName;
+  FString RankColumnName;
+};
+struct UUIDataStore_OnlineStats {
+  UUIDataStore_Remote        Super;
+  VfTable                    IUIListElementProvider;
+  VfTable                    IUIListElementCellProvider;
+  TArray_UClassPtr           StatsReadClasses;  /** Class<OnlineStatsRead> */
+  FName                      StatsReadName;
+  FPlayerNickMetaData        PlayerNickData;
+  FRankMetaData              RankNameMetaData;
+  FName                      TotalRowsName;
+  TArray_UOnlineStatsReadPtr StatsReadObjects;
+  UOnlineStatsRead          *StatsRead;
+  EStatsFetchType            CurrentReadType;
+  FImplementedInterface      StatsInterface;   /** OnlineStatsInterface */
+  FImplementedInterface      PlayerInterface;  /** OnlinePlayerInterface */
+}; assert_size(UUIDataStore_OnlineStats, 244);
 
 /* ---------------------------------------------------------- UUIDataStore_OnlineGameSearch ---------------------------------------------------------- */
 
@@ -10991,7 +11649,7 @@ struct native FGFxDataStoreBinding {
 };
 struct native FGFxWidgetBinding {
   FName   WidgetName;
-  UClass *WidgetClass;/** Class<GFxObject> */
+  UClass *WidgetClass;  /** Class<GFxObject> */
 };
 struct native FASValue {
   ASType   Type;
@@ -11122,6 +11780,30 @@ struct UGFxObject {
   int                      Value[12];
   TArray_FGFxWidgetBinding SubWidgetBindings;
 }; assert_size(UGFxObject, 120);
+
+/* ---------------------------------------------------------- ULoadCharacterLobbyGFxObject ---------------------------------------------------------- */
+
+struct ULoadCharacterLobbyGFxObject {
+  UGFxObject Super;
+}; assert_size(ULoadCharacterLobbyGFxObject, 120);
+
+/* ---------------------------------------------------------- UCharacterSelectionCustomizationListGFxObject ---------------------------------------------------------- */
+
+struct UCharacterSelectionCustomizationListGFxObject {
+  UGFxObject Super;
+}; assert_size(UCharacterSelectionCustomizationListGFxObject, 120);
+
+/* ---------------------------------------------------------- UCharacterSelectionGFxObject ---------------------------------------------------------- */
+
+struct UCharacterSelectionGFxObject {
+  UGFxObject Super;
+}; assert_size(UCharacterSelectionGFxObject, 120);
+
+/* ---------------------------------------------------------- UCharacterCustomizationMenuGFxObject ---------------------------------------------------------- */
+
+struct UCharacterCustomizationMenuGFxObject {
+  UGFxObject Super;
+}; assert_size(UCharacterCustomizationMenuGFxObject, 120);
 
 /* ---------------------------------------------------------- UCreditsDataProviderGFxObject ---------------------------------------------------------- */
 
@@ -11558,13 +12240,90 @@ struct UGFxMovieInteractiveObject {
 /* ---------------------------------------------------------- UWillowGFxMovie ---------------------------------------------------------- */
 
 struct UWillowGFxMovie {
-  UGearboxGFxMovie Super;
-  BITFIELD bAutoCloseHUD : 1;
-  BITFIELD bAutoCloseAll : 1;
-  int DefaultRTTSize_PC;
-  int DefaultRTTSize_Console;
+  UGearboxGFxMovie         Super;
+  BITFIELD                 bAutoCloseHUD : 1;
+  BITFIELD                 bAutoCloseAll : 1;
+  int                      DefaultRTTSize_PC;
+  int                      DefaultRTTSize_Console;
   AWillowPlayerController *WPCOwner;/* 608 */
 }; assert_size(UWillowGFxMovie, 612);
+
+/* ---------------------------------------------------------- UWillowGFxColiseumOverlayMovie ---------------------------------------------------------- */
+
+struct FPlayerLineInfo {
+  BITFIELD                bUpdatedThisRound : 1;
+  FString                 Avatar;
+  APlayerReplicationInfo *PRI;
+  int                     PlayerID;
+  int                     RoundKills;
+  int                     TotalKills;
+};
+struct UWillowGFxColiseumOverlayMovie {
+  UWillowGFxMovie                      Super;
+  UWillowGFxColiseumOverlayDefinition *OverlayDef;
+  UColiseumRuleDefinition             *CurrentRules[4];
+  FString                              RoundPrefix;
+  FString                              WavePrefix;
+  FString                              CertificateText;
+  int                                  CachedRound;
+  int                                  CachedWave;
+  int                                  CachedMaxRound;
+  FString                              RoundResult;
+  FString                              RoundSummary;
+  FString                              EnemyDamage;
+  FString                              EnemyHealth;
+  FString                              EnemyShields;
+  BITFIELD                             bSuppressHUD           : 1;
+  BITFIELD                             bDismissable           : 1;
+  BITFIELD                             bEveryoneSignedInOn360 : 1;
+  EColiseumLatentScreen                LatentScreenType;
+  EGBXPlatform                         Platform;
+  TArray_FPlayerLineInfo               PlayerLines;
+  int                                  HighlightedResultsLine;
+  APlayerReplicationInfo               *SortedResultsPRI[4];
+}; assert_size(UWillowGFxColiseumOverlayMovie, 780);
+
+/* ---------------------------------------------------------- UWillowGFxLobbyLoadCharacter ---------------------------------------------------------- */
+
+struct native FLoadCharacterData {
+  int                               SaveDataId;
+  int                               CharLevel;
+  FString                           CharName;
+  FString                           CharClass;
+  FString                           PlayThrough;
+  FString                           ActiveMission;
+  FString                           PlotMission;
+  FString                           CharSaveDate;
+  FString                           CharPlayedTime;
+  int                               CharPlayedTimeInt;
+  FGuid                             SaveGuid;
+  UDownloadableCharacterDefinition *DlcCharDef;
+  UDownloadableCharacterDefinition *SaveDlcCharDef;
+};
+struct UWillowGFxLobbyLoadCharacter {
+  UWillowGFxMovie                           Super;
+  ULoadCharacterLobbyGFxObject             *LoadCharacterLobby;
+  TArray_FLoadCharacterData                 DisplayedCharacterDataList;
+  BITFIELD                                  bWaitingForPS3LoadGame : 1;
+  BITFIELD                                  bWaitingForPS3SaveList : 1;
+  BITFIELD                                  bRestrictClose         : 1;
+  UWillowGFxMenuHelperSaveGame             *SaveGameHelper;
+  TArray_UPlayerNameIdentifierDefinitionPtr DefaultNewCharacterList;
+  FLoadInfo                                 MostRecentLoadInfo;
+  UWillowGFxDialogBox                      *LoadingCharacterDlg;
+  EGBXPlatform                              Platform;
+  UPlayerSaveGame                          *CachedSaveGame;
+  int                                       AvailableSlots;
+  int                                       TopSlotDataIndex;
+  int                                       SelectedDataIndex;
+  float                                     LastActionTime;
+  int                                       LastDeletedPlayedTime;
+  int                                       LastDeletedLevel;
+  FGuid                                     LastDeletedGuid;
+  int                                       LastClickedDataIndex;
+  FScriptDelegate                           __OnLoadGame__Delegate;
+  FScriptDelegate                           __OnCloseNoLoad__Delegate;
+}; assert_size(UWillowGFxLobbyLoadCharacter, 928);
 
 /* ---------------------------------------------------------- UWillowGFxMoviePressStart ---------------------------------------------------------- */
 
@@ -11756,6 +12515,48 @@ struct UWillowGFxMovie3D {
   FMatrix                      CachedViewMat;
   FMatrix                      CachedProjMat;
 }; assert_size(UWillowGFxMovie3D, 912);
+
+/* ---------------------------------------------------------- UCharacterSelectionReduxGFxMovie ---------------------------------------------------------- */
+
+struct UCharacterSelectionReduxGFxMovie {
+  UWillowGFxMovie3D                              Super;
+  float                                          FadeInTimeInSeconds;
+  float                                          FadeOutTimeInSeconds;
+  UCharacterSelectionGFxObject                  *CharacterSelectClip;
+  UCharacterCustomizationMenuGFxObject          *CustomizationMenu[2];
+  UCharacterSelectionCustomizationListGFxObject *CustomizationList[2];
+  TArray_UPlayerNameIdentifierDefinitionPtr      SelectableCharacters;
+  UCustomizationDefinition                      *EquippedHeadCustomization[2];
+  UCustomizationDefinition                      *EquippedSkinCustomization[2];
+  UCustomizationDefinition                      *PreviewHeadCustomization[2];
+  UCustomizationDefinition                      *PreviewSkinCustomization[2];
+  APlayerStandIn                                *StandIn[2];
+  TArray_UCustomizationDefinitionPtr             PrimaryPlayerHeadCustomizations;
+  TArray_UCustomizationDefinitionPtr             PrimaryPlayerSkinCustomizations;
+  TArray_UCustomizationDefinitionPtr             SplitPlayerHeadCustomizations;
+  TArray_UCustomizationDefinitionPtr             SplitPlayerSkinCustomizations;
+  int                                            SelectedCharacterIndex[2];
+  int                                            CurrentUIState[2];
+  int                                            SelectedEntryIdx[2];
+  int                                            CurrentPlayerEnteringName;
+  FString                                        TimerCaption;
+  FString                                        WaitingMessage;
+  FString                                        SelectCharMessage;
+  float                                          HACK_NextInputTime;
+  BITFIELD                                       CachedIsWidescreen              : 1;
+  BITFIELD                                       bCheckPauseState                : 1;
+  BITFIELD                                       bChangingPrimaryStandInPosition : 1;
+  BITFIELD                                       bChangingSplitStandInPosition   : 1;
+  UWillowPauseTicker                            *TimerPauseTicker;
+  UWillowGFxDialogBox                           *UseCurrentSaveGameDlg;
+  UWillowGFxDialogBox                           *ConfirmQuitDlg;
+  UWillowGFxLobbyLoadCharacter                  *LoadCharacterLobby;
+  int                                            PreviousStartGameTimer;
+  int                                            AdjustStandInDebugMessageKey;
+  int                                            PreviewIndex[2];
+  int                                            LastOfferPlayerIndex;
+  UWillowGFxDialogBox                           *PurchaseDialog;
+}; assert_size(UCharacterSelectionReduxGFxMovie, 1152);
 
 /* ---------------------------------------------------------- UWillowGFxMovieCredits ---------------------------------------------------------- */
 
@@ -12491,6 +13292,26 @@ struct UInterpTrack {
   BITFIELD               bIsCollapsed        : 1;
 }; assert_size(UInterpTrack, 104);
 
+/* ---------------------------------------------------------- UInterpTrackHeadTracking ---------------------------------------------------------- */
+
+struct native FHeadTrackingKey {
+  float               Time;
+  EHeadTrackingAction Action;
+};
+struct UInterpTrackHeadTracking {
+  UInterpTrack            Super;
+  TArray_FHeadTrackingKey HeadTrackingTrack;
+  TArray_FName            TrackControllerName;
+  float                   LookAtActorRadius;
+  BITFIELD                bDisableBeyondLimit : 1;
+  BITFIELD                bLookAtPawns        : 1;
+  float                   MaxLookAtTime;
+  float                   MinLookAtTime;
+  float                   MaxInterestTime;
+  TArray_UClassPtr        ActorClassesToLookAt;  /** Class<Actor> */
+  TArray_FName            TargetBoneNames;
+}; assert_size(UInterpTrackHeadTracking, 172);
+
 /* ---------------------------------------------------------- UInterpTrackMove ---------------------------------------------------------- */
 
 struct native FInterpLookupPoint {
@@ -12541,11 +13362,50 @@ struct UInterpGroup {
   BITFIELD               bRunTracksWhenSkippingToLastFrame : 1;
 }; assert_size(UInterpGroup, 104);
 
+/* ---------------------------------------------------------- UInterpGroupDirector ---------------------------------------------------------- */
+
+struct UInterpGroupDirector {
+  UInterpGroup Super;
+  FName        AttachedGroupName;
+}; assert_size(UInterpGroupDirector, 112);
+
 /* ---------------------------------------------------------- UExpressionEvaluator ---------------------------------------------------------- */
 
 struct UExpressionEvaluator {
   UObject Super;
 }; assert_size(UExpressionEvaluator, 60);
+
+/* ---------------------------------------------------------- UAIResourceExpressionEvaluator ---------------------------------------------------------- */
+
+struct UAIResourceExpressionEvaluator {
+  UExpressionEvaluator Super;
+  AIResourceOption     Option;
+  UAIResource         *Resource;
+}; assert_size(UAIResourceExpressionEvaluator, 68);
+
+/* ---------------------------------------------------------- UPhysicsStateExpressionEvaluator ---------------------------------------------------------- */
+
+struct UPhysicsStateExpressionEvaluator {
+  UExpressionEvaluator Super;
+  EPhysics             PhysicsState;
+  BITFIELD             bIsInState : 1;
+}; assert_size(UPhysicsStateExpressionEvaluator, 68);
+
+/* ---------------------------------------------------------- UCompoundExpressionEvaluator ---------------------------------------------------------- */
+
+struct UCompoundExpressionEvaluator {
+  UExpressionEvaluator     Super;
+  UExpressionEvaluator    *Expression1;
+  ECExpressionOperatorType Operator;
+  UExpressionEvaluator    *Expression2;
+}; assert_size(UCompoundExpressionEvaluator, 72);
+
+/* ---------------------------------------------------------- UExpressionTree ---------------------------------------------------------- */
+
+struct UExpressionTree {
+  UExpressionEvaluator  Super;
+  UExpressionEvaluator *RootChild;
+}; assert_size(UExpressionTree, 64);
 
 /* ---------------------------------------------------------- UAICostExpressionEvaluator ---------------------------------------------------------- */
 
@@ -12753,6 +13613,13 @@ struct UAttributeExpression {
   UObject Super;
 }; assert_size(UAttributeExpression, 60);
 
+/* ---------------------------------------------------------- UAttributeExpressionEvaluator ---------------------------------------------------------- */
+
+struct UAttributeExpressionEvaluator {
+  UExpressionEvaluator    Super;
+  AttributeExpressionData Expression;
+}; assert_size(UAttributeExpressionEvaluator, 76);
+
 /* ---------------------------------------------------------- UAttributeModifier ---------------------------------------------------------- */
 
 struct UAttributeModifier {
@@ -12766,6 +13633,25 @@ struct UAttributeModifier {
 struct UInterface {
   UObject Super;
 }; assert_size(UInterface, 60);
+
+/* ---------------------------------------------------------- UIDynamicObstacle ---------------------------------------------------------- */
+
+struct native FObstacleData {
+  AActor            *Actor;
+  AActor            *Leader;
+  float              Radius;
+  float              HalfHeight;
+  float              MaxSpeed;
+  FVector            Location;
+  FVector            Velocity;
+  FVector            OldVelocity;
+  FVector2D          LastOffset;
+  UIDynamicObstacle *IDO;
+  BITFIELD           bWasAvoiding : 1;
+};
+struct UIDynamicObstacle {
+  UInterface Super;
+}; assert_size(UIDynamicObstacle, 60);
 
 /* ---------------------------------------------------------- UIBodyInfoProvider ---------------------------------------------------------- */
 
@@ -12989,7 +13875,7 @@ struct native FBehaviorCounterState {
   int Target;
 };
 struct native FCounterBehaviorUserState {
-  FBehaviorCounterState Counters[EBehaviorCounterID__MAX];
+  FBehaviorCounterState Counters[EBehaviorCounterID_MAX];
 };
 struct UICounterBehavior {
   UInterface Super;
@@ -13600,24 +14486,24 @@ struct AScorpioActionSkill {
 
 /* ---------------------------------------------------------- UGestaltPartMatrices ---------------------------------------------------------- */
 
-struct GestaltAccessoryPartEntry {
+struct FGestaltAccessoryPartEntry {
   FName PartName;
   FName BoneName;
-  INT MatrixIndex;
+  int   MatrixIndex;
 };
-struct GestaltAccessoryGroupEntry {
-  FName GroupName;
-  TArray_GestaltAccessoryPartEntry GestaltAccessoryPartList;
+struct FGestaltAccessoryGroupEntry {
+  FName                             GroupName;
+  TArray_FGestaltAccessoryPartEntry GestaltAccessoryPartList;
 };
-struct GestaltAccessoryMeshEntry {
-  FName MeshName;
-  TArray_GestaltAccessoryGroupEntry GestaltAccessoryGroupList;
+struct FGestaltAccessoryMeshEntry {
+  FName                              MeshName;
+  TArray_FGestaltAccessoryGroupEntry GestaltAccessoryGroupList;
 };
 struct UGestaltPartMatrices {
-  UObject Super;
-  TArray_GestaltAccessoryMeshEntry GestaltAccessoryMeshList;
-  TArray_FMatrix Matrices;
-  FName ArchetypeName;
+  UObject                           Super;
+  TArray_FGestaltAccessoryMeshEntry GestaltAccessoryMeshList;
+  TArray_FMatrix                    Matrices;
+  FName                             ArchetypeName;
 }; assert_size(UGestaltPartMatrices, 92);
 
 
@@ -14338,16 +15224,37 @@ struct FSceneInterface {
 
 struct UActorComponent {
   UComponent       Super;
-  void            *VfTable_IIWorldBody;
+  VfTable          IIWorldBody;
   FSceneInterface *Scene;
   AActor          *Owner;
-  BITFIELD         bAttached : 1;
-  BITFIELD         bTickInEditor : 1;
-  BITFIELD         bNeedsReattach : 1;
+  BITFIELD         bAttached             : 1;
+  BITFIELD         bTickInEditor         : 1;
+  BITFIELD         bNeedsReattach        : 1;
   BITFIELD         bNeedsUpdateTransform : 1;
-  /* The ticking group this component belongs to. */
-  ETickingGroup    TickGroup;
+  ETickingGroup    TickGroup;  /** The ticking group this component belongs to. */
 }; assert_size(UActorComponent, 92);
+
+/* ---------------------------------------------------------- URB_Spring ---------------------------------------------------------- */
+
+struct URB_Spring {
+  UActorComponent      Super;
+  UPrimitiveComponent *Component1;
+  FName                BoneName1;
+  UPrimitiveComponent *Component2;
+  FName                BoneName2;
+  int                  SceneIndex;
+  BITFIELD             bInHardware           : 1;
+  BITFIELD             bEnableForceMassRatio : 1;
+  void                *SpringData;
+  float                TimeSinceActivation;
+  float                MinBodyMass;
+  float                SpringSaturateDist;
+  float                SpringMaxForce;
+  float                MaxForceMassRatio;
+  FInterpCurveFloat    SpringMaxForceTimeScale;
+  float                DampSaturateVel;
+  float                DampMaxForce;
+}; assert_size(URB_Spring, 172);
 
 /* ---------------------------------------------------------- URB_Handle ---------------------------------------------------------- */
 
@@ -14378,6 +15285,18 @@ struct UWaypointComponent {
   UActorComponent Super;
   BITFIELD        bActive : 1;
 }; assert_size(UWaypointComponent, 96);
+
+/* ---------------------------------------------------------- UMissionObjectiveWaypointComponent ---------------------------------------------------------- */
+
+struct native FMissionObjectiveWaypointData {
+  UMissionObjectiveDefinition             *LinkedObjective;
+  TArray_UMissionObjectiveSetDefinitionPtr ObjectiveSetRestrictions;
+};
+struct UMissionObjectiveWaypointComponent {
+  UWaypointComponent            Super;
+  FMissionObjectiveWaypointData WaypointInfo;
+  int                           WaypointRadius;
+}; assert_size(UMissionObjectiveWaypointComponent, 116);
 
 /* ---------------------------------------------------------- UWillowCoverComponent ---------------------------------------------------------- */
 
@@ -14482,6 +15401,16 @@ struct UAkComponent {
   FScriptDelegate       __OnAkEventCompleted__Delegate;
   FScriptDelegate       __UpdateComponentPosition__Delegate;
 }; assert_size(UAkComponent, 492);
+
+/* ---------------------------------------------------------- UWillowAkComponent ---------------------------------------------------------- */
+
+struct UWillowAkComponent {
+  UAkComponent Super;
+  int          DistanceRTPCRefCount;
+  int          SpeedRTPCRefCount;
+  int          ApproachSpeedRTPCRefCount;
+  FVector      CustomVelocity;
+}; assert_size(UWillowAkComponent, 516);
 
 /* ---------------------------------------------------------- UStatusEffectsComponent ---------------------------------------------------------- */
 
@@ -14879,6 +15808,109 @@ struct UPrimitiveComponent {
   float                        LastRenderTime;
 }; assert_size(UPrimitiveComponent, 528);
 DECLARE_A_TSET(UPrimitiveComponentPtr);
+
+/* ---------------------------------------------------------- URB_RadialImpulseComponent ---------------------------------------------------------- */
+
+__ALIGN(16)
+struct URB_RadialImpulseComponent {
+  UPrimitiveComponent   Super;
+  ERadialImpulseFalloff ImpulseFalloff;
+  float                 ImpulseStrength;
+  float                 ImpulseRadius;
+  BITFIELD              bVelChange     : 1;
+  BITFIELD              bCauseFracture : 1;
+  UDrawSphereComponent *PreviewSphere;
+}; assert_size(URB_RadialImpulseComponent, 560);
+
+/* ---------------------------------------------------------- UFoliageComponent ---------------------------------------------------------- */
+
+struct native FFoliageInstanceBase {
+  FVector Location;
+  FVector XAxis;
+  FVector YAxis;
+  FVector ZAxis;
+  float   DistanceFactorSquared;
+};
+struct native FStoredFoliageInstance {
+  FFoliageInstanceBase Super;
+  FColor               StaticLighting[3];
+};
+__ALIGN(16)
+struct UFoliageComponent {
+  UPrimitiveComponent           Super;
+  TArray_FStoredFoliageInstance LitInstances;
+  TArray_FGuid                  StaticallyRelevantLights;
+  TArray_FGuid                  StaticallyIrrelevantLights;
+  float                         DirectionalStaticLightingScale[3];
+  float                         SimpleStaticLightingScale[3];
+  UStaticMesh                  *InstanceStaticMesh;
+  UMaterialInterface           *Material;
+  float                         MaxDrawRadius;
+  float                         MinTransitionRadius;
+  float                         MinThinningRadius;
+  FVector                       MinScale;
+  FVector                       MaxScale;
+  float                         SwayScale;
+}; assert_size(UFoliageComponent, 640);
+
+/* ---------------------------------------------------------- UFluidSurfaceComponent ---------------------------------------------------------- */
+
+__ALIGN(16)
+struct UFluidSurfaceComponent {
+  UPrimitiveComponent    Super;
+  UMaterialInterface    *FluidMaterial;
+  int                    LightMapResolution;
+  BITFIELD               EnableSimulation          : 1;
+  BITFIELD               EnableDetail              : 1;
+  BITFIELD               bTiling                   : 1;
+  BITFIELD               bPause                    : 1;
+  BITFIELD               bShowSimulationNormals    : 1;
+  BITFIELD               bShowSimulationPosition   : 1;
+  BITFIELD               bShowDetailNormals        : 1;
+  BITFIELD               bShowDetailPosition       : 1;
+  BITFIELD               bShowFluidSimulation      : 1;
+  BITFIELD               bShowFluidDetail          : 1;
+  BITFIELD               bTestRipple               : 1;
+  BITFIELD               bTestRippleCenterOnDetail : 1;
+  int                    SimulationQuadsX;
+  int                    SimulationQuadsY;
+  float                  GridSpacing;
+  float                  GridSpacingLowRes;
+  AActor                *TargetSimulation;
+  float                  GPUTessellationFactor;
+  float                  FluidDamping;
+  float                  FluidTravelSpeed;
+  float                  FluidHeightScale;
+  float                  FluidUpdateRate;
+  float                  ForceImpact;
+  float                  ForceContinuous;
+  float                  LightingContrast;
+  AActor                *TargetDetail;
+  float                  DeactivationDistance;
+  int                    DetailResolution;
+  float                  DetailSize;
+  float                  DetailDamping;
+  float                  DetailTravelSpeed;
+  float                  DetailTransfer;
+  float                  DetailHeightScale;
+  float                  DetailUpdateRate;
+  float                  NormalLength;
+  float                  TestRippleSpeed;
+  float                  TestRippleFrequency;
+  float                  TestRippleRadius;
+  float                  FluidWidth;
+  float                  FluidHeight;
+  float                  TestRippleTime;
+  float                  TestRippleAngle;
+  float                  DeactivationTimer;
+  float                  ViewDistance;
+  FVector                SimulationPosition;
+  FVector                DetailPosition;
+  TArray_BYTE            ClampMap;
+  TArray_UShadowMap2DPtr ShadowMaps;
+  FLightMapRef           LightMap;
+  void                  *FluidSimulation;
+}; assert_size(UFluidSurfaceComponent, 736);
 
 /* ---------------------------------------------------------- USplineComponent ---------------------------------------------------------- */
 
@@ -15348,6 +16380,24 @@ struct UApexComponentBase {
   BITFIELD            bAssetChanged : 1;
 }; assert_size(UApexComponentBase, 560);
 
+/* ---------------------------------------------------------- UApexStaticComponent ---------------------------------------------------------- */
+
+struct UApexStaticComponent {
+  UApexComponentBase Super;
+}; assert_size(UApexStaticComponent, 560);
+
+/* ---------------------------------------------------------- UApexStaticDestructibleComponent ---------------------------------------------------------- */
+
+__ALIGN(16)
+struct UApexStaticDestructibleComponent {
+  UApexStaticComponent Super;
+  float                SleepEnergyThreshold;
+  float                SleepDamping;
+  void                *ApexDestructibleActor;
+  void                *ApexDestructiblePreview;
+  BITFIELD             bIsThumbnailComponent : 1;
+}; assert_size(UApexStaticDestructibleComponent, 592);
+
 /* ---------------------------------------------------------- UStaticMeshComponent ---------------------------------------------------------- */
 
 struct FPaintedVertex {
@@ -15356,13 +16406,12 @@ struct FPaintedVertex {
   FColor        Color;
 };
 struct FStaticMeshComponentLODInfo {
-  /* TODO: TArray_ShadowMap2DPtr */
-  TArray_voidPtr    ShadowMaps;
-  TArray_UObjectPtr ShadowVertexBuffers;
-  void             *LightMap;
-  void             *OverrideVertexColors;
+  TArray_UShadowMap2DPtr ShadowMaps;
+  TArray_UObjectPtr      ShadowVertexBuffers;
+  void                  *LightMap;
+  void                  *OverrideVertexColors;
 };
-__declspec(align(16))
+// __ALIGN(16)
 struct UStaticMeshComponent {
   UMeshComponent                     Super;
   UStaticMesh                       *StaticMesh;
@@ -15382,7 +16431,47 @@ struct UStaticMeshComponent {
   BYTE                               ViewOneOffset;
   BYTE                               ForcedLodModel;
   BYTE                               PreviousLODLevel;
-}; assert_size(UStaticMeshComponent, 592);
+}; assert_size(UStaticMeshComponent, /* 592 */ 584);
+
+/* ---------------------------------------------------------- UBlockingMeshComponent ---------------------------------------------------------- */
+
+__ALIGN(16)
+struct UBlockingMeshComponent {
+  UStaticMeshComponent Super;
+  BITFIELD             bBlockPlayers            : 1;
+  BITFIELD             bBlockVehicles           : 1;
+  BITFIELD             bBlockRocketsAndGrenades : 1;
+  BITFIELD             bBlockBullets            : 1;
+  BITFIELD             bBlockTossedItems        : 1;
+  BITFIELD             bBlockEnemyPawns         : 1;
+  BITFIELD             bBlockFriendlyPawns      : 1;
+  BITFIELD             bBlockPlayerVehicles     : 1;
+  BITFIELD             bBlockEnemyVehicles      : 1;
+  BITFIELD             bIsDisabled              : 1;
+}; assert_size(UBlockingMeshComponent, 592);
+
+/* ---------------------------------------------------------- UInstancedStaticMeshComponent ---------------------------------------------------------- */
+
+struct native atomicwhencooked immutablewhencooked FInstancedStaticMeshInstanceData {
+  FMatrix   Transform;
+  FVector2D LightmapUVBias;
+  FVector2D ShadowmapUVBias;
+};
+struct native FInstancedStaticMeshMappingInfo {
+  void         *Mapping;
+  void         *LightMap;
+  UTexture2D   *LightmapTexture;
+  UShadowMap2D *ShadowmapTexture;
+};
+struct UInstancedStaticMeshComponent {
+  UStaticMeshComponent                    Super; __ALIGN(16)
+  TArray_FInstancedStaticMeshInstanceData PerInstanceData;
+  TArray_FInstancedStaticMeshInstanceData PerInstanceSMData;
+  int                                     NumPendingLightmaps;
+  int                                     ComponentJoinKey;
+  TArray_FInstancedStaticMeshMappingInfo  CachedMappings;
+  int                                     InstancingRandomSeed;
+}; assert_size(UInstancedStaticMeshComponent, 640);
 
 /* ---------------------------------------------------------- USkeletalMeshComponent ---------------------------------------------------------- */
 
@@ -16019,6 +17108,13 @@ struct USequenceObject {
 struct UGBXDefinition {
 	UObject Super;
 }; assert_size(UGBXDefinition, 60);
+
+/* ---------------------------------------------------------- UExpressionEvaluatorDefinition ---------------------------------------------------------- */
+
+struct UExpressionEvaluatorDefinition {
+  UGBXDefinition        Super;
+  UExpressionEvaluator *Expression;
+}; assert_size(UExpressionEvaluatorDefinition, 64);
 
 /* ---------------------------------------------------------- UWillowLevelTimerDefinition ---------------------------------------------------------- */
 
@@ -17375,7 +18471,7 @@ struct UGearboxDialogPriority {
 
 struct UDownloadablePackageDefinition {
   UGBXDefinition                            Super;
-  void                                     *VfTable_IIDlcLicenseObject;
+  VfTable                                   IIDlcLicenseObject;
   int                                       PackageId;
   int                                       PackageMask;
   FString                                   PackageDisplayName;
@@ -17421,7 +18517,7 @@ struct native FTier {
 };
 struct USkillTreeBranchDefinition {
   UGBXDefinition                       Super;
-  void                                *VfTable_IIConstructObject;
+  VfTable                              IIConstructObject;
   TArray_USkillTreeBranchDefinitionPtr Children;
   TArray_FTier                         Tiers;
   USkillTreeBranchLayoutDefinition    *Layout;
@@ -17497,7 +18593,7 @@ struct UInputDeviceCollectionDefinition {
 
 struct UDownloadableContentDefinition {
   UGBXDefinition                  Super;
-  void                           *VfTable_IIDlcLicenseObject;
+  VfTable                         IIDlcLicenseObject;
   UDownloadablePackageDefinition *PackageDef;
   int                             ContentId;
   int                             LicenseMask;
@@ -19246,17 +20342,16 @@ struct UInteractionIconDefinition {
 /* ---------------------------------------------------------- UWillowHUDGFxMovie ---------------------------------------------------------- */
 
 struct native FTrackedSkillIconState {
-  /** ETrackedSkillType */
   ETrackedSkillType Type;
-  USwfMovie *Icon;
-  int PercentComplete;
-  int StackCount;
+  USwfMovie        *Icon;
+  int               PercentComplete;
+  int               StackCount;
 };
 struct native FCriticalTextMessage {
   FString Message;
   FString Title;
-  float DestroyTime;
-  FColor DrawColor;
+  float   DestroyTime;
+  FColor  DrawColor;
 };
 struct native FCriticalTextMessageArray {
   TArray_FCriticalTextMessage MessageArray;
@@ -19266,31 +20361,31 @@ struct native FHUDInteractionIcon {
 };
 struct native FAvailableTrackedSkill {
   USkillDefinition *SkillDef;
-  int RemappedSlot;
+  int               RemappedSlot;
 };
 struct native FInjuredStringReplacementSet {
   TArray_FName Skills;
-  FString NewPlayerInjuredString;
-  FString NewInjuredTooltipString1;
-  FString NewInjuredTooltipString2;
+  FString      NewPlayerInjuredString;
+  FString      NewInjuredTooltipString1;
+  FString      NewInjuredTooltipString2;
 };
 struct UWillowHUDGFxMovie {
-  UWillowGFxMovie3D Super;
-  BITFIELD bIsWidescreen                                : 1;
-  BITFIELD bIsPrimary                                   : 1;
-  BITFIELD bUsingPC360                                  : 1;
-  BITFIELD bUpdateSplitRegionNextTick                   : 1;
-  BITFIELD bHasEverPickedUpGrenades                     : 1;
-  BITFIELD bShowLevelTimer                              : 1;
-  BITFIELD bShowIpAddr                                  : 1;
-  BITFIELD bGameStageDebugEnabled                       : 1;
-  BITFIELD bCachedPersistentMapNameMatchesRecordingList : 1;
-  BITFIELD bDisplayTradeIcon_HUD                        : 1;
-  BITFIELD bDisplayTradeDisabledIcon_HUD                : 1;
-  BITFIELD RetryTraining_PausesGame                     : 1;
-  BITFIELD RetryTraining_bIsntActuallyATrainingMessage  : 1;
-  BITFIELD RetryTraining_bMandatory                     : 1;
-  BITFIELD bMidTick                                     : 1;
+  UWillowGFxMovie3D             Super;
+  BITFIELD                      bIsWidescreen                                : 1;
+  BITFIELD                      bIsPrimary                                   : 1;
+  BITFIELD                      bUsingPC360                                  : 1;
+  BITFIELD                      bUpdateSplitRegionNextTick                   : 1;
+  BITFIELD                      bHasEverPickedUpGrenades                     : 1;
+  BITFIELD                      bShowLevelTimer                              : 1;
+  BITFIELD                      bShowIpAddr                                  : 1;
+  BITFIELD                      bGameStageDebugEnabled                       : 1;
+  BITFIELD                      bCachedPersistentMapNameMatchesRecordingList : 1;
+  BITFIELD                      bDisplayTradeIcon_HUD                        : 1;
+  BITFIELD                      bDisplayTradeDisabledIcon_HUD                : 1;
+  BITFIELD                      RetryTraining_PausesGame                     : 1;
+  BITFIELD                      RetryTraining_bIsntActuallyATrainingMessage  : 1;
+  BITFIELD                      RetryTraining_bMandatory                     : 1;
+  BITFIELD                      bMidTick                                     : 1;
   ESplitScreenType              SplitscreenMode;
   BYTE                          bIsInVehicle;
   BYTE                          bNeedsWidgetsRenewed;
@@ -19552,6 +20647,39 @@ struct UAttributeInitializationDefinition {
   Variance                             RandomVariance;
   Range                                RangeRestriction;
 }; assert_size(UAttributeInitializationDefinition, 240);
+
+/* ---------------------------------------------------------- UBehavior_Explode ---------------------------------------------------------- */
+
+struct UBehavior_Explode {
+  UBehaviorBase               Super;
+  VfTable                     IIDamageCauser;
+  UClass                     *DamageSource;  /** Class<WillowDamageSource> */
+  AttributeInitializationData DamageRadiusFormula;
+  AttributeInitializationData DamageFormula;
+  AttributeInitializationData MomentumFormula;
+  UExplosionDefinition       *Definition;
+  BITFIELD                    bReplicate                  : 1;
+  BITFIELD                    bNoSound                    : 1;
+  BITFIELD                    bDisableRadiusDamageFalloff : 1;
+  BITFIELD                    bSkipTraceTest              : 1;
+  BITFIELD                    bCanDamageFriendlies        : 1;
+  BITFIELD                    bBarrelSource               : 1;
+  BITFIELD                    bPlantSource                : 1;
+  FVector                     LocationOffset;
+  FName                       SocketName;
+  FBehaviorContextData        DamageContext;
+  FVector                     HitNormal;
+  AttributeInitializationData StatusEffectDamage;
+  AttributeInitializationData StatusEffectChance;
+  FBehaviorContextData        OverrideContext;
+  FName                       OverrideName;
+  FBehaviorContextData        HitContext;
+  float                       BarrelSourceTime;
+  float                       PlantSourceTime;
+  float                       InstigatorSelfDamageScale;
+  AActor                     *OverrideActor;
+  AActor                     *SelfActor;
+}; assert_size(UBehavior_Explode, 280);
 
 /* ---------------------------------------------------------- UIAIInterface ---------------------------------------------------------- */
 
@@ -20333,7 +21461,7 @@ struct native FDeathByWeaponDamageStatID {
 };
 struct UWillowCharacterClassDefinition {
   UCharacterClassDefinition            Super;
-  VfTable                              VfTable_IIBehaviorProvider;
+  VfTable                              IIBehaviorProvider;
   UWillowCharacterClassDefinition     *AttributeParentClass;
   TArray_AttributeBaseValueData        AttributeStartingValues;
   TArray_FFlagDefinitionInitialization DesignerFlagStartingValues;
@@ -22095,7 +23223,7 @@ struct UWillowInventoryPartDefinition {
 
 struct UWeaponPartDefinition {
   UWillowInventoryPartDefinition             Super;
-  void                                      *VfTable_IIBehaviorProvider;
+  VfTable                                    IIBehaviorProvider;
   TArray_UWeaponNamePartDefinitionPtr        TitleList;
   TArray_UWeaponNamePartDefinitionPtr        PrefixList;
   UWillowDamageTypeDefinition               *CustomDamageTypeDefinition;
@@ -22109,8 +23237,7 @@ struct UWeaponPartDefinition {
   EWeaponPartType                            PartType;
   EWeaponPartVariation                       PartVariation;
   BYTE                                       NumPhysicalBarrelsToFireFrom;
-  /* TODO: TArray_WeaponBoneControllerData */
-  TArray_void                                BoneControllers;
+  TArray_FWeaponBoneControllerData           BoneControllers;
   TArray_FName                               VisibleAmmoBoneNames;
   FName                                      LeftHandIKHoldName;
   BITFIELD                                   bIsSpinningEnabled   : 1; /* 0 */
@@ -22285,9 +23412,29 @@ struct UDesignerAttributeDefinition {
 struct USequenceVariable {
 	USequenceObject       Super;
 	FName                 VarName;
-	BITFIELD              bLinkToAttribute:1;
+	BITFIELD              bLinkToAttribute : 1;
 	UAttributeDefinition *OptionalAttributeDefinition;
 }; assert_size(USequenceVariable, 88);
+
+/* ---------------------------------------------------------- UInterpData ---------------------------------------------------------- */
+
+struct native FAnimSetBakeAndPruneStatus {
+  FString  AnimSetName;
+  BITFIELD bReferencedButUnused : 1;
+  BITFIELD bSkipBakeAndPrune    : 1;
+};
+struct UInterpData {
+  USequenceVariable                 Super;
+  float                             InterpLength;
+  float                             PathBuildTime;
+  TArray_UInterpGroupPtr            InterpGroups;
+  UInterpCurveEdSetup              *CurveEdSetup;
+  float                             EdSectionStart;
+  float                             EdSectionEnd;
+  BITFIELD                          bShouldBakeAndPrune : 1;
+  TArray_FAnimSetBakeAndPruneStatus BakeAndPruneStatus;
+  UInterpGroupDirector             *CachedDirectorGroup;
+}; assert_size(UInterpData, 140);
 
 /* ---------------------------------------------------------- USeqVar_Object ---------------------------------------------------------- */
 
@@ -22297,6 +23444,15 @@ struct USeqVar_Object {
   FVector           ActorLocation;
 }; assert_size(USeqVar_Object, 104);
 
+/* ---------------------------------------------------------- USeqVar_Player ---------------------------------------------------------- */
+
+struct USeqVar_Player {
+  USeqVar_Object    Super;
+  TArray_UObjectPtr Players;
+  BITFIELD          bAllPlayers : 1;
+  int               PlayerIdx;
+}; assert_size(USeqVar_Player, 124);
+
 /* ---------------------------------------------------------- USequenceOp ---------------------------------------------------------- */
 
 struct native FSeqOpInputLink {
@@ -22305,13 +23461,13 @@ struct native FSeqOpInputLink {
 	USequenceOp *LinkedOp;
 	int          DrawY;
 	int          OverrideDelta;
-	BITFIELD     bHidden:1;
-	BITFIELD     bMoving:1;
-	BITFIELD     bClampedMax:1;
-	BITFIELD     bClampedMin:1;
-	BITFIELD     bDisabled:1;
-	BITFIELD     bDisabledPIE:1;
-	BITFIELD     bHasImpulse:1;
+	BITFIELD     bHidden      : 1;
+	BITFIELD     bMoving      : 1;
+	BITFIELD     bClampedMax  : 1;
+	BITFIELD     bClampedMin  : 1;
+	BITFIELD     bDisabled    : 1;
+	BITFIELD     bDisabledPIE : 1;
+	BITFIELD     bHasImpulse  : 1;
 	float        ActivateDelay;
 };
 struct native FSeqOpOutputInputLink {
@@ -22422,6 +23578,13 @@ struct USequence {
   float                        DefaultViewZoom;
 }; assert_size(USequence, 232);
 
+/* ---------------------------------------------------------- UPrefabSequence ---------------------------------------------------------- */
+
+struct UPrefabSequence {
+  USequence        Super;
+  APrefabInstance *OwnerPrefab;
+}; assert_size(UPrefabSequence, 236);
+
 /* ---------------------------------------------------------- USequenceEvent ---------------------------------------------------------- */
 
 struct USequenceEvent {
@@ -22443,6 +23606,19 @@ struct USequenceEvent {
 	BYTE                                 RequiredAllegiance;
 	USequenceEventCustomEnableCondition *CustomEnableCondition;
 }; assert_size(USequenceEvent, 196);
+
+/* ---------------------------------------------------------- USeqEvent_Touch ---------------------------------------------------------- */
+
+struct USeqEvent_Touch {
+  USequenceEvent   Super;
+  TArray_UClassPtr ClassProximityTypes;  /** Class<Actor> */
+  TArray_AActorPtr ArchetypeFilter;
+  TArray_UClassPtr IgnoredClassProximityTypes;  /** Class<Actor> */
+  BITFIELD         bForceOverlapping : 1;
+  BITFIELD         bUseInstigator    : 1;
+  BITFIELD         bAllowDeadPawns   : 1;
+  TArray_AActorPtr TouchedList;
+}; assert_size(USeqEvent_Touch, 248);
 
 /* ---------------------------------------------------------- USeqEvent_EncounterWaveComplete ---------------------------------------------------------- */
 
@@ -22552,6 +23728,87 @@ struct USeqAct_Latent {
 	BITFIELD         bAborted : 1;
 }; assert_size(USeqAct_Latent, 180);
 
+/* ---------------------------------------------------------- USeqAct_Interp ---------------------------------------------------------- */
+
+struct native export FSavedTransform {
+  FVector  Location;
+  FRotator Rotation;
+};
+struct native FCameraCutInfo {
+  FVector Location;
+  float   TimeStamp;
+};
+struct USeqAct_Interp {
+  USeqAct_Latent                 Super;
+  _TMAP_NAME(INT, INT)           SavedActorTransforms;    /* native const transient map{VOID,VOID} */
+  _TMAP_NAME(INT, INT)           SavedActorVisibilities;  /* native const transient map{VOID,VOID} */
+  float                          PlayRate;
+  float                          Position;
+  float                          ForceStartPosition;
+  BITFIELD                       bIsPlaying                            : 1;
+  BITFIELD                       bPaused                               : 1;
+  BITFIELD                       bIsBeingEdited                        : 1;
+  BITFIELD                       bLooping                              : 1;
+  BITFIELD                       bRewindOnPlay                         : 1;
+  BITFIELD                       bNoResetOnRewind                      : 1;
+  BITFIELD                       bRewindIfAlreadyPlaying               : 1;
+  BITFIELD                       bReversePlayback                      : 1;
+  BITFIELD                       bInterpForPathBuilding                : 1;
+  BITFIELD                       bForceStartPos                        : 1;
+  BITFIELD                       bDisableRadioFilter                   : 1;
+  BITFIELD                       bClientSideOnly                       : 1;
+  BITFIELD                       bSkipUpdateIfNotVisible               : 1;
+  BITFIELD                       bIsSkippable                          : 1;
+  BITFIELD                       bIsSkipped                            : 1;
+  BITFIELD                       bShouldShowGore                       : 1;
+  BITFIELD                       TestForInputActorsOnClient            : 1;
+  BITFIELD                       bFireEventsWhenJumpToLastFrame        : 1;
+  BITFIELD                       bFireCompleteEventWhenJumpToLastFrame : 1;
+  BITFIELD                       bLastFrameEventFired                  : 1;
+  BITFIELD                       bSkipNextUpdate                       : 1;
+  BITFIELD                       bInitialReplication                   : 1;
+  TArray_ACoverLinkPtr           LinkedCover;
+  UInterpData                   *InterpData;
+  TArray_UInterpGroupInstPtr     GroupInst;
+  UClass                        *ReplicatedActorClass;  /** Class<MatineeActor> */
+  AMatineeActor                 *ReplicatedActor;
+  int                            PreferredSplitScreenNum;
+  TArray_FCameraCutInfo          CameraCuts;
+  float                          TerminationTime;
+  FRenderingPerformanceOverrides RenderingOverrides;
+}; assert_size(USeqAct_Interp, 376);
+
+/* ---------------------------------------------------------- USeqAct_PrepareMapChange ---------------------------------------------------------- */
+
+struct USeqAct_PrepareMapChange {
+  USeqAct_Latent Super;
+  FName          MainLevelName;
+  TArray_FName   InitiallyLoadedSecondaryLevelNames;
+  BITFIELD       bIsHighPriority        : 1;
+  BITFIELD       bTransitionToFakeEntry : 1;
+  BITFIELD       bStatusIsOk            : 1;
+}; assert_size(USeqAct_PrepareMapChange, 204);
+
+/* ---------------------------------------------------------- USeqAct_WaitForLevelsVisible ---------------------------------------------------------- */
+
+struct USeqAct_WaitForLevelsVisible {
+  USeqAct_Latent Super;
+  TArray_FName   LevelNames;
+  BITFIELD       bShouldBlockOnLoad : 1;
+}; assert_size(USeqAct_WaitForLevelsVisible, 196);
+
+/* ---------------------------------------------------------- USeqAct_Delay ---------------------------------------------------------- */
+
+struct USeqAct_Delay {
+  USeqAct_Latent Super;
+  BITFIELD       bDelayActive      : 1;
+  BITFIELD       bStartWillRestart : 1;
+  float          DefaultDuration;
+  float          Duration;
+  float          LastUpdateTime;
+  float          RemainingTime;
+}; assert_size(USeqAct_Delay, 200);
+
 /* ---------------------------------------------------------- ATrigger ---------------------------------------------------------- */
 
 struct ATrigger {
@@ -22560,6 +23817,32 @@ struct ATrigger {
   BITFIELD bRecentlyTriggered : 1;
   float AITriggerDelay;
 }; assert_size(ATrigger, 404);
+
+/* ---------------------------------------------------------- AWillowTrigger ---------------------------------------------------------- */
+
+struct AWillowTrigger {
+  ATrigger                    Super;
+  VfTable                     IIUsable;
+  EInteractionIcons           HUDIcon;
+  ECurrencyType               CostsToUseType;
+  UInteractionIconDefinition *HUDIconDef;
+  UParticleSystemComponent   *ParticleHighlight;
+  USpriteComponent           *TriggerSprite;
+  BITFIELD                    bCostsToUse : 1;
+  int                         CostsToUseAmount;
+}; assert_size(AWillowTrigger, 432);
+
+/* ---------------------------------------------------------- AWillowWaypoint ---------------------------------------------------------- */
+
+struct AWillowWaypoint {
+  AWillowTrigger                Super;
+  VfTable                       IIMission;
+  FMissionObjectiveWaypointData WaypointInfo;
+  int                           AreaRadius;
+  BITFIELD                      bUpdateObjectiveOnPlayerTouch : 1;
+  BITFIELD                      bEnabled                      : 1;
+  TArray_AVolumePtr             TouchVolumes;
+}; assert_size(AWillowWaypoint, 472);
 
 /* ---------------------------------------------------------- AInteractionProxy ---------------------------------------------------------- */
 
@@ -22592,6 +23875,18 @@ struct ALight {
   ULightComponent *LightComponent;
   BITFIELD         bEnabled : 1;
 }; assert_size(ALight, 400);
+
+/* ---------------------------------------------------------- ASpotLight ---------------------------------------------------------- */
+
+struct ASpotLight {
+  ALight Super;
+}; assert_size(ASpotLight, 400);
+
+/* ---------------------------------------------------------- ADominantSpotLight ---------------------------------------------------------- */
+
+struct ADominantSpotLight {
+  ASpotLight Super;
+}; assert_size(ADominantSpotLight, 400);
 
 /* ---------------------------------------------------------- APointLight ---------------------------------------------------------- */
 
@@ -22847,7 +24142,7 @@ struct FWeaponAccessorySetup {
   FName                           WeaponArchetypeName;
   UGestaltSkeletalMeshDefinition *AccessoryDefinition;
   UGestaltPartMatrices           *AccessoryTransforms;
-  TArray_void                     AccessoryParts;
+  TArray_FGestaltPartPermutation  AccessoryParts;
 };
 struct FWeaponDefinitionData {
   UWeaponTypeDefinition       *WeaponTypeDefinition;
@@ -22870,9 +24165,9 @@ struct FWeaponDefinitionData {
 };
 struct native FWeaponMemento {
   FInventorySerialNumber SerialNumber;
-  int StoredAmmo;
-  BITFIELD bEquipped : 1;
-  BITFIELD bDropOnDeath : 1;
+  int                    StoredAmmo;
+  BITFIELD               bEquipped    : 1;
+  BITFIELD               bDropOnDeath : 1;
 };
 struct native FWeaponBoneControllerData {
   FName                     BoneName;
@@ -22883,7 +24178,7 @@ struct native FWeaponBoneControllerData {
 };
 struct native FExtraMuzzleEffect {
   UParticleSystem *Particles;
-  UAkEvent *Sound;
+  UAkEvent        *Sound;
 };
 struct UWillowWeaponTypes {
   UInterface Super;
@@ -23288,8 +24583,7 @@ struct UItemInspectionGFxMovie {
   float                              StartTime;
   UMeshComponent                    *MyInspectionMesh;
   UWillowInventoryDefinition        *InvDef;
-  FRotator                           MeshRotation;
-  __ALIGN(16)
+  FRotator                           MeshRotation; __ALIGN(16)
   FQuat                              MeshRotationQuat;
   FQuat                              MeshRotationPitchQuat;
   FQuat                              MeshRotationYawQuat;
@@ -23372,106 +24666,103 @@ struct native FCachedInvData {
 };
 __ALIGN(16)
 struct UStatusMenuExGFxMovie {
-  UWillowInventoryGFxMovie Super;
-  UStatusMenuGFxDefinition *StatusDef;
-  USkillTreeGFxDefinition *SkillDef;
-  FString InventoryTabString;
-  FString LogTabString;
-  FString MapTabString;
-  FString LevelString;
-  FString XPString;
-  FString NextString;
-  FString PoweredByString;
-  FString NoMissionsString;
-  FString NoClassModString;
-  FString EmptyInventorySlotText;
-  FString AlreadyEquipped;
-  FString Leg_Trans;
-  FString Leg_Outpost;
-  FString Leg_POI;
-  FString Leg_Player;
-  FString Leg_Buddy;
-  FString Leg_Waypoint;
-  FString Leg_Vss;
-  FString Leg_BB;
-  FString Leg_Health;
-  FString Leg_Shop;
-  FString Leg_Unknown;
-  FString Leg_Vehicle;
-  FString Leg_CustomWaypoint;
-  FString Leg_Customization;
-  FString MissionLogTooltip_Replay;
-  FString MissionLogTooltip_Track;
-  FString MissionLogTooltip_Scroll;
-  FString MissionLogTooltip_Sort;
-  FString MissionLogTooltip_ViewWorldMissions;
-  FString MissionLogTooltip_ViewMyMissions;
-  FString MissionLogTooltip_Ignore;
-  FString MissionLogTooltip_Unignore;
-  FString MissionLogTooltip_Cancel;
-  /* TArray_StatusMenuMissionEligibilityData */
-  TArray_void ClientMissions;
-  int ClientActiveMissionIndex;
-  /* TArray_StatusMenuMissionEligibilityData */
-  TArray_void WorldMissions;
-  BITFIELD bShowWorldMissions                      : 1;
-  BITFIELD bOnLeftSide                             : 1;
-  BITFIELD bFullyOpened                            : 1;
-  BITFIELD bHasScreenToCleanup                     : 1;
-  BITFIELD bMissionUpdated                         : 1;
-  BITFIELD bHasReadiableWeapon                     : 1;
-  BITFIELD bHasReadiableShield                     : 1;
-  BITFIELD bHasReadiableGrenadeMod                 : 1;
-  BITFIELD bHasReadiableClassMod                   : 1;
-  BITFIELD bHasReadiableArtifact                   : 1;
-  BITFIELD bInListView                             : 1;
-  BITFIELD bContextMenuUp                          : 1;
-  BITFIELD bDisplayMarketingUnlockDialogOnNextTick : 1;
-  BITFIELD bDraggingMouse                          : 1;
-  BITFIELD bShouldSaveGame                         : 1;
-  /* 1576 */
-  EMissionSortType                    MissionSortType;
-  EBackButtonScreen                   CurrentScreen;
-  int                                 MaxCapacity;
-  int                                 SlotsUsed;
-  float                               InventoryRefreshRate;
-  int                                 CachedMaxCapacity;
-  int                                 NewSlots;
-  int                                 CachedMaxReadied;
-  int                                 MaxReadiedWeapons;
-  TArray_FCachedInvData               CachedInventory;
-  USkillTreeGFxObject                *SkillTreePanel;
-  UStatusMenuMapGFxObject            *StatusMenuMap;
-  FCellContentData                    EquippedContents[8];
-  TArray_AWillowInventoryPtr          BackpackThings;
-  TArray_AWillowInventoryPtr          AllThings;
-  FName                               CurrentCellName;
-  FName                               LastMainAction;
-  FString                             PlayerName;
-  int                                 ChangingCard;
-  TArray_FString                      UsedManufacturers;
-  TArray_FString                      UsedWeaponTypes;
-  TArray_FString                      EquippedLabels;
-  FSortFilterConfiguration            CompareConfiguration;
-  TArray_FSortFilterConfiguration     SortConfigurations;
-  int                                 LeftSideSortConfigIndex;
-  FName                               ScreenExitKey;
-  UGFxTextListContainer              *MissionLogTextList;
-  TArray_FString                      MissionCategories;
-  FString                             MoreArrowsDirection;
-  float                               MoveHighlightRepeatRate;
-  FIntPoint                           DragMouseLoc;
-  float                               MouseDragScale;
-  UStatusMenuInventoryPanelGFxObject *InventoryPanel;
-  UChallengesScreenGFxObject         *ChallengesPanel;
-  float                               CurrentScreenTime;
-  float                               CurrMapZoomAudioLoopCounter;
-  float                               PrevMapZoomAudioLoopCounter;
-  float                               MapZoomAudioRefireDelay;
-  float                               MapZoomAudioRefireDuration;
-  float                               LastMissionLogTickTime;
-  int                                 TicksUntilPanelSwitchAllowed;
-  UPCContextMenuObject               *PCContextMenu;
+  UWillowInventoryGFxMovie                 Super;
+  UStatusMenuGFxDefinition                *StatusDef;
+  USkillTreeGFxDefinition                 *SkillDef;
+  FString                                  InventoryTabString;
+  FString                                  LogTabString;
+  FString                                  MapTabString;
+  FString                                  LevelString;
+  FString                                  XPString;
+  FString                                  NextString;
+  FString                                  PoweredByString;
+  FString                                  NoMissionsString;
+  FString                                  NoClassModString;
+  FString                                  EmptyInventorySlotText;
+  FString                                  AlreadyEquipped;
+  FString                                  Leg_Trans;
+  FString                                  Leg_Outpost;
+  FString                                  Leg_POI;
+  FString                                  Leg_Player;
+  FString                                  Leg_Buddy;
+  FString                                  Leg_Waypoint;
+  FString                                  Leg_Vss;
+  FString                                  Leg_BB;
+  FString                                  Leg_Health;
+  FString                                  Leg_Shop;
+  FString                                  Leg_Unknown;
+  FString                                  Leg_Vehicle;
+  FString                                  Leg_CustomWaypoint;
+  FString                                  Leg_Customization;
+  FString                                  MissionLogTooltip_Replay;
+  FString                                  MissionLogTooltip_Track;
+  FString                                  MissionLogTooltip_Scroll;
+  FString                                  MissionLogTooltip_Sort;
+  FString                                  MissionLogTooltip_ViewWorldMissions;
+  FString                                  MissionLogTooltip_ViewMyMissions;
+  FString                                  MissionLogTooltip_Ignore;
+  FString                                  MissionLogTooltip_Unignore;
+  FString                                  MissionLogTooltip_Cancel;
+  TArray_FStatusMenuMissionEligibilityData ClientMissions;
+  int                                      ClientActiveMissionIndex;
+  TArray_FStatusMenuMissionEligibilityData WorldMissions;
+  BITFIELD                                 bShowWorldMissions                      : 1;
+  BITFIELD                                 bOnLeftSide                             : 1;
+  BITFIELD                                 bFullyOpened                            : 1;
+  BITFIELD                                 bHasScreenToCleanup                     : 1;
+  BITFIELD                                 bMissionUpdated                         : 1;
+  BITFIELD                                 bHasReadiableWeapon                     : 1;
+  BITFIELD                                 bHasReadiableShield                     : 1;
+  BITFIELD                                 bHasReadiableGrenadeMod                 : 1;
+  BITFIELD                                 bHasReadiableClassMod                   : 1;
+  BITFIELD                                 bHasReadiableArtifact                   : 1;
+  BITFIELD                                 bInListView                             : 1;
+  BITFIELD                                 bContextMenuUp                          : 1;
+  BITFIELD                                 bDisplayMarketingUnlockDialogOnNextTick : 1;
+  BITFIELD                                 bDraggingMouse                          : 1;
+  BITFIELD                                 bShouldSaveGame                         : 1;
+  EMissionSortType                         MissionSortType;
+  EBackButtonScreen                        CurrentScreen;
+  int                                      MaxCapacity;
+  int                                      SlotsUsed;
+  float                                    InventoryRefreshRate;
+  int                                      CachedMaxCapacity;
+  int                                      NewSlots;
+  int                                      CachedMaxReadied;
+  int                                      MaxReadiedWeapons;
+  TArray_FCachedInvData                    CachedInventory;
+  USkillTreeGFxObject                     *SkillTreePanel;
+  UStatusMenuMapGFxObject                 *StatusMenuMap;
+  FCellContentData                         EquippedContents[8];
+  TArray_AWillowInventoryPtr               BackpackThings;
+  TArray_AWillowInventoryPtr               AllThings;
+  FName                                    CurrentCellName;
+  FName                                    LastMainAction;
+  FString                                  PlayerName;
+  int                                      ChangingCard;
+  TArray_FString                           UsedManufacturers;
+  TArray_FString                           UsedWeaponTypes;
+  TArray_FString                           EquippedLabels;
+  FSortFilterConfiguration                 CompareConfiguration;
+  TArray_FSortFilterConfiguration          SortConfigurations;
+  int                                      LeftSideSortConfigIndex;
+  FName                                    ScreenExitKey;
+  UGFxTextListContainer                   *MissionLogTextList;
+  TArray_FString                           MissionCategories;
+  FString                                  MoreArrowsDirection;
+  float                                    MoveHighlightRepeatRate;
+  FIntPoint                                DragMouseLoc;
+  float                                    MouseDragScale;
+  UStatusMenuInventoryPanelGFxObject      *InventoryPanel;
+  UChallengesScreenGFxObject              *ChallengesPanel;
+  float                                    CurrentScreenTime;
+  float                                    CurrMapZoomAudioLoopCounter;
+  float                                    PrevMapZoomAudioLoopCounter;
+  float                                    MapZoomAudioRefireDelay;
+  float                                    MapZoomAudioRefireDuration;
+  float                                    LastMissionLogTickTime;
+  int                                      TicksUntilPanelSwitchAllowed;
+  UPCContextMenuObject                    *PCContextMenu;
 }; assert_size(UStatusMenuExGFxMovie, 1984 /* 1972 */);
 
 /* ---------------------------------------------------------- AWillowItem ---------------------------------------------------------- */
@@ -23522,6 +24813,14 @@ struct AWillowUsableItem {
   VfTable     IIMissionObjective;
   int         ObjectiveBit;
 }; assert_size(AWillowUsableItem, 2452);
+
+/* ---------------------------------------------------------- AWillowMissionItem ---------------------------------------------------------- */
+
+struct AWillowMissionItem {
+  AWillowUsableItem             Super;
+  AWillowMissionPickupFailsafe *PickupFailsafe;
+  FString                       MissionItemString;
+}; assert_size(AWillowMissionItem, 2468);
 
 /* ---------------------------------------------------------- AWillowUsableCustomizationItem ---------------------------------------------------------- */
 
@@ -24083,8 +25382,7 @@ struct ANavigationPoint {
   APawn                  *AnchoredPawn;
   float                   LastAnchoredPawnTime;
   int                     NodeSearchFlags;
-  /* TODO: HybridNavigationArea */
-  void                   *AreaActor;
+  AHybridNavigationArea  *AreaActor;
   FName                   AreaName;
   int                     AreaReach;
   int                     AreaVerticalReach;
@@ -24148,15 +25446,15 @@ struct APortalMarker {
 /* ---------------------------------------------------------- APylon ---------------------------------------------------------- */
 
 struct native FNavMeshPathSize {
-  float Size;
-  float Height;
+  float  Size;
+  float  Height;
   FColor PolyColor;
   FColor ObstacleColor;
 };
 struct native atomicwhencooked immutablewhencooked FPolyReference {
   FActorReference OwningPylon;
-  int PolyId;
-  void *CachedPoly;
+  int             PolyId;
+  void           *CachedPoly;
 };
 struct APylon {
   ANavigationPoint Super;
@@ -24243,32 +25541,32 @@ struct ALadder {
 
 struct native atomicwhencooked immutablewhencooked FCoverReference {
   FActorReference Super;
-  int SlotIdx;
+  int             SlotIdx;
 };
 struct native atomicwhencooked immutablewhencooked FCoverInfo {
   ACoverLink *Link;
-  int SlotIdx;
+  int         SlotIdx;
 };
 struct native atomicwhencooked immutablewhencooked FCovPosInfo {
   ACoverLink *Link;
-  int LtSlotIdx;
-  int RtSlotIdx;
-  float LtToRtPct;
-  FVector Location;
-  FVector Normal;
-  FVector Tangent;
+  int         LtSlotIdx;
+  int         RtSlotIdx;
+  float       LtToRtPct;
+  FVector     Location;
+  FVector     Normal;
+  FVector     Tangent;
 };
 struct native atomicwhencooked immutablewhencooked FFireLinkItem {
-  ECoverType SrcType;
+  ECoverType   SrcType;
   ECoverAction SrcAction;
-  ECoverType DestType;
+  ECoverType   DestType;
   ECoverAction DestAction;
 };
 struct native atomicwhencooked immutablewhencooked FFireLink {
   TArray_BYTE Interactions;
-  int PackedProperties_CoverPairRefAndDynamicInfo;
-  BITFIELD bFallbackLink       : 1;
-  BITFIELD bDynamicIndexInited : 1;
+  int         PackedProperties_CoverPairRefAndDynamicInfo;
+  BITFIELD    bFallbackLink       : 1;
+  BITFIELD    bDynamicIndexInited : 1;
 };
 struct native atomicwhencooked immutablewhencooked FDynamicLinkInfo {
   FVector LastTargetLocation;
@@ -24276,92 +25574,91 @@ struct native atomicwhencooked immutablewhencooked FDynamicLinkInfo {
 };
 struct native atomicwhencooked immutablewhencooked FExposedLink {
   FCoverReference TargetActor;
-  BYTE ExposedScale;
+  BYTE            ExposedScale;
 };
 struct native atomicwhencooked immutablewhencooked FSlotMoveRef {
   FPolyReference Poly;
   FBasedPosition Dest;
-  int Direction;
+  int            Direction;
 };
 struct native atomicwhencooked immutablewhencooked FCoverSlot {
-  APawn *SlotOwner;
-  float SlotValidAfterTime;
-  ECoverType ForceCoverType;
-  ECoverType CoverType;
+  APawn                    *SlotOwner;
+  float                     SlotValidAfterTime;
+  ECoverType                ForceCoverType;
+  ECoverType                CoverType;
   ECoverLocationDescription LocationDescription;
-  FVector LocationOffset;
-  FRotator RotationOffset;
-  /** ECoverAction */
-  TArray_BYTE Actions;
-  TArray_FFireLink FireLinks;
-  TArray_FFireLink RejectedFireLinks;
-  TArray_INT ExposedCoverPackedProperties;
-  int TurnTargetPackedProperties;
-  TArray_FSlotMoveRef SlipRefs;
-  TArray_FCoverInfo OverlapClaimsList;
-  BITFIELD bLeanLeft                : 1;
-  BITFIELD bLeanRight               : 1;
-  BITFIELD bForceCanPopUp           : 1;
-  BITFIELD bCanPopUp                : 1;
-  BITFIELD bCanMantle               : 1;
-  BITFIELD bCanClimbUp              : 1;
-  BITFIELD bForceCanCoverSlip_Left  : 1;
-  BITFIELD bForceCanCoverSlip_Right : 1;
-  BITFIELD bCanCoverSlip_Left       : 1;
-  BITFIELD bCanCoverSlip_Right      : 1;
-  BITFIELD bCanSwatTurn_Left        : 1;
-  BITFIELD bCanSwatTurn_Right       : 1;
-  BITFIELD bEnabled                 : 1;
-  BITFIELD bAllowPopup              : 1;
-  BITFIELD bAllowMantle             : 1;
-  BITFIELD bAllowCoverSlip          : 1;
-  BITFIELD bAllowClimbUp            : 1;
-  BITFIELD bAllowSwatTurn           : 1;
-  BITFIELD bForceNoGroundAdjust     : 1;
-  BITFIELD bPlayerOnly              : 1;
-  BITFIELD bPreferLeanOverPopup     : 1;
-  BITFIELD bDestructible            : 1;
-  BITFIELD bSelected                : 1;
-  BITFIELD bFailedToFindSurface     : 1;
+  FVector                   LocationOffset;
+  FRotator                  RotationOffset;
+  TArray_ECoverAction       Actions;
+  TArray_FFireLink          FireLinks;
+  TArray_FFireLink          RejectedFireLinks;
+  TArray_INT                ExposedCoverPackedProperties;
+  int                       TurnTargetPackedProperties;
+  TArray_FSlotMoveRef       SlipRefs;
+  TArray_FCoverInfo         OverlapClaimsList;
+  BITFIELD                  bLeanLeft                : 1;
+  BITFIELD                  bLeanRight               : 1;
+  BITFIELD                  bForceCanPopUp           : 1;
+  BITFIELD                  bCanPopUp                : 1;
+  BITFIELD                  bCanMantle               : 1;
+  BITFIELD                  bCanClimbUp              : 1;
+  BITFIELD                  bForceCanCoverSlip_Left  : 1;
+  BITFIELD                  bForceCanCoverSlip_Right : 1;
+  BITFIELD                  bCanCoverSlip_Left       : 1;
+  BITFIELD                  bCanCoverSlip_Right      : 1;
+  BITFIELD                  bCanSwatTurn_Left        : 1;
+  BITFIELD                  bCanSwatTurn_Right       : 1;
+  BITFIELD                  bEnabled                 : 1;
+  BITFIELD                  bAllowPopup              : 1;
+  BITFIELD                  bAllowMantle             : 1;
+  BITFIELD                  bAllowCoverSlip          : 1;
+  BITFIELD                  bAllowClimbUp            : 1;
+  BITFIELD                  bAllowSwatTurn           : 1;
+  BITFIELD                  bForceNoGroundAdjust     : 1;
+  BITFIELD                  bPlayerOnly              : 1;
+  BITFIELD                  bPreferLeanOverPopup     : 1;
+  BITFIELD                  bDestructible            : 1;
+  BITFIELD                  bSelected                : 1;
+  BITFIELD                  bFailedToFindSurface     : 1;
 };
 struct ACoverLink {
-  ANavigationPoint Super;
-  void *VfTable_IIGBXNavMeshSpecialMove;
-  BITFIELD GLOBAL_bUseSlotMarkers  : 1;
-  BITFIELD bDisabled               : 1;
-  BITFIELD bClaimAllSlots          : 1;
-  BITFIELD bAutoSort               : 1;
-  BITFIELD bAutoAdjust             : 1;
-  BITFIELD bCircular               : 1;
-  BITFIELD bLooped                 : 1;
-  BITFIELD bPlayerOnly             : 1;
-  BITFIELD bDynamicCover           : 1;
-  BITFIELD bFractureOnTouch        : 1;
-  BITFIELD bDebug                  : 1;
-  BITFIELD bDebug_FireLinks        : 1;
-  BITFIELD bDebug_ExposedLinks     : 1;
-  BITFIELD bDebug_CoverGen         : 1;
-  BITFIELD bDoAutoSlotDensityFixup : 1;
-  float LeanTraceDist;
-  TArray_FCoverSlot Slots;
-  TArray_FDynamicLinkInfo DynamicLinkInfos;
-  TArray_APawnPtr Claims;
-  float InvalidateDistance;
-  float MaxFireLinkDist;
-  FVector CircularOrigin;
-  float CircularRadius;
-  float AlignDist;
-  float AutoCoverSlotInterval;
-  float StandHeight;
-  float MidHeight;
-  FVector StandingLeanOffset;
-  FVector CrouchLeanOffset;
-  FVector PopupOffset;
-  float SlipDist;
-  float TurnDist;
-  float DangerScale;
-  FString CoverSlotMarkerClassName;
-  ACoverLink *NextCoverLink;
+  ANavigationPoint          Super;
+  VfTable                   IIGBXNavMeshSpecialMove;
+  BITFIELD                  GLOBAL_bUseSlotMarkers  : 1;
+  BITFIELD                  bDisabled               : 1;
+  BITFIELD                  bClaimAllSlots          : 1;
+  BITFIELD                  bAutoSort               : 1;
+  BITFIELD                  bAutoAdjust             : 1;
+  BITFIELD                  bCircular               : 1;
+  BITFIELD                  bLooped                 : 1;
+  BITFIELD                  bPlayerOnly             : 1;
+  BITFIELD                  bDynamicCover           : 1;
+  BITFIELD                  bFractureOnTouch        : 1;
+  BITFIELD                  bDebug                  : 1;
+  BITFIELD                  bDebug_FireLinks        : 1;
+  BITFIELD                  bDebug_ExposedLinks     : 1;
+  BITFIELD                  bDebug_CoverGen         : 1;
+  BITFIELD                  bDoAutoSlotDensityFixup : 1;
+  float                     LeanTraceDist;
+  TArray_FCoverSlot         Slots;
+  TArray_FDynamicLinkInfo   DynamicLinkInfos;
+  TArray_APawnPtr           Claims;
+  float                     InvalidateDistance;
+  float                     MaxFireLinkDist;
+  FVector                   CircularOrigin;
+  float                     CircularRadius;
+  float                     AlignDist;
+  float                     AutoCoverSlotInterval;
+  float                     StandHeight;
+  float                     MidHeight;
+  FVector                   StandingLeanOffset;
+  FVector                   CrouchLeanOffset;
+  FVector                   PopupOffset;
+  float                     SlipDist;
+  float                     TurnDist;
+  float                     DangerScale;
+  FString                   CoverSlotMarkerClassName;
+  ACoverLink               *NextCoverLink;
   ECoverLocationDescription LocationDescription;
 }; assert_size(ACoverLink, 736);
 
@@ -24377,27 +25674,26 @@ struct native FCoverExposureData {
   BITFIELD bExposedRight : 1;
 };
 struct native FCombatZoneSearchData {
-  float ZoneMoveDist;
-  FAIRange ZoneTimeLimit;
-  FAIRange TargetRange;
-  float MinHeight;
-  BITFIELD bCanFail : 1;
+  float           ZoneMoveDist;
+  FAIRange        ZoneTimeLimit;
+  FAIRange        TargetRange;
+  float           MinHeight;
+  BITFIELD        bCanFail : 1;
   ECombatPointLOS LineOfSight;
-  FAIRange LineOfSightTimeLimit;
+  FAIRange        LineOfSightTimeLimit;
 };
 struct native FCombatPointSearchData {
   FCombatZoneSearchData Super;
-  BITFIELD bUseCover : 1;
-  float PointRadius;
+  BITFIELD              bUseCover : 1;
+  float                 PointRadius;
 };
 struct native FCombatPointData {
-  int Slot;
-  FVector Location;
-  FActorReference Actor;
-  EPopPointContraintType ConstraintType;
-  /* TODO: TArray_PopulationSpawnedActorTagDefinitionPtr */
-  TArray_voidPtr ConstraintTags;
-  BITFIELD bClaimed : 1;
+  int                                            Slot;
+  FVector                                        Location;
+  FActorReference                                Actor;
+  EPopPointContraintType                         ConstraintType;
+  TArray_UPopulationSpawnedActorTagDefinitionPtr ConstraintTags;
+  BITFIELD                                       bClaimed : 1;
 };
 struct native FCombatPointDebugData {
   BITFIELD bBest : 1;
@@ -24405,34 +25701,44 @@ struct native FCombatPointDebugData {
   FVector  Location;
 };
 struct UWillowAIComponent {
-  UAIComponent Super;
-  AWillowMind *MyWillowMind;
-  /* TODO: PopulationOpportunityDen */
-  void *MyDen;
-  /* TODO: WillowAIBlackboardComponent */
-  void *MyBlackboard;
-  /** IAIInterface */
-  FImplementedInterface TargetLeader;
-  /** IAIInterface */
-  FImplementedInterface FormationLeader;
-  TArray_INT InvalidCombatZones;
-  TArray_INT ClaimedCombatZones;
-  float ZoneTime;
-  FCombatZone LastZone;
-  FCombatZone CurrentZone;
-  FCombatZone ClaimedZone;
-  AVolume *CombatVolume;
-  BITFIELD bCombatVolumeOnlyLimitsRangedAttacks : 1;
-  BITFIELD bCanUseCover                         : 1;
-  FCoverInfo DesiredCover;
-  float LastHurtTime;
-  float LastAttackedTime;
-  AActor *LastAttacker;
-  TArray_FAIHoldData HeadLookHolds;
-  TArray_FAIHoldData PhaseLockHolds;
-  float LastTickTime;
-  float TickThrottleTime;
+  UAIComponent                  Super;
+  AWillowMind                  *MyWillowMind;
+  APopulationOpportunityDen    *MyDen;
+  UWillowAIBlackboardComponent *MyBlackboard;
+  FImplementedInterface         TargetLeader;     /** IAIInterface */
+  FImplementedInterface         FormationLeader;  /** IAIInterface */
+  TArray_INT                    InvalidCombatZones;
+  TArray_INT                    ClaimedCombatZones;
+  float                         ZoneTime;
+  FCombatZone                   LastZone;
+  FCombatZone                   CurrentZone;
+  FCombatZone                   ClaimedZone;
+  AVolume                      *CombatVolume;
+  BITFIELD                      bCombatVolumeOnlyLimitsRangedAttacks : 1;
+  BITFIELD                      bCanUseCover                         : 1;
+  FCoverInfo                    DesiredCover;
+  float                         LastHurtTime;
+  float                         LastAttackedTime;
+  AActor                       *LastAttacker;
+  TArray_FAIHoldData            HeadLookHolds;
+  TArray_FAIHoldData            PhaseLockHolds;
+  float                         LastTickTime;
+  float                         TickThrottleTime;
 }; assert_size(UWillowAIComponent, 448);
+
+/* ---------------------------------------------------------- UWillowAIBlackboardComponent ---------------------------------------------------------- */
+
+struct UWillowAIBlackboardComponent {
+  UWillowAIComponent Super;
+  UPawnAllegiance   *Allegiance;
+}; assert_size(UWillowAIBlackboardComponent, 452);
+
+/* ---------------------------------------------------------- UWillowAIDenComponent ---------------------------------------------------------- */
+
+struct UWillowAIDenComponent {
+  UWillowAIComponent     Super;
+  UWillowAIDenComponent *ParentDenAI;
+}; assert_size(UWillowAIDenComponent, 452);
 
 /* ---------------------------------------------------------- UNavigationHandle ---------------------------------------------------------- */
 
@@ -24466,8 +25772,8 @@ struct UNavigationHandle {
   FPathStore                 PathCache;
   void                      *BestUnfinishedPathPoint;
   void                      *CurrentEdge;
-  void                      *SubGoal_DestPoly;
-  FBasedPosition             FinalDestination;
+  void                      *SubGoal_DestPoly; __ALIGN(16)
+  FBasedPosition             FinalDestination; __ALIGN(16)
   BITFIELD                   bSkipRouteCacheUpdates        : 1;
   BITFIELD                   bUseORforEvaluateGoal         : 1;
   BITFIELD                   bDebugConstraintsAndGoalEvals : 1;
@@ -24862,138 +26168,131 @@ struct FScriptInterface {
 
 struct native FHUDWidget_ChallengeData {
   UChallengeDefinition *Challenge;
-	INT LevelIndex;
-	INT ConditionIndex;
-	INT CurrStatVal;
-	INT GoalStatVal;
-	BITFIELD bComplete : 1;
+	int                   LevelIndex;
+	int                   ConditionIndex;
+	int                   CurrStatVal;
+	int                   GoalStatVal;
+	BITFIELD              bComplete : 1;
 };
 struct FFadePickupParticle {
-	AActor *SourceActor;
+	AActor                   *SourceActor;
 	UParticleSystemComponent *Particle;
-	float FadeEndTime;
+	float                     FadeEndTime;
 };
 struct AWillowHUD {
-	AHUD Super;
-
-	BITFIELD bPawnInspectorUsesAIDebugCam  : 1; /* 0 */
-	BITFIELD bShowDlcVersionErrors         : 1; /* 00 */
-	BITFIELD bShowDlcNeedsEnumerationError : 1; /* 000 */
-	BITFIELD bShowBros                     : 1; /* 0000 */
-	BITFIELD bShowBuildInfo                : 1; /* 00000 */
-	BITFIELD bShowHUDRestoreValue          : 1; /* 000000 */
-	BITFIELD bAIInspectorEnabled           : 1; /* 0000000 */
-	BITFIELD bStatusEffectInspectorEnabled : 1; /* 00000000 */
-	BITFIELD bShowHosEnabled               : 1; /* 000000000 */
-	BITFIELD bShowViewModelAnimDebug       : 1; /* 0000000000 */
-	BITFIELD bShowConnectionWarning        : 1; /* 00000000000 */
-	BITFIELD bAutoAimDebugEnabled          : 1; /* 000000000000 */
-
-	float                         DlcVersionErrorDisplayDuration;
-	float                         DlcVersionErrorDisplayStartTime;
-	float                         PlayerInfoHeight;
-	float                         PlayerInfoMaxDist;
-	APawn                        *PawnOwner;
-  AWillowInventory             *SavedLookAtInventory;
-	AActor                       *CachedBestPickup;
-	AActor                       *CachedHoverPickup;
-	AActor                       *ClientSavedPickup;
-	AActor                       *ClosestPickup;
-	UParticleSystemComponent     *HoverParticleComponent;
-	TArray_FFadePickupParticle    PendingKillHoverComponents;
-	UItemPickupGFxMovie          *PickupItemCard;
-	UParticleSystemComponent     *PickupParticleComponent;
-	FString                       BuildNumber;
-	FString                       BuildTag;
-	FString                       BuildChangelist;
-	INT                           BuildInfoXOffset;
-	INT                           BuildInfoYOffset;
-	AWillowPlayerController      *WPlayerOwner;
-  AWillowPlayerReplicationInfo *WPRI;
-  UHUDDefinition               *HUDDef;
-	FScriptInterface              CurrentTargetable;
-	FScriptInterface              LastPreferredTargetable;
-	float                         HealthBarFadeStartTime;
-	FVector                       LastAutogunTargetLocation;
-	float                         InspectAIOutputStartingXPos;
-	float                         InspectAIOutputStartingYPos;
-	float                         InspectAIOutputIndentSize;
-	float                         InspectAIMaxFlagOutputLineSize;
-	FColor                        InspectAIRulesColor;
-	FColor                        InspectAITimersColor;
-	FColor                        InspectAITargetsColor;
-	FColor                        InspectAIFlagIsTrueColor;
-	FColor                        InspectAIFlagIsFalseColor;
-	float                         InspectStatusEffectOutputStartingXPos;
-	float                         InspectStatusEffectOutputStartingYPos;
-	float                         InspectStatusEffectOutputIndentSize;
-	FString                       InspectStatusEffectTypeName;
-	FColor                        ShowHosColor;
-	INT                           DangerousIconDifference;
-	INT                           ImpossibleEnemyDifference;
-	UWillowHUDGFxMovie           *HUDMovie;/* 776 */
-  UWeaponScopeGFxMovie         *WeaponScopeMovie;
-  UStatusMenuExGFxMovie        *StatusMenuExMovie;
-  UMaterialInstanceConstant    *SavingMatInst;
-  UMaterialInstanceConstant    *ConnectionMatInst;
-  UMaterial                    *SavingMat;
-  UMaterial                    *ConnectionMat;
-	float                         SaveDuration;
-	float                         SaveStartTime;
-	float                         FadeStartTime;
-	float                         FadeDuration;
-	FString                       RespawnDialogString;
-	FString                       RespawnDialogFeeWaivedString;
-	FString                       RespawnDialogTitleString;
-	FString                       RespawnDialogOtherDiedString;
-	FString                       RespawnDialogOtherDiedFeeWaivedString;
-	FString                       RespawnDialogUnknownPlayerString;
-	float                         ScreenFadeStartTime;
-	float                         ScreenFadeDuration;
-	float                         ScreenFadeStartOpacity;
-	float                         ScreenFadeOpacity;
-	FColor                        ScreenFadeColor;
-	FString                       DuelCountdownString;
-	FString                       DuelOutOfBoundsString;
-	float                         DefaultMessageDuration;
-	FString                       DeathStringPistol;
-	FString                       DeathStringShotgun;
-	FString                       DeathStringSMG;
-	FString                       DeathStringSniperRifle;
-	FString                       DeathStringRocketLauncher;
-	FString                       DeathStringAssaultRifle;
-	FString                       DeathStringFragGrenade;
-	FString                       DeathStringProteanGrenade;
-	FString                       DeathStringIncindiaryDamage;
-	FString                       DeathStringShockDamage;
-	FString                       DeathStringExplosiveDamage;
-	FString                       DeathStringCorrosiveDamage;
-	FString                       DeathStringImpactDamage;
-	FString                       DeathStringSuicide;
-	FString                       DeathStringUnknown;
-	FString                       DeathStringFallDamage;
-	float                         SavingMaterialScale;
-	float                         ConnectionMaterialScale;
-	float                         ConnectionWarningStartTime;
-	float                         SavingIconXOffset;
-	float                         SavingIconYOffset;
-	int                           MaxNumPickups;
-	float                         PendingWeaponCardDisplayTime;
-  /** EHUDEquippedCardType */
-	EHUDEquippedCardType          ActiveEquippedCardType;
-  /** EHUDPickupCardType */
-	EHUDPickupCardType            ActivePickupCardType;
-	AWillowInventory             *ItemComparison[2];
-  UMaterial                    *DebugMarkerMat;
-	FInteractionIconWithOverrides CurrentPickupIcon;
-
-  /* TODO: WillowGFxColiseumOverlayMovie */
-  void *ColiseumOverlayMovie;
-
+	AHUD                            Super;
+	BITFIELD                        bPawnInspectorUsesAIDebugCam  : 1; /* 0 */
+	BITFIELD                        bShowDlcVersionErrors         : 1; /* 00 */
+	BITFIELD                        bShowDlcNeedsEnumerationError : 1; /* 000 */
+	BITFIELD                        bShowBros                     : 1; /* 0000 */
+	BITFIELD                        bShowBuildInfo                : 1; /* 00000 */
+	BITFIELD                        bShowHUDRestoreValue          : 1; /* 000000 */
+	BITFIELD                        bAIInspectorEnabled           : 1; /* 0000000 */
+	BITFIELD                        bStatusEffectInspectorEnabled : 1; /* 00000000 */
+	BITFIELD                        bShowHosEnabled               : 1; /* 000000000 */
+	BITFIELD                        bShowViewModelAnimDebug       : 1; /* 0000000000 */
+	BITFIELD                        bShowConnectionWarning        : 1; /* 00000000000 */
+	BITFIELD                        bAutoAimDebugEnabled          : 1; /* 000000000000 */
+	float                           DlcVersionErrorDisplayDuration;
+	float                           DlcVersionErrorDisplayStartTime;
+	float                           PlayerInfoHeight;
+	float                           PlayerInfoMaxDist;
+	APawn                          *PawnOwner;
+  AWillowInventory               *SavedLookAtInventory;
+	AActor                         *CachedBestPickup;
+	AActor                         *CachedHoverPickup;
+	AActor                         *ClientSavedPickup;
+	AActor                         *ClosestPickup;
+	UParticleSystemComponent       *HoverParticleComponent;
+	TArray_FFadePickupParticle      PendingKillHoverComponents;
+	UItemPickupGFxMovie            *PickupItemCard;
+	UParticleSystemComponent       *PickupParticleComponent;
+	FString                         BuildNumber;
+	FString                         BuildTag;
+	FString                         BuildChangelist;
+	INT                             BuildInfoXOffset;
+	INT                             BuildInfoYOffset;
+	AWillowPlayerController        *WPlayerOwner;
+  AWillowPlayerReplicationInfo   *WPRI;
+  UHUDDefinition                 *HUDDef;
+	FScriptInterface                CurrentTargetable;
+	FScriptInterface                LastPreferredTargetable;
+	float                           HealthBarFadeStartTime;
+	FVector                         LastAutogunTargetLocation;
+	float                           InspectAIOutputStartingXPos;
+	float                           InspectAIOutputStartingYPos;
+	float                           InspectAIOutputIndentSize;
+	float                           InspectAIMaxFlagOutputLineSize;
+	FColor                          InspectAIRulesColor;
+	FColor                          InspectAITimersColor;
+	FColor                          InspectAITargetsColor;
+	FColor                          InspectAIFlagIsTrueColor;
+	FColor                          InspectAIFlagIsFalseColor;
+	float                           InspectStatusEffectOutputStartingXPos;
+	float                           InspectStatusEffectOutputStartingYPos;
+	float                           InspectStatusEffectOutputIndentSize;
+	FString                         InspectStatusEffectTypeName;
+	FColor                          ShowHosColor;
+	INT                             DangerousIconDifference;
+	INT                             ImpossibleEnemyDifference;
+	UWillowHUDGFxMovie             *HUDMovie;/* 776 */
+  UWeaponScopeGFxMovie           *WeaponScopeMovie;
+  UStatusMenuExGFxMovie          *StatusMenuExMovie;
+  UMaterialInstanceConstant      *SavingMatInst;
+  UMaterialInstanceConstant      *ConnectionMatInst;
+  UMaterial                      *SavingMat;
+  UMaterial                      *ConnectionMat;
+	float                           SaveDuration;
+	float                           SaveStartTime;
+	float                           FadeStartTime;
+	float                           FadeDuration;
+	FString                         RespawnDialogString;
+	FString                         RespawnDialogFeeWaivedString;
+	FString                         RespawnDialogTitleString;
+	FString                         RespawnDialogOtherDiedString;
+	FString                         RespawnDialogOtherDiedFeeWaivedString;
+	FString                         RespawnDialogUnknownPlayerString;
+	float                           ScreenFadeStartTime;
+	float                           ScreenFadeDuration;
+	float                           ScreenFadeStartOpacity;
+	float                           ScreenFadeOpacity;
+	FColor                          ScreenFadeColor;
+	FString                         DuelCountdownString;
+	FString                         DuelOutOfBoundsString;
+	float                           DefaultMessageDuration;
+	FString                         DeathStringPistol;
+	FString                         DeathStringShotgun;
+	FString                         DeathStringSMG;
+	FString                         DeathStringSniperRifle;
+	FString                         DeathStringRocketLauncher;
+	FString                         DeathStringAssaultRifle;
+	FString                         DeathStringFragGrenade;
+	FString                         DeathStringProteanGrenade;
+	FString                         DeathStringIncindiaryDamage;
+	FString                         DeathStringShockDamage;
+	FString                         DeathStringExplosiveDamage;
+	FString                         DeathStringCorrosiveDamage;
+	FString                         DeathStringImpactDamage;
+	FString                         DeathStringSuicide;
+	FString                         DeathStringUnknown;
+	FString                         DeathStringFallDamage;
+	float                           SavingMaterialScale;
+	float                           ConnectionMaterialScale;
+	float                           ConnectionWarningStartTime;
+	float                           SavingIconXOffset;
+	float                           SavingIconYOffset;
+	int                             MaxNumPickups;
+	float                           PendingWeaponCardDisplayTime;
+	EHUDEquippedCardType            ActiveEquippedCardType;
+	EHUDPickupCardType              ActivePickupCardType;
+	AWillowInventory               *ItemComparison[2];
+  UMaterial                      *DebugMarkerMat;
+	FInteractionIconWithOverrides   CurrentPickupIcon;
+  UWillowGFxColiseumOverlayMovie *ColiseumOverlayMovie;
 	TArray_FHUDWidget_ChallengeData QueuedChallengeNotifications;
-	FString QueuedInitFrame;
-	TArray_FString PlayedInitFrames;
-	USwfMovie *QueuedPullThePinNotification;
+	FString                         QueuedInitFrame;
+	TArray_FString                  PlayedInitFrames;
+	USwfMovie                      *QueuedPullThePinNotification;
 }; assert_size(AWillowHUD, 1240);
 
 /* Templated version of FScriptInterface, which provides accessors and operators for
@@ -25127,7 +26426,7 @@ struct APlayerController {
   FRotator                       TargetViewRotation;
   float                          TargetEyeHeight;
   FRotator                       BlendedTargetViewRotation;
-  AHUD                          *myHUD;/* 1760 */
+  AHUD                          *myHUD;  /* 1760 */
   UClass                        *SavedMoveClass;
   USavedMove                    *SavedMoves;
   USavedMove                    *FreeMoves;
@@ -25139,8 +26438,7 @@ struct APlayerController {
   float                          TimeMargin;
   float                          ClientUpdateTime;
   float                          MaxTimeMargin;
-  /* 1816 */
-  float                          LastActiveTime;
+  float                          LastActiveTime;  /* 1816 */
   int                            ClientCap;
   float                          DynamicPingThreshold;
   float                          LastPingUpdate;
@@ -25164,11 +26462,9 @@ struct APlayerController {
   TArray_FUniqueNetId            BestNextHostPeers;
   UOnlineGameSearch             *MigratedSearchToJoin;
   UOnlineSubsystem              *OnlineSub;
-  /** OnlineVoiceInterface */
-  FImplementedInterface          VoiceInterface;
+  FImplementedInterface          VoiceInterface;  /** OnlineVoiceInterface */
   UUIDataStore_OnlinePlayerData *OnlinePlayerData;
-  /* TODO: UIDataStore_StringAliasMap */
-  void                          *StringAliasMap;
+  UUIDataStore_StringAliasMap   *StringAliasMap;
   float                          InteractDistance;
   FName                          DelayedJoinSessionName;
   FString                        LastPresenceStatusUpdateString;
@@ -26637,6 +27933,15 @@ struct AInfo {
   AActor Super;
 }; assert_size(AInfo, 392);
 
+/* ---------------------------------------------------------- AHybridNavigationArea ---------------------------------------------------------- */
+
+struct AHybridNavigationArea {
+  AInfo    Super;
+  FName    CustomAreaName;
+  FColor   AreaColor;
+  BITFIELD bShowArea : 1;
+}; assert_size(AHybridNavigationArea, 408);
+
 /* ---------------------------------------------------------- AHeightFog ---------------------------------------------------------- */
 
 struct AHeightFog {
@@ -26728,6 +28033,60 @@ struct APopulationOpportunity {
   int                           InclusiveSpawnIndex;
   TArray_INT                    InclusiveSpawnList;
 }; assert_size(APopulationOpportunity, 496);
+
+/* ---------------------------------------------------------- APopulationOpportunityDen ---------------------------------------------------------- */
+
+struct native FPopulationOptionDenSpawnData {
+  FString PopulationDefName;
+  int     MaxActiveActors;
+  int     NumTotalActors;
+  int     NumActiveActors;
+  float   NextSpawnTime;
+  int     NumTotalExternalActors;
+  int     NumActiveExternalActors;
+};
+struct APopulationOpportunityDen {
+  APopulationOpportunity              Super;
+  VfTable                             IIAIInterface;
+  int                                 MaxActiveActorsIsNormal;
+  int                                 MaxActiveActorsThreatened;
+  AttributeInitializationData         MaxTotalActorsFormula;
+  APopulationEncounter               *ParentEncounter;
+  int                                 ParentEncounterWave;
+  UPopulationDefinition              *PopulationDef;
+  float                               RespawnDelay;
+  BITFIELD                            bIsCriticalActor                     : 1;
+  BITFIELD                            bApplyAspectToChildAI                : 1;
+  BITFIELD                            bOpportunityRadius                   : 1;
+  BITFIELD                            bAlwaysSeeInThreatRadius             : 1;
+  BITFIELD                            bPatrolDen                           : 1;
+  BITFIELD                            bNeutral                             : 1;
+  BITFIELD                            bCombatVolumeOnlyLimitsRangedAttacks : 1;
+  BITFIELD                            bPlayerHasBeenDetected               : 1;
+  BITFIELD                            bKeepLeader                          : 1;
+  BITFIELD                            bFoundPerches                        : 1;
+  BITFIELD                            bFoundRallyPoints                    : 1;
+  TArray_AVolumePtr                   DetectionVolumes;
+  float                               DenHeight;
+  float                               SpawnRadius;
+  float                               PatrolRadius;
+  float                               ThreatRadius;
+  TArray_APopulationOpportunityDenPtr SharedThreatDens;
+  UPawnAllegiance                    *OverrideAllegiance;
+  AVolume                            *CombatVolume;
+  int                                 MaxTotalActors;
+  UPawnAllegiance                    *Allegiance;
+  TArray_AWillowPawnPtr               SpawnedDenMembers;
+  FPopulationOptionDenSpawnData       SpawnData;
+  AActor                             *Leader;
+  TArray_APerchPtr                    Perches;
+  ARallyPoint                        *CurrentRallyPoint;
+  TArray_ARallyPointPtr               RallyPoints;
+  FFlag                               Flag_ShouldRally;
+  UWillowAIDenComponent              *AIComponent;
+  EDenStat                            TrackedStat;
+  int                                 StatValue;
+}; assert_size(APopulationOpportunityDen, 708);
 
 /* ---------------------------------------------------------- APopulationEncounter ---------------------------------------------------------- */
 
@@ -26830,41 +28189,41 @@ struct native FEncounterWaveTracker {
   FEncounterLimitState LimitSaveState;
 };
 struct native FEncounterTracker {
-  APopulationEncounter *LoadedEncounter;
-  ULevelStreaming      *EncountersLevel;
-  FNameBasedObjectPath  EncounterPath;
-  BITFIELD              bNeedsKismetUpdate : 1;
-  TArray_BYTE EncounterCompletionSaveState;
+  APopulationEncounter        *LoadedEncounter;
+  ULevelStreaming             *EncountersLevel;
+  FNameBasedObjectPath         EncounterPath;
+  BITFIELD                     bNeedsKismetUpdate : 1;
+  TArray_BYTE                  EncounterCompletionSaveState;
   TArray_FEncounterWaveTracker EncounterSaveState;
-  float RespawnDelayStartTime;
+  float                        RespawnDelayStartTime;
 };
 struct UPopulationMaster {
-  UObject Super;
+  UObject                              Super;
   TArray_FPopulationOpportunityTracker OpportunityList;
-  int                          ActiveActorCost;
-  int                          MaxActorCost;
-  float                        MasterThinkRate;
-  float                        MasterTestForDestroyRate;
-  float                        IfIrrelevantDestroyTimeout;
-  TArray_FPopulationMasterStat PopulationMasterStats;
-  TArray_FEncounterTracker     EncounterList;
-  float                        SecondsElapsed;
-  float                        NextOpportunityTickTime;
-  float                        NextDestroyTestTickTime;
-  float                        PopulationRespawnDelayInSeconds;
-  BITFIELD                     bHasActorsReadyToDeleteIfSpaceIsNeeded : 1;
-  BITFIELD                     bShutdownAIWhenIrrelevant              : 1;
+  int                                  ActiveActorCost;
+  int                                  MaxActorCost;
+  float                                MasterThinkRate;
+  float                                MasterTestForDestroyRate;
+  float                                IfIrrelevantDestroyTimeout;
+  TArray_FPopulationMasterStat         PopulationMasterStats;
+  TArray_FEncounterTracker             EncounterList;
+  float                                SecondsElapsed;
+  float                                NextOpportunityTickTime;
+  float                                NextDestroyTestTickTime;
+  float                                PopulationRespawnDelayInSeconds;
+  BITFIELD                             bHasActorsReadyToDeleteIfSpaceIsNeeded : 1;
+  BITFIELD                             bShutdownAIWhenIrrelevant              : 1;
 }; assert_size(UPopulationMaster, 136);
 
 /* ---------------------------------------------------------- AWorldSoundManager ---------------------------------------------------------- */
 
 struct native FWorldEventSource {
-  UAkEvent *AkEvent;
-  AActor *GroupActor;
+  UAkEvent              *AkEvent;
+  AActor                *GroupActor;
   TArray_UAkComponentPtr AkComponents;
-  TArray_AActorPtr Sources;
-  float    LastUpdateTime;
-  BITFIELD bNeedsUpdate : 1;
+  TArray_AActorPtr       Sources;
+  float                  LastUpdateTime;
+  BITFIELD               bNeedsUpdate : 1;
 };
 struct AWorldSoundManager {
   AInfo                    Super;
@@ -26877,23 +28236,23 @@ struct AWorldSoundManager {
 
 struct AWillowWorldSoundManager {
   AWorldSoundManager Super;
-  UAkComponent *MusicComponent;
-  UAkEvent *CurrentMusicStartAkEvent;
-  UAkEvent *CurrentMusicStopAkEvent;
-  UAkState *CurrentAmbientAkState;
-  UAkState *CurrentCombatAkState;
-  UAkState *CurrentBossAkState;
-  EMusicState CurrentMusicState;
-  UAkState *CurrentCustomCombatMusicAkState;
-  UAkState *CurrentCustomAmbientMusicAkState;
-  BITFIELD bInCombatMusicVolumeTransition : 1;
-  float CombatMusicTransitionValue;
-  float CombatMusicTransitionStartValue;
-  float CombatMusicTransitionTargetValue;
-  float CombatMusicTransitionStartTime;
-  float CombatMusicTransitionEndTime;
-  float LastTransitionDuration;
-  UAkRtpc *CombatMusicRtpc;
+  UAkComponent      *MusicComponent;
+  UAkEvent          *CurrentMusicStartAkEvent;
+  UAkEvent          *CurrentMusicStopAkEvent;
+  UAkState          *CurrentAmbientAkState;
+  UAkState          *CurrentCombatAkState;
+  UAkState          *CurrentBossAkState;
+  EMusicState        CurrentMusicState;
+  UAkState          *CurrentCustomCombatMusicAkState;
+  UAkState          *CurrentCustomAmbientMusicAkState;
+  BITFIELD           bInCombatMusicVolumeTransition : 1;
+  float              CombatMusicTransitionValue;
+  float              CombatMusicTransitionStartValue;
+  float              CombatMusicTransitionTargetValue;
+  float              CombatMusicTransitionStartTime;
+  float              CombatMusicTransitionEndTime;
+  float              LastTransitionDuration;
+  UAkRtpc           *CombatMusicRtpc;
 }; assert_size(AWillowWorldSoundManager, 480);
 
 /* ---------------------------------------------------------- AWillowBaseStats ---------------------------------------------------------- */
@@ -26909,7 +28268,7 @@ struct native FWillowStatProperty {
 };
 struct AWillowBaseStats {
   AInfo                      Super;
-  void                      *VfTable_ISparkUpdateCallback;
+  VfTable                    ISparkUpdateCallback;
   int                        SaveVersion;
   int                        ReadVersion;
   TArray_FWillowStatProperty StatProperties;
@@ -26927,6 +28286,8 @@ struct AWillowPlayerStats {
   AWillowBaseStats Super;
   int              nNumConsecutiveSniperRifleKills;
 }; assert_size(AWillowPlayerStats, 504);
+
+/* ---------------------------------------------------------- AZoneInfo ---------------------------------------------------------- */
 
 struct AZoneInfo {
   AInfo    Super;
@@ -28158,45 +29519,61 @@ struct UTexture2D {
   float                    Timer;
 }; assert_size(UTexture2D, 192);
 
+/* ---------------------------------------------------------- UShadowMapTexture2D ---------------------------------------------------------- */
+
+struct UShadowMapTexture2D {
+  UTexture2D Super;
+  int        ShadowmapFlags;
+}; assert_size(UShadowMapTexture2D, 196);
+
+/* ---------------------------------------------------------- AMutator ---------------------------------------------------------- */
+
 struct AMutator {
   AInfo          Super;
   AMutator      *NextMutator;
   TArray_FString GroupNames;
   BITFIELD       bUserAdded : 1;
-};
+}; assert_size(AMutator, 412);
+
+/* ---------------------------------------------------------- AAutoTestManager ---------------------------------------------------------- */
 
 struct AAutoTestManager {
-  AInfo Super_AInfo;
-  BITFIELD bAutomatedPerfTesting : 1;
-  BITFIELD bAutoContinueToNextRound : 1;
-  BITFIELD bUsingAutomatedTestingMapList : 1;
-  BITFIELD bAutomatedTestingWithOpen : 1;
-  BITFIELD bExitOnCyclesComplete : 1;
-  BITFIELD bCheckingForFragmentation : 1;
-  BITFIELD bCheckingForMemLeaks : 1;
-  BITFIELD bDoingASentinelRun : 1;
-  BITFIELD bSentinelStreamingLevelStillLoading : 1;
-  int AutomatedPerfRemainingTime;
-  int AutomatedTestingMapIndex;
-  TArray_FString AutomatedMapTestingList;
-  int NumAutomatedMapTestingCycles;
-  int NumberOfMatchesPlayed;
-  int NumMapListCyclesDone;
-  FString AutomatedTestingExecCommandToRunAtStartMatch;
-  FString AutomatedMapTestingTransitionMap;
-  FString SentinelTaskDescription;
-  FString SentinelTaskParameter;
-  FString SentinelTagDesc;
+  AInfo              Super;
+  BITFIELD           bAutomatedPerfTesting               : 1;
+  BITFIELD           bAutoContinueToNextRound            : 1;
+  BITFIELD           bUsingAutomatedTestingMapList       : 1;
+  BITFIELD           bAutomatedTestingWithOpen           : 1;
+  BITFIELD           bExitOnCyclesComplete               : 1;
+  BITFIELD           bCheckingForFragmentation           : 1;
+  BITFIELD           bCheckingForMemLeaks                : 1;
+  BITFIELD           bDoingASentinelRun                  : 1;
+  BITFIELD           bSentinelStreamingLevelStillLoading : 1;
+  int                AutomatedPerfRemainingTime;
+  int                AutomatedTestingMapIndex;
+  TArray_FString     AutomatedMapTestingList;
+  TArray_FString     AutomatedMapDLC1TestingList;
+  int                NumAutomatedMapTestingCycles;
+  int                NumberOfMatchesPlayed;
+  int                NumMapListCyclesDone;
+  FString            AutomatedTestingExecCommandToRunAtStartMatch;
+  FString            AutomatedMapTestingTransitionMap;
+  FString            SentinelTaskDescription;
+  FString            SentinelTaskParameter;
+  FString            SentinelTagDesc;
   APlayerController *SentinelPC;
-  TArray_FVector SentinelTravelArray;
-  int SentinelNavigationIdx;
-  int SentinelIdx;
-  int NumRotationsIncrement;
-  int TravelPointsIncrement;
-  int NumMinutesPerMap;
-  TArray_FString CommandsToRunAtEachTravelTheWorldNode;
-  FString CommandStringToExec;
-};
+  TArray_FVector     SentinelTravelArray;
+  int                SentinelNavigationIdx;
+  int                SentinelIdx;
+  int                NumRotationsIncrement;
+  int                TravelPointsIncrement;
+  int                NumMinutesPerMap;
+  TArray_FString     CommandsToRunAtEachTravelTheWorldNode;
+  FString            CommandStringToExec;
+  FString SelectedCharacterClass;
+  FName StationDefName;
+  FString AutomatedTestingTravelType;
+  int NumOfDLCsToIncludeInRun;
+}; assert_size(AAutoTestManager, 596);
 
 /* ---------------------------------------------------------- AReplicationInfo ---------------------------------------------------------- */
 
@@ -29313,93 +30690,90 @@ struct native FColiseumPlayerInfo {
   TArray_FColiseumStat Stats;
 };
 struct AWillowGameInfo {
-  AGearboxGameInfo Super;
-  VfTable          IIDesignerAttributeProvider;
-  VfTable          IIAIInterface;
-  BITFIELD         bWeaponStay                                 : 1;
-  BITFIELD         bDemoMode                                   : 1;
-  BITFIELD         bPIESpawnInVehicle                          : 1;
-  BITFIELD         bConsoleServer                              : 1;
-  BITFIELD         bResurrectAllPlayersWhenOneDies             : 1;
-  BITFIELD         bBossesRegenHealthOnReset                   : 1;
-  BITFIELD         bEnemiesForgetDownedPlayers                 : 1;
-  BITFIELD         bEnemiesCannotDoCloseAttacksOnDownedPlayers : 1;
-  BITFIELD         bDlcTravelFailureReceived                   : 1;
-  BITFIELD         HardcoreMode                                : 1;
-  BITFIELD         bIgnoreFriendlyFire                         : 1;
-  BITFIELD         bIgnoreNPCFriendlyFire                      : 1;
-  BITFIELD         bFromSeamlessTravel                         : 1;
-  float            AdjustedDifficulty;
-  FString          PIESpawnInVehicleName;
-  AActor          *LastPlayerStartSpot;
-  AActor          *LastStartSpot;
+  AGearboxGameInfo                       Super;
+  VfTable                                IIDesignerAttributeProvider;
+  VfTable                                IIAIInterface;
+  BITFIELD                               bWeaponStay                                 : 1;
+  BITFIELD                               bDemoMode                                   : 1;
+  BITFIELD                               bPIESpawnInVehicle                          : 1;
+  BITFIELD                               bConsoleServer                              : 1;
+  BITFIELD                               bResurrectAllPlayersWhenOneDies             : 1;
+  BITFIELD                               bBossesRegenHealthOnReset                   : 1;
+  BITFIELD                               bEnemiesForgetDownedPlayers                 : 1;
+  BITFIELD                               bEnemiesCannotDoCloseAttacksOnDownedPlayers : 1;
+  BITFIELD                               bDlcTravelFailureReceived                   : 1;
+  BITFIELD                               HardcoreMode                                : 1;
+  BITFIELD                               bIgnoreFriendlyFire                         : 1;
+  BITFIELD                               bIgnoreNPCFriendlyFire                      : 1;
+  BITFIELD                               bFromSeamlessTravel                         : 1;
+  float                                  AdjustedDifficulty;
+  FString                                PIESpawnInVehicleName;
+  AActor                                *LastPlayerStartSpot;
+  AActor                                *LastStartSpot;
   /* TODO: WillowVehicle */
-  void *VehicleList;
-  UGlobalsDefinition  *MyGlobals;
-  ASkillEffectManager *GlobalSkillManager;
-  UPlayerInteractionManager *GlobalPlayerInteractionManager;
-  AChallengeManager *GlobalChallengeManager;
-  UCombatMusicManager        *GlobalCombatMusicManager;
-  UPlayerStatsNotifier       *GlobalPlayerStatsNotifier;
-  ABlackMarketUpgradeManager *GlobalBlackMarketUpgradeManager;
-  TArray_UInstancedDesignerAttributePtr DesignerAttributes;
-  AWillowPersonalTeleporter *ReturnTeleporter;
-  AWillowPersonalTeleporter *PersonalTeleporter;
-  FName TeleporterDestinationName;
+  void                                  *VehicleList;
+  UGlobalsDefinition                    *MyGlobals;
+  ASkillEffectManager                   *GlobalSkillManager;
+  UPlayerInteractionManager             *GlobalPlayerInteractionManager;
+  AChallengeManager                     *GlobalChallengeManager;
+  UCombatMusicManager                   *GlobalCombatMusicManager;
+  UPlayerStatsNotifier                  *GlobalPlayerStatsNotifier;
+  ABlackMarketUpgradeManager            *GlobalBlackMarketUpgradeManager;
+  TArray_UInstancedDesignerAttributePtr  DesignerAttributes;
+  AWillowPersonalTeleporter             *ReturnTeleporter;
+  AWillowPersonalTeleporter             *PersonalTeleporter;
+  FName                                  TeleporterDestinationName;
   /* TODO: TArray_IPlayerObserverPtr */
-  TArray_voidPtr PlayerObservers;
-  FString MapChangeInitiated;
-  FString MapChangePlayerDown;
-  FString MapChangePlayerInMenu;
-  FString MapChangeYouAreInMenu;
-  FString MapChangeMissingDLC;
-  FString MapChangeNeedInstallMissingDLC;
-  FString MapChangeUpsellMissingDLC;
-  FString MapChangeCountdown;
-  FString MapChangeCanceledPlayerDown;
-  FString MapChangeCanceledPlayerMenu;
-  FString MapChangePlayerIsSaving;
-  FString MapChangeCanceledPlayerIsSaving;
-  FString MapChangePlayerJoining;
-  FString MapChangeUnknownPlayerJoining;
-  FString MapChangeCanceledPlayerJoining;
-  FString MapChangeCanceledUnknownPlayerJoining;
-  FString MapChangePlayerDueling;
-  FString MapChangeCanceledPlayerDueling;
-  FString MapChangePlayerRespawn;
-  FString MapChangeCanceledPlayerRespawn;
-  int TravelCountdownTime;
-  int TravelPostCountdownTime;
+  TArray_voidPtr                         PlayerObservers;
+  FString                                MapChangeInitiated;
+  FString                                MapChangePlayerDown;
+  FString                                MapChangePlayerInMenu;
+  FString                                MapChangeYouAreInMenu;
+  FString                                MapChangeMissingDLC;
+  FString                                MapChangeNeedInstallMissingDLC;
+  FString                                MapChangeUpsellMissingDLC;
+  FString                                MapChangeCountdown;
+  FString                                MapChangeCanceledPlayerDown;
+  FString                                MapChangeCanceledPlayerMenu;
+  FString                                MapChangePlayerIsSaving;
+  FString                                MapChangeCanceledPlayerIsSaving;
+  FString                                MapChangePlayerJoining;
+  FString                                MapChangeUnknownPlayerJoining;
+  FString                                MapChangeCanceledPlayerJoining;
+  FString                                MapChangeCanceledUnknownPlayerJoining;
+  FString                                MapChangePlayerDueling;
+  FString                                MapChangeCanceledPlayerDueling;
+  FString                                MapChangePlayerRespawn;
+  FString                                MapChangeCanceledPlayerRespawn;
+  int                                    TravelCountdownTime;
+  int                                    TravelPostCountdownTime;
   /* TODO: Behavior_CheckMapChangeConditions */
-  void *TravelBehavior;
-  /** ICustomEvent */
-  FImplementedInterface TravelEventInterface;
-  UTravelStationDefinition *TravelStationDef;
-  AWillowPlayerController *TravelInstigator;
-  FString NewShopInventory;
-  float SecondsUntilShopsReset;
-  float ShopTimerRate;
-  float ShopTimerRateBaseValue;
-  TArray_UAttributeModifierPtr ShopTimerRateModifierStack;
-  float LastShopResetTime;
-  float SecondsUntilShopTimerResend;
-  float NewShopInventoryDisplayTime;
-  FColor NewShopInventoryDisplayColor;
-  FWaypointActorData WaypointActors[6];
-  FAreaWaypointData AreaWaypoints[4];
-  TArray_FString RecordedDialogEvents;
-  FColiseumPlayerInfo CachedColiseumStats[4];
-  /* TODO: TArray_WillowAIBlackboardComponentPtr */
-  TArray_voidPtr AIBlackboards;
-  int StartGameTimer;
-  /** EStartGameState */
-  EStartGameState StartGameState;
-  TArray_APlayerReplicationInfoPtr PlayersThatHaveSeenTheCharacterSelect;
-  TArray_APlayerReplicationInfoPtr PlayersThatHaveSelectedACharacter;
-  TArray_APlayerReplicationInfoPtr PlayersThatHaveReceivedAPawn;
-  int CharacterSelectTimeInSeconds;
-  int CharacterSelectQuickStartTimeInSeconds;
-  int NextNameListIndex;
+  void                                  *TravelBehavior;
+  FImplementedInterface                  TravelEventInterface;  /** ICustomEvent */
+  UTravelStationDefinition              *TravelStationDef;
+  AWillowPlayerController               *TravelInstigator;
+  FString                                NewShopInventory;
+  float                                  SecondsUntilShopsReset;
+  float                                  ShopTimerRate;
+  float                                  ShopTimerRateBaseValue;
+  TArray_UAttributeModifierPtr           ShopTimerRateModifierStack;
+  float                                  LastShopResetTime;
+  float                                  SecondsUntilShopTimerResend;
+  float                                  NewShopInventoryDisplayTime;
+  FColor                                 NewShopInventoryDisplayColor;
+  FWaypointActorData                     WaypointActors[6];
+  FAreaWaypointData                      AreaWaypoints[4];
+  TArray_FString                         RecordedDialogEvents;
+  FColiseumPlayerInfo                    CachedColiseumStats[4];
+  TArray_UWillowAIBlackboardComponentPtr AIBlackboards;
+  int                                    StartGameTimer;
+  EStartGameState                        StartGameState;
+  TArray_APlayerReplicationInfoPtr       PlayersThatHaveSeenTheCharacterSelect;
+  TArray_APlayerReplicationInfoPtr       PlayersThatHaveSelectedACharacter;
+  TArray_APlayerReplicationInfoPtr       PlayersThatHaveReceivedAPawn;
+  int                                    CharacterSelectTimeInSeconds;
+  int                                    CharacterSelectQuickStartTimeInSeconds;
+  int                                    NextNameListIndex;
 }; assert_size(AWillowGameInfo, 1556);
 
 struct FTexture2D {
@@ -29869,7 +31243,7 @@ struct native FInventoryManufacturerBalanceData {
 };
 struct UInventoryBalanceDefinition {
   UBaseBalanceDefinition                   Super;
-  VfTable                                  VfTable_IIDlcLicensableObject;
+  VfTable                                  IIDlcLicensableObject;
   BITFIELD                                 bInterpolateExpLevel : 1;
   UWillowInventoryDefinition              *InventoryDefinition;
   UInventoryBalanceDefinition             *BaseDefinition;
@@ -32381,6 +33755,53 @@ struct FPrimitiveHashBase {
   void **vftable;
 };
 
+/* ---------------------------------------------------------- FMemStack ---------------------------------------------------------- */
+
+struct FTaggedMemory {
+  FTaggedMemory *Next;
+  INT            DataSize;
+  BYTE           Data[1];
+};
+struct FMemStack {
+  // Constants.
+	enum {MAX_CHUNKS=1024};
+
+	// Variables.
+	BYTE *Top;                      // Top of current chunk (Top<=End).
+	BYTE *End;                      // End of current chunk.
+	INT   DefaultChunkSize;                     // Maximum chunk size to allocate.
+	FTaggedMemory *TopChunk;			// Only chunks 0..ActiveChunks-1 are valid.
+
+	/** The top mark on the stack. */
+	FMemMark *TopMark;
+
+	/** The memory chunks that have been allocated but are currently unused. */
+	FTaggedMemory*	UnusedChunks;
+
+	/** The number of marks on this stack. */
+	INT NumMarks;
+
+	/** Whether this stack is used in the game thread. */
+	UBOOL			bUsedInGameThread;
+
+	/** Whether this stack is used in the rendering thread. */
+	UBOOL			bUsedInRenderingThread;
+};
+/**
+ * FMemMark marks a top-of-stack position in the memory stack.
+ * When the marker is constructed or initialized with a particular memory 
+ * stack, it saves the stack's current position. When marker is popped, it
+ * pops all items that were added to the stack subsequent to initialization.
+ */
+struct FMemMark {
+  // Implementation variables.
+	FMemStack     *Mem;
+	BYTE          *Top;
+	FTaggedMemory *SavedChunk;
+	UBOOL          bPopped;
+	FMemMark      *NextTopmostMark;
+};
+
 /* ---------------------------------------------------------- UWorld ---------------------------------------------------------- */
 
 struct UWorld {
@@ -32449,16 +33870,16 @@ struct UWorld {
   UBOOL FullPurgeTriggered;             ///< Whether a full purge has been triggered, so that the next GarbageCollect will do a full purge no matter what.
   UBOOL bIsWorldInitialized;            ///< Whether world object has been initialized via Init()
   BYTE unknown_04[4];
-  TSparseArray_voidPtr StaticLightList; ///< All static light component's attached to the world's scene.
-  TSparseArray_voidPtr DynamicLightList; ///< All dynamic light component's attached to the world's scene.
-  TSparseArray_voidPtr LightEnvironmentList; ///< All light environment components that need to be notified when a static light changes.
-  void *DominantDirectionalLight;       ///< The dominant directional light affecting the world, if any.
-  TSparseArray_voidPtr DominantSpotLights; ///< All the dominant spot lights affecting the world.
-  TSparseArray_voidPtr DominantPointLights; ///< All the dominant point lights affecting the world.
+  TSparseArray_voidPtr StaticLightList;       /** All static light component's attached to the world's scene. */
+  TSparseArray_voidPtr DynamicLightList;      /** All dynamic light component's attached to the world's scene. */
+  TSparseArray_voidPtr LightEnvironmentList;  /** All light environment components that need to be notified when a static light changes. */
+  void *DominantDirectionalLight;             /** The dominant directional light affecting the world, if any. */
+  TSparseArray_voidPtr DominantSpotLights;    /** All the dominant spot lights affecting the world. */
+  TSparseArray_voidPtr DominantPointLights;   /** All the dominant point lights affecting the world. */
   /* 700 */
-  INT AllowLevelLoadOverride;           ///< Override, forcing level load requests to be allowed. < 0 == not allowed, 0 == have code choose, > 1 == force allow.
-  UBOOL bDisallowRoutingSequenceBeginPlay; ///< If this is TRUE, then AddToWorld will NOT call Sequence->BeginPlay on the level's GameSequences
-  INT StreamingVolumeUpdateDelay;       ///< Number of frames to delay Streaming Volume updating, useful if you preload a bunch of levels but the camera hasn't caught up yet (INDEX_NONE for infinite)
+  int   AllowLevelLoadOverride;             /** Override, forcing level load requests to be allowed. < 0 == not allowed, 0 == have code choose, > 1 == force allow. */
+  UBOOL bDisallowRoutingSequenceBeginPlay;  /** If this is TRUE, then AddToWorld will NOT call Sequence->BeginPlay on the level's GameSequences */
+  int   StreamingVolumeUpdateDelay;         /** Number of frames to delay Streaming Volume updating, useful if you preload a bunch of levels but the camera hasn't caught up yet (INDEX_NONE for infinite) */
   /* 712 */
   TArray_UObjectPtr ExtraReferencedObjects; ///< Array of any additional objects that need to be referenced by this world, to make sure they aren't GC'd
   /* 724 */
@@ -32467,7 +33888,7 @@ struct UWorld {
   /* 732 */
   UBOOL bAllowDecalAttach;              ///< Toggles allowing decal components to be attached to the world/levels
   UBOOL bEditorHasMassiveLOD;           ///< True if any massive LOD has been used in the world
-  INT LandscapeComponentCount;          ///< Non-zero if the world contains Landscape components (used to optimize line and point checks)
+  int   LandscapeComponentCount;          ///< Non-zero if the world contains Landscape components (used to optimize line and point checks)
   TArray_voidPtr Observers;             ///< Array of observers within this world
 }; assert_size(UWorld, 756);
 #pragma pack(pop)
@@ -32971,6 +34392,13 @@ struct ULevelStreaming {
   ALevelGridVolume               *EditorGridVolume;
   int                             GridPosition[3];
 }; assert_size(ULevelStreaming, 152);
+
+/* ---------------------------------------------------------- ULevelStreamingAlwaysLoaded ---------------------------------------------------------- */
+
+struct ULevelStreamingAlwaysLoaded {
+  ULevelStreaming Super;
+  BITFIELD        bIsProceduralBuildingLODLevel : 1;
+}; assert_size(ULevelStreamingAlwaysLoaded, 156);
 
 
 //
