@@ -7,74 +7,116 @@ typedef enum : unsigned int {
   TRUE,
 } UBOOL;
 
-/* Internal enums. */
-typedef enum ENativeConstructor {EC_NativeConstructor} ENativeConstructor;
-typedef enum EStaticConstructor {EC_StaticConstructor} EStaticConstructor;
-typedef enum EInternal          {EC_Internal}          EInternal;
-typedef enum ECppProperty       {EC_CppProperty}       ECppProperty;
-typedef enum EEventParm         {EC_EventParm}         EEventParm;
+/* ---------------------------------------------------------- Internal ---------------------------------------------------------- */
+
+typedef enum ENativeConstructor { EC_NativeConstructor } ENativeConstructor;
+typedef enum EStaticConstructor { EC_StaticConstructor } EStaticConstructor;
+typedef enum EInternal          { EC_Internal }          EInternal;
+typedef enum ECppProperty       { EC_CppProperty }       ECppProperty;
+typedef enum EEventParm         { EC_EventParm }         EEventParm;
+#define ENativeConstructor  ENativeConstructor
+#define EStaticConstructor  EStaticConstructor
+#define EInternal           EInternal
+#define ECppProperty        ECppProperty
+#define EEventParm          EEventParm
 
 // Global constants.
-enum {MINBYTE		= 0x00       };
-enum {MINWORD		= 0x0000U    };
-enum {MINDWORD		= 0x00000000U};
-enum {MINSBYTE		= 0x80       };
-enum {MINSWORD		= 0x8000     };
+enum { MINBYTE  = 0x00        };
+enum { MINWORD  = 0x0000U     };
+enum { MINDWORD = 0x00000000U };
+enum { MINSBYTE = 0x80        };
+enum { MINSWORD = 0x8000      };
 #undef MININT
-enum {MININT		= 0x80000000 };
+enum { MININT = 0x80000000 };
 #define MININT ((INT)~MAXINT)
-enum {MAXBYTE		= 0xff       };
-enum {MAXWORD		= 0xffffU    };
-enum {MAXDWORD		= 0xffffffffU};
-enum {MAXSBYTE		= 0x7f       };
-enum {MAXSWORD		= 0x7fff     };
-enum {MAXINT		= 0x7fffffff };
-enum {INDEX_NONE	= -1         };
-enum {UNICODE_BOM   = 0xfeff     };
-enum ENoInit {E_NoInit = 0};
-enum EForceInit {E_ForceInit = 0};
-enum {MAX_TEXCOORDS = 4};
+enum { MAXBYTE     = 0xff        };
+enum { MAXWORD     = 0xffffU     };
+enum { MAXDWORD    = 0xffffffffU };
+enum { MAXSBYTE    = 0x7f        };
+enum { MAXSWORD    = 0x7fff      };
+enum { MAXINT      = 0x7fffffff  };
+enum { INDEX_NONE  = -1          };
+enum { UNICODE_BOM = 0xfeff      };
+enum ENoInit    { E_NoInit    = 0 };
+enum EForceInit { E_ForceInit = 0 };
+enum { MAX_TEXCOORDS = 4 };
+
+/** RHI capabilities. */
+enum { MAX_TEXTURE_MIP_COUNT        = 14 };  /** Maximum number of miplevels in a texture. */
+enum { MaxVertexElementCount        = 16 };  /** The maximum number of vertex elements which can be used by a vertex declaration. */
+enum { ShaderArrayElementAlignBytes = 16 };  /** The alignment in bytes between elements of array shader parameters. */
 
 /* Sizes. */
-enum {MAX_STRING_CONST_SIZE = 1024}; 
-/** this is the size of the buffer used by the script interpreter for unused simple (not constructed) return values.
- * Larger return values use the constructed value path (EX_EatReturnValue/execEatReturnValue)
+enum { MAX_STRING_CONST_SIZE = 1024 };
+/**
+ * This is the size of the buffer used by the script interpreter for
+ * unused simple (not constructed) return values.  Larger return values
+ * use the constructed value path (EX_EatReturnValue/execEatReturnValue)
  */
-enum {MAX_SIMPLE_RETURN_VALUE_SIZE = 64 };
-
+enum { MAX_SIMPLE_RETURN_VALUE_SIZE = 64 };
 
 /**
- * This is the largest possible size that a single variable can be; a variables size is determined by multiplying the
- * size of the type by the variables ArrayDim (always 1 unless it's a static array).
+ * This is the largest possible size that a single variable can be;
+ * a variables size is determined by multiplying the size of the type
+ * by the variables ArrayDim (always 1 unless it's a static array).
  */
-enum {MAX_VARIABLE_SIZE = 0x0FFF};
+enum { MAX_VARIABLE_SIZE = 0x0FFF };
 
-enum EAIFunctions {
-	AI_PollMoveTo = 501,
-	AI_PollMoveToward = 503,
-	AI_PollStrafeTo = 505,
-	AI_PollStrafeFacing = 507,
+typedef enum EAIFunctions {
+	AI_PollMoveTo         = 501,
+	AI_PollMoveToward     = 503,
+	AI_PollStrafeTo       = 505,
+	AI_PollStrafeFacing   = 507,
 	AI_PollFinishRotation = 509,
 	AI_PollWaitForLanding = 528,
-};
+  #define AI_PollMoveTo                    AI_PollMoveTo
+  #define AI_PollMoveToward                AI_PollMoveToward
+  #define AI_PollStrafeTo                  AI_PollStrafeTo
+  #define AI_PollStrafeFacing              AI_PollStrafeFacing
+  #define AI_PollFinishRotation            AI_PollFinishRotation
+  #define AI_PollWaitForLanding            AI_PollWaitForLanding
+  #define EAIFunctions_PollMoveTo          AI_PollMoveTo
+  #define EAIFunctions_PollMoveToward      AI_PollMoveToward
+  #define EAIFunctions_PollStrafeTo        AI_PollStrafeTo
+  #define EAIFunctions_PollStrafeFacing    AI_PollStrafeFacing
+  #define EAIFunctions_PollFinishRotation  AI_PollFinishRotation
+  #define EAIFunctions_PollWaitForLanding  AI_PollWaitForLanding
+} EAIFunctions;
+#define EAIFunctions  EAIFunctions
+
+/* ---------------------------------------------------------- FTexture2D ! ---------------------------------------------------------- */
 
 /** Texture formats used by FTexture2D */
 typedef enum ETexture2DFormats {
   TF_UNKNOWN,
   TF_ARGB8,
   TF_ARGB16F
+  #define TF_UNKNOWN                 TF_UNKNOWN
+  #define TF_ARGB8                   TF_ARGB8
+  #define TF_ARGB16F                 TF_ARGB16F
+  #define ETexture2DFormats_UNKNOWN  TF_UNKNOWN
+  #define ETexture2DFormats_ARGB8    TF_ARGB8
+  #define ETexture2DFormats_ARGB16F  TF_ARGB16F
 } ETexture2DFormats;
+#define ETexture2DFormats  ETexture2DFormats
 
-/* Result of GotoState. */
+#ifndef EGotoState
+/** Result of GotoState. */
 typedef enum EGotoState {
   GOTOSTATE_NotFound  = 0,
   GOTOSTATE_Success   = 1,
   GOTOSTATE_Preempted = 2,
+  #define GOTOSTATE_NotFound    GOTOSTATE_NotFound
+  #define GOTOSTATE_Success     GOTOSTATE_Success
+  #define GOTOSTATE_Preempted   GOTOSTATE_Preempted
+  #define EGotoState_NotFound   GOTOSTATE_NotFound
+  #define EGotoState_Success    GOTOSTATE_Success
+  #define EGotoState_Preempted  GOTOSTATE_Preempted
 } EGotoState;
+#define EGotoState  EGotoState
+#endif
 
-/**
- * Flags describing a class.
- */
+/** Flags describing a class. */
 typedef enum EClassFlags {
   /** @name Base flags */
   //@{
@@ -168,9 +210,7 @@ typedef enum EClassFlags {
   CLASS_AllFlags			= 0xFFFFFFFF,
 } EClassFlags;
 
-/**
- * Flags used for quickly casting classes of certain types; all class cast flags are inherited
- */
+/** Flags used for quickly casting classes of certain types; all class cast flags are inherited. */
 typedef enum EClassCastFlag {
   CASTCLASS_None						= 0x00000000,
   CASTCLASS_UField					= 0x00000001,
@@ -187,112 +227,19 @@ typedef enum EClassCastFlag {
   CASTCLASS_UInterfaceProperty		= 0x00001000,
   CASTCLASS_UNameProperty				= 0x00002000,
   CASTCLASS_UStrProperty				= 0x00004000,
-
-  //@{
-  // these match the values of the old class flags to make conversion easier
+  /** These match the values of the old class flags to make conversion easier. */
   CASTCLASS_UProperty					= 0x00008000,
   CASTCLASS_UObjectProperty			= 0x00010000,
   CASTCLASS_UBoolProperty				= 0x00020000,
   CASTCLASS_UState					= 0x00040000,
   CASTCLASS_UFunction					= 0x00080000,
   CASTCLASS_UStructProperty			= 0x00100000,
-  //@}
-
   CASTCLASS_UArrayProperty			= 0x00200000,
   CASTCLASS_UMapProperty				= 0x00400000,
   CASTCLASS_UDelegateProperty			= 0x00800000,
   CASTCLASS_UComponent				= 0x01000000,
-
-
   CASTCLASS_AllFlags					= 0xFFFFFFFF,
 } EClassCastFlag;
-
-/**
- * Unique stats identifiers. Note these don't have to defined in this header
- * but they do have to be unique. You're better off defining these in your
- * own headers/cpp files
- */
-typedef enum EStats {
-  // Special stats
-  STAT_Error,
-  STAT_Root,
-  STAT_FrameTime,
-  // Used by the per group stats to avoid conflicts
-  STAT_ObjectFirstStat				= 100,
-  STAT_EngineFirstStat				= 200,
-  STAT_GameFirstStat					= 300,
-  STAT_UnrealScriptTime,// This stat needs to be visible to core
-  STAT_NetFirstStat					= 400,
-  STAT_NetPeerFirstStat				= 450,
-  STAT_StreamingFirstStat				= 500,
-  STAT_AsyncLoadingTime,// This stat needs to be here for include order reasons
-  STAT_PhysicsFirstStat				= 700,
-  STAT_CollisionFirstStat				= 800,
-  STAT_AudioFirstStat					= 900,
-  STAT_MemoryFirstStat				= 1000,
-  STAT_MemoryChurnFirstStat			= 1100,
-  STAT_ParticlesFirstStat				= 1200,
-  STAT_BeamParticlesFirstStat			= 1300,
-  STAT_D3D9RHIFirstStat				= 1400,
-  STAT_StatSystemFirstStat			= 1500,
-  STAT_OctreeFirstStat				= 1600,
-  STAT_TrailParticlesFirstStat		= 1700,
-  STAT_FaceFXFirstStat				= 1800,
-  STAT_SceneRenderingFirstStat		= 1900,
-  STAT_ThreadingFirstStat				= 2100,
-  STAT_SceneUpdateFirstStat			= 2200,
-  STAT_AnimFirstStat					= 2300,
-  STAT_UIFirstStat					= 2400,
-  STAT_DLEFirstStat					= 2500,
-  STAT_AsyncIOFirstStat				= 2600,
-  STAT_FPSChartFirstStat				= 2700,
-  STAT_ShaderCompilingFirstStat		= 2800,
-  STAT_PathFindingFirstStat			= 2900,
-  STAT_PhysicsFluidFirstStat			= 3000,
-  STAT_PhysicsClothFirstStat			= 3100,
-  STAT_PhysicsFieldsFirstStat			= 3200,
-  STAT_DecalFirstStat					= 3300,
-  STAT_CanvasFirstStat				= 3400,
-  STAT_MeshParticlesFirstStat			= 3500,
-  STAT_PS3RHIFirstStat				= 3700,
-  STAT_XeRHIFirstStat					= 3800,
-  STAT_FluidsFirstStat				= 3900,
-  STAT_MemoryDetailedFirstStat		= 4000,
-  STAT_NavMeshFirstStat				= 4100,
-  STAT_CrowdFirstStat					= 4200,
-  STAT_InstancingFirstStat			= 4300,
-  STAT_ShaderCompressionFirstStat		= 4400,
-  STAT_InitViewsFirstStat				= 4500,
-  STAT_ShadowRenderingFirstStat		= 4600,
-  STAT_SceneCapturesFirstStat			= 4700,
-  STAT_GFxFirstStat				    = 4800,
-  STAT_ES2FirstStat				    = 4900,
-  STAT_TexturePoolFirstStat			= 5000,
-  STAT_D3D11RHIFirstStat				= 5100,
-  STAT_MorphFirstStat					= 5200,
-  STAT_GxmFirstStat				    = 5300,
-  STAT_OpenGLRHIFirstStat				= 5400,
-  STAT_SceneMemoryFirstStat			= 5500,
-  // -- Add new stat ranges BELOW this line --
-
-  // -- Add new stat ranges ABOVE this line --
-
-  // stats created from arbitrary runtime strings on the fly
-  STAT_FirstStringStat				= 35000,
-  STAT_LastStringStat					= 39999,
-
-  // Licensees should create their own enum with the first value being
-  // set to the value below
-  STAT_LicenseeFirstStat				= 60000
-} EStats;
-
-/** Stats for the stat system */
-typedef enum EStatSystemStats {
-  STAT_PerFrameCapture = STAT_StatSystemFirstStat,
-  STAT_PerFrameCaptureRT,
-  STAT_DrawStats,
-  STAT_TimingCodeCalls,
-} EStatSystemStats;
 
 /**
  * Various memory regions that can be used with memory stats. The exact meaning of
@@ -302,21 +249,102 @@ typedef enum EStatSystemStats {
  * max available memory for each region (uses an array MCR_MAX big)
  */
 typedef enum EMemoryCounterRegion {
-  MCR_Physical, // main system memory
-  MCR_GPU, // memory directly a GPU (graphics card, etc)
-  MCR_GPUSystem, // system memory directly accessible by a GPU
-  MCR_RingBuffer1, // general purpose regions for tracking how full a ring buffer gets (NOT the rendering thread command buffer)
+  MCR_Physical,     /** Main system memory. */
+  MCR_GPU,          /** Memory directly a GPU (graphics card, etc). */
+  MCR_GPUSystem,    /** System memory directly accessible by a GPU. */
+  MCR_RingBuffer1,  /** General purpose regions for tracking how full a ring buffer gets (NOT the rendering thread command buffer). */
   MCR_RingBuffer2, 
   MCR_RingBuffer3, 
-  MCR_TexturePool1, // presized texture pools
+  MCR_TexturePool1,  /** Presized texture pools. */
   MCR_TexturePool2, 
   MCR_TexturePool3, 
   MCR_MAX
 } EMemoryCounterRegion;
 
+/* ---------------------------------------------------------- ?? Stats ?? ---------------------------------------------------------- */
+
 /**
- * Texture pool stats
+ * Unique stats identifiers. Note these don't have to defined in this header
+ * but they do have to be unique. You're better off defining these in your
+ * own headers/cpp files
  */
+typedef enum EStats {
+  /** Special stats. */
+  STAT_Error,
+  STAT_Root,
+  STAT_FrameTime,
+  /** Used by the per group stats to avoid conflicts. */
+  STAT_ObjectFirstStat            = 100,
+  STAT_EngineFirstStat            = 200,
+  STAT_GameFirstStat              = 300,
+  STAT_UnrealScriptTime,  /** This stat needs to be visible to core. */
+  STAT_NetFirstStat               = 400,
+  STAT_NetPeerFirstStat           = 450,
+  STAT_StreamingFirstStat         = 500,
+  STAT_AsyncLoadingTime,  /** This stat needs to be here for include order reasons. */
+  STAT_PhysicsFirstStat           = 700,
+  STAT_CollisionFirstStat         = 800,
+  STAT_AudioFirstStat             = 900,
+  STAT_MemoryFirstStat            = 1000,
+  STAT_MemoryChurnFirstStat       = 1100,
+  STAT_ParticlesFirstStat         = 1200,
+  STAT_BeamParticlesFirstStat     = 1300,
+  STAT_D3D9RHIFirstStat           = 1400,
+  STAT_StatSystemFirstStat        = 1500,
+  STAT_OctreeFirstStat            = 1600,
+  STAT_TrailParticlesFirstStat    = 1700,
+  STAT_FaceFXFirstStat            = 1800,
+  STAT_SceneRenderingFirstStat    = 1900,
+  STAT_ThreadingFirstStat         = 2100,
+  STAT_SceneUpdateFirstStat       = 2200,
+  STAT_AnimFirstStat              = 2300,
+  STAT_UIFirstStat                = 2400,
+  STAT_DLEFirstStat               = 2500,
+  STAT_AsyncIOFirstStat           = 2600,
+  STAT_FPSChartFirstStat          = 2700,
+  STAT_ShaderCompilingFirstStat   = 2800,
+  STAT_PathFindingFirstStat       = 2900,
+  STAT_PhysicsFluidFirstStat      = 3000,
+  STAT_PhysicsClothFirstStat      = 3100,
+  STAT_PhysicsFieldsFirstStat     = 3200,
+  STAT_DecalFirstStat             = 3300,
+  STAT_CanvasFirstStat            = 3400,
+  STAT_MeshParticlesFirstStat     = 3500,
+  STAT_PS3RHIFirstStat            = 3700,
+  STAT_XeRHIFirstStat             = 3800,
+  STAT_FluidsFirstStat            = 3900,
+  STAT_MemoryDetailedFirstStat    = 4000,
+  STAT_NavMeshFirstStat           = 4100,
+  STAT_CrowdFirstStat             = 4200,
+  STAT_InstancingFirstStat        = 4300,
+  STAT_ShaderCompressionFirstStat = 4400,
+  STAT_InitViewsFirstStat         = 4500,
+  STAT_ShadowRenderingFirstStat   = 4600,
+  STAT_SceneCapturesFirstStat     = 4700,
+  STAT_GFxFirstStat               = 4800,
+  STAT_ES2FirstStat               = 4900,
+  STAT_TexturePoolFirstStat       = 5000,
+  STAT_D3D11RHIFirstStat          = 5100,
+  STAT_MorphFirstStat             = 5200,
+  STAT_GxmFirstStat               = 5300,
+  STAT_OpenGLRHIFirstStat         = 5400,
+  STAT_SceneMemoryFirstStat       = 5500,
+  /** -- Add new stat ranges BELOW this line -- */
+  /** -- Add new stat ranges ABOVE this line -- */
+  /** Stats created from arbitrary runtime strings on the fly. */
+  STAT_FirstStringStat            = 35000,
+  STAT_LastStringStat             = 39999,
+  /** Licensees should create their own enum with the first value being set to the value below. */
+  STAT_LicenseeFirstStat          = 60000
+} EStats;
+/** Stats for the stat system */
+typedef enum EStatSystemStats {
+  STAT_PerFrameCapture = STAT_StatSystemFirstStat,
+  STAT_PerFrameCaptureRT,
+  STAT_DrawStats,
+  STAT_TimingCodeCalls,
+} EStatSystemStats;
+/** Texture pool stats */
 typedef enum ETexturePoolStats {
   STAT_TexturePool_DefragTime = STAT_TexturePoolFirstStat + 1,
   STAT_TexturePool_Blocked,
@@ -331,7 +359,6 @@ typedef enum ETexturePoolStats {
   STAT_TexturePool_TotalAsyncCancellations,
   STAT_TexturePool_PackMipTailSavings,
 } ETexturePoolStats;
-
 /** Memory churn stats. */
 typedef enum EMemoryChurnStats {
   STAT_MallocCalls = STAT_MemoryChurnFirstStat,
@@ -341,10 +368,7 @@ typedef enum EMemoryChurnStats {
   STAT_PhysicalFreeCalls,
   STAT_TotalAllocatorCalls,
 } EMemoryChurnStats;
-
-/**
- * Holds the list of stat ids for object stat gathering
- */
+/** Holds the list of stat ids for object stat gathering. */
 typedef enum EObjectStats {
   STAT_ConstructObject = STAT_ObjectFirstStat,
   STAT_LoadConfig,
@@ -359,62 +383,331 @@ typedef enum EObjectStats {
   STAT_NameTableMemorySize,
   STAT_DestroyObject,
 } EObjectStats;
+/** Engine stats */
+enum EEngineStats {
+	/** Terrain stats */
+	STAT_TerrainRenderTime = STAT_EngineFirstStat,
+	STAT_TerrainSmoothTime,
+	STAT_TerrainTriangles,
+	/** Input stat */
+	STAT_InputTime,
+	STAT_InputLatencyTime,
+	/** HUD stat */
+	STAT_HudTime,
+	/** Static mesh tris rendered */
+	STAT_StaticMeshTriangles,
+	STAT_SkinningTime,
+	STAT_UpdateClothVertsTime,
+	STAT_UpdateSoftBodyVertsTime,
+	STAT_SkelMeshTriangles,
+	STAT_SkelMeshDrawCalls,
+	STAT_CPUSkinVertices,
+	STAT_GPUSkinVertices,
+	STAT_FracturePartPoolUsed,
+	STAT_GameEngineTick,
+	STAT_GameViewportTick,
+	STAT_RedrawViewports,
+	STAT_UpdateLevelStreaming,
+	STAT_RHITickTime
+};
+/** Game stats */
+enum EGameStats {
+	STAT_DecalTime = (STAT_UnrealScriptTime + 1),
+	STAT_PhysicsTime,
+	STAT_SpawnActorTime,
+	STAT_MoveActorTime,
+	STAT_FarMoveActorTime,
+	STAT_GCMarkTime,
+	STAT_GCSweepTime,
+	STAT_UpdateComponentsTime,
+	STAT_KismetTime,
+	STAT_TempTime,
+	/** Ticking stats */
+	STAT_PostUpdateTickTime,
+	STAT_PostAsyncTickTime,
+	STAT_DuringAsyncTickTime,
+	STAT_PreAsyncTickTime,
+	STAT_PostUpdateComponentTickTime,
+	STAT_PostAsyncComponentTickTime,
+	STAT_DuringAsyncComponentTickTime,
+	STAT_PreAsyncComponentTickTime,
+	STAT_TickTime,
+	STAT_WorldTickTime,
+	STAT_PostTickComponentUpdate,
+	STAT_ParticleManagerUpdateData,
+	STAT_PostUpdateWorkActorsTicked,
+	STAT_PostAsyncActorsTicked,
+	STAT_DuringAsyncActorsTicked,
+	STAT_PreAsyncActorsTicked,
+	STAT_PostAsyncComponentsTicked,
+	STAT_DuringAsyncComponentsTicked,
+	STAT_PreAsyncComponentsTicked,
+	STAT_AsyncWorkWaitTime,
+	STAT_PawnPhysics,
+};
+/** FPS chart stats */
+enum FPSChartStats {
+	STAT_FPSChart_0_5	= STAT_FPSChartFirstStat,
+	STAT_FPSChart_5_10,
+	STAT_FPSChart_10_15,
+	STAT_FPSChart_15_20,
+	STAT_FPSChart_20_25,
+	STAT_FPSChart_25_30,
+	STAT_FPSChart_30_35,
+	STAT_FPSChart_35_40,
+	STAT_FPSChart_40_45,
+	STAT_FPSChart_45_50,
+	STAT_FPSChart_50_55,
+	STAT_FPSChart_55_60,
+	STAT_FPSChart_60_INF,
+	STAT_FPSChartLastBucketStat,
+	STAT_FPSChart_30Plus,
+	STAT_FPSChart_UnaccountedTime,
+	STAT_FPSChart_FrameCount,
+	/** Hitch stats */
+	STAT_FPSChart_FirstHitchStat,
+	STAT_FPSChart_Hitch_5000_Plus = STAT_FPSChart_FirstHitchStat,
+	STAT_FPSChart_Hitch_2500_5000,
+	STAT_FPSChart_Hitch_2000_2500,
+	STAT_FPSChart_Hitch_1500_2000,
+	STAT_FPSChart_Hitch_1000_1500,
+	STAT_FPSChart_Hitch_750_1000,
+	STAT_FPSChart_Hitch_500_750,
+	STAT_FPSChart_Hitch_300_500,
+	STAT_FPSChart_Hitch_200_300,
+	STAT_FPSChart_Hitch_150_200,
+	STAT_FPSChart_Hitch_100_150,
+	STAT_FPSChart_LastHitchBucketStat,
+	STAT_FPSChart_TotalHitchCount,
+	/** Unit time stats */
+	STAT_FPSChart_UnitFrame,
+	STAT_FPSChart_UnitRender,
+	STAT_FPSChart_UnitGame,
+	STAT_FPSChart_UnitGPU,
+};
+/** Path finding stats */
+enum EPathFindingStats {
+	STAT_PathFinding_Reachable = STAT_PathFindingFirstStat,
+	STAT_PathFinding_FindPathToward,
+	STAT_PathFinding_BestPathTo,
+};
+/** UI Stats */
+enum EUIStats {
+	STAT_UIKismetTime = STAT_UIFirstStat,
+	STAT_UITickTime,
+	STAT_UIDrawingTime,
+};
+/** Canvas Stats */
+enum ECanvasStats {
+	STAT_Canvas_FlushTime = STAT_CanvasFirstStat,	
+	STAT_Canvas_DrawTextureTileTime,
+	STAT_Canvas_DrawMaterialTileTime,
+	STAT_Canvas_DrawStringTime,
+	STAT_Canvas_GetBatchElementsTime,
+	STAT_Canvas_AddTileRenderTime,
+	STAT_Canvas_NumBatchesCreated	
+};
+/** Decal stats */
+enum EDecalStats {
+	STAT_DecalAttachTime = STAT_DecalFirstStat,
+	STAT_DecalBSPAttachTime,
+	STAT_DecalStaticMeshAttachTime,
+	STAT_DecalSkeletalMeshAttachTime,
+	STAT_DecalTerrainAttachTime,
+	STAT_DecalHitComponentAttachTime,
+	STAT_DecalHitNodeAttachTime,
+	STAT_DecalMultiComponentAttachTime,
+	STAT_DecalReceiverImagesAttachTime,
+	/** Decal stats */
+	STAT_DecalTriangles,
+	STAT_DecalDrawCalls,
+	STAT_DecalRenderUnlitTime,
+	STAT_DecalRenderLitTime,
+	STAT_DecalRenderDynamicBSPTime,
+	STAT_DecalRenderDynamicSMTime,
+	STAT_DecalRenderDynamicTerrainTime,
+	STAT_DecalRenderDynamicSkelTime
+};
+/** Streaming stats */
+enum EStreamingStats {
+	STAT_StreamingTextures = (STAT_AsyncLoadingTime + 1),
+	STAT_StreamingTexturesSize,
+	STAT_StreamingTexturesMaxSize,
+	STAT_LightmapMemorySize,
+	STAT_LightmapDiskSize,
+	STAT_TexturePoolAllocatedSize,
+	STAT_RequestsInCancelationPhase,
+	STAT_RequestsInUpdatePhase,
+	STAT_RequestsInFinalizePhase,
+	STAT_IntermediateTextures,
+	STAT_IntermediateTexturesSize,
+	STAT_RequestSizeCurrentFrame,
+	STAT_RequestSizeTotal,
+	STAT_LightmapRequestSizeTotal,
+	STAT_StreamingFudgeFactor,
+	STAT_GameThreadUpdateTime,
+	STAT_RenderingThreadUpdateTime,
+	STAT_RenderingThreadFinalizeTime,
+	STAT_StreamingLatency,
+	STAT_StreamingBandwidth,
+	STAT_DynamicStreamingTotal,
+	STAT_AudioResourceCreationTime,
+	STAT_VolumeStreamingTickTime,
+	STAT_VolumeStreamingChecks,
+	STAT_GrowingReallocations,
+	STAT_ShrinkingReallocations,
+	STAT_FullReallocations,
+	STAT_FailedReallocations,
+	STAT_PanicDefragmentations,
+	STAT_AddToWorldTime,
+	STAT_RemoveFromWorldTime,
+	STAT_UpdateLevelStreamingTime,
+	STAT_OptimalTextureSize,
+	STAT_StreamingOverBudget,
+	STAT_StreamingUnderBudget,
+	STAT_NumWantingTextures,
+	STAT_NumStreamingTextureInstances,
+	STAT_NumStreamingLightmapInstances,
+	STAT_TotalStaticTextureHeuristicSize,
+	STAT_TotalLastRenderHeuristicSize,
+	STAT_TotalDynamicHeuristicSize,
+	STAT_TotalForcedHeuristicSize,
+};
 
-/* Flags for loading objects. */
+/* ---------------------------------------------------------- UPackage ! ---------------------------------------------------------- */
+
+/** Flags for loading objects. */
 typedef enum ELoadFlags {
-  LOAD_None			= 0x00000000,	// No flags.
-  LOAD_SeekFree		= 0x00000001,	// Loads the package via the seek free loading path/ reader
-  LOAD_NoWarn			= 0x00000002,	// Don't display warning if load fails.
-  LOAD_Throw			= 0x00000008,	// Throw exceptions upon failure.
-  LOAD_Verify			= 0x00000010,	// Only verify existance; don't actually load.
-  LOAD_AllowDll		= 0x00000020,	// Allow plain DLLs.
-  LOAD_DisallowFiles  = 0x00000040,	// Don't load from file.
-  LOAD_NoVerify       = 0x00000080,   // Don't verify imports yet.
-  LOAD_Quiet			= 0x00002000,   // No log warnings.
-  LOAD_FindIfFail		= 0x00004000,	// Tries FindObject if a linker cannot be obtained (e.g. package is currently being compiled)
-  LOAD_MemoryReader	= 0x00008000,	// Loads the file into memory and serializes from there.
-
+  LOAD_None            = 0x00000000,  /** No flags. */
+  LOAD_SeekFree        = 0x00000001,  /** Loads the package via the seek free loading path/ reader */
+  LOAD_NoWarn          = 0x00000002,  /** Don't display warning if load fails. */
+  LOAD_Throw           = 0x00000008,  /** Throw exceptions upon failure. */
+  LOAD_Verify          = 0x00000010,  /** Only verify existance; don't actually load. */
+  LOAD_AllowDll        = 0x00000020,  /** Allow plain DLLs. */
+  LOAD_DisallowFiles   = 0x00000040,  /** Don't load from file. */
+  LOAD_NoVerify        = 0x00000080,  /** Don't verify imports yet. */
+  LOAD_Quiet           = 0x00002000,  /** No log warnings. */
+  LOAD_FindIfFail      = 0x00004000,  /** Tries FindObject if a linker cannot be obtained (e.g. package is currently being compiled) */
+  LOAD_MemoryReader    = 0x00008000,  /** Loads the file into memory and serializes from there. */
   //@script patcher
-  LOAD_RemappedPackage= 0x00010000,	// Indicates that is a native script package which has been renamed - GScriptPackageSuffix should be appended to the package name
-
-  LOAD_NoRedirects	= 0x00020000,	// Never follow redirects when loading objects; redirected loads will fail
+  LOAD_RemappedPackage = 0x00010000,  /** Indicates that is a native script package which has been renamed - GScriptPackageSuffix should be appended to the package name */
+  LOAD_NoRedirects     = 0x00020000,  /** Never follow redirects when loading objects; redirected loads will fail */
+  #define LOAD_None                   LOAD_None
+  #define LOAD_SeekFree               LOAD_SeekFree
+  #define LOAD_NoWarn                 LOAD_NoWarn
+  #define LOAD_Throw                  LOAD_Throw
+  #define LOAD_Verify                 LOAD_Verify
+  #define LOAD_AllowDll               LOAD_AllowDll
+  #define LOAD_DisallowFiles          LOAD_DisallowFiles
+  #define LOAD_NoVerify               LOAD_NoVerify
+  #define LOAD_Quiet                  LOAD_Quiet
+  #define LOAD_FindIfFail             LOAD_FindIfFail
+  #define LOAD_MemoryReader           LOAD_MemoryReader
+  #define LOAD_RemappedPackage        LOAD_RemappedPackage
+  #define LOAD_NoRedirects            LOAD_NoRedirects
+  #define ELoadFlags_None             LOAD_None
+  #define ELoadFlags_SeekFree         LOAD_SeekFree
+  #define ELoadFlags_NoWarn           LOAD_NoWarn
+  #define ELoadFlags_Throw            LOAD_Throw
+  #define ELoadFlags_Verify           LOAD_Verify
+  #define ELoadFlags_AllowDll         LOAD_AllowDll
+  #define ELoadFlags_DisallowFiles    LOAD_DisallowFiles
+  #define ELoadFlags_NoVerify         LOAD_NoVerify
+  #define ELoadFlags_Quiet            LOAD_Quiet
+  #define ELoadFlags_FindIfFail       LOAD_FindIfFail
+  #define ELoadFlags_MemoryReader     LOAD_MemoryReader
+  #define ELoadFlags_RemappedPackage  LOAD_RemappedPackage
+  #define ELoadFlags_NoRedirects      LOAD_NoRedirects
 } ELoadFlags;
-
-/* Flags for saving packages */
+/** Flags for saving packages */
 typedef enum ESaveFlags {
-  SAVE_None			= 0x00000000,	// No flags
-  SAVE_NoError		= 0x00000001,	// Don't generate errors on save
-  SAVE_FromAutosave	= 0x00000002,   // Used to indicate this save was initiated automatically
-  SAVE_KeepDirty		= 0x00000004,	// Do not clear the dirty flag when saving
+  SAVE_None         = 0x00000000,  /** No flags */
+  SAVE_NoError      = 0x00000001,  /** Don't generate errors on save */
+  SAVE_FromAutosave = 0x00000002,  /** Used to indicate this save was initiated automatically */
+  SAVE_KeepDirty    = 0x00000004,  /** Do not clear the dirty flag when saving */
+  #define SAVE_None                SAVE_None
+  #define SAVE_NoError             SAVE_NoError
+  #define SAVE_FromAutosave        SAVE_FromAutosave
+  #define SAVE_KeepDirty           SAVE_KeepDirty
+  #define ESaveFlags_None          SAVE_None
+  #define ESaveFlags_NoError       SAVE_NoError
+  #define ESaveFlags_FromAutosave  SAVE_FromAutosave
+  #define ESaveFlags_KeepDirty     SAVE_KeepDirty
 } ESaveFlags;
-
-/* Package flags. */
+/** Package flags. */
 typedef enum EPackageFlags {
-  PKG_AllowDownload				= 0x00000001,	// Allow downloading package.
-  PKG_ClientOptional				= 0x00000002,	// Purely optional for clients.
-  PKG_ServerSideOnly				= 0x00000004,   // Only needed on the server side.
-  PKG_Cooked						= 0x00000008,	// Whether this package has been cooked for the target platform.
-  PKG_Unsecure					= 0x00000010,   // Not trusted.
-  PKG_SavedWithNewerVersion		= 0x00000020,	// Package was saved with newer version.
-  PKG_Need						= 0x00008000,	// Client needs to download this package.
-  PKG_Compiling					= 0x00010000,	// package is currently being compiled
-  PKG_ContainsMap					= 0x00020000,	// Set if the package contains a ULevel/ UWorld object
-  PKG_Trash						= 0x00040000,	// Set if the package was loaded from the trashcan
-  PKG_DisallowLazyLoading			= 0x00080000,	// Set if the archive serializing this package cannot use lazy loading
-  PKG_PlayInEditor				= 0x00100000,	// Set if the package was created for the purpose of PIE
-  PKG_ContainsScript				= 0x00200000,	// Package is allowed to contain UClasses and unrealscript
-  PKG_ContainsDebugInfo			= 0x00400000,	// Package contains debug info (for UDebugger)
-  PKG_RequireImportsAlreadyLoaded	= 0x00800000,	// Package requires all its imports to already have been loaded
-  PKG_SelfContainedLighting		= 0x01000000,	// All lighting in this package should be self contained
-  PKG_StoreCompressed				= 0x02000000,	// Package is being stored compressed, requires archive support for compression
-  PKG_StoreFullyCompressed		= 0x04000000,	// Package is serialized normally, and then fully compressed after (must be decompressed before LoadPackage is called)
-  PKG_ContainsInlinedShaders		= 0x08000000,	// Package was cooked allowing materials to inline their FMaterials (and hence shaders)
-  PKG_ContainsFaceFXData			= 0x10000000,	// Package contains FaceFX assets and/or animsets
-  PKG_NoExportAllowed				= 0x20000000,	// Package was NOT created by a modder.  Internal data not for export
-  PKG_StrippedSource				= 0x40000000,	// Source has been removed to compress the package size
+  PKG_AllowDownload               = 0x00000001,  /** Allow downloading package. */
+  PKG_ClientOptional              = 0x00000002,  /** Purely optional for clients. */
+  PKG_ServerSideOnly              = 0x00000004,  /** Only needed on the server side. */
+  PKG_Cooked                      = 0x00000008,  /** Whether this package has been cooked for the target platform. */
+  PKG_Unsecure                    = 0x00000010,  /** Not trusted. */
+  PKG_SavedWithNewerVersion       = 0x00000020,  /** Package was saved with newer version. */
+  PKG_Need                        = 0x00008000,  /** Client needs to download this package. */
+  PKG_Compiling                   = 0x00010000,  /** package is currently being compiled */
+  PKG_ContainsMap                 = 0x00020000,  /** Set if the package contains a ULevel/ UWorld object */
+  PKG_Trash                       = 0x00040000,  /** Set if the package was loaded from the trashcan */
+  PKG_DisallowLazyLoading         = 0x00080000,  /** Set if the archive serializing this package cannot use lazy loading */
+  PKG_PlayInEditor                = 0x00100000,  /** Set if the package was created for the purpose of PIE */
+  PKG_ContainsScript              = 0x00200000,  /** Package is allowed to contain UClasses and unrealscript */
+  PKG_ContainsDebugInfo           = 0x00400000,  /** Package contains debug info (for UDebugger) */
+  PKG_RequireImportsAlreadyLoaded = 0x00800000,  /** Package requires all its imports to already have been loaded */
+  PKG_SelfContainedLighting       = 0x01000000,  /** All lighting in this package should be self contained */
+  PKG_StoreCompressed             = 0x02000000,  /** Package is being stored compressed, requires archive support for compression */
+  PKG_StoreFullyCompressed        = 0x04000000,  /** Package is serialized normally, and then fully compressed after (must be decompressed before LoadPackage is called) */
+  PKG_ContainsInlinedShaders      = 0x08000000,  /** Package was cooked allowing materials to inline their FMaterials (and hence shaders) */
+  PKG_ContainsFaceFXData          = 0x10000000,  /** Package contains FaceFX assets and/or animsets */
+  PKG_NoExportAllowed             = 0x20000000,  /** Package was NOT created by a modder.  Internal data not for export */
+  PKG_StrippedSource              = 0x40000000,  /** Source has been removed to compress the package size */
+  #define PKG_AllowDownload                          PKG_AllowDownload
+  #define PKG_ClientOptional                         PKG_ClientOptional
+  #define PKG_ServerSideOnly                         PKG_ServerSideOnly
+  #define PKG_Cooked                                 PKG_Cooked
+  #define PKG_Unsecure                               PKG_Unsecure
+  #define PKG_SavedWithNewerVersion                  PKG_SavedWithNewerVersion
+  #define PKG_Need                                   PKG_Need
+  #define PKG_Compiling                              PKG_Compiling
+  #define PKG_ContainsMap                            PKG_ContainsMap
+  #define PKG_Trash                                  PKG_Trash
+  #define PKG_DisallowLazyLoading                    PKG_DisallowLazyLoading
+  #define PKG_PlayInEditor                           PKG_PlayInEditor
+  #define PKG_ContainsScript                         PKG_ContainsScript
+  #define PKG_ContainsDebugInfo                      PKG_ContainsDebugInfo
+  #define PKG_RequireImportsAlreadyLoaded            PKG_RequireImportsAlreadyLoaded
+  #define PKG_SelfContainedLighting                  PKG_SelfContainedLighting
+  #define PKG_StoreCompressed                        PKG_StoreCompressed
+  #define PKG_StoreFullyCompressed                   PKG_StoreFullyCompressed
+  #define PKG_ContainsInlinedShaders                 PKG_ContainsInlinedShaders
+  #define PKG_ContainsFaceFXData                     PKG_ContainsFaceFXData
+  #define PKG_NoExportAllowed                        PKG_NoExportAllowed
+  #define PKG_StrippedSource                         PKG_StrippedSource
+  #define EPackageFlags_AllowDownload                PKG_AllowDownload
+  #define EPackageFlags_ClientOptional               PKG_ClientOptional
+  #define EPackageFlags_ServerSideOnly               PKG_ServerSideOnly
+  #define EPackageFlags_Cooked                       PKG_Cooked
+  #define EPackageFlags_Unsecure                     PKG_Unsecure
+  #define EPackageFlags_SavedWithNewerVersion        PKG_SavedWithNewerVersion
+  #define EPackageFlags_Need                         PKG_Need
+  #define EPackageFlags_Compiling                    PKG_Compiling
+  #define EPackageFlags_ContainsMap                  PKG_ContainsMap
+  #define EPackageFlags_Trash                        PKG_Trash
+  #define EPackageFlags_DisallowLazyLoading          PKG_DisallowLazyLoading
+  #define EPackageFlags_PlayInEditor                 PKG_PlayInEditor
+  #define EPackageFlags_ContainsScript               PKG_ContainsScript
+  #define EPackageFlags_ContainsDebugInfo            PKG_ContainsDebugInfo
+  #define EPackageFlags_RequireImportsAlreadyLoaded  PKG_RequireImportsAlreadyLoaded
+  #define EPackageFlags_SelfContainedLighting        PKG_SelfContainedLighting
+  #define EPackageFlags_StoreCompressed              PKG_StoreCompressed
+  #define EPackageFlags_StoreFullyCompressed         PKG_StoreFullyCompressed
+  #define EPackageFlags_ContainsInlinedShaders       PKG_ContainsInlinedShaders
+  #define EPackageFlags_ContainsFaceFXData           PKG_ContainsFaceFXData
+  #define EPackageFlags_NoExportAllowed              PKG_NoExportAllowed
+  #define EPackageFlags_StrippedSource               PKG_StrippedSource
 } EPackageFlags;
+#define ELoadFlags     ELoadFlags
+#define ESaveFlags     ESaveFlags
+#define EPackageFlags  EPackageFlags
 
-/** 
+/**
  * These are the types of PerfMem RunResults you the system understands and can achieve.  They are stored in the table as we
  * will get "valid" numbers but we ran OOM.  We want to list the numbers in the OOM case because there is probably something that
  * jumped up to cause the OOM (e.g. vertex lighting).
@@ -427,159 +720,130 @@ typedef enum ProcessEventType {
   PE_Enable,
 } ProcessEventType;
 
-typedef enum EDistributionVectorMirrorFlags {
-  EDVMF_Same              =0,
-  EDVMF_Different         =1,
-  EDVMF_Mirror            =2,
-  EDVMF_MAX               =3,
-} EDistributionVectorMirrorFlags;
-
-typedef enum EDistributionVectorLockFlags {
-  EDVLF_None              =0,
-  EDVLF_XY                =1,
-  EDVLF_XZ                =2,
-  EDVLF_YZ                =3,
-  EDVLF_XYZ               =4,
-  EDVLF_MAX               =5,
-} EDistributionVectorLockFlags;
-
 #define DECLARE_UINT64(x)  x##ULL
 
 typedef enum EObjectFlagsEnum {
-  RF_InSingularFunc = 0x0000000000000002ULL,
-  RF_StateChanged = 0x0000000000000004ULL,
-  RF_DebugPostLoad = 0x0000000000000008ULL,
-  RF_DebugSerialize = 0x0000000000000010ULL,
-  RF_DebugFinishDestroyed = 0x0000000000000020ULL,
-  RF_EdSelected = 0x0000000000000040ULL,
-  RF_ZombieComponent = 0x0000000000000080ULL,
-  RF_Protected = 0x0000000000000100ULL,
-  RF_ClassDefaultObject = 0x0000000000000200ULL,
-  RF_ArchetypeObject = 0x0000000000000400ULL,
-  RF_ForceTagExp = 0x0000000000000800ULL,
-  RF_TokenStreamAssembled = 0x0000000000001000ULL,
-  RF_MisalignedObject = 0x0000000000002000ULL,
-  RF_RootSet = 0x0000000000004000ULL,
-  RF_BeginDestroyed = 0x0000000000008000ULL,
-  RF_FinishDestroyed = 0x0000000000010000ULL,
-  RF_DebugBeginDestroyed = 0x0000000000020000ULL,
-  RF_MarkedByCooker = 0x0000000000040000ULL,
-  RF_LocalizedResource = 0x0000000000080000ULL,
-  RF_InitializedProps = 0x0000000000100000ULL,
-  RF_PendingFieldPatches = 0x0000000000200000ULL,
+  RF_InSingularFunc         = 0x0000000000000002ULL,
+  RF_StateChanged           = 0x0000000000000004ULL,
+  RF_DebugPostLoad          = 0x0000000000000008ULL,
+  RF_DebugSerialize         = 0x0000000000000010ULL,
+  RF_DebugFinishDestroyed   = 0x0000000000000020ULL,
+  RF_EdSelected             = 0x0000000000000040ULL,
+  RF_ZombieComponent        = 0x0000000000000080ULL,
+  RF_Protected              = 0x0000000000000100ULL,
+  RF_ClassDefaultObject     = 0x0000000000000200ULL,
+  RF_ArchetypeObject        = 0x0000000000000400ULL,
+  RF_ForceTagExp            = 0x0000000000000800ULL,
+  RF_TokenStreamAssembled   = 0x0000000000001000ULL,
+  RF_MisalignedObject       = 0x0000000000002000ULL,
+  RF_RootSet                = 0x0000000000004000ULL,
+  RF_BeginDestroyed         = 0x0000000000008000ULL,
+  RF_FinishDestroyed        = 0x0000000000010000ULL,
+  RF_DebugBeginDestroyed    = 0x0000000000020000ULL,
+  RF_MarkedByCooker         = 0x0000000000040000ULL,
+  RF_LocalizedResource      = 0x0000000000080000ULL,
+  RF_InitializedProps       = 0x0000000000100000ULL,
+  RF_PendingFieldPatches    = 0x0000000000200000ULL,
   RF_IsCrossLevelReferenced = 0x0000000000400000ULL,
-  RF_Saved = 0x0000000080000000ULL,
-  RF_Transactional = 0x0000000100000000ULL,
-  RF_Unreachable = 0x0000000200000000ULL,
-  RF_Public = 0x0000000400000000ULL,
-  RF_TagImp = 0x0000000800000000ULL,
-  RF_TagExp = 0x0000001000000000ULL,
-  RF_Obsolete = 0x0000002000000000ULL,
-  RF_TagGarbage = 0x0000004000000000ULL,
-  RF_DisregardForGC = 0x0000008000000000ULL,
-  RF_PerObjectLocalized = 0x0000010000000000ULL,
-  RF_NeedLoad = 0x0000020000000000ULL,
-  RF_AsyncLoading = 0x0000040000000000ULL,
+  RF_Saved                  = 0x0000000080000000ULL,
+  RF_Transactional          = 0x0000000100000000ULL,
+  RF_Unreachable            = 0x0000000200000000ULL,
+  RF_Public                 = 0x0000000400000000ULL,
+  RF_TagImp                 = 0x0000000800000000ULL,
+  RF_TagExp                 = 0x0000001000000000ULL,
+  RF_Obsolete               = 0x0000002000000000ULL,
+  RF_TagGarbage             = 0x0000004000000000ULL,
+  RF_DisregardForGC         = 0x0000008000000000ULL,
+  RF_PerObjectLocalized     = 0x0000010000000000ULL,
+  RF_NeedLoad               = 0x0000020000000000ULL,
+  RF_AsyncLoading           = 0x0000040000000000ULL,
   RF_NeedPostLoadSubobjects = 0x0000080000000000ULL,
-  RF_Suppress = 0x0000100000000000ULL,
-  RF_InEndState = 0x0000200000000000ULL,
-  RF_Transient = 0x0000400000000000ULL,
-  RF_Cooked = 0x0000800000000000ULL,
-  RF_LoadForClient = 0x0001000000000000ULL,
-  RF_LoadForServer = 0x0002000000000000ULL,
-  RF_LoadForEdit = 0x0004000000000000ULL,
-  RF_Standalone = 0x0008000000000000ULL,
-  RF_NotForClient = 0x0010000000000000ULL,
-  RF_NotForServer = 0x0020000000000000ULL,
-  RF_NotForEdit = 0x0040000000000000ULL,
-  RF_NeedPostLoad = 0x0100000000000000ULL,
-  RF_HasStack = 0x0200000000000000ULL,
-  RF_Native = 0x0400000000000000ULL,
-  RF_Marked = 0x0800000000000000ULL,
-  RF_ErrorShutdown = 0x1000000000000000LL,
-  RF_PendingKill = 0x2000000000000000ULL,
-  RF_ContextFlags = (RF_NotForClient | RF_NotForServer | RF_NotForEdit),
-  RF_LoadContextFlags = (RF_LoadForClient | RF_LoadForServer | RF_LoadForEdit),
-  RF_Load = (RF_ContextFlags | RF_LoadContextFlags | RF_Public | RF_Standalone | RF_Native | RF_Obsolete | RF_Protected | RF_Transactional | RF_HasStack | RF_PerObjectLocalized | RF_ClassDefaultObject | RF_ArchetypeObject | RF_LocalizedResource),
-  RF_Keep = (RF_Native | RF_Marked | RF_PerObjectLocalized | RF_MisalignedObject | RF_DisregardForGC | RF_RootSet | RF_LocalizedResource),
-  RF_ScriptMask = (RF_Transactional | RF_Public | RF_Transient | RF_NotForClient | RF_NotForServer | RF_NotForEdit | RF_Standalone),
-  RF_UndoRedoMask = (RF_PendingKill),
-  RF_PropagateToSubObjects = (RF_Public | RF_ArchetypeObject | RF_Transactional),
-  RF_AllFlags = 0xFFFFFFFFFFFFFFFFULL
+  RF_Suppress               = 0x0000100000000000ULL,
+  RF_InEndState             = 0x0000200000000000ULL,
+  RF_Transient              = 0x0000400000000000ULL,
+  RF_Cooked                 = 0x0000800000000000ULL,
+  RF_LoadForClient          = 0x0001000000000000ULL,
+  RF_LoadForServer          = 0x0002000000000000ULL,
+  RF_LoadForEdit            = 0x0004000000000000ULL,
+  RF_Standalone             = 0x0008000000000000ULL,
+  RF_NotForClient           = 0x0010000000000000ULL,
+  RF_NotForServer           = 0x0020000000000000ULL,
+  RF_NotForEdit             = 0x0040000000000000ULL,
+  RF_NeedPostLoad           = 0x0100000000000000ULL,
+  RF_HasStack               = 0x0200000000000000ULL,
+  RF_Native                 = 0x0400000000000000ULL,
+  RF_Marked                 = 0x0800000000000000ULL,
+  RF_ErrorShutdown          = 0x1000000000000000LL,
+  RF_PendingKill            = 0x2000000000000000ULL,
+  RF_ContextFlags           = (RF_NotForClient | RF_NotForServer | RF_NotForEdit),
+  RF_LoadContextFlags       = (RF_LoadForClient | RF_LoadForServer | RF_LoadForEdit),
+  RF_Load                   = (RF_ContextFlags | RF_LoadContextFlags | RF_Public | RF_Standalone | RF_Native | RF_Obsolete | RF_Protected | RF_Transactional | RF_HasStack | RF_PerObjectLocalized | RF_ClassDefaultObject | RF_ArchetypeObject | RF_LocalizedResource),
+  RF_Keep                   = (RF_Native | RF_Marked | RF_PerObjectLocalized | RF_MisalignedObject | RF_DisregardForGC | RF_RootSet | RF_LocalizedResource),
+  RF_ScriptMask             = (RF_Transactional | RF_Public | RF_Transient | RF_NotForClient | RF_NotForServer | RF_NotForEdit | RF_Standalone),
+  RF_UndoRedoMask           = (RF_PendingKill),
+  RF_PropagateToSubObjects  = (RF_Public | RF_ArchetypeObject | RF_Transactional),
+  RF_AllFlags               = 0xFFFFFFFFFFFFFFFFULL
 } EObjectFlagsEnum;
 
 typedef enum CPF {
-  CPF_Edit	=				DECLARE_UINT64(0x0000000000000001),		// Property is user-settable in the editor.
-  CPF_Const =					DECLARE_UINT64(0x0000000000000002),		// Actor's property always matches class's default actor property.
-  CPF_Input =					DECLARE_UINT64(0x0000000000000004),		// Variable is writable by the input system.
-  CPF_ExportObject =			DECLARE_UINT64(0x0000000000000008),		// Object can be exported with actor.
-  CPF_OptionalParm =			DECLARE_UINT64(0x0000000000000010),		// Optional parameter (if CPF_Param is set),.
-  CPF_Net =						DECLARE_UINT64(0x0000000000000020),		// Property is relevant to network replication.
-  CPF_EditFixedSize =			DECLARE_UINT64(0x0000000000000040),		// Indicates that elements of an array can be modified, but its size cannot be changed.
-  CPF_Parm =					DECLARE_UINT64(0x0000000000000080),		// Function/When call parameter.
-  CPF_OutParm =					DECLARE_UINT64(0x0000000000000100),		// Value is copied out after function call.
-  CPF_SkipParm =				DECLARE_UINT64(0x0000000000000200),		// Property is a short-circuitable evaluation function parm.
-  CPF_ReturnParm =				DECLARE_UINT64(0x0000000000000400),		// Return value.
-  CPF_CoerceParm =				DECLARE_UINT64(0x0000000000000800),		// Coerce args into this function parameter.
-  CPF_Native =      			DECLARE_UINT64(0x0000000000001000),		// Property is native: C++ code is responsible for serializing it.
-  CPF_Transient =   			DECLARE_UINT64(0x0000000000002000),		// Property is transient: shouldn't be saved, zero-filled at load time.
-  CPF_Config =      			DECLARE_UINT64(0x0000000000004000),		// Property should be loaded/saved as permanent profile.
-  CPF_Localized =   			DECLARE_UINT64(0x0000000000008000),		// Property should be loaded as localizable text.
-
-   CPF_EditConst =   			DECLARE_UINT64(0x0000000000020000),		// Property is uneditable in the editor.
-   CPF_GlobalConfig =			DECLARE_UINT64(0x0000000000040000),		// Load config from base class, not subclass.
-   CPF_Component =				DECLARE_UINT64(0x0000000000080000),		// Property containts component references.
-   CPF_AlwaysInit =				DECLARE_UINT64(0x0000000000100000),		// Property should never be exported as NoInit	(@todo - this doesn't need to be a property flag...only used during make),
-   CPF_DuplicateTransient =		DECLARE_UINT64(0x0000000000200000),		// Property should always be reset to the default value during any type of duplication (copy/paste, binary duplication, etc.),
-   CPF_NeedCtorLink =			DECLARE_UINT64(0x0000000000400000),		// Fields need construction/destruction.
-   CPF_NoExport =    			DECLARE_UINT64(0x0000000000800000),		// Property should not be exported to the native class header file.
-    CPF_NoImport =				DECLARE_UINT64(0x0000000001000000),		// Property should not be imported when creating an object from text (copy/paste),
-   CPF_NoClear =					DECLARE_UINT64(0x0000000002000000),		// Hide clear (and browse), button.
-   CPF_EditInline =				DECLARE_UINT64(0x0000000004000000),		// Edit this object reference inline.
-
-  CPF_EditInlineUse =			DECLARE_UINT64(0x0000000010000000),		// EditInline with Use button.
-  CPF_Deprecated =  			DECLARE_UINT64(0x0000000020000000),		// Property is deprecated.  Read it from an archive, but don't save it.
-  CPF_DataBinding =				DECLARE_UINT64(0x0000000040000000),		// Indicates that this property should be exposed to data stores
-  CPF_SerializeText =			DECLARE_UINT64(0x0000000080000000),		// Native property should be serialized as text (ImportText, ExportText),
-
-  CPF_RepNotify =				DECLARE_UINT64(0x0000000100000000),		// Notify actors when a property is replicated
-  CPF_Interp =					DECLARE_UINT64(0x0000000200000000),		// interpolatable property for use with matinee
-  CPF_NonTransactional =		DECLARE_UINT64(0x0000000400000000),		// Property isn't transacted
-
-  CPF_EditorOnly =				DECLARE_UINT64(0x0000000800000000),		// Property should only be loaded in the editor
-  CPF_NotForConsole =			DECLARE_UINT64(0x0000001000000000),		// Property should not be loaded on console (or be a console cooker commandlet),
-  CPF_RepRetry =				DECLARE_UINT64(0x0000002000000000),		// retry replication of this property if it fails to be fully sent (e.g. object references not yet available to serialize over the network),
-  CPF_PrivateWrite =			DECLARE_UINT64(0x0000004000000000),		// property is const outside of the class it was declared in
-  CPF_ProtectedWrite =			DECLARE_UINT64(0x0000008000000000),		// property is const outside of the class it was declared in and subclasses
-
-  //@todo ronp - temporary until we add UArchetypeProperty
-  CPF_ArchetypeProperty =		DECLARE_UINT64(0x0000010000000000),		// property should be ignored by archives which have ArIgnoreArchetypeRef set
-
-  CPF_EditHide =				DECLARE_UINT64(0x0000020000000000),		// property should never be shown in a properties window.
-  CPF_EditTextBox =				DECLARE_UINT64(0x0000040000000000),		// property can be edited using a text dialog box.
-
-  CPF_CrossLevelPassive =		DECLARE_UINT64(0x0000100000000000),		// property can point across levels, and will be serialized properly, but assumes it's target exists in-game (non-editor)
-  CPF_CrossLevelActive =		DECLARE_UINT64(0x0000200000000000),		// property can point across levels, and will be serialized properly, and will be updated when the target is streamed in/out
-
+  CPF_Edit                  = DECLARE_UINT64(0x0000000000000001),  /** Property is user-settable in the editor. */
+  CPF_Const                 = DECLARE_UINT64(0x0000000000000002),  /** Actor's property always matches class's default actor property. */
+  CPF_Input                 = DECLARE_UINT64(0x0000000000000004),  /** Variable is writable by the input system. */
+  CPF_ExportObject          = DECLARE_UINT64(0x0000000000000008),  /** Object can be exported with actor. */
+  CPF_OptionalParm          = DECLARE_UINT64(0x0000000000000010),  /** Optional parameter (if CPF_Param is set),. */
+  CPF_Net                   = DECLARE_UINT64(0x0000000000000020),  /** Property is relevant to network replication. */
+  CPF_EditFixedSize         = DECLARE_UINT64(0x0000000000000040),  /** Indicates that elements of an array can be modified, but its size cannot be changed. */
+  CPF_Parm                  = DECLARE_UINT64(0x0000000000000080),  /** Function/When call parameter. */
+  CPF_OutParm               = DECLARE_UINT64(0x0000000000000100),  /** Value is copied out after function call. */
+  CPF_SkipParm              = DECLARE_UINT64(0x0000000000000200),  /** Property is a short-circuitable evaluation function parm. */
+  CPF_ReturnParm            = DECLARE_UINT64(0x0000000000000400),  /** Return value. */
+  CPF_CoerceParm            = DECLARE_UINT64(0x0000000000000800),  /** Coerce args into this function parameter. */
+  CPF_Native                = DECLARE_UINT64(0x0000000000001000),  /** Property is native: C++ code is responsible for serializing it. */
+  CPF_Transient             = DECLARE_UINT64(0x0000000000002000),  /** Property is transient: shouldn't be saved, zero-filled at load time. */
+  CPF_Config                = DECLARE_UINT64(0x0000000000004000),  /** Property should be loaded/saved as permanent profile. */
+  CPF_Localized             = DECLARE_UINT64(0x0000000000008000),  /** Property should be loaded as localizable text. */
+  CPF_EditConst             = DECLARE_UINT64(0x0000000000020000),  /** Property is uneditable in the editor. */
+  CPF_GlobalConfig          = DECLARE_UINT64(0x0000000000040000),  /** Load config from base class, not subclass. */
+  CPF_Component             = DECLARE_UINT64(0x0000000000080000),  /** Property containts component references. */
+  CPF_AlwaysInit            = DECLARE_UINT64(0x0000000000100000),  /** Property should never be exported as NoInit	(@todo - this doesn't need to be a property flag...only used during make), */
+  CPF_DuplicateTransient    = DECLARE_UINT64(0x0000000000200000),  /** Property should always be reset to the default value during any type of duplication (copy/paste, binary duplication, etc.), */
+  CPF_NeedCtorLink          = DECLARE_UINT64(0x0000000000400000),  /** Fields need construction/destruction. */
+  CPF_NoExport              = DECLARE_UINT64(0x0000000000800000),  /** Property should not be exported to the native class header file. */
+  CPF_NoImport              = DECLARE_UINT64(0x0000000001000000),  /** Property should not be imported when creating an object from text (copy/paste), */
+  CPF_NoClear               = DECLARE_UINT64(0x0000000002000000),  /** Hide clear (and browse), button. */
+  CPF_EditInline            = DECLARE_UINT64(0x0000000004000000),  /** Edit this object reference inline. */
+  CPF_EditInlineUse         = DECLARE_UINT64(0x0000000010000000),  /** EditInline with Use button. */
+  CPF_Deprecated            = DECLARE_UINT64(0x0000000020000000),  /** Property is deprecated.  Read it from an archive, but don't save it. */
+  CPF_DataBinding           = DECLARE_UINT64(0x0000000040000000),  /** Indicates that this property should be exposed to data stores */
+  CPF_SerializeText         = DECLARE_UINT64(0x0000000080000000),  /** Native property should be serialized as text (ImportText, ExportText), */
+  CPF_RepNotify             = DECLARE_UINT64(0x0000000100000000),  /** Notify actors when a property is replicated */
+  CPF_Interp                = DECLARE_UINT64(0x0000000200000000),  /** interpolatable property for use with matinee */
+  CPF_NonTransactional      = DECLARE_UINT64(0x0000000400000000),  /** Property isn't transacted */
+  CPF_EditorOnly            = DECLARE_UINT64(0x0000000800000000),  /** Property should only be loaded in the editor */
+  CPF_NotForConsole         = DECLARE_UINT64(0x0000001000000000),  /** Property should not be loaded on console (or be a console cooker commandlet), */
+  CPF_RepRetry              = DECLARE_UINT64(0x0000002000000000),  /** retry replication of this property if it fails to be fully sent (e.g. object references not yet available to serialize over the network), */
+  CPF_PrivateWrite          = DECLARE_UINT64(0x0000004000000000),  /** property is const outside of the class it was declared in */
+  CPF_ProtectedWrite        = DECLARE_UINT64(0x0000008000000000),  /** property is const outside of the class it was declared in and subclasses */
+  /** @todo ronp - temporary until we add UArchetypeProperty */
+  CPF_ArchetypeProperty     = DECLARE_UINT64(0x0000010000000000),  /** property should be ignored by archives which have ArIgnoreArchetypeRef set */
+  CPF_EditHide              = DECLARE_UINT64(0x0000020000000000),  /** property should never be shown in a properties window. */
+  CPF_EditTextBox           = DECLARE_UINT64(0x0000040000000000),  /** property can be edited using a text dialog box. */
+  CPF_CrossLevelPassive     = DECLARE_UINT64(0x0000100000000000),  /** property can point across levels, and will be serialized properly, but assumes it's target exists in-game (non-editor) */
+  CPF_CrossLevelActive      = DECLARE_UINT64(0x0000200000000000),  /** property can point across levels, and will be serialized properly, and will be updated when the target is streamed in/out */
   /** the flags that should never be set on interface properties */
-  CPF_InterfaceClearMask =		(CPF_NeedCtorLink|CPF_ExportObject),
-
+  CPF_InterfaceClearMask    = (CPF_NeedCtorLink|CPF_ExportObject),
   /** a combination of both cross level types */
-  CPF_CrossLevel = (CPF_CrossLevelPassive | CPF_CrossLevelActive),
+  CPF_CrossLevel            = (CPF_CrossLevelPassive | CPF_CrossLevelActive),
   /** @name Combinations flags */
-  //@{
-  CPF_ParmFlags =				(CPF_OptionalParm | CPF_Parm | CPF_OutParm | CPF_SkipParm | CPF_ReturnParm | CPF_CoerceParm),
-  CPF_PropagateFromStruct =		(CPF_Const | CPF_Native | CPF_Transient),
-  CPF_PropagateToArrayInner =	(CPF_ExportObject | CPF_EditInline | CPF_EditInlineUse | CPF_Localized | CPF_Component | CPF_Config | CPF_AlwaysInit | CPF_EditConst | CPF_Deprecated | CPF_SerializeText | CPF_CrossLevel ),
-
-  CPF_AllFlags =				DECLARE_UINT64(0xFFFFFFFFFFFFFFFF)
+  CPF_ParmFlags             = (CPF_OptionalParm | CPF_Parm | CPF_OutParm | CPF_SkipParm | CPF_ReturnParm | CPF_CoerceParm),
+  CPF_PropagateFromStruct   = (CPF_Const | CPF_Native | CPF_Transient),
+  CPF_PropagateToArrayInner = (CPF_ExportObject | CPF_EditInline | CPF_EditInlineUse | CPF_Localized | CPF_Component | CPF_Config | CPF_AlwaysInit | CPF_EditConst | CPF_Deprecated | CPF_SerializeText | CPF_CrossLevel ),
+  CPF_AllFlags              = DECLARE_UINT64(0xFFFFFFFFFFFFFFFF)
 } CPF;
 
-/**
- * Enum of different supported reference type tokens.
- */
+/** Enum of different supported reference type tokens. */
 typedef enum EGCReferenceType {
-  GCRT_None			= 0,
+  GCRT_None = 0,
   GCRT_Object,
   GCRT_PersistentObject,
   GCRT_ArrayObject,
@@ -591,57 +855,52 @@ typedef enum EGCReferenceType {
 
 
 // File manager.
-enum EFileTimes
-{
+enum EFileTimes {
   FILETIME_Create				= 0,
   FILETIME_LastAccess			= 1,
   FILETIME_LastWrite			= 2,
 };
-enum EFileWrite
-{
+enum EFileWrite {
   FILEWRITE_NoFail            = 0x01,
   FILEWRITE_NoReplaceExisting = 0x02,
   FILEWRITE_EvenIfReadOnly    = 0x04,
-  FILEWRITE_Append			= 0x08,
+  FILEWRITE_Append            = 0x08,
   FILEWRITE_AllowRead         = 0x10,
-  FILEWRITE_SaveGame			= 0x20,		// The platform needs to create a platform-specific save game file. The passed in path is relative to the "base" of savegames for that platform
-  FILEWRITE_Async				= 0x40,		// Attempt to create an async file archive (use the FArchive::IsCloseComplete to tell if it's completed). Supported in only a VERY small set of cases
+  FILEWRITE_SaveGame          = 0x20,  /** The platform needs to create a platform-specific save game file. The passed in path is relative to the "base" of savegames for that platform. */
+  FILEWRITE_Async             = 0x40,  /** Attempt to create an async file archive (use the FArchive::IsCloseComplete to tell if it's completed). Supported in only a VERY small set of cases. */
 };
-enum EFileRead
-{
-  FILEREAD_NoFail             = 0x01,
-  FILEREAD_SaveGame			= 0x02,		// The platform needs to load a platform-specific save game file. The passed in path is relative to the "base" of savegames for that platform
-  FILEREAD_Silent				= 0x04,
+enum EFileRead {
+  FILEREAD_NoFail   = 0x01,
+  FILEREAD_SaveGame = 0x02,  /** The platform needs to load a platform-specific save game file. The passed in path is relative to the "base" of savegames for that platform. */
+  FILEREAD_Silent   = 0x04,
 };
-enum ECopyResult
-{
-  COPY_OK						= 0x00,
-  COPY_MiscFail				= 0x01,
-  COPY_ReadFail				= 0x02,
-  COPY_WriteFail				= 0x03,
-  COPY_Canceled				= 0x06,
+enum ECopyResult {
+  COPY_OK        = 0x00,
+  COPY_MiscFail  = 0x01,
+  COPY_ReadFail  = 0x02,
+  COPY_WriteFail = 0x03,
+  COPY_Canceled  = 0x06,
 };
 
 enum EFileOpenFlags {
-  IO_READ			= 0x01,					// Open for reading
-  IO_WRITE		= 0x02,					// Open for writing
-  IO_READWRITE	= IO_READ | IO_WRITE,	// Combination of reading and writing
-  IO_APPEND		= 0x40,					// When writing, keep the existing data, set the filepointer to the end of the existing data
+  IO_READ      = 0x01,                  /** Open for reading. */
+  IO_WRITE     = 0x02,                  /** Open for writing. */
+  IO_READWRITE = (IO_READ | IO_WRITE),  /** Combination of reading and writing. */
+  IO_APPEND    = 0x40,                  /** When writing, keep the existing data, set the filepointer to the end of the existing data. */
 };
 
-enum EFileSeekFlags
-{
+enum EFileSeekFlags {
   IO_SEEK_BEGIN,
   IO_SEEK_CURRENT,
   IO_SEEK_END
 };
 
 typedef enum EUglyHackFlags {
-	HACK_DisableSubobjectInstancing		=	0x01,
-	HACK_ClassLoadingDisabled			=	0x02,	// indicates that classes aren't being loaded from disk, thus all classes should be treated as intrinsic classes.
-	HACK_UpdateArchetypeFromInstance	=	0x04,
-	HACK_KeepSequenceObject				=	0x08,	// prevents the code that removes sequences objects from sequences from marking the object pending kill
-	HACK_IsReloadObjArc					=	0x10,
+	HACK_DisableSubobjectInstancing  = 0x01,
+	HACK_ClassLoadingDisabled        = 0x02,  /** Indicates that classes aren't being loaded from disk, thus all classes should be treated as intrinsic classes. */
+	HACK_UpdateArchetypeFromInstance = 0x04,
+	HACK_KeepSequenceObject          = 0x08,  /** Prevents the code that removes sequences objects from sequences from marking the object pending kill. */
+	HACK_IsReloadObjArc              = 0x10,
 
 	/**
 	 * prevents component instancing code from instancing new components from templates;
@@ -664,29 +923,28 @@ typedef enum EUglyHackFlags {
 
 /* Flags controlling [de]compression. */
 typedef enum ECompressionFlags {
-  /** No compression																*/
-  COMPRESS_None					= 0x00,
-  /** Compress with ZLIB															*/
-  COMPRESS_ZLIB 					= 0x01,
-  /** Compress with LZO															*/
-  COMPRESS_LZO 					= 0x02,
-  /** Compress with LZX															*/
-  COMPRESS_LZX					= 0x04,
-  /** Prefer compression that compresses smaller (ONLY VALID FOR COMPRESSION)		*/
-  COMPRESS_BiasMemory 			= 0x10,
-  /** Prefer compression that compresses faster (ONLY VALID FOR COMPRESSION)		*/
-  COMPRESS_BiasSpeed				= 0x20,
-  /** If this flag is present, decompression will not happen on the SPUs.			*/
-  COMPRESS_ForcePPUDecompressZLib	= 0x80
+  COMPRESS_None                   = 0x00,  /** No compression. */
+  COMPRESS_ZLIB                   = 0x01,  /** Compress with ZLIB. */
+  COMPRESS_LZO                    = 0x02,  /** Compress with LZO. */
+  COMPRESS_LZX                    = 0x04,  /** Compress with LZX. */
+  COMPRESS_BiasMemory             = 0x10,  /** Prefer compression that compresses smaller (ONLY VALID FOR COMPRESSION). */
+  COMPRESS_BiasSpeed              = 0x20,  /** Prefer compression that compresses faster (ONLY VALID FOR COMPRESSION). */
+  COMPRESS_ForcePPUDecompressZLib = 0x80   /** If this flag is present, decompression will not happen on the SPUs. */
 } ECompressionFlags;
-
 
 /* Accepting connection responses. */
 typedef enum EAcceptConnection {
-  ACCEPTC_Reject,	// Reject the connection.
-  ACCEPTC_Accept, // Accept the connection.
-  ACCEPTC_Ignore, // Ignore it, sending no reply, while server travelling.
+  ACCEPTC_Reject,  /** Reject the connection. */
+  ACCEPTC_Accept,  /** Accept the connection. */
+  ACCEPTC_Ignore,  /** Ignore it, sending no reply, while server travelling. */
+  #define ACCEPTC_Reject            ACCEPTC_Reject
+  #define ACCEPTC_Accept            ACCEPTC_Accept
+  #define ACCEPTC_Ignore            ACCEPTC_Ignore
+  #define EAcceptConnection_Reject  ACCEPTC_Reject
+  #define EAcceptConnection_Accept  ACCEPTC_Accept
+  #define EAcceptConnection_Ignore  ACCEPTC_Ignore
 } EAcceptConnection;
+#define EAcceptConnection  EAcceptConnection
 
 /* State of a connection. */
 typedef enum EConnectionState {
@@ -1413,61 +1671,35 @@ REGISTER_NAME( 1209, Untitled)
 # undef REGISTERING_ENUM
 #endif
 
-/**
- * Flags serialized with the bulk data.
- */
-enum EBulkDataFlags
-{
-  /** Empty flag set.																*/
-  BULKDATA_None								= 0,
-  /** If set, payload is [going to be] stored in separate file.					*/
-  BULKDATA_StoreInSeparateFile				= 1<<0,
-  /** If set, payload should be [un]compressed using ZLIB during serialization.	*/
-  BULKDATA_SerializeCompressedZLIB			= 1<<1,
-  /** Force usage of SerializeElement over bulk serialization.					*/
-  BULKDATA_ForceSingleElementSerialization	= 1<<2,
-  /** Bulk data is only used once at runtime in the game.							*/
-  BULKDATA_SingleUse							= 1<<3,
-  /** If set, payload should be [un]compressed using LZO during serialization.	*/
-  BULKDATA_SerializeCompressedLZO				= 1<<4,
-  /** Bulk data won't be used and doesn't need to be loaded						*/
-  BULKDATA_Unused								= 1<<5,
-  /** If specified, only payload data will be written to archive.					*/
-  BULKDATA_StoreOnlyPayload					= 1<<6,
-  /** If set, payload should be [un]compressed using LZX during serialization.	*/
-  BULKDATA_SerializeCompressedLZX				= 1<<7,
-  /** Flag to check if either compression mode is specified						*/
-  BULKDATA_SerializeCompressed				= (BULKDATA_SerializeCompressedZLIB | BULKDATA_SerializeCompressedLZO | BULKDATA_SerializeCompressedLZX),
-
+/** Flags serialized with the bulk data. */
+enum EBulkDataFlags {
+  BULKDATA_None                            = 0,         /** Empty flag set. */
+  BULKDATA_StoreInSeparateFile             = (1 << 0),  /** If set, payload is [going to be] stored in separate file. */
+  BULKDATA_SerializeCompressedZLIB         = (1 << 1),  /** If set, payload should be [un]compressed using ZLIB during serialization */
+  BULKDATA_ForceSingleElementSerialization = (1 << 2),  /** Force usage of SerializeElement over bulk serialization. */
+  BULKDATA_SingleUse                       = (1 << 3),  /** Bulk data is only used once at runtime in the game. */
+  BULKDATA_SerializeCompressedLZO          = (1 << 4),  /** If set, payload should be [un]compressed using LZO during serialization */
+  BULKDATA_Unused                          = (1 << 5),  /** Bulk data won't be used and doesn't need to be loaded */
+  BULKDATA_StoreOnlyPayload                = (1 << 6),  /** If specified, only payload data will be written to archive. */
+  BULKDATA_SerializeCompressedLZX          = (1 << 7),  /** If set, payload should be [un]compressed using LZX during serialization */
+  BULKDATA_SerializeCompressed             = (BULKDATA_SerializeCompressedZLIB | BULKDATA_SerializeCompressedLZO | BULKDATA_SerializeCompressedLZX),  /** Flag to check if either compression mode is specified */
 };
 
-/**
- * Enumeration for bulk data lock status.
- */
-enum EBulkDataLockStatus
-{
-  /** Unlocked array													*/
-  LOCKSTATUS_Unlocked							= 0,
-  /** Locked read-only												*/
-  LOCKSTATUS_ReadOnlyLock						= 1,
-  /** Locked read-write-realloc										*/
-  LOCKSTATUS_ReadWriteLock					= 2,
+/** Enumeration for bulk data lock status. */
+enum EBulkDataLockStatus {
+  LOCKSTATUS_Unlocked      = 0,  /** Unlocked array */
+  LOCKSTATUS_ReadOnlyLock  = 1,  /** Locked read-only */
+  LOCKSTATUS_ReadWriteLock = 2,  /** Locked read-write-realloc */
 };
 
-/**
- * Enumeration for bulk data lock behavior
- */
-enum EBulkDataLockFlags
-{
+/** Enumeration for bulk data lock behavior. */
+enum EBulkDataLockFlags {
   LOCK_READ_ONLY								= 1,
   LOCK_READ_WRITE								= 2,
 };
 
-/**
- * Enum of token types.
- */
-enum EGPPTokenType
-{
+/** Enum of token types. */
+enum EGPPTokenType {
   GPPToken_Function	= 0,
   GPPToken_Actor		= 1,
   GPPToken_Component	= 2,
@@ -1489,47 +1721,35 @@ enum EGPPTokenType
  * @warning: if this enum gains a multi-byte value, the networking code needs to be updated
  */
 typedef enum EPlatformType {
-  PLATFORM_Unknown			=	0x00000000,
-  PLATFORM_Windows			=	0x00000001,
-  PLATFORM_WindowsServer		=	0x00000002,		// Windows platform dedicated server mode ("lean and mean" cooked as console without editor support)
-  PLATFORM_Xbox360			=	0x00000004,
-  PLATFORM_PS3				=	0x00000008,
-  PLATFORM_Linux				=	0x00000010,
-  PLATFORM_MacOSX				=	0x00000020,
-  PLATFORM_WindowsConsole		=	0x00000040,     // Windows platform cooked as console without editor support
-  PLATFORM_IPhone				=	0x00000080,
-  PLATFORM_NGP				=	0x00000100,
-  PLATFORM_Android			=	0x00000200,
-
-  // Combination Masks
-  /** PC platform types */
-  PLATFORM_PC					=	PLATFORM_Windows|PLATFORM_WindowsServer|PLATFORM_WindowsConsole|PLATFORM_Linux|PLATFORM_MacOSX,
-
-  /** Windows platform types */
-  PLATFORM_AnyWindows			=	PLATFORM_Windows|PLATFORM_WindowsServer|PLATFORM_WindowsConsole,
-
-  /** Console platform types */
-  PLATFORM_Console			=	PLATFORM_Xbox360|PLATFORM_PS3|PLATFORM_IPhone|PLATFORM_Android|PLATFORM_NGP,
-
-  /** Mobile platform types */
-  PLATFORM_Mobile				=	PLATFORM_IPhone|PLATFORM_Android|PLATFORM_NGP,
-
-  /** Platforms with data that has been stripped during cooking */
-  PLATFORM_Stripped			=	PLATFORM_Console|PLATFORM_WindowsServer|PLATFORM_WindowsConsole,
-
-  /** Platforms who's vertex data can't be packed into 16-bit floats */
-  PLATFORM_OpenGLES2			=	PLATFORM_IPhone|PLATFORM_Android,
+  PLATFORM_Unknown        =	0x00000000,
+  PLATFORM_Windows        =	0x00000001,
+  PLATFORM_WindowsServer  =	0x00000002,  /** Windows platform dedicated server mode ("lean and mean" cooked as console without editor support). */
+  PLATFORM_Xbox360        =	0x00000004,
+  PLATFORM_PS3            =	0x00000008,
+  PLATFORM_Linux          =	0x00000010,
+  PLATFORM_MacOSX         =	0x00000020,
+  PLATFORM_WindowsConsole =	0x00000040,  /** Windows platform cooked as console without editor support. */
+  PLATFORM_IPhone         =	0x00000080,
+  PLATFORM_NGP            =	0x00000100,
+  PLATFORM_Android        =	0x00000200,
+  /** Combination Masks */
+  PLATFORM_PC             = (PLATFORM_Windows | PLATFORM_WindowsServer | PLATFORM_WindowsConsole | PLATFORM_Linux | PLATFORM_MacOSX),  /** PC platform types */
+  PLATFORM_AnyWindows     = (PLATFORM_Windows | PLATFORM_WindowsServer | PLATFORM_WindowsConsole),                                     /** Windows platform types */
+  PLATFORM_Console        = (PLATFORM_Xbox360 | PLATFORM_PS3 | PLATFORM_IPhone | PLATFORM_Android | PLATFORM_NGP),                     /** Console platform types */
+  PLATFORM_Mobile         = (PLATFORM_IPhone | PLATFORM_Android | PLATFORM_NGP),                                                       /** Mobile platform types */
+  PLATFORM_Stripped       = (PLATFORM_Console | PLATFORM_WindowsServer | PLATFORM_WindowsConsole),                                     /** Platforms with data that has been stripped during cooking */
+  PLATFORM_OpenGLES2      = (PLATFORM_IPhone | PLATFORM_Android),                                                                      /** Platforms who's vertex data can't be packed into 16-bit floats */
 } EPlatformType;
 
 /** Identifier for specifying the type of map check message. */
 typedef enum MapCheckType {
-  MCTYPE_CRITICALERROR	= 0,
-  MCTYPE_ERROR			= 1,
+  MCTYPE_CRITICALERROR      = 0,
+  MCTYPE_ERROR              = 1,
   MCTYPE_PERFORMANCEWARNING = 2,
-  MCTYPE_WARNING			= 3,
-  MCTYPE_NOTE				= 4,
-  MCTYPE_KISMET			= 5,
-  MCTYPE_INFO				= 6,
+  MCTYPE_WARNING            = 3,
+  MCTYPE_NOTE               = 4,
+  MCTYPE_KISMET             = 5,
+  MCTYPE_INFO               = 6,
   MCTYPE_NUM
 } MapCheckType;
 
@@ -1560,9 +1780,9 @@ typedef enum EAppMsgType {
 	AMT_CancelRetryContinue,
 	AMT_YesNoYesAllNoAll,
 	AMT_YesNoYesAllNoAllCancel,
-#if IPHONE
+  #if IPHONE
 	AMT_Crash,
-#endif
+  #endif
 } EAppMsgType;
 
 
@@ -1593,8 +1813,7 @@ typedef enum EAppMsgType {
 // Note: The naming convention here is like for macros (#define) because
 //       those have been #defines before and now became enums. This can be changed later.
 //
-enum EUnrealEngineObjectVersion
-{
+enum EUnrealEngineObjectVersion {
   // - Min version for content resave
   VER_CONTENT_RESAVE_AUGUST_2007_QA_BUILD				= 491,
   // - Static mesh version bump, package version bumped to ease resaving
@@ -2333,6 +2552,52 @@ typedef enum : unsigned char {
   FNAME_Replace,
 } EFindName;
 #define EFindName  EFindName
+
+/* ---------------------------------------------------------- IConsoleManager ! ---------------------------------------------------------- */
+
+/** Bitmask 0x1, 0x2, 0x4, .. */
+typedef enum EConsoleVariableFlags {
+	/** Default, no flags are set */
+	ECVF_Default = 0x0,
+	/**
+	 * Console variables marked with this flag behave differently in a final release build.
+	 * Then they are are hidden in the console and cannot be changed by the user.
+	 */
+	ECVF_Cheat = 0x1,
+	/**
+	 * By default, after creation this flag is not set.
+	 * Whenever the value was changes through the Set functions the flag is set.
+	 * To detect changes:
+	 * if(CVar->TestFlags(ECVF_Changed))
+	 * {
+	 *     CVar->ClearFlags(ECVF_Changed);
+	 *     ... 
+	 * }
+	 * The old value is not stored as this can be easily done by hand and only when needed.
+	 */
+	ECVF_Changed = 0x2,
+	/**
+	 * Console variables cannot be changed by the user (from console or from ini file).
+	 * Changing from C++ is still possible.
+	 */
+	ECVF_ReadOnly = 0x4,
+	/**
+	 * UnregisterConsoleVariable() was called on this one.
+	 * If the variable is registered again with the same type this object is reactivated. This is good for DLL unloading.
+	 */
+	ECVF_Unregistered = 0x8,
+  #define ECVF_Default                        ECVF_Default
+  #define ECVF_Cheat                          ECVF_Cheat
+  #define ECVF_Changed                        ECVF_Changed
+  #define ECVF_ReadOnly                       ECVF_ReadOnly
+  #define ECVF_Unregistered                   ECVF_Unregistered
+  #define EConsoleVariableFlags_Default       ECVF_Default
+  #define EConsoleVariableFlags_Cheat         ECVF_Cheat
+  #define EConsoleVariableFlags_Changed       ECVF_Changed
+  #define EConsoleVariableFlags_ReadOnly      ECVF_ReadOnly
+  #define EConsoleVariableFlags_Unregistered  ECVF_Unregistered
+} EConsoleVariableFlags;
+#define EConsoleVariableFlags  EConsoleVariableFlags
 
 /* ---------------------------------------------------------- AActor ! ---------------------------------------------------------- */
 
@@ -5134,6 +5399,21 @@ typedef enum EThreadPriority : unsigned char {
   #define EThreadPriority_BelowNormal  TPri_BelowNormal
 } EThreadPriority;
 #define EThreadPriority  EThreadPriority
+
+/**
+ * Some standard IDs for special queued work types
+ * These are just setup for future use, these aren't supported yet
+ */
+enum EWorkID {
+	WORK_None,
+	WORK_DMARequest,
+	WORK_Skin,
+	WORK_ShadowExtrusion,
+	WORK_Decompress,
+	WORK_Stream,
+	WORK_GenerateParticles,
+	WORK_MAX
+};
 
 /* ---------------------------------------------------------- Shader PLACEHOLDER ! ---------------------------------------------------------- */
 
@@ -9765,10 +10045,10 @@ typedef enum ERootRotationOption : unsigned char {
 
 /* ---------------------------------------------------------- UModel ! ---------------------------------------------------------- */
 
-enum {MAX_NODES  = 65536};
-enum {MAX_POINTS = 128000};
-enum {MAX_NODE_VERTICES=255};	// Max vertices in a Bsp node.
-enum {MAX_ZONES=64};			// Max zones per level.
+enum { MAX_NODES         = 65536  };
+enum { MAX_POINTS        = 128000 };
+enum { MAX_NODE_VERTICES = 255    };  /** Max vertices in a Bsp node. */
+enum { MAX_ZONES         = 64     };  /** Max zones per level. */
 
 /* Flags associated with a Bsp node. */
 typedef enum EBspNodeFlags : unsigned char {
@@ -16956,3 +17236,231 @@ typedef enum AIResourceOption : unsigned char {
   #define AIResourceOption_MAX  AIResourceOption_MAX
 } AIResourceOption;
 #define AIResourceOption  AIResourceOption
+
+/* ---------------------------------------------------------- UWillowNavigationHandle ! ---------------------------------------------------------- */
+
+typedef enum PathFixMode : unsigned char {
+  PathFix_None,                   // 0
+  PathFix_Waiting,                // 1
+  PathFix_Moving,                 // 2
+  PathFix_Lerping,                // 3
+  PathFix_Failed,                 // 4
+  PathFix_MAX                     // 5
+  #define PathFix_None         PathFix_None
+  #define PathFix_Waiting      PathFix_Waiting
+  #define PathFix_Moving       PathFix_Moving
+  #define PathFix_Lerping      PathFix_Lerping
+  #define PathFix_Failed       PathFix_Failed
+  #define PathFix_MAX          PathFix_MAX
+  #define PathFixMode_None     PathFix_None
+  #define PathFixMode_Waiting  PathFix_Waiting
+  #define PathFixMode_Moving   PathFix_Moving
+  #define PathFixMode_Lerping  PathFix_Lerping
+  #define PathFixMode_Failed   PathFix_Failed
+  #define PathFixMode_MAX      PathFix_MAX
+} PathFixMode;
+typedef enum EFlightMode : unsigned char {
+  FlightMode_None,                // 0
+  FlightMode_Flying,              // 1
+  FlightMode_Stuck,               // 2
+  FlightMode_Landing,             // 3
+  FlightMode_Walking,             // 4
+  FlightMode_MAX                  // 5
+  #define FlightMode_None      FlightMode_None
+  #define FlightMode_Flying    FlightMode_Flying
+  #define FlightMode_Stuck     FlightMode_Stuck
+  #define FlightMode_Landing   FlightMode_Landing
+  #define FlightMode_Walking   FlightMode_Walking
+  #define FlightMode_MAX       FlightMode_MAX
+  #define EFlightMode_None     FlightMode_None
+  #define EFlightMode_Flying   FlightMode_Flying
+  #define EFlightMode_Stuck    FlightMode_Stuck
+  #define EFlightMode_Landing  FlightMode_Landing
+  #define EFlightMode_Walking  FlightMode_Walking
+  #define EFlightMode_MAX      FlightMode_MAX
+} EFlightMode;
+#define PathFixMode  PathFixMode
+#define EFlightMode  EFlightMode
+
+/* ---------------------------------------------------------- UTextureFlipBook ! ---------------------------------------------------------- */
+
+typedef enum TextureFlipBookMethod : unsigned char {
+  TFBM_UL_ROW,                    // 0
+  TFBM_UL_COL,                    // 1
+  TFBM_UR_ROW,                    // 2
+  TFBM_UR_COL,                    // 3
+  TFBM_LL_ROW,                    // 4
+  TFBM_LL_COL,                    // 5
+  TFBM_LR_ROW,                    // 6
+  TFBM_LR_COL,                    // 7
+  TFBM_RANDOM,                    // 8
+  TFBM_MAX                        // 9
+  #define TFBM_UL_ROW                   TFBM_UL_ROW
+  #define TFBM_UL_COL                   TFBM_UL_COL
+  #define TFBM_UR_ROW                   TFBM_UR_ROW
+  #define TFBM_UR_COL                   TFBM_UR_COL
+  #define TFBM_LL_ROW                   TFBM_LL_ROW
+  #define TFBM_LL_COL                   TFBM_LL_COL
+  #define TFBM_LR_ROW                   TFBM_LR_ROW
+  #define TFBM_LR_COL                   TFBM_LR_COL
+  #define TFBM_RANDOM                   TFBM_RANDOM
+  #define TFBM_MAX                      TFBM_MAX
+  #define TextureFlipBookMethod_UL_ROW  TFBM_UL_ROW
+  #define TextureFlipBookMethod_UL_COL  TFBM_UL_COL
+  #define TextureFlipBookMethod_UR_ROW  TFBM_UR_ROW
+  #define TextureFlipBookMethod_UR_COL  TFBM_UR_COL
+  #define TextureFlipBookMethod_LL_ROW  TFBM_LL_ROW
+  #define TextureFlipBookMethod_LL_COL  TFBM_LL_COL
+  #define TextureFlipBookMethod_LR_ROW  TFBM_LR_ROW
+  #define TextureFlipBookMethod_LR_COL  TFBM_LR_COL
+  #define TextureFlipBookMethod_RANDOM  TFBM_RANDOM
+  #define TextureFlipBookMethod_MAX     TFBM_MAX
+} TextureFlipBookMethod;
+#define TextureFlipBookMethod  TextureFlipBookMethod
+
+/* ---------------------------------------------------------- UDistributionFloat ! ---------------------------------------------------------- */
+
+typedef enum EDistributionVectorLockFlags   : unsigned char {
+  EDVLF_None,                     // 0
+  EDVLF_XY,                       // 1
+  EDVLF_XZ,                       // 2
+  EDVLF_YZ,                       // 3
+  EDVLF_XYZ,                      // 4
+  EDVLF_MAX                       // 5
+  #define EDVLF_None                         EDVLF_None
+  #define EDVLF_XY                           EDVLF_XY
+  #define EDVLF_XZ                           EDVLF_XZ
+  #define EDVLF_YZ                           EDVLF_YZ
+  #define EDVLF_XYZ                          EDVLF_XYZ
+  #define EDVLF_MAX                          EDVLF_MAX
+  #define EDistributionVectorLockFlags_None  EDVLF_None
+  #define EDistributionVectorLockFlags_XY    EDVLF_XY
+  #define EDistributionVectorLockFlags_XZ    EDVLF_XZ
+  #define EDistributionVectorLockFlags_YZ    EDVLF_YZ
+  #define EDistributionVectorLockFlags_XYZ   EDVLF_XYZ
+  #define EDistributionVectorLockFlags_MAX   EDVLF_MAX
+} EDistributionVectorLockFlags;
+typedef enum EDistributionVectorMirrorFlags : unsigned char {
+  EDVMF_Same,                     // 0
+  EDVMF_Different,                // 1
+  EDVMF_Mirror,                   // 2
+  EDVMF_MAX                       // 3
+  #define EDVMF_Same                                EDVMF_Same
+  #define EDVMF_Different                           EDVMF_Different
+  #define EDVMF_Mirror                              EDVMF_Mirror
+  #define EDVMF_MAX                                 EDVMF_MAX
+  #define EDistributionVectorMirrorFlags_Same       EDVMF_Same
+  #define EDistributionVectorMirrorFlags_Different  EDVMF_Different
+  #define EDistributionVectorMirrorFlags_Mirror     EDVMF_Mirror
+  #define EDistributionVectorMirrorFlags_MAX        EDVMF_MAX
+} EDistributionVectorMirrorFlags;
+#define EDistributionVectorLockFlags    EDistributionVectorLockFlags
+#define EDistributionVectorMirrorFlags  EDistributionVectorMirrorFlags
+
+/* ---------------------------------------------------------- UAkDialogueEvent ! ---------------------------------------------------------- */
+
+typedef enum EDynamicDialogueArgument : unsigned char {
+  DYNAMICDIALOGUEARGUMENT_None,   // 0
+  DYNAMICDIALOGUEARGUMENT_SpeakerName,// 1
+  DYNAMICDIALOGUEARGUMENT_Stance, // 2
+  DYNAMICDIALOGUEARGUMENT_TargetName,// 3
+  DYNAMICDIALOGUEARGUMENT_MAX     // 4
+  #define DYNAMICDIALOGUEARGUMENT_None          DYNAMICDIALOGUEARGUMENT_None
+  #define DYNAMICDIALOGUEARGUMENT_SpeakerName   DYNAMICDIALOGUEARGUMENT_SpeakerName
+  #define DYNAMICDIALOGUEARGUMENT_Stance        DYNAMICDIALOGUEARGUMENT_Stance
+  #define DYNAMICDIALOGUEARGUMENT_TargetName    DYNAMICDIALOGUEARGUMENT_TargetName
+  #define DYNAMICDIALOGUEARGUMENT_MAX           DYNAMICDIALOGUEARGUMENT_MAX
+  #define EDynamicDialogueArgument_None         DYNAMICDIALOGUEARGUMENT_None
+  #define EDynamicDialogueArgument_SpeakerName  DYNAMICDIALOGUEARGUMENT_SpeakerName
+  #define EDynamicDialogueArgument_Stance       DYNAMICDIALOGUEARGUMENT_Stance
+  #define EDynamicDialogueArgument_TargetName   DYNAMICDIALOGUEARGUMENT_TargetName
+  #define EDynamicDialogueArgument_MAX          DYNAMICDIALOGUEARGUMENT_MAX
+} EDynamicDialogueArgument;
+#define EDynamicDialogueArgument  EDynamicDialogueArgument
+
+/* ---------------------------------------------------------- UAction_GenericAttack ! ---------------------------------------------------------- */
+
+typedef enum EAttackType     : unsigned char {
+  Attack_Far,                     // 0
+  Attack_Close,                   // 1
+  Attack_InPlace,                 // 2
+  Attack_MAX                      // 3
+  #define Attack_Far           Attack_Far
+  #define Attack_Close         Attack_Close
+  #define Attack_InPlace       Attack_InPlace
+  #define Attack_MAX           Attack_MAX
+  #define EAttackType_Far      Attack_Far
+  #define EAttackType_Close    Attack_Close
+  #define EAttackType_InPlace  Attack_InPlace
+  #define EAttackType_MAX      Attack_MAX
+} EAttackType;
+typedef enum EAttackValidity : unsigned char {
+  Validity_None,                  // 0
+  Validity_Partial,               // 1
+  Validity_Full,                  // 2
+  Validity_MAX                    // 3
+  #define Validity_None            Validity_None
+  #define Validity_Partial         Validity_Partial
+  #define Validity_Full            Validity_Full
+  #define Validity_MAX             Validity_MAX
+  #define EAttackValidity_None     Validity_None
+  #define EAttackValidity_Partial  Validity_Partial
+  #define EAttackValidity_Full     Validity_Full
+  #define EAttackValidity_MAX      Validity_MAX
+} EAttackValidity;
+#define EAttackType      EAttackType
+#define EAttackValidity  EAttackValidity
+
+/* ---------------------------------------------------------- UAction_AnimAttack ! ---------------------------------------------------------- */
+
+typedef enum EAimType : unsigned char {
+  AimType_HoldStill,              // 0
+  AimType_FollowTarget,           // 1
+  AimType_AlignToTarget,          // 2
+  AimType_MAX                     // 3
+  #define AimType_HoldStill       AimType_HoldStill
+  #define AimType_FollowTarget    AimType_FollowTarget
+  #define AimType_AlignToTarget   AimType_AlignToTarget
+  #define AimType_MAX             AimType_MAX
+  #define EAimType_HoldStill      AimType_HoldStill
+  #define EAimType_FollowTarget   AimType_FollowTarget
+  #define EAimType_AlignToTarget  AimType_AlignToTarget
+  #define EAimType_MAX            AimType_MAX
+} EAimType;
+#define EAimType  EAimType
+
+/* ---------------------------------------------------------- UAction_BasicAttack ! ---------------------------------------------------------- */
+
+typedef enum ERangeType : unsigned char {
+  Range_None,                     // 0
+  Range_Zone,                     // 1
+  Range_Numbers,                  // 2
+  Range_MAX                       // 3
+  #define Range_None          Range_None
+  #define Range_Zone          Range_Zone
+  #define Range_Numbers       Range_Numbers
+  #define Range_MAX           Range_MAX
+  #define ERangeType_None     Range_None
+  #define ERangeType_Zone     Range_Zone
+  #define ERangeType_Numbers  Range_Numbers
+  #define ERangeType_MAX      Range_MAX
+} ERangeType;
+#define ERangeType  ERangeType
+
+/* ---------------------------------------------------------- UAction_SwoopAttack ! ---------------------------------------------------------- */
+
+typedef enum ESwoopOffset : unsigned char {
+  SwoopOffset_Left,               // 0
+  SwoopOffset_Right,              // 1
+  SwoopOffset_Random,             // 2
+  SwoopOffset_MAX                 // 3
+  #define SwoopOffset_Left     SwoopOffset_Left
+  #define SwoopOffset_Right    SwoopOffset_Right
+  #define SwoopOffset_Random   SwoopOffset_Random
+  #define SwoopOffset_MAX      SwoopOffset_MAX
+  #define ESwoopOffset_Left    SwoopOffset_Left
+  #define ESwoopOffset_Right   SwoopOffset_Right
+  #define ESwoopOffset_Random  SwoopOffset_Random
+  #define ESwoopOffset_MAX     SwoopOffset_MAX
+} ESwoopOffset;
+#define ESwoopOffset  ESwoopOffset

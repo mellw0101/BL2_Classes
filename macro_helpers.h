@@ -95,6 +95,8 @@
 #define atomic
 #define immutable
 
+#define NUM_BANDWIDTHSAMPLES  512
+#define NUM_LATENCYSAMPLES    512
 
 #define STRU_(x, size, ...) \
   struct x {  \
@@ -118,7 +120,6 @@
     BYTE MisalignmentPadding; \
     __type Element; \
   }
-
 
 #define _TTYPE_COMPATIBILITY_BYTES(__type)  \
   struct __declspec(align(sizeof(FAlignedElements_##__type) - sizeof(__type))) { \
@@ -161,21 +162,21 @@
     INT NumFreeIndices;           \
   }
 
-#define _TLINKED_LIST(__type) \
-  struct _TLINKED_LIST_NAME(__type) {  \
-    __type Element; \
-	  _TLINKED_LIST_NAME(__type)* NextLink; \
-	  _TLINKED_LIST_NAME(__type)** PrevLink; \
+#define _TLINKED_LIST(__type)               \
+  struct _TLINKED_LIST_NAME(__type) {       \
+    __type Element;                         \
+	  _TLINKED_LIST_NAME(__type)* NextLink;   \
+	  _TLINKED_LIST_NAME(__type)** PrevLink;  \
   }
 
-#define _TREF_COUNT_PTR(__type) \
-  struct {                      \
-    __type *Reference;          \
-  }
-
-#define _TSCOPED_POINTER(__type) \
+#define _TREF_COUNT_PTR(__type)  \
   struct {                       \
     __type *Reference;           \
+  }
+
+#define _TSCOPED_POINTER(__type)  \
+  struct {                        \
+    __type *Reference;            \
   }
 
 #define _TINLINE_ALLOCATOR(num_inline, __type)                     \
@@ -185,10 +186,10 @@
   }
 
 #define _TSET__FELEMENT(__type)  \
-  struct { \
-    __type Value; \
-    FSetElementId HashNextId; \
-    INT HashIndex;  \
+  struct {                       \
+    __type Value;                \
+    FSetElementId HashNextId;    \
+    INT HashIndex;               \
   }
 
 #define _TSET(__type)  \
@@ -197,19 +198,22 @@
     TInlineAllocator_1_FSetElementId Hash;  \
     INT HashSize;  \
   }
-// #define _TSET(__type)         __TSET(PP_CAT(TSparseArray_, __type))
-// #define _TSET_INLINE(__type)  __TSET(_TSPARSE_ARRAY_INLINE(_TARRAY(__type)))
 
-#define _TMAP(__t0, __t1) \
-  struct {\
+#define _TMAP(__t0, __t1)                          \
+  struct {                                         \
     PP_CAT(TSet_, _FPAIR_NAME(__t0, __t1)) Pairs;  \
   }
 
-#define _TMULTI_MAP(__t0, __t1) \
-  struct {\
+#define _TMULTI_MAP(__t0, __t1)                    \
+  struct {                                         \
     PP_CAT(TSet_, _FPAIR_NAME(__t0, __t1)) Pairs;  \
   }
-// #define _TMAP(__t0, __t1)         __TMAP(PP_CAT(TSet_, _TSET__FELEMENT_NAME(_FPAIR_NAME(__t0, __t1))))
+
+#define _TKEY_VALUE_PAIR(__t0, __t1)  \
+  struct {                            \
+    __t0 Key;                         \
+    __t1 Value;                       \
+  }
 
 #define _PTR_NAME(__type)                        PP_CAT(__type, Ptr)
 #define _FALIGNED_ELEMENTS_NAME(__type)          PP_CAT(FAlignedElements_, __type)
@@ -230,6 +234,7 @@
 #define _TSET_NAME(__type)                       PP_CAT(TSet_, __type)
 #define _TMAP_NAME(__t0, __t1)                   PP_CAT(TMap_, PP_CAT(__t0, PP_CAT(_, __t1)))
 #define _TMULTI_MAP_NAME(__t0, __t1)             PP_CAT(TMultiMap_, PP_CAT(__t0, PP_CAT(_, __t1)))
+#define _TKEY_VALUE_PAIR_NAME(__t0, __t1)        PP_CAT(TKeyValuePair_, PP_CAT(__t0, PP_CAT(_, __t1)))
 
 #define _DECL_A_TYPE(name, __type)  typedef PP_CAT(name, (__type))  PP_CAT(name, _NAME(__type))
 
@@ -257,6 +262,7 @@
 #define _DECL_TSET(__type)                      typedef _TSET(__type)                      _TSET_NAME(__type)
 #define _DECL_TMAP(__t0, __t1)                  typedef _TMAP(__t0, __t1)                  _TMAP_NAME(__t0, __t1)
 #define _DECL_TMULTI_MAP(__t0, __t1)            typedef _TMULTI_MAP(__t0, __t1)            _TMULTI_MAP_NAME(__t0, __t1)
+#define _DECL_TKEY_VALUE_PAIR(__t0, __t1)       typedef _TKEY_VALUE_PAIR(__t0, __t1)       _TKEY_VALUE_PAIR_NAME(__t0, __t1)
 
 #define DECLARE_A_TARRAY_TINLINEALLOCATOR_BASE(__type)  \
   _DECL_FALIGNED_ELEMENTS(__type);                      \

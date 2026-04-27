@@ -164,8 +164,6 @@ _(FChunkedList_Mirror);
 _(FArray_Mirror);
 _(FStableArray_Mirror);
 
-_(FRenderCommandFence);
-
 /* ---------------------------------------------------------- FLightingChannelContainer ---------------------------------------------------------- */
 
 _(FLightingChannelContainer);
@@ -179,6 +177,21 @@ _(FScriptDelegate);
 /* ---------------------------------------------------------- FImplementedInterface ---------------------------------------------------------- */
 
 _(FImplementedInterface);
+
+/* ---------------------------------------------------------- UDlcTmsHolder ---------------------------------------------------------- */
+
+_(FPremiumCustomizationInfo);
+_(UDlcTmsHolder);
+
+/* ---------------------------------------------------------- UOnlineMatchmakingStats ---------------------------------------------------------- */
+
+_(FMMStats_Timer);
+_(UOnlineMatchmakingStats);
+
+/* ---------------------------------------------------------- UCellsNavigator ---------------------------------------------------------- */
+
+_(FMoveToCellData);
+_(UCellsNavigator);
 
 /* ---------------------------------------------------------- UOnlineGameInterfaceImpl ---------------------------------------------------------- */
 
@@ -232,6 +245,10 @@ _(UWillowLeviathanService);
 /* ---------------------------------------------------------- UApexAsset ---------------------------------------------------------- */
 
 _(UApexAsset);
+
+/* ---------------------------------------------------------- UApexGenericAsset ---------------------------------------------------------- */
+
+_(UApexGenericAsset);
 
 /* ---------------------------------------------------------- UApexClothingAsset ---------------------------------------------------------- */
 
@@ -288,6 +305,26 @@ _(URES_Skill);
 
 _(UActorFactory);
 
+/* ---------------------------------------------------------- UActorFactoryPhysicsAsset ---------------------------------------------------------- */
+
+_(UActorFactoryPhysicsAsset);
+
+/* ---------------------------------------------------------- UActorFactorySkeletalMesh ---------------------------------------------------------- */
+
+_(UActorFactorySkeletalMesh);
+
+/* ---------------------------------------------------------- UActorFactoryAkAmbientSound ---------------------------------------------------------- */
+
+_(UActorFactoryAkAmbientSound);
+
+/* ---------------------------------------------------------- UActorFactoryActor ---------------------------------------------------------- */
+
+_(UActorFactoryActor);
+
+/* ---------------------------------------------------------- UActorFactoryAI ---------------------------------------------------------- */
+
+_(UActorFactoryAI);
+
 /* ---------------------------------------------------------- UActorFactoryMissionPickupSpawner ---------------------------------------------------------- */
 
 _(UActorFactoryMissionPickupSpawner);
@@ -338,6 +375,10 @@ _(UUIManager);
 /* ---------------------------------------------------------- UOnlineStats ---------------------------------------------------------- */
 
 _(UOnlineStats);
+
+/* ---------------------------------------------------------- UOnlineStatsWrite ---------------------------------------------------------- */
+
+_(UOnlineStatsWrite);
 
 /* ---------------------------------------------------------- UIniLocPatcher ---------------------------------------------------------- */
 
@@ -575,6 +616,10 @@ _(UExposureUtilityBase);
 _(FHitTargetRecord);
 _(FPriorityDebugStruct);
 _(UMindTargetInfo);
+
+/* ---------------------------------------------------------- UWillowMindTargetInfo ---------------------------------------------------------- */
+
+_(UWillowMindTargetInfo);
 
 /* ---------------------------------------------------------- UPlayerInteractionServer ---------------------------------------------------------- */
 
@@ -944,6 +989,10 @@ _(UGFxMovieDrawStyleMesh);
 
 _(UActionSequence);
 
+/* ---------------------------------------------------------- UActionSequenceList ---------------------------------------------------------- */
+
+_(UActionSequenceList);
+
 /* ---------------------------------------------------------- UActionSequencePawn ---------------------------------------------------------- */
 
 _(UActionSequencePawn);
@@ -1118,6 +1167,10 @@ _(USkelControlBase);
 
 _(USkelControlLookAt);
 
+/* ---------------------------------------------------------- UWillowSkelControl_LookAtActor ---------------------------------------------------------- */
+
+_(UWillowSkelControl_LookAtActor);
+
 /* ---------------------------------------------------------- USkelControlLimb ---------------------------------------------------------- */
 
 _(USkelControlLimb);
@@ -1274,6 +1327,11 @@ _(UInventoryCardGFx);
 /* ---------------------------------------------------------- UAkObject ---------------------------------------------------------- */
 
 _(UAkObject);
+
+/* ---------------------------------------------------------- UAkDialogueEvent ---------------------------------------------------------- */
+
+_(FDialogueArgument);
+_(UAkDialogueEvent);
 
 /* ---------------------------------------------------------- UAkBank ---------------------------------------------------------- */
 
@@ -1659,6 +1717,7 @@ _(FRunnable);
 /* ---------------------------------------------------------- FRunnableThread ---------------------------------------------------------- */
 
 _(FRunnableThread);
+_(FAsyncTask);
 
 /* ---------------------------------------------------------- FRefCountedObject ---------------------------------------------------------- */
 
@@ -1697,6 +1756,10 @@ _(FRawStaticIndexBuffer);
 /* ---------------------------------------------------------- UPostProcessEffect ---------------------------------------------------------- */
 
 _(UPostProcessEffect);
+
+/* ---------------------------------------------------------- UAccumulateAlphaEffect ---------------------------------------------------------- */
+
+_(UAccumulateAlphaEffect);
 
 /* ---------------------------------------------------------- UMaterialEffect ---------------------------------------------------------- */
 
@@ -1741,13 +1804,17 @@ _(FAnimSlotInfo);
 _(FAnimSlotDesc);
 _(FRigidBodyState);
 _(FRigidBodyContactInfo);
-_(CollisionImpactData);
+_(FCollisionImpactData);
 _(FPhysEffectInfo);
 _(FActorReference);
 _(FNavReference);
 _(FBasedPosition);
 _(FResourcePoolReference);
 _(AActor);
+
+/* ---------------------------------------------------------- AFluidSurfaceActor ---------------------------------------------------------- */
+
+_(AFluidSurfaceActor);
 
 /* ---------------------------------------------------------- AWillowMissionPickupSpawner ---------------------------------------------------------- */
 
@@ -1774,6 +1841,10 @@ _(ARB_LineImpulseActor);
 _(ASkeletalMeshActor__FCheckpointRecord);
 _(FSkelMeshActorControlTarget);
 _(ASkeletalMeshActor);
+
+/* ---------------------------------------------------------- AAIDebugDummyBase ---------------------------------------------------------- */
+
+_(AAIDebugDummyBase);
 
 /* ---------------------------------------------------------- ASkeletalMeshActorBasedOnExtremeContent ---------------------------------------------------------- */
 
@@ -1804,6 +1875,10 @@ _(ALensFlareSource);
 /* ---------------------------------------------------------- AStaticMeshActorBase ---------------------------------------------------------- */
 
 _(AStaticMeshActorBase);
+
+/* ---------------------------------------------------------- ABlockingMeshActor ---------------------------------------------------------- */
+
+_(ABlockingMeshActor);
 
 /* ---------------------------------------------------------- AStaticMeshActor ---------------------------------------------------------- */
 
@@ -2052,6 +2127,10 @@ _(FLeaf);
 
 _(AVolume);
 
+/* ---------------------------------------------------------- ABlockingVolume ---------------------------------------------------------- */
+
+_(ABlockingVolume);
+
 /* ---------------------------------------------------------- ATriggerVolume ---------------------------------------------------------- */
 
 _(ATriggerVolume);
@@ -2130,6 +2209,22 @@ _(FBehaviorContextData);
 _(FBehaviorOutputLinkDescriptionData);
 _(UBehaviorBase);
 
+/* ---------------------------------------------------------- UBehavior_UpdateCollision ---------------------------------------------------------- */
+
+_(UBehavior_UpdateCollision);
+
+/* ---------------------------------------------------------- UBehavior_SpawnFirstPersonParticleSystem ---------------------------------------------------------- */
+
+_(UBehavior_SpawnFirstPersonParticleSystem);
+
+/* ---------------------------------------------------------- UBehavior_ActivateInstancedMissionBehaviorSequence ---------------------------------------------------------- */
+
+_(UBehavior_ActivateInstancedMissionBehaviorSequence);
+
+/* ---------------------------------------------------------- UBehavior_CallFunction ---------------------------------------------------------- */
+
+_(UBehavior_CallFunction);
+
 /* ---------------------------------------------------------- UPlayerBehaviorBase ---------------------------------------------------------- */
 
 _(UPlayerBehaviorBase);
@@ -2202,6 +2297,10 @@ _(USoundClass);
 /* ---------------------------------------------------------- USubsystem ---------------------------------------------------------- */
 
 _(USubsystem);
+
+/* ---------------------------------------------------------- UAkAudioDevice ---------------------------------------------------------- */
+
+_(UAkAudioDevice);
 
 /* ---------------------------------------------------------- UAkBaseSoundObject ---------------------------------------------------------- */
 
@@ -2863,6 +2962,10 @@ _(UInterpGroupDirector);
 
 _(UExpressionEvaluator);
 
+/* ---------------------------------------------------------- UActionSkillStateExpressionEvaluator ---------------------------------------------------------- */
+
+_(UActionSkillStateExpressionEvaluator);
+
 /* ---------------------------------------------------------- UAIResourceExpressionEvaluator ---------------------------------------------------------- */
 
 _(UAIResourceExpressionEvaluator);
@@ -2934,6 +3037,14 @@ _(UGBXNavMeshPathModifier_Simplify);
 _(UGBXNavMeshPathModifier_SmoothTurns);
 
 _(FString);
+
+/* ---------------------------------------------------------- FDiagnosticTableWriterCSV ---------------------------------------------------------- */
+
+_(FDiagnosticTableWriterCSV);
+
+/* ---------------------------------------------------------- FDiagnosticTableViewer ---------------------------------------------------------- */
+
+_(FDiagnosticTableViewer);
 
 _(FName);
 _(FNameEntry);
@@ -3041,6 +3152,10 @@ _(UDistributionFloat);
 /* ---------------------------------------------------------- UDistributionVector ---------------------------------------------------------- */
 
 _(UDistributionVector);
+
+/* ---------------------------------------------------------- UDistributionVectorUniform ---------------------------------------------------------- */
+
+_(UDistributionVectorUniform);
 
 /* ---------------------------------------------------------- UFactory ---------------------------------------------------------- */
 
@@ -3848,6 +3963,10 @@ _(FBehaviorVariableData);
 _(FBehaviorSequenceData);
 _(UBehaviorProviderDefinition);
 
+/* ---------------------------------------------------------- UAIBehaviorProviderDefinition ---------------------------------------------------------- */
+
+_(UAIBehaviorProviderDefinition);
+
 /* ---------------------------------------------------------- UBehaviorKernel ---------------------------------------------------------- */
 
 _(FBehaviorExecutionRecord);
@@ -3940,6 +4059,11 @@ _(ConditionalInitializationExpressions);
 _(AttributeBaseValueData);
 _(UAttributeInitializationDefinition);
 
+/* ---------------------------------------------------------- UActionSequenceRandom ---------------------------------------------------------- */
+
+_(FActionSequenceRandomData);
+_(UActionSequenceRandom);
+
 /* ---------------------------------------------------------- UBehavior_Explode ---------------------------------------------------------- */
 
 _(UBehavior_Explode);
@@ -4028,6 +4152,10 @@ _(UBalanceModifierDefinition);
 /* ---------------------------------------------------------- UAttributeValueResolver ---------------------------------------------------------- */
 
 _(UAttributeValueResolver);
+
+/* ---------------------------------------------------------- UAIResourceAttributeValueResolver ---------------------------------------------------------- */
+
+_(UAIResourceAttributeValueResolver);
 
 /* ---------------------------------------------------------- UBlackMarketUpgradeAttributeValueResolver ---------------------------------------------------------- */
 
@@ -4440,6 +4568,10 @@ _(USeqEvent_TakeHitRegionDamage);
 
 _(USequenceAction);
 
+/* ---------------------------------------------------------- UGFxAction_Invoke ---------------------------------------------------------- */
+
+_(UGFxAction_Invoke);
+
 /* ---------------------------------------------------------- USeqAct_AllPlayersInVolume ---------------------------------------------------------- */
 
 _(USeqAct_AllPlayersInVolume);
@@ -4566,6 +4698,10 @@ _(FNavMeshPathSize);
 _(FPolyReference);
 _(APylon);
 
+/* ---------------------------------------------------------- AAISwitchablePylon ---------------------------------------------------------- */
+
+_(AAISwitchablePylon);
+
 /* ---------------------------------------------------------- ADynamicPylon ---------------------------------------------------------- */
 
 _(ADynamicPylon);
@@ -4612,6 +4748,60 @@ _(FEdgePointer);
 _(FPathStore);
 _(FNavMeshPathParams);
 _(UNavigationHandle);
+
+/* ---------------------------------------------------------- UGearboxNavigationHandle ---------------------------------------------------------- */
+
+_(FPathFindData);
+_(UGearboxNavigationHandle);
+
+/* ---------------------------------------------------------- UWillowActionSequencePawn ---------------------------------------------------------- */
+
+_(UWillowActionSequencePawn);
+
+/* ---------------------------------------------------------- UAction_SwoopAttack ---------------------------------------------------------- */
+
+_(FSwoopAttackData);
+_(UAction_SwoopAttack);
+
+/* ---------------------------------------------------------- UAction_CoverAttack ---------------------------------------------------------- */
+
+_(UAction_CoverAttack);
+
+/* ---------------------------------------------------------- UAction_CombatPoint ---------------------------------------------------------- */
+
+_(UAction_CombatPoint);
+
+/* ---------------------------------------------------------- UAction_Burrow ---------------------------------------------------------- */
+
+_(UAction_Burrow);
+
+/* ---------------------------------------------------------- UAction_GenericAttack ---------------------------------------------------------- */
+
+_(UAction_GenericAttack);
+
+/* ---------------------------------------------------------- UAction_ShootTarget ---------------------------------------------------------- */
+
+_(UAction_ShootTarget);
+
+/* ---------------------------------------------------------- UAction_AnimAttack ---------------------------------------------------------- */
+
+_(UAction_AnimAttack);
+
+/* ---------------------------------------------------------- UAction_BasicAttack ---------------------------------------------------------- */
+
+_(UAction_BasicAttack);
+
+/* ---------------------------------------------------------- UAction_LeapAtTarget ---------------------------------------------------------- */
+
+_(UAction_LeapAtTarget);
+
+/* ---------------------------------------------------------- UWillowNavigationHandle ---------------------------------------------------------- */
+
+_(UWillowNavigationHandle);
+
+/* ---------------------------------------------------------- UWillowClientNavigationHandle ---------------------------------------------------------- */
+
+_(UWillowClientNavigationHandle);
 
 /* ---------------------------------------------------------- AController ---------------------------------------------------------- */
 
@@ -4678,6 +4868,16 @@ _(AGamePlayerController);
 
 _(FGearboxViewShakeInfo);
 _(AGearboxPlayerController);
+
+/* ---------------------------------------------------------- UVehicleHandlingDefinition ---------------------------------------------------------- */
+
+_(FVehicleHandlingWheelData);
+_(FFishtailingInfo);
+_(UVehicleHandlingDefinition);
+
+/* ---------------------------------------------------------- UChopperVehicleHandlingDefinition ---------------------------------------------------------- */
+
+_(UChopperVehicleHandlingDefinition);
 
 /* ---------------------------------------------------------- UOnlineGameSearch ---------------------------------------------------------- */
 
@@ -4904,6 +5104,14 @@ _(FMaterialViewRelevance);
 _(FRBCollisionChannelContainer);
 _(UPrimitiveComponent);
 
+/* ---------------------------------------------------------- UAkAmbientSoundRenderingComponent ---------------------------------------------------------- */
+
+_(UAkAmbientSoundRenderingComponent);
+
+/* ---------------------------------------------------------- UActorFactoryApexClothing ---------------------------------------------------------- */
+
+_(UActorFactoryApexClothing);
+
 /* ---------------------------------------------------------- URB_RadialImpulseComponent ---------------------------------------------------------- */
 
 _(URB_RadialImpulseComponent);
@@ -5050,6 +5258,10 @@ _(FParticleEventTraceData);
 _(FParticleEventKismetData);
 _(UParticleSystemComponent);
 
+/* ---------------------------------------------------------- FParticleDataManager ---------------------------------------------------------- */
+
+_(FParticleDataManager);
+
 /* ---------------------------------------------------------- UCylinderComponent ---------------------------------------------------------- */
 
 _(UCylinderComponent);
@@ -5124,6 +5336,34 @@ _(FPostProcessSettings);
 _(FRawDistribution);
 _(FRawDistributionFloat);
 _(FRawDistributionVector);
+
+/* ---------------------------------------------------------- IConsoleManager ---------------------------------------------------------- */
+
+_(IConsoleVariable);
+_(IConsoleVariableVisitor);
+_(IConsoleManager);
+
+/* ---------------------------------------------------------- FConsoleManager ---------------------------------------------------------- */
+
+_(FConsoleManager);
+
+/* ---------------------------------------------------------- FRenderCommandFence ---------------------------------------------------------- */
+
+_(FRenderCommandFence);
+
+/* ---------------------------------------------------------- FThreadSafeCounter ---------------------------------------------------------- */
+
+_(FThreadSafeCounter);
+
+/* ---------------------------------------------------------- FRingBuffer ---------------------------------------------------------- */
+
+_(FRingBuffer__AllocationContext);
+_(FRingBuffer);
+
+/* ---------------------------------------------------------- FArchiveRealtimeGC ---------------------------------------------------------- */
+
+_(FArchiveRealtimeGC__FStackEntry);
+_(FArchiveRealtimeGC);
 
 /* ---------------------------------------------------------- AMutator ---------------------------------------------------------- */
 
@@ -5219,6 +5459,15 @@ _(FObjectImport);
 _(FTextureGroupContainer);
 _(UTexture);
 
+/* ---------------------------------------------------------- UTexture2DDynamic ---------------------------------------------------------- */
+
+_(UTexture2DDynamic);
+
+/* ---------------------------------------------------------- UTexture2DComposite ---------------------------------------------------------- */
+
+_(FSourceTexture2DRegion);
+_(UTexture2DComposite);
+
 /* ---------------------------------------------------------- UTextureRenderTarget ---------------------------------------------------------- */
 
 _(UTextureRenderTarget);
@@ -5237,13 +5486,16 @@ _(FTexture2DMipMap);
 _(FTextureLinkedListMirror);
 _(UTexture2D);
 
+/* ---------------------------------------------------------- UTextureFlipBook ---------------------------------------------------------- */
+
+_(UTextureFlipBook);
+
 /* ---------------------------------------------------------- UShadowMapTexture2D ---------------------------------------------------------- */
 
 _(UShadowMapTexture2D);
 
 _(FGenerationInfo);
 _(FCompressedChunk);
-_(FThreadSafeCounter);
 _(FResourceBulkDataInterface);
 _(FTexture2DResourceMem);
 _(FTextureType);
@@ -5333,7 +5585,10 @@ _(UGearboxPlayerInput);
 
 _(DamagePipeline);
 
+/* ---------------------------------------------------------- FTexture2D ---------------------------------------------------------- */
+
 _(FTexture2D);
+
 _(FMaterialFileHeader);
 _(FBaseMaterialData);
 _(FMaterialData);
@@ -5348,6 +5603,14 @@ _(USystem);
 /* ---------------------------------------------------------- UInterface ---------------------------------------------------------- */
 
 _(UInterface);
+
+/* ---------------------------------------------------------- UIFaceFXActor ---------------------------------------------------------- */
+
+_(UIFaceFXActor);
+
+/* ---------------------------------------------------------- UICustomizable ---------------------------------------------------------- */
+
+_(UICustomizable);
 
 /* ---------------------------------------------------------- UIDynamicObstacle ---------------------------------------------------------- */
 
@@ -5784,6 +6047,10 @@ _(FScalarParameterInterpStruct);
 _(FBalanceDefSpawnedActorState);
 _(APawn);
 
+/* ---------------------------------------------------------- AVehicle ---------------------------------------------------------- */
+
+_(AVehicle);
+
 /* ---------------------------------------------------------- AWillowInteractiveObject ---------------------------------------------------------- */
 
 _(FInteractiveObjectReplicatedStateData);
@@ -5857,6 +6124,8 @@ _(FAttachmentData);
 _(AWillowPlayerPawn);
 
 _(FLinearColor);
+
+/* ---------------------------------------------------------- FViewportClient ---------------------------------------------------------- */
 
 _(FViewportClient);
 
@@ -6017,6 +6286,10 @@ _(FSceneViewFamily);
 
 _(ULevelStreaming);
 
+/* ---------------------------------------------------------- ULevelStreamingPersistent ---------------------------------------------------------- */
+
+_(ULevelStreamingPersistent);
+
 /* ---------------------------------------------------------- ULevelStreamingAlwaysLoaded ---------------------------------------------------------- */
 
 _(ULevelStreamingAlwaysLoaded);
@@ -6027,17 +6300,32 @@ _(UPolys);
 _(FDeferredCleanupInterface);
 _(FPendingCleanupObjects);
 _(FEngineLoop);
+
+/* ---------------------------------------------------------- UFontImportOptions ---------------------------------------------------------- */
+
 _(FFontImportOptionsData);
 _(UFontImportOptions);
+
+/* ---------------------------------------------------------- UFont ---------------------------------------------------------- */
+
 _(FFontCharacter);
 _(UFont);
+
+/* ---------------------------------------------------------- UMultiFont ---------------------------------------------------------- */
+
+_(UMultiFont);
 
 _(UDebugger);
 _(FDebuggerLog);
 
 _(FStringOutputDevice);
 
+/* ---------------------------------------------------------- UDebuggerCore ---------------------------------------------------------- */
+
 _(UDebuggerCore);
+
+/* ---------------------------------------------------------- UDebuggerInterface ---------------------------------------------------------- */
+
 _(UDebuggerInterface);
 
 /* ---------------------------------------------------------- FStreamingViewInfo ---------------------------------------------------------- */
@@ -6052,6 +6340,19 @@ _(FStreamingManagerBase);
 
 _(FStreamingManagerCollection);
 
+/* ---------------------------------------------------------- FStreamingManagerTexture ---------------------------------------------------------- */
+
+_(FStreamableTextureInstance4);
+_(FDynamicTextureInstance);
+_(FSpawnedTextureInstance);
+_(FStreamMemoryTracker);
+_(FStreamingTexture);
+_(FStreamingManagerTexture__FThreadLevelData);
+_(FStreamingManagerTexture__FSpawnedPrimitiveData);
+_(FStreamingManagerTexture__FThreadSettings);
+_(FStreamingManagerTexture__FPendingPrimitiveType);
+_(FStreamingManagerTexture);
+
 _(FStatChartLine);
 _(FStatChart);
 
@@ -6059,10 +6360,11 @@ _(FHitProxyId);
 _(HHitProxy);
 
 _(FTransformEntry);
+
+/* ---------------------------------------------------------- FCanvas ---------------------------------------------------------- */
+
 _(FMaskRegion);
-
 _(FCanvasBaseRenderItem);
-
 _(FCanvasSortElement);
 _(FCanvas);
 

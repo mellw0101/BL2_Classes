@@ -16,6 +16,7 @@ _DECL_TARRAY(UBOOL);
 _DECL_TARRAY(WORD);
 _DECL_TARRAY(SWORD);
 _DECL_TARRAY(UINT);
+_DECL_TARRAY(DOUBLE);
 DECLARE_A_TMAP(WORD,WORD);
 DECLARE_A_TMAP(INT,INT);
 DECLARE_A_TMAP(voidPtr, voidPtr);
@@ -43,6 +44,24 @@ typedef struct {
 	const FString *Key;
 	const FString *Value;
 } FPair_FString_FString_InitType;
+
+/* ---------------------------------------------------------- FDiagnosticTableWriterCSV ---------------------------------------------------------- */
+
+/** Encapsulates writing a table of data to a CSV file that is output by the engine for diagnostic purposes. */
+struct FDiagnosticTableWriterCSV {
+	FString   CurrentRow;    /** The contents of the current row. */
+	FArchive *OutputStream;  /** The stream the table is being written to. */
+};
+
+/* ---------------------------------------------------------- FDiagnosticTableViewer ---------------------------------------------------------- */
+
+/** Encapsulates a diagnostic table that is written to a temporary file and opened in a viewer. */
+struct FDiagnosticTableViewer {
+  FDiagnosticTableWriterCSV Super;
+	UBOOL                     bHasOpenedViewer;   /** True if the file has been opened in the viewer. */
+	UBOOL                     bSuppressViewer;
+	FString                   TemporaryFilePath;  /** The filename used for the temporary file. */
+};
 
 struct FName {
   int ComparisonIndex;
@@ -326,26 +345,230 @@ struct FPackedNormal {
 		struct {
 			// Note: The PS3 GPU expects X in the first byte, Y in the second, etc..., so the struct is
 			// correct although using the DWORD Packed member directly is risky
-#if SYS_BYTE_ORDER == SYS_LITTLE_ENDIAN
+  #if SYS_BYTE_ORDER == SYS_LITTLE_ENDIAN
 			BYTE X;
 			BYTE Y;
 			BYTE Z;
 			BYTE W;
-#else
+  #else
 			BYTE W;
 			BYTE Z;
 			BYTE Y;
 			BYTE X;
-#endif
+  #endif
 		};
 		DWORD Packed;
 	} Vector;
 };
 
+/* ---------------------------------------------------------- IConsoleManager ---------------------------------------------------------- */
+
+/**
+ * Console variable usage guide:
+ *
+ * The variable should be creates early in the initialization but not before (not in global variable construction).
+ * Choose the right variable type, consider using a console command if more functionality is needed (see Exec()).
+ * Available types: int, float, int&, float&, string
+ * There is no bool type as the int type provides enough functionality (0=false, 1=true) and can be extended easily (e.g. 2=auto, -1=debug)
+ * Always provide a good help text, other should be able to understand the function of the console variable by reading this help.
+ * The help length should be limited to a reasonable width in order to work well for low res screen resolutions.
+ *
+ * Usage in the game console:
+ *   <COMMAND> ?				print the HELP
+ *   <COMMAND>	 				print the current state of the console variable
+ *   <COMMAND> x 				set and print the new state of the console variable
+ *
+ * The ECVF_Changed flag can be used to detect if the state was changes through the Set() method (float& and int& can change outside of this).
+ * 
+ * All variables support auto completion. The single line help that can show up there is currently not connected to the help as the help text
+ * is expected to be multi line.
+ * The former Exec() system can be used to access the console variables.
+ * Use console variables only in main thread.
+ * The state of console variables is not network synchronized or serialized (load/save). The plan is to allow to set the state in external files (game/platform/engige/local).
+ */
+
+typedef struct {
+	/** Set the internal value from the specified int. */
+	void (__thiscall *Set__int)(IConsoleVariable *, INT InValue);
+	/** Set the internal value from the specified float. */
+	void (__thiscall *Set__float)(IConsoleVariable *, FLOAT InValue);
+	/** Set the internal value from the specified string. */
+	void (__thiscall *Set__wchar)(IConsoleVariable *, const wchar_t *InValue);
+	/**
+	 * Get the internal value as int (should not be used on strings).
+	 * @return value is not rounded (simple cast)
+	 */
+	INT (__thiscall *GetInt)(const IConsoleVariable *);
+	/** Get the internal value as float (should not be used on strings). */
+	FLOAT (__thiscall *GetFloat)(const IConsoleVariable *);
+	/** Get the internal value as string (works on all types). */
+	FString (__thiscall *GetString)(const IConsoleVariable *);
+	/** @return never 0, can be multi line ('\n'). */
+	const TCHAR* (__thiscall *GetHelp)(const IConsoleVariable *);
+	/** @return never 0, can be multi line ('\n'). */
+	void (__thiscall *SetHelp)(IConsoleVariable *, const TCHAR* Value);
+	/** Get the internal state of the flags. */
+	EConsoleVariableFlags (__thiscall *GetFlags)(const IConsoleVariable *);
+	/** Sets the internal flag state to the specified value. */
+	void (__thiscall *SetFlags)(IConsoleVariable *, const EConsoleVariableFlags Value);
+	/** Should only be called by the manager, needs to be implemented for each instance. */
+	void (__thiscall *Release)(IConsoleVariable *);
+} VfTable__IConsoleVariable;
+/** Interface for console variables. */
+struct IConsoleVariable {
+  VfTable__IConsoleVariable *vftable;
+};
+DECLARE_A_TMAP(FString, IConsoleVariablePtr);
+
+typedef struct {
+	/**
+	 * @param Name must not be 0
+	 * @param CVar must not be 0
+	 */
+	void (__thiscall *OnConsoleVariable)(IConsoleVariableVisitor *, const wchar_t *Name, IConsoleVariable *CVar);
+} VfTable__IConsoleVariableVisitor;
+/** Allows to iterate through all console variables. */
+struct IConsoleVariableVisitor {
+  VfTable__IConsoleVariableVisitor *vftable;
+};
+
+typedef struct {
+	/**
+	 * Create a int console variable
+	 * @param Name must not be 0
+	 * @param Help must not be 0
+	 * @param Flags bitmask combined from EConsoleVariableFlags
+	 */
+	IConsoleVariable *(__thiscall *RegisterConsoleVariable__int)(IConsoleManager *, const wchar_t *Name, INT DefaultValue, const wchar_t *Help, UINT Flags /* = ECVF_Default */);
+	/**
+	 * Create a float console variable
+	 * @param Name must not be 0
+	 * @param Help must not be 0
+	 * @param Flags bitmask combined from EConsoleVariableFlags
+	 */
+	IConsoleVariable *(__thiscall *RegisterConsoleVariable__float)(IConsoleManager *, const wchar_t *Name, FLOAT DefaultValue, const wchar_t *Help, UINT Flags /* = ECVF_Default */);
+	/**
+	 * Create a string console variable
+	 * @param Name must not be 0
+	 * @param Help must not be 0
+	 * @param Flags bitmask combined from EConsoleVariableFlags
+	 */
+	IConsoleVariable *(__thiscall *RegisterConsoleVariable__wchar)(IConsoleManager *, const wchar_t *Name, const wchar_t *DefaultValue, const wchar_t *Help, UINT Flags /* = ECVF_Default */);
+	/**
+	 * Create a reference to a int console variable
+	 * @param Name must not be 0
+	 * @param Help must not be 0
+	 * @param Flags bitmask combined from EConsoleVariableFlags
+	 */
+	IConsoleVariable *(__thiscall *RegisterConsoleVariableRef_int)(IConsoleManager *, const wchar_t *Name, INT *RefValue, const wchar_t *Help, UINT Flags /* = ECVF_Default */);
+	/**
+	 * Create a reference to a float console variable
+	 * @param Name must not be 0
+	 * @param Help must not be 0
+	 * @param Flags bitmask combined from EConsoleVariableFlags
+	 */
+	IConsoleVariable *(__thiscall *RegisterConsoleVariableRef_float)(IConsoleManager *, const wchar_t *Name, FLOAT *RefValue, const wchar_t *Help, UINT Flags /* = ECVF_Default */);
+	/**
+	 * Deactivated the use of the console variable but not actually removes it as some pointers might still reference it.
+	 * If the variable is registered again with the same type this object is reactivated. This is good for DLL unloading.
+	 * @param CVar can be 0 then the function does nothing
+	 */
+	void (__thiscall *UnregisterConsoleVariable)(IConsoleManager *, IConsoleVariable *CVar);
+	/**
+	 * Find a console variable
+	 * @param Name must not be 0
+	 * @param bCaseSensitive TRUE:fast, FALSE:slow but convenient
+	 * @return 0 if the variable wasn't found
+	 */
+	IConsoleVariable *(__thiscall *FindConsoleVariable)(const IConsoleManager *, const wchar_t *Name, UBOOL bCaseSensitive /* = TRUE */);
+	/**
+	 *  Iterate in O(n), not case sensitive, does not guarantee that UnregisterConsoleVariable() will work in the loop
+	 *  @param Visitor must not be 0
+	 *  @param ThatStartsWith must not be 0 
+	 */
+	void (__thiscall *ForEachConsoleVariable)(const IConsoleManager *, IConsoleVariableVisitor* Visitor, const wchar_t *ThatStartsWith /* = TEXT("") */);
+	/**
+	 * Process user input
+	 *  e.g.
+	 *  "MyCVar" to get the current value of the console variable
+	 *  "MyCVar -5.2" to set the value to -5.2
+	 *  "MyCVar ?" to get the help text
+	 *  @param Input must not be 0
+	 *  @return TRUE if the command was recognized
+	 */
+	UBOOL (__thiscall *ProcessUserConsoleInput)(const IConsoleManager *, const wchar_t *Input, FOutputDevice *Ar);
+} VfTable__IConsoleManager;
+/** Handles console commands and variables, registered console variables are released on destruction. */
+struct IConsoleManager {
+  VfTable__IConsoleManager *vftable;
+};
+
+/* ---------------------------------------------------------- FConsoleManager ---------------------------------------------------------- */
+
+struct FConsoleManager {
+  IConsoleManager                          Super;
+  _TMAP_NAME(FString, IConsoleVariablePtr) Variables;
+}; assert_size(FConsoleManager, 64);
+
+/* ---------------------------------------------------------- FRenderCommandFence ---------------------------------------------------------- */
+
 struct FRenderCommandFence {
   volatile DWORD NumPendingFences;
 };
 
+/* ---------------------------------------------------------- FThreadSafeCounter ---------------------------------------------------------- */
+
+/* Thread safe counter. */
+struct FThreadSafeCounter {
+  /* Thread-safe counter. */
+	volatile int Counter;
+};
+
+/* ---------------------------------------------------------- FRingBuffer ---------------------------------------------------------- */
+
+/**
+ * A reference to an allocated chunk of the ring buffer.
+ * Upon destruction of the context, the chunk is committed as written.
+ */
+struct FRingBuffer__AllocationContext {
+  FRingBuffer *RingBuffer;
+  BYTE        *AllocationStart;
+  BYTE        *AllocationEnd;
+};
+/** A ring buffer for use with two threads: a reading thread and a writing thread. */
+struct FRingBuffer {
+	BYTE          *Data;              /** The data buffer. */
+	BYTE          *DataEnd;           /** The first byte after end the of the data buffer. */
+	BYTE *volatile WritePointer;      /** The next byte to be written to. */
+	UBOOL          bIsWriting;        /** TRUE if there is an AllocationContext outstanding for this ring buffer. */
+	BYTE *volatile ReadPointer;       /** The next byte to be read from. */
+	UINT           Alignment;         /** Alignment of each allocation unit (in bytes). */
+	/* TODO: FEvent */
+  void          *DataWrittenEvent;  /** The event used to signal the reader thread when the ring buffer has data to read. */
+};
+
+/* ---------------------------------------------------------- FArchiveRealtimeGC ---------------------------------------------------------- */
+
+/** Helper struct for stack based approach */
+struct FArchiveRealtimeGC__FStackEntry {
+  BYTE *Data;            /** Current data pointer, incremented by stride */
+  int   Stride;          /** Current stride */
+  int   Count;           /** Current loop count, decremented each iteration */
+  int   LoopStartIndex;  /** First token index in loop */
+};
+/**
+ * Implementation of realtime garbage collector.
+ *
+ * The approach is to create an array of DWORD tokens for each class that describe object references. This is done for 
+ * script exposed classes by traversing the properties and additionally via manual function calls to emit tokens for
+ * native only classes in the StaticConstructor. A third alternative is a AddReferencedObjects callback per object which 
+ * is used to deal with object references from types that aren't supported by UnrealScript's type system.
+ * interface doesn't make sense to implement for.
+ */
+struct FArchiveRealtimeGC {
+	TArray_UObjectPtr	ObjectsToSerialize;  /** Growing array of objects that require serialization */
+	UObject          *CurrentObject;       /** Object we're currently serializing */
+};
 
 /* ---------------------------------------------------------- FLightingChannelContainer ---------------------------------------------------------- */
 
@@ -621,6 +844,228 @@ struct FRunnableThread {
   VfTable__FRunnableThread *vftable;
 };
 
+// /**
+//  * This is the factory interface for creating threads. Each platform must
+//  * implement this with all the correct platform semantics
+//  */
+// class FThreadFactory {
+//  public:
+// 	/**
+// 	 * Creates the thread with the specified stack size and thread priority.
+// 	 *
+// 	 * @param InRunnable The runnable object to execute
+// 	 * @param ThreadName Name of the thread
+// 	 * @param bAutoDeleteSelf Whether to delete this object on exit
+// 	 * @param bAutoDeleteRunnable Whether to delete the runnable object on exit
+// 	 * @param InStackSize The size of the stack to create. 0 means use the
+// 	 * current thread's stack size
+// 	 * @param InThreadPri Tells the thread whether it needs to adjust its
+// 	 * priority or not. Defaults to normal priority
+// 	 *
+// 	 * @return The newly created thread or NULL if it failed
+// 	 */
+// 	virtual FRunnableThread* CreateThread(FRunnable* InRunnable, const TCHAR* ThreadName,
+// 		UBOOL bAutoDeleteSelf = 0,UBOOL bAutoDeleteRunnable = 0,
+// 		DWORD InStackSize = 0,EThreadPriority InThreadPri = TPri_Normal) = 0;
+//
+// 	/**
+// 	 * Cleans up the specified thread object using the correct heap
+// 	 *
+// 	 * @param InThread The thread object to destroy
+// 	 */
+// 	virtual void Destroy(FRunnableThread* InThread) = 0;
+// };
+
+// /**
+//  * This interface is a type of runnable object that requires no per thread
+//  * initialization. It is meant to be used with pools of threads in an
+//  * abstract way that prevents the pool from needing to know any details
+//  * about the object being run. This allows queueing of disparate tasks and
+//  * servicing those tasks with a generic thread pool.
+//  */
+// class FQueuedWork {
+//  public:
+// 	/**
+// 	 * Virtual destructor so that child implementations are guaranteed a chance
+// 	 * to clean up any resources they allocated.
+// 	 */
+// 	virtual ~FQueuedWork(void) {}
+//
+// 	/**
+// 	 * This is where the real thread work is done. All work that is done for
+// 	 * this queued object should be done from within the call to this function.
+// 	 */
+// 	virtual void DoThreadedWork(void) = 0;
+//
+// 	/**
+// 	 * Tells the queued work that it is being abandoned so that it can do
+// 	 * per object clean up as needed. This will only be called if it is being
+// 	 * abandoned before completion. NOTE: This requires the object to delete
+// 	 * itself using whatever heap it was allocated in.
+// 	 */
+// 	virtual void Abandon(void) = 0;
+//
+//
+// #if PLATFORM_NEEDS_SPECIAL_QUEUED_WORK
+// 	/**
+// 	 * Return a special (possibly platform specific name for this type of work 
+// 	 * in case the  platform needs to handle it specially. Most likely this 
+// 	 * function does not need to be overridden.
+// 	 * @return One of the EWorkID enums or another platform specific integer
+// 	 */
+// 	virtual DWORD GetSpecialID(void) { return WORK_None; }
+//
+// 	/**
+// 	 * Return the size of the data that needs to be specially handled (copied 
+// 	 * elsewhere, etc)
+// 	 * NOTE: On the PS3, the size will need to be known before a Work object
+// 	 * is created, so this function is just used to validate.
+// 	 * @return Size of data payload that will need to be copied in GetData
+// 	 */
+// 	virtual DWORD GetDataSize(void) { return 0; }
+//
+// 	/**
+// 	 * Fill out a buffer with the special data payload needed for this work
+// 	 * @param Data A pointer to the data that will received the work's data
+// 	 * @param True if successful
+// 	 */
+// 	virtual UBOOL GetData(void* Data) { appErrorf(TEXT("This function should be overridden if GetSpecialID doesn't return WORK_None")); return FALSE; }
+// #endif
+// };
+
+// /**
+//  * This is the interface used for all poolable threads. The usage pattern for
+//  * a poolable thread is different from a regular thread and this interface
+//  * reflects that. Queued threads spend most of their life cycle idle, waiting
+//  * for work to do. When signaled they perform a job and then return themselves
+//  * to their owning pool via a callback and go back to an idle state.
+//  */
+// class FQueuedThread {
+//  public:
+// 	/**
+// 	 * Virtual destructor so that child implementations are guaranteed a chance
+// 	 * to clean up any resources they allocated.
+// 	 */
+// 	virtual ~FQueuedThread(void) {}
+//
+// 	/**
+// 	 * Creates the thread with the specified stack size and creates the various
+// 	 * events to be able to communicate with it.
+// 	 *
+// 	 * @param InPool The thread pool interface used to place this thread
+// 	 * back into the pool of available threads when its work is done
+// 	 * @param ProcessorMask The processor set to run the thread on
+// 	 * @param InStackSize The size of the stack to create. 0 means use the
+// 	 * current thread's stack size
+// 	 * @param ThreadPriority priority of new thread
+// 	 *
+// 	 * @return True if the thread and all of its initialization was successful, false otherwise
+// 	 */
+// 	virtual UBOOL Create(class FQueuedThreadPool* InPool,DWORD ProcessorMask,
+// 		DWORD InStackSize = 0,EThreadPriority ThreadPriority=TPri_Normal) = 0;
+//
+// 	/**
+// 	 * Tells the thread to exit. If the caller needs to know when the thread
+// 	 * has exited, it should use the bShouldWait value and tell it how long
+// 	 * to wait before deciding that it is deadlocked and needs to be destroyed.
+// 	 * NOTE: having a thread forcibly destroyed can cause leaks in TLS, etc.
+// 	 *
+// 	 * @param bShouldWait If true, the call will wait for the thread to exit
+// 	 * @param MaxWaitTime The amount of time to wait before killing it. It
+// 	 * defaults to inifinite.
+// 	 * @param bShouldDeleteSelf Whether to delete ourselves upon completion
+// 	 *
+// 	 * @return True if the thread exited gracefull, false otherwise
+// 	 */
+// 	virtual UBOOL Kill(UBOOL bShouldWait = FALSE,DWORD MaxWaitTime = INFINITE,
+// 		UBOOL bShouldDeleteSelf = FALSE) = 0;
+//
+// 	/**
+// 	 * Tells the thread there is work to be done. Upon completion, the thread
+// 	 * is responsible for adding itself back into the available pool.
+// 	 *
+// 	 * @param InQueuedWork The queued work to perform
+// 	 */
+// 	virtual void DoWork(FQueuedWork* InQueuedWork) = 0;
+// };
+
+// /**
+//  * This interface is used by all queued thread pools. It used as a callback by
+//  * FQueuedThreads and is used to queue asynchronous work for callers.
+//  */
+// class FQueuedThreadPool {
+//  public:
+// 	/**
+// 	 * Virtual destructor so that child implementations are guaranteed a chance
+// 	 * to clean up any resources they allocated.
+// 	 */
+// 	virtual ~FQueuedThreadPool(void) {}
+//
+// 	/**
+// 	 * Creates the thread pool with the specified number of threads
+// 	 *
+// 	 * @param InNumQueuedThreads Specifies the number of threads to use in the pool
+// 	 * @param ProcessorMask Specifies which processors should be used by the pool
+// 	 * @param StackSize The size of stack the threads in the pool need (32K default)
+// 	 * @param ThreadPriority priority of new pool thread
+// 	 *
+// 	 * @return Whether the pool creation was successful or not
+// 	 */
+// 	virtual UBOOL Create(DWORD InNumQueuedThreads,DWORD ProcessorMask = 0,
+// 		DWORD StackSize = (32 * 1024),EThreadPriority ThreadPriority=TPri_Normal) = 0;
+//
+// 	/**
+// 	 * Tells the pool to clean up all background threads
+// 	 */
+// 	virtual void Destroy(void) = 0;
+//
+// 	/**
+// 	 * Checks to see if there is a thread available to perform the task. If not,
+// 	 * it queues the work for later. Otherwise it is immediately dispatched.
+// 	 *
+// 	 * @param InQueuedWork The work that needs to be done asynchronously
+// 	 */
+// 	virtual void AddQueuedWork(FQueuedWork* InQueuedWork) = 0;
+//
+// 	/**
+// 	 * Attempts to retract a previously queued task.
+// 	 *
+// 	 * @param InQueuedWork The work to try to retract
+// 	 * @return TRUE if the work was retracted
+// 	 */
+// 	virtual UBOOL RetractQueuedWork(FQueuedWork* InQueuedWork) = 0;
+//
+// 	/**
+// 	 * Places a thread back into the available pool
+// 	 *
+// 	 * @param InQueuedThread The thread that is ready to be pooled
+// 	 * @return next job or null if there is no job available now
+// 	 */
+// 	virtual FQueuedWork* ReturnToPoolOrGetNextJob(FQueuedThread* InQueuedThread) = 0;
+// };
+
+// template<typename TTask>
+/**
+ * User job embedded in this task.
+ * TODO:
+ * We need to first declare FQueuedWork, FEvent and FQueuedThreadPool,
+ * then we can make a macro to declare typed structs as we need.
+ */
+struct FAsyncTask  {
+  /* FQueuedWork */
+  void *Super;
+	/* TTask */
+  void *Task;
+	/** Thread safe counter that indicates WORK completion, no necessarily finalization of the job */
+	FThreadSafeCounter	WorkNotFinishedCounter;
+	/** If we aren't doing the work synchrnously, this will hold the completion event */
+	/* FEvent */
+  void *DoneEvent;
+	/** Pool we are queued into, maintained by the calling thread */
+	/* FQueuedThreadPool */
+  void *QueuedPool;
+};
+
 /* ---------------------------------------------------------- FRefCountedObject ---------------------------------------------------------- */
 
 typedef struct {
@@ -645,12 +1090,6 @@ struct FBatchedElementParameters {
   int NumRefs;
 };
 _DECL_TREF_COUNT_PTR(FBatchedElementParameters);
-
-/* Thread safe counter. */
-struct FThreadSafeCounter {
-  /* Thread-safe counter. */
-	volatile INT Counter;
-};
 
 /** Helper structure encapsulating file and stats handle. */
 struct FAsyncIOHandle {
@@ -1733,6 +2172,47 @@ struct FImplementedInterface {
   UProperty *PointerProperty;           ///< the pointer property that is located at the offset of the interface's vtable
 };
 
+/* ---------------------------------------------------------- UDlcTmsHolder ---------------------------------------------------------- */
+
+struct native FPremiumCustomizationInfo {
+  int     OfferId;
+  int     PackageId;
+  int     ContentId;
+  FString PS3TitleId;
+};
+struct UDlcTmsHolder {
+  UObject                          Super;
+  TArray_FPremiumCustomizationInfo PremiumCustomizationList;
+  TArray_FPremiumCustomizationInfo PremiumClassList;
+}; assert_size(UDlcTmsHolder, 84);
+
+/* ---------------------------------------------------------- UOnlineMatchmakingStats ---------------------------------------------------------- */
+
+#pragma pack(push, 4)
+struct native FMMStats_Timer {
+  BITFIELD bInProgress : 1;
+  DOUBLE MSecs;
+};
+#pragma pack(pop)
+struct UOnlineMatchmakingStats {
+  UObject Super;
+}; assert_size(UOnlineMatchmakingStats, 60);
+
+/* ---------------------------------------------------------- UCellsNavigator ---------------------------------------------------------- */
+
+struct native FMoveToCellData {
+  int   IndexInCellsList;
+  float DistanceFromCurrentCell;
+  float CosAngle;
+};
+struct UCellsNavigator {
+  UObject                Super;
+  TArray_FCellInfo       Cells;
+  TArray_INT             UnnavigableIndices;
+  int                    CurrentSelectedCellIndex;
+  TArray_FMoveToCellData MoveCellInfo;
+}; assert_size(UCellsNavigator, 100);
+
 /* ---------------------------------------------------------- UOnlineGameInterfaceImpl ---------------------------------------------------------- */
 
 struct UOnlineGameInterfaceImpl {
@@ -1952,26 +2432,32 @@ struct UApexAsset {
   TArray_UApexComponentBasePtr ApexComponents;
 }; assert_size(UApexAsset, 84);
 
+/* ---------------------------------------------------------- UApexGenericAsset ---------------------------------------------------------- */
+
+struct UApexGenericAsset {
+  UApexAsset Super;
+  void      *MApexAsset;
+}; assert_size(UApexGenericAsset, 88);
+
 /* ---------------------------------------------------------- UApexClothingAsset ---------------------------------------------------------- */
 
 struct UApexClothingAsset {
-  UApexAsset Super;
-  void      *MApexAsset;
-  /* TODO: ApexGenericAsset */
-  void      *ApexClothingLibrary;
-  BITFIELD   bUseHardwareCloth   : 1;
-  BITFIELD   bFallbackSkinning   : 1;
-  BITFIELD   bSlowStart          : 1;
-  BITFIELD   bRecomputeNormals   : 1;
-  BITFIELD   bResetAfterTeleport : 1;
-  int        UVChannelForTangentUpdate;
-  float      MaxDistanceBlendTime;
-  float      ContinuousRotationThreshold;
-  float      ContinuousDistanceThreshold;
-  float      LodWeightsMaxDistance;
-  float      LodWeightsDistanceWeight;
-  float      LodWeightsBias;
-  float      LodWeightsBenefitsBias;
+  UApexAsset         Super;
+  void              *MApexAsset;
+  UApexGenericAsset *ApexClothingLibrary;
+  BITFIELD           bUseHardwareCloth   : 1;
+  BITFIELD           bFallbackSkinning   : 1;
+  BITFIELD           bSlowStart          : 1;
+  BITFIELD           bRecomputeNormals   : 1;
+  BITFIELD           bResetAfterTeleport : 1;
+  int                UVChannelForTangentUpdate;
+  float              MaxDistanceBlendTime;
+  float              ContinuousRotationThreshold;
+  float              ContinuousDistanceThreshold;
+  float              LodWeightsMaxDistance;
+  float              LodWeightsDistanceWeight;
+  float              LodWeightsBias;
+  float              LodWeightsBenefitsBias;
 }; assert_size(UApexClothingAsset, 128);
 
 /* ---------------------------------------------------------- URB_ConstraintInstance ---------------------------------------------------------- */
@@ -2123,6 +2609,56 @@ struct UActorFactory {
   UClass  *CustomPropertyEditorDelegateTargetClass;
 }; assert_size(UActorFactory, 124);
 
+/* ---------------------------------------------------------- UActorFactoryPhysicsAsset ---------------------------------------------------------- */
+
+struct UActorFactoryPhysicsAsset {
+  UActorFactory  Super;
+  UPhysicsAsset *PhysicsAsset;
+  USkeletalMesh *SkeletalMesh;
+  BITFIELD       bStartAwake               : 1;
+  BITFIELD       bDamageAppliesImpulse     : 1;
+  BITFIELD       bNotifyRigidBodyCollision : 1;
+  BITFIELD       bUseCompartment           : 1;
+  BITFIELD       bCastDynamicShadow        : 1;
+  FVector        InitialVelocity;
+  FVector        DrawScale3D;
+}; assert_size(UActorFactoryPhysicsAsset, 160);
+
+/* ---------------------------------------------------------- UActorFactorySkeletalMesh ---------------------------------------------------------- */
+
+struct UActorFactorySkeletalMesh {
+  UActorFactory  Super;
+  USkeletalMesh *SkeletalMesh;
+  UAnimSet      *AnimSet;
+  FName          AnimSequenceName;
+}; assert_size(UActorFactorySkeletalMesh, 140);
+
+/* ---------------------------------------------------------- UActorFactoryAkAmbientSound ---------------------------------------------------------- */
+
+struct UActorFactoryAkAmbientSound {
+  UActorFactory Super;
+  UAkEvent     *AmbientEvent;
+}; assert_size(UActorFactoryAkAmbientSound, 128);
+
+/* ---------------------------------------------------------- UActorFactoryActor ---------------------------------------------------------- */
+
+struct UActorFactoryActor {
+  UActorFactory Super;
+  UClass       *ActorClass;  /** Class<Actor> */
+}; assert_size(UActorFactoryActor, 128);
+
+/* ---------------------------------------------------------- UActorFactoryAI ---------------------------------------------------------- */
+
+struct UActorFactoryAI {
+  UActorFactory    Super;
+  UClass          *ControllerClass;  /** Class<AIController> */
+  UClass          *PawnClass;        /** Class<Pawn> */
+  FString          PawnName;
+  BITFIELD         bGiveDefaultInventory : 1;
+  TArray_UClassPtr InventoryList;  /** Class<Inventory> */
+  int              TeamIndex;
+}; assert_size(UActorFactoryAI, 164);
+
 /* ---------------------------------------------------------- UActorFactoryMissionPickupSpawner ---------------------------------------------------------- */
 
 struct UActorFactoryMissionPickupSpawner {
@@ -2238,6 +2774,18 @@ struct UOnlineStats {
   UObject                         Super;
   TArray_FStringIdToStringMapping ViewIdMappings;
 }; assert_size(UOnlineStats, 72);
+
+/* ---------------------------------------------------------- UOnlineStatsWrite ---------------------------------------------------------- */
+
+struct UOnlineStatsWrite {
+  UOnlineStats                    Super;
+  TArray_FStringIdToStringMapping StatMappings;
+  TArray_FSettingsProperty        Properties;
+  TArray_INT                      ViewIds;
+  TArray_INT                      ArbitratedViewIds;
+  int                             RatingId;
+  FScriptDelegate                 __OnStatsWriteComplete__Delegate;
+}; assert_size(UOnlineStatsWrite, 136);
 
 /* ---------------------------------------------------------- UIniLocPatcher ---------------------------------------------------------- */
 
@@ -3210,6 +3758,31 @@ struct UMindTargetInfo {
   FSmartVector                LastVisibleOrAudibleLocation;
   float                       BonusPriority;
 }; assert_size(UMindTargetInfo, 216);
+
+/* ---------------------------------------------------------- UWillowMindTargetInfo ---------------------------------------------------------- */
+
+struct UWillowMindTargetInfo {
+  UMindTargetInfo       Super;
+  FImplementedInterface Targetable;  /** ITargetable */
+  float                 Distance2D;
+  float                 DotToTarget;
+  float                 DotFromTarget;
+  float                 DistanceVertical;
+  float                 WeaponDotToTarget;
+  float                 LeftDotToTarget;
+  float                 DotTargetFacing;
+  EThreatLevel          ThreatLevel;
+  TargetExposure        Exposure;
+  TargetExposure        CoverExposure;
+  float                 ForgetTime;
+  float                 AggroTime;
+  float                 ExposureChangeTime;
+  FVector               LastKnownLocation;
+  BITFIELD              bTargetLost : 1;
+  float                 LastAttackTime;
+  float                 TotalDamagePct;
+  FImplementedInterface MovingAI;  /** IAIInterface */
+}; assert_size(UWillowMindTargetInfo, 300);
 
 /* ---------------------------------------------------------- UPlayerInteractionServer ---------------------------------------------------------- */
 
@@ -4875,6 +5448,13 @@ struct UActionSequence {
   FName                                BehaviorName;
 }; assert_size(UActionSequence, 168);
 
+/* ---------------------------------------------------------- UActionSequenceList ---------------------------------------------------------- */
+
+struct UActionSequenceList {
+  UActionSequence Super;
+  int             CurrentIndex;
+}; assert_size(UActionSequenceList, 172);
+
 /* ---------------------------------------------------------- UActionSequencePawn ---------------------------------------------------------- */
 
 struct UActionSequencePawn {
@@ -4882,22 +5462,6 @@ struct UActionSequencePawn {
   AGearboxMind   *MyGearboxMind;
   AGearboxPawn   *MyGearboxPawn;
 }; assert_size(UActionSequencePawn, 176);
-
-/* ---------------------------------------------------------- UWillowActionSequencePawn ---------------------------------------------------------- */
-
-// struct UWillowActionSequencePawn {
-//   UActionSequencePawn Super;
-//   UWillowAIComponent *WillowAI;
-//   /* TODO: WillowNavigationHandle */
-//   void *MyNavHandle;
-//   AWillowMind   *MyWillowMind;
-//   AWillowAIPawn *MyWillowPawn;
-//   PathFindData PathData;
-// var transient Actor Target;
-// var transient WillowMindTargetInfo TargetRec;
-// var transient WillowMindTargetInfo ParentTargetRec;
-// var transient int LastYawCheck;
-// }; assert_size(UWillowActionSequencePawn, 296);
 
 /* ---------------------------------------------------------- UGFxManager ---------------------------------------------------------- */
 
@@ -5593,6 +6157,17 @@ struct USkelControlLookAt {
   int               ControlBoneIndex;
 }; assert_size(USkelControlLookAt, 312);
 
+/* ---------------------------------------------------------- UWillowSkelControl_LookAtActor ---------------------------------------------------------- */
+
+struct UWillowSkelControl_LookAtActor {
+  USkelControlLookAt Super;
+  FVector            AdditionalOffset;
+  float              OutOfRangeBlendTime;
+  BITFIELD           bOutOfRange  : 1;
+  BITFIELD           bInitialized : 1;
+  AWillowAIPawn     *MyAIPawn;
+}; assert_size(UWillowSkelControl_LookAtActor, 336);
+
 /* ---------------------------------------------------------- USkelControlLimb ---------------------------------------------------------- */
 
 struct USkelControlLimb {
@@ -6211,6 +6786,18 @@ struct UAkObject {
   UObject Super;
   int ShortId;
 }; assert_size(UAkObject, 64);
+
+/* ---------------------------------------------------------- UAkDialogueEvent ---------------------------------------------------------- */
+
+struct native FDialogueArgument {
+  EDynamicDialogueArgument Source;
+};
+struct UAkDialogueEvent {
+  UAkObject                Super;
+  UAkBank                 *RequiredBank;
+  TArray_FDialogueArgument Arguments;
+  UFaceFXAnimSet          *FaceFXAnimSet;
+}; assert_size(UAkDialogueEvent, 84);
 
 /* ---------------------------------------------------------- UAkBank ---------------------------------------------------------- */
 
@@ -8090,6 +8677,12 @@ struct UPostProcessEffect {
   ESceneDepthPriorityGroup SceneDPG;
 }; assert_size(UPostProcessEffect, 100);
 
+/* ---------------------------------------------------------- UAccumulateAlphaEffect ---------------------------------------------------------- */
+
+struct UAccumulateAlphaEffect {
+  UPostProcessEffect Super;
+}; assert_size(UAccumulateAlphaEffect, 100);
+
 /* ---------------------------------------------------------- UMaterialEffect ---------------------------------------------------------- */
 
 struct UMaterialEffect {
@@ -8306,7 +8899,7 @@ struct FRigidBodyContactInfo {
   FVector            ContactVelocity[2];
   UPhysicalMaterial *PhysMaterial[2];
 };
-struct CollisionImpactData {
+struct FCollisionImpactData {
   TArray_FRigidBodyContactInfo ContactInfos;
   FVector                      TotalNormalForceVector;
   FVector                      TotalFrictionForceVector;
@@ -8493,6 +9086,14 @@ struct AActor {
 	float                     MostRecentDamageTaken;/* 388 */
 }; assert_size(AActor, 392);
 
+/* ---------------------------------------------------------- AFluidSurfaceActor ---------------------------------------------------------- */
+
+struct AFluidSurfaceActor {
+  AActor                  Super;
+  UFluidSurfaceComponent *FluidComponent;
+  UParticleSystem        *ProjectileEntryEffect;
+}; assert_size(AFluidSurfaceActor, 400);
+
 /* ---------------------------------------------------------- AWillowMissionPickupSpawner ---------------------------------------------------------- */
 
 struct AWillowMissionPickupSpawner {
@@ -8583,6 +9184,17 @@ struct ASkeletalMeshActor {
   FName                              SavedAnimSeqName;
   float                              SavedCurrentTime;
 }; assert_size(ASkeletalMeshActor, 460);
+
+/* ---------------------------------------------------------- AAIDebugDummyBase ---------------------------------------------------------- */
+
+struct AAIDebugDummyBase {
+  ASkeletalMeshActor         Super;
+  USkeletalMeshComponent    *MyMesh;
+  UMaterialInstanceConstant *MatInstBody;
+  UMaterialInstanceConstant *MatInstHead;
+  UMaterialInstanceConstant *MatInstHelmet;
+  FLinearColor               DummyColor;
+}; assert_size(AAIDebugDummyBase, 492);
 
 /* ---------------------------------------------------------- ASkeletalMeshActorBasedOnExtremeContent ---------------------------------------------------------- */
 
@@ -8677,6 +9289,18 @@ struct ALensFlareSource {
 struct AStaticMeshActorBase {
   AActor Super;
 }; assert_size(AStaticMeshActorBase, 392);
+
+/* ---------------------------------------------------------- ABlockingMeshActor ---------------------------------------------------------- */
+
+struct ABlockingMeshActor {
+  AStaticMeshActorBase       Super;
+  VfTable                    IIGBXNavMeshObstacle;
+  UBlockingMeshComponent    *BlockingMeshComponent;
+  UMaterialInterface        *BlockingMeshMaterial;
+  BITFIELD                   bBlockNavMesh : 1;
+  UMaterialInstanceConstant *MatInstantConstant;
+  UMaterialInstanceConstant *MatInstantConstantNew;
+}; assert_size(ABlockingMeshActor, 416);
 
 /* ---------------------------------------------------------- AStaticMeshActor ---------------------------------------------------------- */
 
@@ -9814,6 +10438,14 @@ struct AVolume {
 	BITFIELD         bPawnsOnly        : 1; /* 000 */
 }; assert_size(AVolume, 444);
 
+/* ---------------------------------------------------------- ABlockingVolume ---------------------------------------------------------- */
+
+struct ABlockingVolume {
+  AVolume  Super;
+  BITFIELD bBlockCamera      : 1;
+  BITFIELD bBlockProjectiles : 1;
+}; assert_size(ABlockingVolume, 448);
+
 /* ---------------------------------------------------------- ATriggerVolume ---------------------------------------------------------- */
 
 struct ATriggerVolume {
@@ -10126,6 +10758,44 @@ struct UBehaviorBase {
   FBehaviorContextData Context;
 }; assert_size(UBehaviorBase, 76);
 
+/* ---------------------------------------------------------- UBehavior_UpdateCollision ---------------------------------------------------------- */
+
+struct UBehavior_UpdateCollision {
+  UBehaviorBase Super;
+  BITFIELD      bResetTouching : 1;
+}; assert_size(UBehavior_UpdateCollision, 80);
+
+/* ---------------------------------------------------------- UBehavior_SpawnFirstPersonParticleSystem ---------------------------------------------------------- */
+
+struct UBehavior_SpawnFirstPersonParticleSystem {
+  UBehaviorBase        Super;
+  BITFIELD             bSaveParticleReference : 1;
+  BITFIELD             bDeleteByOwner         : 1;
+  FBehaviorContextData InstanceDataContext;
+  FName                SavedReferenceName;
+  UParticleSystem     *ParticleEffect;
+  FName                AttachmentPointName;
+  FVector              RelativeLocation;
+  FRotator             RelativeRotation;
+  float                DrawScale;
+}; assert_size(UBehavior_SpawnFirstPersonParticleSystem, 144);
+
+/* ---------------------------------------------------------- UBehavior_ActivateInstancedMissionBehaviorSequence ---------------------------------------------------------- */
+
+struct UBehavior_ActivateInstancedMissionBehaviorSequence {
+  UBehaviorBase                Super;
+  UMissionDefinition          *Mission;
+  UMissionObjectiveDefinition *MissionObjective;
+  FName                        SequenceName;
+}; assert_size(UBehavior_ActivateInstancedMissionBehaviorSequence, 92);
+
+/* ---------------------------------------------------------- UBehavior_CallFunction ---------------------------------------------------------- */
+
+struct UBehavior_CallFunction {
+  UBehaviorBase Super;
+  FName         FunctionName;
+}; assert_size(UBehavior_CallFunction, 84);
+
 /* ---------------------------------------------------------- UPlayerBehaviorBase ---------------------------------------------------------- */
 
 struct UPlayerBehaviorBase {
@@ -10409,6 +11079,13 @@ struct USubsystem {
   UObject Super;
   FExec  *Exec;
 }; assert_size(USubsystem, 64);
+
+/* ---------------------------------------------------------- UAkAudioDevice ---------------------------------------------------------- */
+
+struct UAkAudioDevice {
+  USubsystem Super;
+  BYTE       unknown_00[312 - 64];
+}; assert_size(UAkAudioDevice, 312);
 
 /* ---------------------------------------------------------- UAkBaseSoundObject ---------------------------------------------------------- */
 
@@ -13375,6 +14052,14 @@ struct UExpressionEvaluator {
   UObject Super;
 }; assert_size(UExpressionEvaluator, 60);
 
+/* ---------------------------------------------------------- UActionSkillStateExpressionEvaluator ---------------------------------------------------------- */
+
+struct UActionSkillStateExpressionEvaluator {
+  UExpressionEvaluator Super;
+  BITFIELD             bIsRunning    : 1;
+  BITFIELD             bIsNotRunning : 1;
+}; assert_size(UActionSkillStateExpressionEvaluator, 64);
+
 /* ---------------------------------------------------------- UAIResourceExpressionEvaluator ---------------------------------------------------------- */
 
 struct UAIResourceExpressionEvaluator {
@@ -13633,6 +14318,18 @@ struct UAttributeModifier {
 struct UInterface {
   UObject Super;
 }; assert_size(UInterface, 60);
+
+/* ---------------------------------------------------------- UIFaceFXActor ---------------------------------------------------------- */
+
+struct UIFaceFXActor {
+  UInterface Super;
+}; assert_size(UIFaceFXActor, 60);
+
+/* ---------------------------------------------------------- UICustomizable ---------------------------------------------------------- */
+
+struct UICustomizable {
+  UInterface Super;
+}; assert_size(UICustomizable, 60);
 
 /* ---------------------------------------------------------- UIDynamicObstacle ---------------------------------------------------------- */
 
@@ -15125,12 +15822,23 @@ struct UDistributionFloat {
 /* ---------------------------------------------------------- UDistributionVector ---------------------------------------------------------- */
 
 struct UDistributionVector {
-  UComponent Super;
+  UComponent        Super;
   FCurveEdInterface CurveEd;
-  BITFIELD bCanBeBaked:1;
-  BITFIELD bIsDirty:1;
-  BITFIELD : 0;
+  BITFIELD          bCanBeBaked : 1;
+  BITFIELD          bIsDirty    : 1;
 }; assert_size(UDistributionVector, 80);
+
+/* ---------------------------------------------------------- UDistributionVectorUniform ---------------------------------------------------------- */
+
+struct UDistributionVectorUniform {
+  UDistributionVector            Super;
+  FVector                        Max;
+  FVector                        Min;
+  BITFIELD                       bLockAxes    : 1;
+  BITFIELD                       bUseExtremes : 1;
+  EDistributionVectorLockFlags   LockedAxes;
+  EDistributionVectorMirrorFlags MirrorFlags[3];
+}; assert_size(UDistributionVectorUniform, 112);
 
 /* ---------------------------------------------------------- UFactory ---------------------------------------------------------- */
 
@@ -15808,6 +16516,23 @@ struct UPrimitiveComponent {
   float                        LastRenderTime;
 }; assert_size(UPrimitiveComponent, 528);
 DECLARE_A_TSET(UPrimitiveComponentPtr);
+
+/* ---------------------------------------------------------- UAkAmbientSoundRenderingComponent ---------------------------------------------------------- */
+
+__ALIGN(16)
+struct UAkAmbientSoundRenderingComponent {
+  UPrimitiveComponent Super;
+  BITFIELD            bShowOnlyIfSelected : 1;
+}; assert_size(UAkAmbientSoundRenderingComponent, 544);
+
+/* ---------------------------------------------------------- UActorFactoryApexClothing ---------------------------------------------------------- */
+
+struct UActorFactoryApexClothing {
+  UActorFactorySkeletalMesh    Super;
+  TArray_UApexClothingAssetPtr ClothingAssets;
+  ERBCollisionChannel          ClothingRBChannel;
+  FRBCollisionChannelContainer ClothingRBCollideWithChannels;
+}; assert_size(UActorFactoryApexClothing, 160);
 
 /* ---------------------------------------------------------- URB_RadialImpulseComponent ---------------------------------------------------------- */
 
@@ -16939,6 +17664,24 @@ struct UParticleSystemComponent {
   FAkPlayingInfo                                    LoopingAkPlayingInfo;
   FScriptDelegate                                   __OnSystemFinished__Delegate;
 }; assert_size(UParticleSystemComponent, 816);
+DECLARE_A_TMAP(UParticleSystemComponentPtr, UBOOL);
+
+/* ---------------------------------------------------------- FParticleDataManager ---------------------------------------------------------- */
+
+typedef struct {
+	/** Update the dynamic data for all particle system componets. */
+	void (__thiscall *UpdateDynamicData)(FParticleDataManager *);
+} VfTable__FParticleDataManager;
+/*-----------------------------------------------------------------------------
+ *	ParticleDataManager
+ *	Handles the collection of ParticleSystemComponents that are to be 
+ *	submitted to the rendering thread for display.
+ ----------------------------------------------------------------------------*/
+struct FParticleDataManager {
+  VfTable__FParticleDataManager *vftable;
+	/** The particle system components that need to be sent to the rendering thread */
+	_TMAP_NAME(UParticleSystemComponentPtr, UBOOL) PSysComponents;
+};
 
 /* ---------------------------------------------------------- UCylinderComponent ---------------------------------------------------------- */
 
@@ -19897,6 +20640,12 @@ struct UBehaviorProviderDefinition {
   TArray_FBehaviorSequenceData BehaviorSequences;
 }; assert_size(UBehaviorProviderDefinition, 76);
 
+/* ---------------------------------------------------------- UAIBehaviorProviderDefinition ---------------------------------------------------------- */
+
+struct UAIBehaviorProviderDefinition {
+  UBehaviorProviderDefinition Super;
+}; assert_size(UAIBehaviorProviderDefinition, 76);
+
 /* ---------------------------------------------------------- UBehaviorKernel ---------------------------------------------------------- */
 
 struct native FBehaviorExecutionRecord {
@@ -19992,7 +20741,6 @@ struct UBehaviorKernel {
   TArray_FString DebugPages;
   TArray_UObjectPtr EventFilterObjects;
 }; assert_size(UBehaviorKernel, 196);
-
 
 /* ---------------------------------------------------------- UWeaponPartListDefinition ---------------------------------------------------------- */
 
@@ -20648,6 +21396,17 @@ struct UAttributeInitializationDefinition {
   Range                                RangeRestriction;
 }; assert_size(UAttributeInitializationDefinition, 240);
 
+/* ---------------------------------------------------------- UActionSequenceRandom ---------------------------------------------------------- */
+
+struct native FActionSequenceRandomData {
+  AttributeInitializationData ProbabilityData;
+  UActionSequence            *ActionToRunWhenTrue;
+};
+struct UActionSequenceRandom {
+  UActionSequence                  Super;
+  TArray_FActionSequenceRandomData ActionList;
+}; assert_size(UActionSequenceRandom, 180);
+
 /* ---------------------------------------------------------- UBehavior_Explode ---------------------------------------------------------- */
 
 struct UBehavior_Explode {
@@ -21177,6 +21936,13 @@ struct UBalanceModifierDefinition {
 struct UAttributeValueResolver {
 	UObject Super;
 }; assert_size(UAttributeValueResolver, 60);
+
+/* ---------------------------------------------------------- UAIResourceAttributeValueResolver ---------------------------------------------------------- */
+
+struct UAIResourceAttributeValueResolver {
+  UAttributeValueResolver Super;
+  UAIResource            *Resource;
+}; assert_size(UAIResourceAttributeValueResolver, 64);
 
 /* ---------------------------------------------------------- UBlackMarketUpgradeAttributeValueResolver ---------------------------------------------------------- */
 
@@ -23696,6 +24462,15 @@ struct USequenceAction {
 	TArray_UObjectPtr Targets;
 }; assert_size(USequenceAction, 164);
 
+/* ---------------------------------------------------------- UGFxAction_Invoke ---------------------------------------------------------- */
+
+struct UGFxAction_Invoke {
+  USequenceAction  Super;
+  UGFxMoviePlayer *Movie;
+  FString          MethodName;
+  TArray_FASValue  Arguments;
+}; assert_size(UGFxAction_Invoke, 192);
+
 /* ---------------------------------------------------------- USeqAct_AllPlayersInVolume ---------------------------------------------------------- */
 
 struct USeqAct_AllPlayersInVolume {
@@ -25522,6 +26297,13 @@ struct APylon {
   APylon           *OuterPylon;
 }; assert_size(APylon, 756);
 
+/* ---------------------------------------------------------- AAISwitchablePylon ---------------------------------------------------------- */
+
+struct AAISwitchablePylon {
+  APylon   Super;
+  BITFIELD bOpen : 1;
+}; assert_size(AAISwitchablePylon, 760);
+
 /* ---------------------------------------------------------- ADynamicPylon ---------------------------------------------------------- */
 
 struct ADynamicPylon {
@@ -25750,20 +26532,27 @@ struct native FPolySegmentSpan {
 struct FEdgePointer {
   void *Dummy;
 };
-struct FPathStore {
-  TArray_voidPtr EdgeList;
+struct native FPathStore {
+  TArray_FEdgePointer EdgeList;
+  TArray_FLOAT        PathDistances;
 };
-struct FNavMeshPathParams {
-  IInterface_NavigationHandle *Interface;
-  BITFIELD                     bCanMantle               : 1;
-  BITFIELD                     bNeedsMantleValidityTest : 1;
-  BITFIELD                     bAbleToSearch            : 1;
-  FVector                      SearchExtent;
-  float                        SearchLaneMultiplier;
-  FVector                      SearchStart;
-  float                        MaxDropHeight;
-  float                        MinWalkableZ;
-  float                        MaxHoverDistance;
+struct native FNavMeshPathParams {
+  void             *Interface;
+  BITFIELD          bCanMantle      : 1;
+  BITFIELD          bCanPhysicsJump : 1;
+  float             PhysicsJumpCostMultiplier;
+  BITFIELD          bNeedsMantleValidityTest : 1;
+  BITFIELD          bAbleToSearch            : 1;
+  FVector           SearchExtent;
+  float             SearchLaneMultiplier;
+  FVector           SearchStart;
+  float             MaxDropHeight;
+  float             MinWalkableZ;
+  float             MaxHoverDistance;
+  TArray_UObjectPtr ObstaclesToIgnore;
+  float             LookAheadDistance;
+  float             CornerCutDistance;
+  float             LookInterpRate;
 };
 struct UNavigationHandle {
   UObject                    Super;
@@ -25772,8 +26561,8 @@ struct UNavigationHandle {
   FPathStore                 PathCache;
   void                      *BestUnfinishedPathPoint;
   void                      *CurrentEdge;
-  void                      *SubGoal_DestPoly; __ALIGN(16)
-  FBasedPosition             FinalDestination; __ALIGN(16)
+  void                      *SubGoal_DestPoly;
+  FBasedPosition             FinalDestination;
   BITFIELD                   bSkipRouteCacheUpdates        : 1;
   BITFIELD                   bUseORforEvaluateGoal         : 1;
   BITFIELD                   bDebugConstraintsAndGoalEvals : 1;
@@ -25787,43 +26576,231 @@ struct UNavigationHandle {
   FVector                    Breadcrumbs[10];
   int                        BreadCrumbMostRecentIdx;
   float                      BreadCrumbDistanceInterval;
-}; /* assert_size(UNavigationHandle, 384); */
+}; assert_size(UNavigationHandle, 384);
 
 /* ---------------------------------------------------------- UGearboxNavigationHandle ---------------------------------------------------------- */
 
-// struct native FPathFindData {
-//   FGBXNavMeshPath Path;
-//   FBasedPosition FinalDest;
-//   BITFIELD bFinalDestIsActor : 1;
-//   float MaxRangeToDest;
-//   FGBXNavMeshPolyRef AnchorPoly;
-//   BITFIELD bCanArriveEarly : 1;
-// };
-// struct UGearboxNavigationHandle {
-//   UNavigationHandle Super;
-//   EMovementSpeed DesiredMovementSpeed;
-//   /* TODO: IGBXNavMeshSpecialMove.GBXNavMeshSpecialMoveType */
-//   BYTE ActiveSpecialNavMeshMove;
-//   BITFIELD bFollowingPath             : 1;
-//   BITFIELD bReachedDestination        : 1;
-//   BITFIELD bSpecialMovementFinished   : 1;
-//   BITFIELD bClearPathAfterSpecialMove : 1;
-//   FBasedPosition CurrentGoal;
-//   FPathFindData CurrentPath;
-//   FGBXNavMeshPolyRef Anchor;
-//   FGBXNavMeshPolyRef LastValidAnchor;
-//   FBasedPosition LastAnchorPosition;
-//   FVector LastAnchorDelta;
-//   float NextPathObjectDistance;
-//   FVector CurrentGoalStartLoc;
-//   FRotator DesiredLookDirection;
-//   FRotator LookDirection;
-//   UGBXNavMeshPathFinder *PathFinder;
-//   float NearPathCheckDist;
-//   float NearPathCheckDistMin;
-//   float NearPathCheckDistMax;
-//   float NearPathCheckDistRate;
-// }; assert_size(UGearboxNavigationHandle, 672);
+struct native FPathFindData {
+  FGBXNavMeshPath    Path;
+  FBasedPosition     FinalDest;
+  BITFIELD           bFinalDestIsActor : 1;
+  float              MaxRangeToDest;
+  FGBXNavMeshPolyRef AnchorPoly;
+  BITFIELD           bCanArriveEarly : 1;
+};
+struct UGearboxNavigationHandle {
+  UNavigationHandle      Super;
+  EMovementSpeed         DesiredMovementSpeed;
+  /* TODO: IGBXNavMeshSpecialMove.GBXNavMeshSpecialMoveType */
+  BYTE                   ActiveSpecialNavMeshMove;
+  BITFIELD               bFollowingPath             : 1;
+  BITFIELD               bReachedDestination        : 1;
+  BITFIELD               bSpecialMovementFinished   : 1;
+  BITFIELD               bClearPathAfterSpecialMove : 1;
+  FBasedPosition         CurrentGoal;
+  FPathFindData          CurrentPath;
+  FGBXNavMeshPolyRef     Anchor;
+  FGBXNavMeshPolyRef     LastValidAnchor;
+  FBasedPosition         LastAnchorPosition;
+  FVector                LastAnchorDelta;
+  float                  NextPathObjectDistance;
+  FVector                CurrentGoalStartLoc;
+  FRotator               DesiredLookDirection;
+  FRotator               LookDirection;
+  UGBXNavMeshPathFinder *PathFinder;
+  float                  NearPathCheckDist;
+  float                  NearPathCheckDistMin;
+  float                  NearPathCheckDistMax;
+  float                  NearPathCheckDistRate;
+}; assert_size(UGearboxNavigationHandle, 672);
+
+/* ---------------------------------------------------------- UWillowActionSequencePawn ---------------------------------------------------------- */
+
+struct UWillowActionSequencePawn {
+  UActionSequencePawn      Super;
+  UWillowAIComponent      *WillowAI;
+  UWillowNavigationHandle *MyNavHandle;
+  AWillowMind             *MyWillowMind;
+  AWillowAIPawn           *MyWillowPawn;
+  FPathFindData            PathData;
+  AActor                  *Target;
+  UWillowMindTargetInfo   *TargetRec;
+  UWillowMindTargetInfo   *ParentTargetRec;
+  int                      LastYawCheck;
+}; assert_size(UWillowActionSequencePawn, 296);
+
+/* ---------------------------------------------------------- UAction_SwoopAttack ---------------------------------------------------------- */
+
+struct native FSwoopAttackData {
+  BITFIELD bTriggered           : 1;
+  BITFIELD bCacheTargetLocation : 1;
+  float    Distance;
+};
+struct UAction_SwoopAttack {
+  UWillowActionSequencePawn Super;
+  float                     SwoopFarDistance;
+  float                     SwoopFarHeight;
+  float                     SwoopCloseDistance;
+  float                     SwoopCloseHeight;
+  BITFIELD                  bShootTarget       : 1;
+  BITFIELD                  bUseOffset         : 1;
+  BITFIELD                  bFoundAttackOffset : 1;
+  BITFIELD                  bCacheTargetLoc    : 1;
+  float                     SwoopAttackDistance;
+  TArray_FSwoopAttackData   SwoopAttackDistances;
+  float                     Offset;
+  ESwoopOffset              OffsetDirection;
+  ESwoopOffset              Direction;
+  FVector                   AttackOffset;
+  float                     ClosestAttackDist;
+  FVector                   LastAttackLocation;
+  FVector                   CachedTargetLoc;
+}; assert_size(UAction_SwoopAttack, 380);
+
+/* ---------------------------------------------------------- UAction_CoverAttack ---------------------------------------------------------- */
+
+struct UAction_CoverAttack {
+  UWillowActionSequencePawn Super;
+  TArray_UAttackLocationPtr Limits;
+  float                     LineOfSightTime;
+  FCoverInfo                MyCover;
+  FCombatZone               MyZone;
+  float                     IdleTime;
+}; assert_size(UAction_CoverAttack, 356);
+
+/* ---------------------------------------------------------- UAction_CombatPoint ---------------------------------------------------------- */
+
+struct UAction_CombatPoint {
+  UAction_CoverAttack    Super;
+  BITFIELD               bMigrated : 1;
+  FCombatPointSearchData Search;
+}; assert_size(UAction_CombatPoint, 408);
+
+/* ---------------------------------------------------------- UAction_Burrow ---------------------------------------------------------- */
+
+struct UAction_Burrow {
+  UWillowActionSequencePawn Super;
+  USpecialMove_Cloak       *BurrowEnter;
+  USpecialMove_Cloak       *BurrowExit;
+}; assert_size(UAction_Burrow, 304);
+
+/* ---------------------------------------------------------- UAction_GenericAttack ---------------------------------------------------------- */
+
+struct UAction_GenericAttack {
+  UAction_Burrow            Super;
+  BITFIELD                  bLimitedMovement             : 1;
+  BITFIELD                  bBurrowAttack                : 1;
+  BITFIELD                  bShootTarget                 : 1;
+  BITFIELD                  bPathingFailed               : 1;
+  BITFIELD                  bWantsCrouchIdle             : 1;
+  BITFIELD                  bWantsCrouchMove             : 1;
+  BITFIELD                  bCanBeLimitedByDownedPlayers : 1;
+  BITFIELD                  bWantsFullLOSTrace           : 1;
+  TArray_UAttackLocationPtr Limits;
+  float                     CrouchIdleChance;
+  float                     CrouchMoveChance;
+  float                     CheckRate;
+  EAttackType               Type;
+  EAttackValidity           Validity;
+  FVector                   AttackLoc;
+  FCombatZone               MyZone;
+  float                     IdleTime;
+}; assert_size(UAction_GenericAttack, 384);
+
+/* ---------------------------------------------------------- UAction_ShootTarget ---------------------------------------------------------- */
+
+struct UAction_ShootTarget {
+  UAction_GenericAttack Super;
+  float                 ChanceToCrouch;
+  float                 ChanceToMoveCrouch;
+  BITFIELD              bMigrated : 1;
+  float                 Angle;
+  FAIRange              Range;
+  ERangeType            RangeType;
+  FCombatZoneSearchData ZoneSearch;
+}; assert_size(UAction_ShootTarget, 452);
+
+/* ---------------------------------------------------------- UAction_AnimAttack ---------------------------------------------------------- */
+
+struct UAction_AnimAttack {
+  UAction_GenericAttack   Super;
+  EAimType                AimType;
+  float                   VisionAngle;
+  USpecialMoveDefinition *AttackAnim;
+  float                   Aim;
+  BITFIELD                bTargetHeld     : 1;
+  BITFIELD                bTempHardAttach : 1;
+}; assert_size(UAction_AnimAttack, 404);
+
+/* ---------------------------------------------------------- UAction_BasicAttack ---------------------------------------------------------- */
+
+struct UAction_BasicAttack {
+  UAction_AnimAttack      Super;
+  BITFIELD                bMigrated             : 1;
+  BITFIELD                bTargetMustBeInRange  : 1;
+  BITFIELD                bInterpToAimDirection : 1;
+  BITFIELD                bAlwaysFaceTarget     : 1;
+  float                   Angle;
+  float                   VerticalDistMax;
+  FAIRange                Range;
+  ERangeType              RangeType;
+  FCombatZoneSearchData   ZoneSearch;
+  USpecialMoveDefinition *AttackSMD;
+  FAIRange                InnerRadius;
+  FAIRange                OuterRadius;
+}; assert_size(UAction_BasicAttack, 488);
+
+/* ---------------------------------------------------------- UAction_LeapAtTarget ---------------------------------------------------------- */
+
+struct UAction_LeapAtTarget {
+  UAction_BasicAttack     Super;
+  FTrajectoryData         Options;
+  USpecialMoveDefinition *LaunchAnimation;
+  USpecialMoveDefinition *LandAnimation;
+  USpecialMoveDefinition *InAirAttackIdleAnimation;
+}; assert_size(UAction_LeapAtTarget, 532);
+
+/* ---------------------------------------------------------- UWillowNavigationHandle ---------------------------------------------------------- */
+
+struct UWillowNavigationHandle {
+  UGearboxNavigationHandle   Super;
+  BITFIELD                   bInitialized          : 1;
+  BITFIELD                   bGoalActorIsFinalDest : 1;
+  BITFIELD                   bNavMeshWalking       : 1;
+  BITFIELD                   bFlightBlocked        : 1;
+  BITFIELD                   bFlightFullyBlocked   : 1;
+  BITFIELD                   bIsAvoidingObstacle   : 1;
+  BITFIELD                   bWasAvoidingObstacle  : 1;
+  AWillowMind               *MyWillowMind;
+  AWillowAIPawn             *MyWillowPawn;
+  UWillowActionSequencePawn *ControllingAction;
+  int                        PathFindActionIndex;
+  FCombatZone                PathZone;
+  PathFixMode                FixMode;
+  EFlightMode                FlightMode;
+  float                      FixStartTime;
+  FBasedPosition             FixPosition;
+  float                      FixWaitTime;
+  float                      FixMoveTime;
+  float                      FixLerpTime;
+  float                      FixMaxDist;
+  float                      FixFailedWaitTime;
+  int                        FlyHitIndex;
+  FVector                    OriginalFlyDirection;
+  TArray_FVector             FlyHits;
+  TArray_FVector             FlyDirections;
+  float                      FlightObstacleDistPct;
+  float                      FlyFixRate;
+  float                      FlyFixLastCheckTime;
+  FVector                    FlyFixLocation;
+  int                        MyNextExpensiveFrame;
+}; assert_size(UWillowNavigationHandle, 872);
+
+/* ---------------------------------------------------------- UWillowClientNavigationHandle ---------------------------------------------------------- */
+
+struct UWillowClientNavigationHandle {
+  UWillowNavigationHandle Super;
+}; assert_size(UWillowClientNavigationHandle, 872);
 
 /* ---------------------------------------------------------- AController ---------------------------------------------------------- */
 
@@ -26102,36 +27079,35 @@ struct AGearboxMind {
 /* ---------------------------------------------------------- AWillowMind ---------------------------------------------------------- */
 
 struct AWillowMind {
-  AGearboxMind          Super;
-  VfTable               VfTable_IISeeTargetable;
-  VfTable               VfTable_IIControllerLocator;
-  VfTable               VfTable_IIConstructObject;
-  UAIClassDefinition   *AIClass;
-  AWillowAIPawn        *MyWillowPawn;
-  UAIDefinition        *AIDefOverride;
-  BITFIELD              bCharacterClassInitialized : 1;
-  BITFIELD              bWantsToSprint             : 1;
-  BITFIELD              bCurrentlyScripted         : 1;
-  BITFIELD              bScriptedHoldPosition      : 1;
-  BITFIELD              bScriptedCanAttack         : 1;
-  BITFIELD              bWantsToFireWeapon         : 1;
-  BITFIELD              bWeaponsRestricted         : 1;
-  BITFIELD              bWeaponFireUseRotation     : 1;
-  BITFIELD              bProvoked                  : 1;
-  BITFIELD              bPawnAddedToRadar          : 1;
-  BITFIELD              bWantsRotationAudio        : 1;
-  AWillowMind          *SpawnParent;
-  TArray_AWillowMindPtr SpawnChildren;
-  int                   TotalSpawnedChildren;
-  FVector               DirectionHint;
-  /* TODO: WillowNavigationHandle */
-  void              *WillowNav;
-  float              DistanceToGoal;
-  AWillowAIMoveNode *LastPatrolNode;
-  AWillowAIMoveNode *LastScriptedNode;
-  EDefaultStance     ScriptedStance;
-  EScriptFocus       ScriptedFocusStyle;
-  AIWeaponState      WeaponFireMode;
+  AGearboxMind             Super;
+  VfTable                  IISeeTargetable;
+  VfTable                  IIControllerLocator;
+  VfTable                  IIConstructObject;
+  UAIClassDefinition      *AIClass;
+  AWillowAIPawn           *MyWillowPawn;
+  UAIDefinition           *AIDefOverride;
+  BITFIELD                 bCharacterClassInitialized : 1;
+  BITFIELD                 bWantsToSprint             : 1;
+  BITFIELD                 bCurrentlyScripted         : 1;
+  BITFIELD                 bScriptedHoldPosition      : 1;
+  BITFIELD                 bScriptedCanAttack         : 1;
+  BITFIELD                 bWantsToFireWeapon         : 1;
+  BITFIELD                 bWeaponsRestricted         : 1;
+  BITFIELD                 bWeaponFireUseRotation     : 1;
+  BITFIELD                 bProvoked                  : 1;
+  BITFIELD                 bPawnAddedToRadar          : 1;
+  BITFIELD                 bWantsRotationAudio        : 1;
+  AWillowMind             *SpawnParent;
+  TArray_AWillowMindPtr    SpawnChildren;
+  int                      TotalSpawnedChildren;
+  FVector                  DirectionHint;
+  UWillowNavigationHandle *WillowNav;
+  float                    DistanceToGoal;
+  AWillowAIMoveNode       *LastPatrolNode;
+  AWillowAIMoveNode       *LastScriptedNode;
+  EDefaultStance           ScriptedStance;
+  EScriptFocus             ScriptedFocusStyle;
+  AIWeaponState            WeaponFireMode;
   /* TODO: WillowSeqAct_AIScriptedAnim */
   void *ScriptedAction;
   float LastUsedTime;
@@ -26554,6 +27530,85 @@ struct AGearboxPlayerController {
   int                          SessionBundleNumber;
   UGearboxProfileSettings     *CachedProfileSettings;
 }; assert_size(AGearboxPlayerController, 2548);
+
+/* ---------------------------------------------------------- UVehicleHandlingDefinition ---------------------------------------------------------- */
+
+struct native FVehicleHandlingWheelData {
+  FName BoneName;
+  /* TODO: VehicleWheelDefinition */
+  void *WheelDef;
+};
+struct native FFishtailingInfo {
+  FVector ContactPoint;
+  FVector Impulse;
+};
+struct UVehicleHandlingDefinition {
+  UGBXDefinition                   Super;
+  float                            WheelSuspensionStiffness;
+  float                            WheelSuspensionDamping;
+  float                            WheelSuspensionBias;
+  float                            WheelLongExtremumSlip;
+  float                            WheelLongExtremumValue;
+  float                            WheelLongAsymptoteSlip;
+  float                            WheelLongAsymptoteValue;
+  float                            WheelLatExtremumSlip;
+  float                            WheelLatExtremumValue;
+  float                            WheelLatAsymptoteSlip;
+  float                            WheelLatAsymptoteValue;
+  float                            WheelInertia;
+  BITFIELD                         bWheelSpeedOverride   : 1;
+  BITFIELD                         bClampedFrictionModel : 1;
+  BITFIELD                         bAutoDrive            : 1;
+  BITFIELD                         bStayUpright          : 1;
+  float                            AutoDriveSteer;
+  FVector                          COMOffset;
+  FVector                          InertiaTensorMultiplier;
+  float                            StayUprightRollResistAngle;
+  float                            StayUprightPitchResistAngle;
+  float                            StayUprightStiffness;
+  float                            StayUprightDamping;
+  TArray_FVehicleHandlingWheelData Wheels;
+  TArray_FFishtailingInfo          HandbrakeFishtailForces;
+  FGearboxViewShakeInfo            FishtailCameraShake;
+  float                            FishtailCameraShakeMinVehicleSpeed;
+}; assert_size(UVehicleHandlingDefinition, 252);
+
+/* ---------------------------------------------------------- UChopperVehicleHandlingDefinition ---------------------------------------------------------- */
+
+struct UChopperVehicleHandlingDefinition {
+  UVehicleHandlingDefinition Super;
+  float                      MaxThrustForce;
+  float                      MaxReverseForce;
+  float                      LongDamping;
+  float                      MaxStrafeForce;
+  float                      LatDamping;
+  float                      DirectionChangeForce;
+  float                      MaxRiseForce;
+  float                      UpDamping;
+  float                      TurnTorqueFactor;
+  float                      TurnTorqueMax;
+  float                      TurnDamping;
+  float                      MaxYawRate;
+  float                      PitchTorqueFactor;
+  float                      PitchTorqueMax;
+  float                      PitchDamping;
+  float                      RollTorqueTurnFactor;
+  float                      RollTorqueStrafeFactor;
+  float                      RollTorqueMax;
+  float                      RollDamping;
+  float                      StopThreshold;
+  float                      MaxRandForce;
+  float                      RandForceInterval;
+  BITFIELD                   bAllowZThrust                : 1;
+  BITFIELD                   bFullThrustOnDirectionChange : 1;
+  BITFIELD                   bShouldCutThrustMaxOnImpact  : 1;
+  BITFIELD                   bStabilizeStops              : 1;
+  BITFIELD                   bAutoHover                   : 1;
+  float                      StabilizationForceMultiplier;
+  float                      MaxVelocityWhenAdjustingHover;
+  float                      HoverDeadZone;
+  float                      RiseAdjustmentInterval;
+}; assert_size(UChopperVehicleHandlingDefinition, 360);
 
 /* ---------------------------------------------------------- UOnlineGameSearch ---------------------------------------------------------- */
 
@@ -29429,6 +30484,32 @@ struct UTexture {
   int                        InternalFormatLODBias;
 }; assert_size(UTexture, 88);
 
+/* ---------------------------------------------------------- UTexture2DDynamic ---------------------------------------------------------- */
+
+struct UTexture2DDynamic {
+  UTexture     Super;
+  int          SizeX;
+  int          SizeY;
+  EPixelFormat Format;
+  int          NumMips;
+  BITFIELD     bIsResolveTarget : 1;
+}; assert_size(UTexture2DDynamic, 108);
+
+/* ---------------------------------------------------------- UTexture2DComposite ---------------------------------------------------------- */
+
+struct native FSourceTexture2DRegion {
+  int         OffsetX;
+  int         OffsetY;
+  int         SizeX;
+  int         SizeY;
+  UTexture2D *Texture2D;
+};
+struct UTexture2DComposite {
+  UTexture                      Super;
+  TArray_FSourceTexture2DRegion SourceRegions;
+  int                           MaxTextureSize;
+}; assert_size(UTexture2DComposite, 104);
+
 /* ---------------------------------------------------------- UTextureRenderTarget ---------------------------------------------------------- */
 
 struct UTextureRenderTarget {
@@ -29518,6 +30599,31 @@ struct UTexture2D {
   int                      FirstResourceMemMip;
   float                    Timer;
 }; assert_size(UTexture2D, 192);
+
+/* ---------------------------------------------------------- UTextureFlipBook ---------------------------------------------------------- */
+
+struct UTextureFlipBook {
+  UTexture2D            Super;
+  VfTable               FTickableObject;
+  float                 TimeIntoMovie;
+  float                 TimeSinceLastFrame;
+  float                 HorizontalScale;
+  float                 VerticalScale;
+  BITFIELD              bPaused   : 1;
+  BITFIELD              bStopped  : 1;
+  BITFIELD              bLooping  : 1;
+  BITFIELD              bAutoPlay : 1;
+  int                   HorizontalImages;
+  int                   VerticalImages;
+  TextureFlipBookMethod FBMethod;
+  float                 FrameRate;
+  float                 FrameTime;
+  int                   CurrentRow;
+  int                   CurrentColumn;
+  float                 RenderOffsetU;
+  float                 RenderOffsetV;
+  void                 *ReleaseResourcesFence;
+}; assert_size(UTextureFlipBook, 256);
 
 /* ---------------------------------------------------------- UShadowMapTexture2D ---------------------------------------------------------- */
 
@@ -30776,6 +31882,8 @@ struct AWillowGameInfo {
   int                                    NextNameListIndex;
 }; assert_size(AWillowGameInfo, 1556);
 
+/* ---------------------------------------------------------- FTexture2D ---------------------------------------------------------- */
+
 struct FTexture2D {
   /** Texture dimensions */
   INT SizeX;
@@ -30787,6 +31895,7 @@ struct FTexture2D {
   /** Mip 0 texture data */
   BYTE *Data;
 };
+
 /* UObject *EventInstigator, TArray_BehaviorProviderDefinition *Providers */
 #pragma pack(push, 1)
 
@@ -31509,8 +32618,7 @@ struct APawn {
   UCylinderComponent                 *CylinderComponent;
   float                               RBPushRadius;
   float                               RBPushStrength;
-  /* TODO: Vehicle */
-  void                               *DrivenVehicle;
+  AVehicle                           *DrivenVehicle;
   float                               AlwaysRelevantDistanceSquared;
   float                               VehicleCheckRadius;
   AController                        *LastHitBy;
@@ -31584,6 +32692,47 @@ struct APawn {
   int                                 YawLastFrame;
   float                               YawPerSecond;
 }; assert_size(APawn, 1684);
+
+/* ---------------------------------------------------------- AVehicle ---------------------------------------------------------- */
+
+struct AVehicle {
+  APawn          Super;
+  APawn         *Driver;
+  BITFIELD       bDriving                    : 1;
+  BITFIELD       bDriverIsVisible            : 1;
+  BITFIELD       bAttachDriver               : 1;
+  BITFIELD       bTurnInPlace                : 1;
+  BITFIELD       bSeparateTurretFocus        : 1;
+  BITFIELD       bFollowLookDir              : 1;
+  BITFIELD       bHasHandbrake               : 1;
+  BITFIELD       bScriptedRise               : 1;
+  BITFIELD       bDuckObstacles              : 1;
+  BITFIELD       bAvoidReversing             : 1;
+  BITFIELD       bRetryPathfindingWithDriver : 1;
+  BITFIELD       bIgnoreStallZ               : 1;
+  BITFIELD       bDoExtraNetRelevancyTraces  : 1;
+  TArray_FVector ExitPositions;
+  float          ExitRadius;
+  FVector        ExitOffset;
+  float          Steering;
+  float          Throttle;
+  float          Rise;
+  FVector        TargetLocationAdjustment;
+  float          DriverDamageMult;
+  float          MomentumMult;
+  UClass        *CrushedDamageType;  /** Class<DamageType> */
+  float          MinCrushSpeed;
+  float          ForceCrushPenetration;
+  BYTE           StuckCount;
+  float          ThrottleTime;
+  float          StuckTime;
+  float          OldSteering;
+  float          OnlySteeringStartTime;
+  float          OldThrottle;
+  float          AIMoveCheckTime;
+  float          VehicleMovingTime;
+  float          TurnTime;
+}; assert_size(AVehicle, 1800);
 
 /* ---------------------------------------------------------- AWillowInteractiveObject ---------------------------------------------------------- */
 
@@ -32072,8 +33221,7 @@ struct AWillowPawn {
   FVector                               LookAtOffset;
   float                                 LookAtSpeedOverride;
   UWillowAnimNodeAimOffset             *AimOffset;
-  /* TODO: WillowSkelControl_LookAtActor */
-  void                                 *HeadLookAt;
+  UWillowSkelControl_LookAtActor       *HeadLookAt;
   int                                   LastAnimSetsCount;
   TArray_UAnimSetPtr                    WeaponAnimSets;
   int                                   DesiredMeshYawOffset;
@@ -32235,29 +33383,27 @@ struct AWillowPawn {
 /* ---------------------------------------------------------- AWillowAIPawn ---------------------------------------------------------- */
 
 struct native FRagdollDeathImpulseStruct {
-  FVector Impulse;
-  FVector Offset;
-  FName BoneName;
+  FVector  Impulse;
+  FVector  Offset;
+  FName    BoneName;
   BITFIELD VelocityRatherThanForce             : 1;
   BITFIELD TransformImpulseByVelocityDirection : 1;
 };
 struct native FStaggerStateData {
-  BITFIELD bIsStaggered    : 1;
-  BITFIELD bIsUnstaggering : 1;
-  BITFIELD bForced         : 1;
-  /** EStaggerState */
-  EStaggerState State;
-  float StaggerStartTime;
-  float StaggerEndTime;
-  float StaggerEndRagdollTime;
-  float StaggerRecoveryStartTime;
-  float NextUnstaggerCheckTime;
-  UPhysicalMaterial *PreviousOverridePhysicalMaterial;
-  /** ERBCollisionChannel */
-  ERBCollisionChannel PreviousCollisionChannel;
+  BITFIELD             bIsStaggered    : 1;
+  BITFIELD             bIsUnstaggering : 1;
+  BITFIELD             bForced         : 1;
+  EStaggerState        State;
+  float                StaggerStartTime;
+  float                StaggerEndTime;
+  float                StaggerEndRagdollTime;
+  float                StaggerRecoveryStartTime;
+  float                NextUnstaggerCheckTime;
+  UPhysicalMaterial   *PreviousOverridePhysicalMaterial;
+  ERBCollisionChannel  PreviousCollisionChannel;
   UPrimitiveComponent *PreviousCollisionComponent;
-  APawn *StaggerInstigator;
-  int RestaggeredCount;
+  APawn               *StaggerInstigator;
+  int                  RestaggeredCount;
 };
 struct native FWillowCoverState {
   FName                         Action;
@@ -32265,16 +33411,16 @@ struct native FWillowCoverState {
   UWillowCoverStanceDefinition *Stance;
 };
 struct native FPerchStateData {
-  FName AttachmentName;
-  UStaticMesh *StaticMesh;
+  FName          AttachmentName;
+  UStaticMesh   *StaticMesh;
   USkeletalMesh *SkelMesh;
-  FVector LocOffset;
-  FRotator RotOffset;
-  float Scale;
-  AActor *Actor;
+  FVector        LocOffset;
+  FRotator       RotOffset;
+  float          Scale;
+  AActor        *Actor;
 };
 struct native FDamageLocationData {
-  float Time;
+  float   Time;
   FVector Location;
 };
 struct native FSplineAnimPathData {
@@ -32283,73 +33429,71 @@ struct native FSplineAnimPathData {
   BITFIELD      bReverse : 1;
 };
 struct AWillowAIPawn {
-  AWillowPawn                       Super;
-  VfTable                           IIMissionDirector;
-  VfTable                           IIFocusable;
-  VfTable                           IITimerBehavior;
-  VfTable                           IICustomizable;
-  TArray_UCylinderComponentPtr      SecondaryCylinders;
-  UPrimitiveComponent              *LastEncroachedPrimitive;
-  AWillowMind                      *MyWillowMind;
-  APopulationPoint                 *MySpawnPoint;
-  UWillowClanDefinition            *ClanDef;
-  AWillowAIPawn                    *SpawnParent;
-  int                               ExpLevel;
-  int                               GameStageForSpawnedInventory;
-  int                               AwesomeLevel;
-  float                             ExperiencePointMultiplier;
-  float                             ExperiencePointMultiplierBaseValue;
-  TArray_UAttributeModifierPtr      ExperiencePointMultiplierModifierStack;
-  int                               NumLevelUps;
-  FName                             MountedInstanceDataName;
-  EAITransformed                    TransformType;
-  BYTE                              bInjured;
-  BYTE                              bUsable[2];
-  BYTE                              bCostsToUse[2];
-  ECurrencyType                     CostsToUseType[2];
-  UAIClassDefinition               *AIClass;
-  BITFIELD                          bMigratedAIClass             : 1;
-  BITFIELD                          bMigratedAIClass2            : 1;
-  BITFIELD                          bOverrideAutoAimRange        : 1;
-  BITFIELD                          bOverrideAutoAimOrigin       : 1;
-  BITFIELD                          bDefaultInventoryAdded       : 1;
-  BITFIELD                          bDebugUsingAIInspector       : 1;
-  BITFIELD                          DoesVehicleAllowMeToDropLoot : 1;
-  BITFIELD                          bLeaping                     : 1;
-  BITFIELD                          bDodging                     : 1;
-  BITFIELD                          bDodgeLeft                   : 1;
-  BITFIELD                          bDodgeProjectile             : 1;
-  BITFIELD                          bIsCharging                  : 1;
-  BITFIELD                          bInKnockback                 : 1;
-  BITFIELD                          bIsPatrolling                : 1;
-  BITFIELD                          bPerchAttached               : 1;
-  BITFIELD                          bSkelUpdate_SkipWhileIdle    : 1;
-  BITFIELD                          bCurrentlyThrottled          : 1;
-  BITFIELD                          bHideInfoOnHud               : 1;
-  BITFIELD                          bPlayingRotationAudio        : 1;
-  BITFIELD                          bDisableServerRotation       : 1;
-  BITFIELD                          bAwardedExperienceForKill    : 1;
-  BITFIELD                          bHeadLookOnHold              : 1;
-  float                             AutoAimRangeOverride;
-  FVector                           AutoAimOriginOverride;
-  UMaterialInstanceConstant        *DebugPawnMarkerInst;
-  URB_BodyInstance                 *PhysicsVehicleCollisionBody;
-  URB_BodySetup                    *PhysicsVehicleCollisionBodySetup;
-  /* TODO: Vehicle */
-  void                             *LastRunOverByVehicle;
-  int                               LastRunOverByWheelIndex;
-  float                             LastRunOverByTime;
-  TArray_FRagdollDeathImpulseStruct RagdollDeathExtraImpulses;
-  UStatusEffectDefinition          *RagdollDeathExtraStatusEffect;
-  AWillowPlayerController          *PlayerMaster;
-  FString                           MasteredDisplayName;
-  APlayerReplicationInfo           *PlayerMasterPRI;
-  AWillowPlayerController          *ThoughtlockMaster;
-  float                             EnteredVehicleTime;
-  float                             ExitedVehicleTime;
-  FStaggerStateData                 StaggerState;
-  /* TODO: WillowStaggerAnimNodeBlend */
-  void                              *StaggerRecoveryBlend;
+  AWillowPawn                        Super;
+  VfTable                            IIMissionDirector;
+  VfTable                            IIFocusable;
+  VfTable                            IITimerBehavior;
+  VfTable                            IICustomizable;
+  TArray_UCylinderComponentPtr       SecondaryCylinders;
+  UPrimitiveComponent               *LastEncroachedPrimitive;
+  AWillowMind                       *MyWillowMind;
+  APopulationPoint                  *MySpawnPoint;
+  UWillowClanDefinition             *ClanDef;
+  AWillowAIPawn                     *SpawnParent;
+  int                                ExpLevel;
+  int                                GameStageForSpawnedInventory;
+  int                                AwesomeLevel;
+  float                              ExperiencePointMultiplier;
+  float                              ExperiencePointMultiplierBaseValue;
+  TArray_UAttributeModifierPtr       ExperiencePointMultiplierModifierStack;
+  int                                NumLevelUps;
+  FName                              MountedInstanceDataName;
+  EAITransformed                     TransformType;
+  BYTE                               bInjured;
+  BYTE                               bUsable[2];
+  BYTE                               bCostsToUse[2];
+  ECurrencyType                      CostsToUseType[2];
+  UAIClassDefinition                *AIClass;
+  BITFIELD                           bMigratedAIClass             : 1;
+  BITFIELD                           bMigratedAIClass2            : 1;
+  BITFIELD                           bOverrideAutoAimRange        : 1;
+  BITFIELD                           bOverrideAutoAimOrigin       : 1;
+  BITFIELD                           bDefaultInventoryAdded       : 1;
+  BITFIELD                           bDebugUsingAIInspector       : 1;
+  BITFIELD                           DoesVehicleAllowMeToDropLoot : 1;
+  BITFIELD                           bLeaping                     : 1;
+  BITFIELD                           bDodging                     : 1;
+  BITFIELD                           bDodgeLeft                   : 1;
+  BITFIELD                           bDodgeProjectile             : 1;
+  BITFIELD                           bIsCharging                  : 1;
+  BITFIELD                           bInKnockback                 : 1;
+  BITFIELD                           bIsPatrolling                : 1;
+  BITFIELD                           bPerchAttached               : 1;
+  BITFIELD                           bSkelUpdate_SkipWhileIdle    : 1;
+  BITFIELD                           bCurrentlyThrottled          : 1;
+  BITFIELD                           bHideInfoOnHud               : 1;
+  BITFIELD                           bPlayingRotationAudio        : 1;
+  BITFIELD                           bDisableServerRotation       : 1;
+  BITFIELD                           bAwardedExperienceForKill    : 1;
+  BITFIELD                           bHeadLookOnHold              : 1;
+  float                              AutoAimRangeOverride;
+  FVector                            AutoAimOriginOverride;
+  UMaterialInstanceConstant         *DebugPawnMarkerInst;
+  URB_BodyInstance                  *PhysicsVehicleCollisionBody;
+  URB_BodySetup                     *PhysicsVehicleCollisionBodySetup;
+  AVehicle                          *LastRunOverByVehicle;
+  int                                LastRunOverByWheelIndex;
+  float                              LastRunOverByTime;
+  TArray_FRagdollDeathImpulseStruct  RagdollDeathExtraImpulses;
+  UStatusEffectDefinition           *RagdollDeathExtraStatusEffect;
+  AWillowPlayerController           *PlayerMaster;
+  FString                            MasteredDisplayName;
+  APlayerReplicationInfo            *PlayerMasterPRI;
+  AWillowPlayerController           *ThoughtlockMaster;
+  float                              EnteredVehicleTime;
+  float                              ExitedVehicleTime;
+  FStaggerStateData                  StaggerState;
+  UWillowStaggerAnimNodeBlend       *StaggerRecoveryBlend;
   BYTE                               pad_align16__00[4];
   FRigidBodyState                    RBState;
   BYTE                               pad_align16__01[8];
@@ -32399,8 +33543,7 @@ struct AWillowAIPawn {
   float                              CachedCrawlerFloorAdjustHeight;
   float                              RevivePct;
   FRotator                           ServerRotation;
-  /* TODO: WillowClientNavigationHandle */
-  void                              *ClientNavigationHandle;
+  UWillowClientNavigationHandle     *ClientNavigationHandle;
   int                                NameListIndex;
 };
 /* This size is correct as we currently manually align to 16 internally,
@@ -32641,6 +33784,14 @@ struct UFont {
   float                  ScalingFactor;
 }; assert_size(UFont, 336);
 
+/* ---------------------------------------------------------- UMultiFont ---------------------------------------------------------- */
+
+struct UMultiFont {
+  UFont        Super;
+  TArray_FLOAT ResolutionTestTable;
+}; assert_size(UMultiFont, 348);
+
+/* ---------------------------------------------------------- FViewportClient ---------------------------------------------------------- */
 
 typedef struct FViewport  FViewport;
 typedef struct {
@@ -34393,6 +35544,12 @@ struct ULevelStreaming {
   int                             GridPosition[3];
 }; assert_size(ULevelStreaming, 152);
 
+/* ---------------------------------------------------------- ULevelStreamingPersistent ---------------------------------------------------------- */
+
+struct ULevelStreamingPersistent {
+  ULevelStreaming Super;
+}; assert_size(ULevelStreamingPersistent, 152);
+
 /* ---------------------------------------------------------- ULevelStreamingAlwaysLoaded ---------------------------------------------------------- */
 
 struct ULevelStreamingAlwaysLoaded {
@@ -34657,80 +35814,50 @@ struct FStringOutputDevice {
 // 	virtual ~FDebuggerWatch();
 // };
 
-
-/*-----------------------------------------------------------------------------
-	UDebuggerCore.
------------------------------------------------------------------------------*/
+/* ---------------------------------------------------------- UDebuggerCore ---------------------------------------------------------- */
 
 struct UDebuggerCore {
   UDebugger Super;
-	/** the list of user watch value expressions */
-	/* TArray<FDebuggerWatch> */ TArray_void Watches;
-
-	/** When evaluting watch values for arrays, tracks the index of the element currently being evaluated */
-	INT						ArrayMemberIndex;
-
-	/** the location in the debugger's callstack current being used for evaluating watch variables */
-	INT						CurrentStackPosition;
-
-	/** Whether the UDebugger is currently attached to the game */
-	UBOOL					bAttached;
-
-	/** Whether the UDebugger is allowed to process debug opcodes */
-	UBOOL					bProcessDebugInfo;
-
-	/** TRUE when the UDebugger is waiting for user input */
-	UBOOL					bIsDebugging;
-
-	/** TRUE when the user has closed the debuger via the UI */
-	UBOOL					bIsClosing;
-
-	/** Indicates that the engine detected an "accessed none" error; relevant only if bBreakOnNone is enabled */
-	UBOOL					bAccessedNone;
-
-	/** Controls whether the UDebugger will break when an "accessed none" error occurs */
-	UBOOL					bBreakOnNone;
-
-	/** Indicates that the UDebugger should break immediately */
-	UBOOL					bBreakASAP;
-
-	/** The UDebugger's log output device */
-	FDebuggerLog*			DebuggerLog;
-
-	/** Used for generating variable watch expression evaluation error messages */
-	FStringOutputDevice	ErrorDevice;
-
-	/** The state that the UDebugger will switch to the next time it receives a debug opcode */
+	/* TODO: TArray_FDebuggerWatch */
+  TArray_void         Watches;               /** The list of user watch value expressions. */
+	int                 ArrayMemberIndex;      /** When evaluting watch values for arrays, tracks the index of the element currently being evaluated */
+	int                 CurrentStackPosition;  /** the location in the debugger's callstack current being used for evaluating watch variables */
+	UBOOL               bAttached;             /** Whether the UDebugger is currently attached to the game */
+	UBOOL               bProcessDebugInfo;     /** Whether the UDebugger is allowed to process debug opcodes */
+	UBOOL               bIsDebugging;          /** TRUE when the UDebugger is waiting for user input */
+	UBOOL               bIsClosing;            /** TRUE when the user has closed the debuger via the UI */
+	UBOOL               bAccessedNone;         /** Indicates that the engine detected an "accessed none" error; relevant only if bBreakOnNone is enabled */
+	UBOOL               bBreakOnNone;          /** Controls whether the UDebugger will break when an "accessed none" error occurs */
+	UBOOL               bBreakASAP;            /** Indicates that the UDebugger should break immediately */
+	FDebuggerLog       *DebuggerLog;           /** The UDebugger's log output device */
+	FStringOutputDevice	ErrorDevice;           /** Used for generating variable watch expression evaluation error messages */
   /* TODO: FDebuggerState */
-	struct FDebuggerState *PendingState;
-
-	/** Manages all breakpoints */
+	void               *PendingState;          /** The state that the UDebugger will switch to the next time it receives a debug opcode */
   /* TODO: FBreakpointManager */
-	struct FBreakpointManager *BreakpointManager;
-
-	/** The list of stack nodes currently being debugged */
+	void               *BreakpointManager;     /** Manages all breakpoints */
   /* TODO: FCallStack */
-	struct FCallStack *CallStack;
-
-	/**
-	 * Displays the Udebugger output; processes input from the user and routes that input to the UDebugger engine.
-	 */
-	UDebuggerInterface*		Interface;
-
+	void               *CallStack;             /** The list of stack nodes currently being debugged */
+	UDebuggerInterface *Interface;             /** Displays the Udebugger output; processes input from the user and routes that input to the UDebugger engine. */
   /**
 	 * The state the UDebugger is currently in.  States determine how the UDebugger behaves; the most important states are:
 	 *	DSIdleState: UDebugger is attached and the game is running normally
 	 *	DSWaitForInput: Game is paused and UDebugger is currently in interactive mode, waiting for user input (i.e. step into, out of)
 	 *	DSStep*: Game is running normally but UDebugger will automatically pause when a certain class/line is reached.
 	 */
-	struct FDebuggerState *CurrentState;
-
-	INT MaxObjectRecursion, CurrentObjectRecursion;
-	INT MaxStructRecursion, CurrentStructRecursion;
-	INT MaxClassRecursion, CurrentClassRecursion;
-	INT MaxStaticArrayRecursion, CurrentStaticArrayRecursion;
-	INT MaxDynamicArrayRecursion, CurrentDynamicArrayRecursion;
+	void *CurrentState;
+	int   MaxObjectRecursion;
+  int   CurrentObjectRecursion;
+	int   MaxStructRecursion;
+  int   CurrentStructRecursion;
+	int   MaxClassRecursion;
+  int   CurrentClassRecursion;
+	int   MaxStaticArrayRecursion;
+  int   CurrentStaticArrayRecursion;
+	int   MaxDynamicArrayRecursion;
+  int   CurrentDynamicArrayRecursion;
 }; assert_size(UDebuggerCore, 144);
+
+/* ---------------------------------------------------------- UDebuggerInterface ---------------------------------------------------------- */
 
 typedef struct {
   /**
@@ -34924,19 +36051,17 @@ typedef struct FSystemSettings FSystemSettings;
 
 /* Helper structure containing all relevant information for streaming. */
 struct FStreamingViewInfo {
-	/** View origin */
-	FVector ViewOrigin;
-	/** Screen size, not taking FOV into account */
-	float	ScreenSize;
-	/** Screen size, taking FOV into account */
-	float	FOVScreenSize;
+	FVector ViewOrigin;     /** View origin. */
+	float	  ScreenSize;     /** Screen size, not taking FOV into account. */
+	float	  FOVScreenSize;  /** Screen size, taking FOV into account. */
 };
 
 /* ---------------------------------------------------------- FStreamingManagerBase ---------------------------------------------------------- */
 
-#define VFTB_FN(ret, name)         ret (__thiscall *name)(FStreamingManagerBase *)
-#define VFTB_FN_VA(ret, name, ...) ret (__thiscall *name)(FStreamingManagerBase *, __VA_ARGS__)
 typedef struct {
+  #define VFTB_FN(ret, name)         ret (__thiscall *name)(FStreamingManagerBase *)
+  #define VFTB_FN_VA(ret, name, ...) ret (__thiscall *name)(FStreamingManagerBase *, __VA_ARGS__)
+
   /** Virtual destructor */
   VFTB_FN(void, Dtor);
 
@@ -35007,10 +36132,10 @@ typedef struct {
 	VFTB_FN_VA(void, RemoveStreamingTexture, UTexture2D* Texture );
 
 	/** Called when an actor is spawned. */
-	VFTB_FN_VA(void, NotifyActorSpawned, AActor* Actor );
+	VFTB_FN_VA(void, NotifyActorSpawned, AActor *Actor);
 
 	/** Called when a spawned actor is destroyed. */
-	VFTB_FN_VA(void, NotifyActorDestroyed, AActor* Actor );
+	VFTB_FN_VA(void, NotifyActorDestroyed, AActor *Actor);
 
 	/**
 	 * Called when a primitive is attached to an actor or another component.
@@ -35018,7 +36143,7 @@ typedef struct {
 	 *
 	 * @param InPrimitive	Newly attached dynamic/spawned primitive
 	 */
-	VFTB_FN_VA(void, NotifyPrimitiveAttached, const UPrimitiveComponent* Primitive, EDynamicPrimitiveType DynamicType );
+	VFTB_FN_VA(void, NotifyPrimitiveAttached, const UPrimitiveComponent *Primitive, EDynamicPrimitiveType DynamicType);
 
 	/** Called when a primitive is detached from an actor or another component. */
 	VFTB_FN_VA(void, NotifyPrimitiveDetached, const UPrimitiveComponent* Primitive );
@@ -35031,23 +36156,20 @@ typedef struct {
 	VFTB_FN_VA(void, NotifyPrimitiveUpdated, const UPrimitiveComponent* Primitive );
 
 	/** Returns the number of resources that currently wants to be streamed in. */
-	VFTB_FN(INT, GetNumWantingResources);
+	VFTB_FN(int, GetNumWantingResources);
+  #undef VFTB_FN
+  #undef VFTB_FN_VA
 } VfTable__FStreamingManagerBase;
-#undef VFTB_FN
-#undef VFTB_FN_VA
 /* Pure virtual base class of a streaming manager. */
 struct FStreamingManagerBase {
   VfTable__FStreamingManagerBase *vftable;
-  /** Number of resources that currently wants to be streamed in. */
-	INT NumWantingResources;
+	int                             NumWantingResources; /** Number of resources that currently wants to be streamed in. */
 };
 
 /* ---------------------------------------------------------- FStreamingManagerCollection ---------------------------------------------------------- */
 
-/**
- * Streaming manager collection, routing function calls to streaming managers that have been added
- * via AddStreamingManager.
- */
+/* Streaming manager collection, routing function calls to
+ * streaming managers that have been added via AddStreamingManager. */
 struct FStreamingManagerCollection {
   FStreamingManagerBase Super;
 
@@ -35063,10 +36185,297 @@ struct FStreamingManagerCollection {
 	float LoadMapTimeLimit;
 };
 
+/* ---------------------------------------------------------- FStreamingManagerTexture ---------------------------------------------------------- */
+
 /**
- * Streaming manager dealing with textures.
+ * Structure containing all information needed for determining the screen space
+ * size of an object/ texture instance.
  */
-typedef struct FStreamingManagerTexture  FStreamingManagerTexture;
+struct FStreamableTextureInstance4 {
+	FVector4 BoundingSphereX;       /** X coordinates for the bounding sphere origin of 4 texture instances */
+	FVector4 BoundingSphereY;       /** Y coordinates for the bounding sphere origin of 4 texture instances */
+	FVector4 BoundingSphereZ;       /** Z coordinates for the bounding sphere origin of 4 texture instances */
+	FVector4 BoundingSphereRadius;  /** Sphere radii for the bounding sphere of 4 texture instances */
+	FVector4 TexelFactor;           /** Texel scale factors for 4 texture instances */
+};
+DECLARE_A_TMAP(UTexture2DPtr, TArray_FStreamableTextureInstance4);
+/** Serialized ULevel information about dynamic texture instances. */
+struct FDynamicTextureInstance {
+  FStreamableTextureInstance Super;
+	UTexture2D                *Texture;         /** Texture that is used by a dynamic UPrimitiveComponent. */
+	UBOOL                      bAttached;       /** Whether the primitive that uses this texture is attached to the scene or not. */
+	FLOAT                      OriginalRadius;  /** Original bounding sphere radius, at the time the TexelFactor was calculated originally. */
+};
+struct FSpawnedTextureInstance {
+	UTexture2D *Texture2D;       /** Texture that is used by a dynamic UPrimitiveComponent. */
+	float       TexelFactor;     /** Texture specific texel scale factor  */
+	float       OriginalRadius;  /** Original bounding sphere radius, at the time the TexelFactor was calculated originally. */
+};
+/**
+ * Helper class for tracking upcoming changes to the texture memory,
+ * and how much of the currently allocated memory is used temporarily for streaming.
+ */
+struct FStreamMemoryTracker {
+	volatile int PendingStreamIn;    /** Stream-in memory that hasn't been allocated yet. */
+	volatile int PendingTempMemory;  /** Temp memory that hasn't been allocated yet. */
+	volatile int CurrentStreamOut;   /** Stream-out memory that is allocated but hasn't been freed yet. */
+	volatile int CurrentTempMemory;  /** Temp memory that is allocated, but not freed yet. */
+};
+/** Self-contained structure to manage a streaming texture, possibly on a separate thread. */
+struct FStreamingTexture {
+	UTexture2D *Texture;                /** Texture to manage. */
+	int         MipCount;               /** Cached number of mip-maps in the UTexture2D mip array (including the base mip) */
+	int         ResidentMips;           /** Cached number of mip-maps in memory (including the base mip) */
+	int         RequestedMips;          /** Cached number of mip-maps requested by the streaming system. */
+	int         WantedMips;             /** Cached number of mip-maps we would like to have in memory. */
+	int         DynamicWantedMips;      /** Number of wanted mip-maps for dynamic primitives. */
+  #if STATS_FAST
+	int         PerfectWantedMips;      /** Legacy: Same as WantedMips, but not clamped by fudge factor. */
+	int         MaxAllowedOptimalMips;  /** Same as MaxAllowedMips, but not clamped by the -reducepoolsize command line option. */
+	int         MostResidentMips;       /** Most number of mip-levels this texture has ever had resident in memory. */
+  #endif
+	int         MinAllowedMips;                           /** Minimum number of mip-maps that this texture must keep in memory. */
+	int         MaxAllowedMips;                           /** Maximum number of mip-maps that this texture can have in memory. */
+	int         TextureSizes[MAX_TEXTURE_MIP_COUNT + 1];  /** Cached memory sizes for each possible mipcount. */
+	int         ForceLoadRefCount;                        /** Ref-count for how many ULevels want this texture fully-loaded. */
+	/** Cached texture group. */
+	TextureGroup LODGroup;
+	int          TextureLODBias;         /** Cached LOD bias. */
+	int          NumMipTailLevels;       /** Cached number of mip-maps in the mip-tail (on Xbox). */
+	int          NumCinematicMipLevels;  /** Cached number of cinematic (high-resolution) mip-maps. Normally not streamed in, unless the texture is forcibly fully loaded. */
+	float        LastRenderTime;         /** Last time this texture was rendered, 0-based from GStartTime. */
+	float        MinDistance;            /** Distance to the closest instance of this texture, in world space units. Defaults to a specific value for non-staticmesh textures. */
+	float        DynamicMinDistance;     /** Distance to the closest dynamic instance of this texture. */
+	/**
+	 * Temporary boost of the streaming distance factor.
+	 * This factor is automatically reset to 1.0 after it's been used for mip-calculations.
+	 */
+	float BoostFactor;
+	BITFIELD bForceFullyLoad           : 1;  /** Whether the texture should be forcibly fully loaded. */
+	BITFIELD bReadyForStreaming        : 1;  /** Whether the texture is ready to be streamed in/out (cached from IsReadyForStreaming()). */
+	BITFIELD bInFlight                 : 1;  /** Whether the texture is currently being streamed in/out. */
+	BITFIELD bIsStreamingLightmap      : 1;  /** Whether this is a streaming lightmap or shadowmap (cached from IsStreamingLightmap()). */
+	BITFIELD bUsesStaticHeuristics     : 1;  /** Whether this texture uses StaticTexture heuristics. */
+	BITFIELD bUsesDynamicHeuristics    : 1;  /** Whether this texture uses DynamicTexture heuristics. */
+	BITFIELD bUsesLastRenderHeuristics : 1;  /** Whether this texture uses LastRenderTime heuristics. */
+	BITFIELD bUsesForcedHeuristics     : 1;  /** Whether this texture uses ForcedIntoMemory heuristics. */
+	BITFIELD bNeedPrimitiveUpdate      : 1;  /** Whether this texture has been replaced in a material and all primitives using it call NotifyPrimitiveUpdated(). */
+};
+/** Thread-safe helper struct for per-level information. */
+struct FStreamingManagerTexture__FThreadLevelData {
+  /** Whether this level has been removed.  Default = FALSE */
+  UBOOL bRemove;
+  /** Texture instances used in this level, stored in SIMD-friendly format. */
+  _TMAP_NAME(UTexture2DPtr, TArray_FStreamableTextureInstance4) TextureInstances;
+};
+_DECL_TKEY_VALUE_PAIR(ULevelPtr, FStreamingManagerTexture__FThreadLevelData);
+typedef _TKEY_VALUE_PAIR_NAME(ULevelPtr, FStreamingManagerTexture__FThreadLevelData) FLevelData;
+_DECL_TARRAY(FLevelData);
+/** Texture instance data for a spawned primitive. Stored in the ThreadSettings.SpawnedPrimitives map. */
+struct FStreamingManagerTexture__FSpawnedPrimitiveData {
+  TArray_FSpawnedTextureInstance TextureInstances;  /** Texture instances used by primitive. */
+  FSphere                        BoundingSphere;    /** Bounding sphere of primitive. */
+  EDynamicPrimitiveType          DynamicType;       /** Dynamic primitive tracking type. */
+  UBOOL                          bAttached;         /** Whether the primitive that uses this texture is currently attached to the scene or not. */
+  UBOOL                          bPendingUpdate;    /** Set to TRUE when it's marked for Attach or Detach. Don't touch this primitive until it's been fully updated. */
+};
+DECLARE_A_TMAP(UPrimitiveComponentPtr, FStreamingManagerTexture__FSpawnedPrimitiveData);
+struct FStreamingManagerTexture__FPendingPrimitiveType {
+  EDynamicPrimitiveType DynamicType;
+  UBOOL                 bShouldTrack;
+};
+DECLARE_A_TMAP(UPrimitiveComponentPtr, FStreamingManagerTexture__FPendingPrimitiveType);
+/** Thread-safe helper struct for streaming information. */
+struct FStreamingManagerTexture__FThreadSettings {
+  /** Cached from the system settings. */
+  int NumStreamedMips[TEXTUREGROUP_MAX];
+  /** Cached from each ULevel. */
+  TArray_FLevelData LevelData;
+  /** Cached from FStreamingManagerBase. */
+  TArray_FStreamingViewInfo ViewInfos;
+  /** Maps spawned primitives to texture instances. Owns the instance data. */
+  _TMAP_NAME(UPrimitiveComponentPtr, FStreamingManagerTexture__FSpawnedPrimitiveData) SpawnedPrimitives;
+};
+/** Streaming manager dealing with textures. */
+struct FStreamingManagerTexture {
+  FStreamingManagerBase Super;
+  /** Number of streaming texture instances (including lightmaps). */
+	DWORD NumStreamingTextureInstances;
+	/** Number of streaming lightmap instances. */
+	DWORD NumStreamingLightmapInstances;
+  /** Thread-safe helper data for streaming information. */
+  FStreamingManagerTexture__FThreadSettings ThreadSettings;
+
+  /** All streaming UTexture2D objects. */
+  TArray_FStreamingTexture StreamingTextures;
+
+  /** Index of the StreamingTexture that will be updated next by UpdateStreamingTextures(). */
+  INT CurrentUpdateStreamingTextureIndex;
+
+  /** Remaining ticks to disregard world textures. */
+  INT RemainingTicksToDisregardWorldTextures;
+
+  /** Next sync, dump texture group stats. */
+	UBOOL	bTriggerDumpTextureGroupStats;
+
+	/** Whether to the dumped texture group stats should contain extra information. */
+	UBOOL	bDetailedDumpTextureGroupStats;
+	/** Next sync, dump all information we have about a certain texture. */
+	UBOOL	bTriggerInvestigateTexture;
+	/** Name of a texture to investigate. Can be partial name. */
+	FString	InvestigateTextureName;
+	/** Async work for calculating priorities for all textures. */
+	FAsyncTask/* <FAsyncTextureStreaming>* */	AsyncWork;
+	/** New textures, before they've been added to the thread-safe container. */
+	TArray_UTexture2DPtr PendingStreamingTextures;
+  /** Textures on newly spawned primitives, before they've been added to the thread-safe container. */
+	_TMAP_NAME(UPrimitiveComponentPtr, FStreamingManagerTexture__FPendingPrimitiveType) PendingSpawnedPrimitives;
+
+	/** New levels, before they've been added to the thread-safe container. */
+	TArray_ULevelPtr PendingLevels;
+
+	/** Stages [0,N-2] is non-threaded data collection, Stage N-1 is wait-for-AsyncWork-and-finalize. */
+	INT						ProcessingStage;
+
+	/** Total number of processing stages (N). */
+	INT						NumTextureProcessingStages;
+
+	/** Maximum amount of temp memory used for streaming, at any given time. */
+	INT						MaxTempMemoryUsed;
+
+	/** Whether we're using the new priority-based streaming system or not. */
+	UBOOL					bUsePriorityStreaming;
+
+	/** Whether we support the TogglePriorityStreaming exec command to switch streaming system at run-time. */
+	UBOOL					bAllowSwitchingStreamingSystem;
+
+	/** Whether to support texture instance streaming for dynamic (movable/spawned) objects. */
+	UBOOL					bUseDynamicStreaming;
+
+	FLOAT					BoostPlayerTextures;
+
+	/** Array of texture streaming objects to use during update. */
+	/* TODO: TArray_FStreamingHandlerTextureBasePtr */
+  TArray_voidPtr TextureStreamingHandlers;
+
+	/** Remaining ticks to suspend texture requests for. Used to sync up with async memory allocations. */
+	INT	RemainingTicksToSuspendActivity;
+
+	/** Fudge factor used to balance memory allocations/ use. */
+	FLOAT FudgeFactor;
+	/** Fudge factor rate of change. */
+	FLOAT FudgeFactorRateOfChange;
+	/** Last time NotifyLevelChange was called. */
+	DOUBLE LastLevelChangeTime;
+	/** Whether to use MinRequestedMipsToConsider limit. */
+	UBOOL bUseMinRequestLimit;
+	/** Time of last full iteration over all textures. */
+	FLOAT LastFullIterationTime;
+	/** Time of current iteration over all textures. */
+	FLOAT CurrentFullIterationTime;
+
+	// Config variables used by the new streaming system.
+	/** Amount of memory to leave free in the texture pool. */
+	INT MemoryMargin;
+
+	// Config variables used by the old streaming system.
+	/** Limit for change of fudge factor range to avoid hysteresis. */
+	INT MemoryHysteresisLimit;
+	/** Determines when to fiddle with fudge factor to stream out miplevels. */
+	INT	MemoryDropMipLevelsLimit;
+	/** Determines when to start disallowing texture miplevel increases. */
+	INT MemoryStopIncreasingLimit;
+	/** Limit when stop issuing new streaming requests altogether. */
+	INT	MemoryStopStreamingLimit;
+	/** Minimum value of fudge factor. A fudge factor of 1 means neutral though with sufficient memory we can prefetch textures. */
+	FLOAT MinFudgeFactor;
+	/** Rate of change to use when increasing fudge factor */
+	FLOAT FudgeFactorIncreaseRateOfChange;
+	/** Rate of change to use when decreasing fudge factor */
+	FLOAT FudgeFactorDecreaseRateOfChange;
+	/** 
+	 * Minimum number of requested mips at which texture stream-in request is still going to be considered. 
+	 * This is used by the texture priming code to prioritize large request for higher miplevels before smaller
+	 * ones for background textures to avoid seeking and texture popping.
+	 */
+	INT MinRequestedMipsToConsider;
+	/** Minimum amount of time in seconds to guarantee MinRequestedMipsToConsider to be respected. */
+	FLOAT MinTimeToGuaranteeMinMipCount;
+	/** Maximum amount of time in seconds to guarantee MinRequestedMipsToConsider to be respected. */
+	FLOAT MaxTimeToGuaranteeMinMipCount;
+
+	// Config variables used by both new and old streaming system
+	/** Minimum number of bytes to evict when we need to stream out textures because of a failed allocation. */
+	INT MinEvictSize;
+
+	/** If set, UpdateResourceStreaming() will only process this texture. */
+	UTexture2D *IndividualStreamingTexture;
+
+	// Stats we need to keep across frames as we only iterate over a subset of textures.
+
+	/** Number of streaming textures */
+	DWORD NumStreamingTextures;
+	/** Number of requests in cancelation phase. */
+	DWORD NumRequestsInCancelationPhase;
+	/** Number of requests in mip update phase. */
+	DWORD NumRequestsInUpdatePhase;
+	/** Number of requests in mip finalization phase. */
+	DWORD NumRequestsInFinalizePhase;
+	/** Size ot all intermerdiate textures in flight. */
+	DWORD TotalIntermediateTexturesSize;
+	/** Number of intermediate textures in flight. */
+	DWORD NumIntermediateTextures;
+	/** Size of all streaming testures. */
+	DWORD TotalStreamingTexturesSize;
+	/** Maximum size of all streaming textures. */
+	DWORD TotalStreamingTexturesMaxSize;
+	/** Total number of bytes in memory, for all streaming lightmap textures. */
+	DWORD TotalLightmapMemorySize;
+	/** Total number of bytes on disk, for all streaming lightmap textures. */
+	DWORD TotalLightmapDiskSize;
+	/** Number of mip count increase requests in flight. */
+	DWORD TotalMipCountIncreaseRequestsInFlight;
+	/** Total number of bytes in memory, if all textures were streamed perfectly with a 1.0 fudge factor. */
+	DWORD TotalOptimalWantedSize;
+	/** Total number of bytes using StaticTexture heuristics, currently in memory. */
+	DWORD TotalStaticTextureHeuristicSize;
+	/** Total number of bytes using DynmicTexture heuristics, currently in memory. */
+	DWORD TotalDynamicTextureHeuristicSize;
+	/** Total number of bytes using LastRenderTime heuristics, currently in memory. */
+	DWORD TotalLastRenderHeuristicSize;
+	/** Total number of bytes using ForcedIntoMemory heuristics, currently in memory. */
+	DWORD TotalForcedHeuristicSize;
+
+	/** Unmodified texture pool size, in bytes, as specified in the .ini file. */
+	INT OriginalTexturePoolSize;
+
+	/** Whether to collect, and optionally report, texture stats for the next run. */
+	UBOOL   bCollectTextureStats;
+	UBOOL   bReportTextureStats;
+	TArray_FString TextureStatsReport;
+
+	/** Optional string to match against the texture names when collecting stats. */
+	FString CollectTextureStatsName;
+
+	/** Whether texture streaming is paused or not. When paused, it won't stream any textures in or out. */
+	UBOOL bPauseTextureStreaming;
+	/**
+	 * Ring buffer containing all latency samples we keep track of, as measured in seconds from the time the streaming system
+	 * detects that a change is required until the data has been streamed in and the new texture is ready to be used.
+	 */
+	FLOAT LatencySamples[NUM_LATENCYSAMPLES];
+	/** Number of latency samples that have been filled in. Will stop counting when it reaches NUM_LATENCYSAMPLES. */
+	INT NumLatencySamples;
+	/** Current sample index in the ring buffer. */
+	INT LatencySampleIndex;
+	/** Average of all latency samples in the ring buffer, in seconds. */
+	FLOAT LatencyAverage;
+	/** Maximum latency measured since the start of the game.  */
+	FLOAT LatencyMaximum;
+
+	/** Total time taken for each processing stage. */
+	TArray_DOUBLE StreamingTimes;
+};
 
 struct FStatChartLine {
 	UBOOL        bHideLine;
@@ -35074,28 +36483,23 @@ struct FStatChartLine {
 	INT          DataPos;
 	FColor       LineColor;
 	FString      LineName;
-	float        YRange[2]; // [Min,Max]
+	float        YRange[2];  /** [Min,Max] */
 	float        XSpacing;
 	UBOOL        bAutoScale;
 };
 
 struct FStatChart {
-	UBOOL bHideChart;
-	UBOOL bLockScale;
-	_TMAP_NAME(FString,INT) LineNameMap;
-	TArray_FStatChartLine	Lines;
-
-	// Screen [x.y] size of chart
-	float ChartSize[2];
-
-	// Screen [x,y] origin (bottom left) of chart
-	float ChartOrigin[2];
-
-	INT     XRange;
-	UBOOL   bHideKey;
-	float   ZeroYRatio;
-	BYTE    BackgroundAlpha;
-	FString FilterString;
+	UBOOL                    bHideChart;
+	UBOOL                    bLockScale;
+	_TMAP_NAME(FString, INT) LineNameMap;
+	TArray_FStatChartLine	   Lines;
+	float                    ChartSize[2];    /** Screen [x.y] size of chart. */
+	float                    ChartOrigin[2];  /** Screen [x,y] origin (bottom left) of chart. */
+	INT                      XRange;
+	UBOOL                    bHideKey;
+	float                    ZeroYRatio;
+	BYTE                     BackgroundAlpha;
+	FString                  FilterString;
 };
 
 /**
@@ -35105,7 +36509,6 @@ struct FHitProxyId {
   /** A uniquely identifying index for the hit proxy. */
 	INT Index;
 };
-
 
 typedef struct {
   void (__thiscall *Dtor)(HHitProxy *);
@@ -35138,20 +36541,19 @@ _DECL_TREF_COUNT_PTR(HHitProxy);
 /** Entry for the transform stack which stores a matrix and its CRC for faster comparisons */
 struct FTransformEntry {
   FMatrix Matrix;
-  DWORD MatrixCRC;
+  DWORD   MatrixCRC;
 };
 
-/**
- * Region on the canvas that should be masked
- */
+/* ---------------------------------------------------------- FCanvas ---------------------------------------------------------- */
+
+/** Region on the canvas that should be masked. */
 struct FMaskRegion {
-  float X;
-  float Y;
-  float SizeX;
-  float SizeY;
+  float   X;
+  float   Y;
+  float   SizeX;
+  float   SizeY;
   FMatrix Transform;
 };
-
 typedef struct {
   void (__thiscall *Dtor)(FCanvasBaseRenderItem *);
 
@@ -35179,17 +36581,13 @@ typedef struct {
 struct FCanvasBaseRenderItem {
 	VfTable__FCanvasBaseRenderItem *vftable;
 };
-
-/**
- * Contains all of the batched elements that need to be rendered at a certain depth sort key
- */
+/** Contains all of the batched elements that need to be rendered at a certain depth sort key. */
 struct FCanvasSortElement {
   /** sort key for this set of render batch elements */
   INT DepthSortKey;
   /** list of batches that should be rendered at this sort key level */
   TArray_FCanvasBaseRenderItemPtr RenderBatchArray;
 };
-
 struct FCanvas {
 	float AlphaModulate;
   /** Current render target used by the canvas */

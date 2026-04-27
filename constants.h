@@ -635,3 +635,9 @@ static const int NUM_RULE_SLOTS = 4;
 /* ---------------------------------------------------------- AWillowMissionPickupFailsafe ---------------------------------------------------------- */
 
 static const int FailsafeCheckPeriod = 5;
+
+/* ---------------------------------------------------------- UNavigationHandle ---------------------------------------------------------- */
+
+static const float LINECHECK_GRANULARITY  = 768.f;
+static const int   NUM_PATHFINDING_PARAMS = 9;
+static const int   NumBreadCrumbs         = 10;
