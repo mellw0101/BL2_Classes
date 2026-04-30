@@ -641,3 +641,12 @@ static const int FailsafeCheckPeriod = 5;
 static const float LINECHECK_GRANULARITY  = 768.f;
 static const int   NUM_PATHFINDING_PARAMS = 9;
 static const int   NumBreadCrumbs         = 10;
+
+/* ---------------------------------------------------------- UUIListElementCellProvider ---------------------------------------------------------- */
+
+static const char *UnknownCellDataFieldName = "NAME_None";
+
+/* ---------------------------------------------------------- UPawnRelevanceUtilityFixedCost ---------------------------------------------------------- */
+
+static const float SKIP_UPDATE_TIME_RELEVANCE = .1f;
+static const float TIME_BETWEEN_IF_RELEVANT   = 3.f;

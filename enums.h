@@ -17464,3 +17464,74 @@ typedef enum ESwoopOffset : unsigned char {
   #define ESwoopOffset_MAX     SwoopOffset_MAX
 } ESwoopOffset;
 #define ESwoopOffset  ESwoopOffset
+
+/* ---------------------------------------------------------- ULightShaftComponent ! ---------------------------------------------------------- */
+
+typedef enum ELightShaftType : unsigned char {
+  LightShaft_Directional,         // 0
+  LightShaft_Spot,                // 1
+  LightShaft_Point,               // 2
+  LightShaft_MAX                  // 3
+  #define LightShaft_Directional       LightShaft_Directional
+  #define LightShaft_Spot              LightShaft_Spot
+  #define LightShaft_Point             LightShaft_Point
+  #define LightShaft_MAX               LightShaft_MAX
+  #define ELightShaftType_Directional  LightShaft_Directional
+  #define ELightShaftType_Spot         LightShaft_Spot
+  #define ELightShaftType_Point        LightShaft_Point
+  #define ELightShaftType_MAX          LightShaft_MAX
+} ELightShaftType;
+#define ELightShaftType  ELightShaftType
+
+/* ---------------------------------------------------------- UControlChannel ---------------------------------------------------------- */
+
+/** maximum size of additional buffer if this is exceeded as well, we kill the connection */
+enum { MAX_QUEUED_CONTROL_MESSAGES = 256 };
+
+/* ---------------------------------------------------------- ABehaviorVolume ! ---------------------------------------------------------- */
+
+typedef enum EBehaviorVolumeAction : unsigned char {
+  EBVA_Entry,                     // 0
+  EBVA_Exit,                      // 1
+  EBVA_Shoot,                     // 2
+  EBVA_MAX                        // 3
+  #define EBVA_Entry                   EBVA_Entry
+  #define EBVA_Exit                    EBVA_Exit
+  #define EBVA_Shoot                   EBVA_Shoot
+  #define EBVA_MAX                     EBVA_MAX
+  #define EBehaviorVolumeAction_Entry  EBVA_Entry
+  #define EBehaviorVolumeAction_Exit   EBVA_Exit
+  #define EBehaviorVolumeAction_Shoot  EBVA_Shoot
+  #define EBehaviorVolumeAction_MAX    EBVA_MAX
+} EBehaviorVolumeAction;
+#define EBehaviorVolumeAction  EBehaviorVolumeAction
+
+/* ---------------------------------------------------------- UPopulationFactoryWillowVehicle ! ---------------------------------------------------------- */
+
+typedef enum WillowVehicleRoles    : unsigned char {
+  WILLOWVEHICLEROLE_Driver,       // 0
+  WILLOWVEHICLEROLE_Gunner,       // 1
+  WILLOWVEHICLEROLE_SideClinger,  // 2
+  WILLOWVEHICLEROLE_MAX           // 3
+  #define WILLOWVEHICLEROLE_Driver        WILLOWVEHICLEROLE_Driver
+  #define WILLOWVEHICLEROLE_Gunner        WILLOWVEHICLEROLE_Gunner
+  #define WILLOWVEHICLEROLE_SideClinger   WILLOWVEHICLEROLE_SideClinger
+  #define WILLOWVEHICLEROLE_MAX           WILLOWVEHICLEROLE_MAX
+  #define WillowVehicleRoles_Driver       WILLOWVEHICLEROLE_Driver
+  #define WillowVehicleRoles_Gunner       WILLOWVEHICLEROLE_Gunner
+  #define WillowVehicleRoles_SideClinger  WILLOWVEHICLEROLE_SideClinger
+  #define WillowVehicleRoles_MAX          WILLOWVEHICLEROLE_MAX
+} WillowVehicleRoles;
+typedef enum EVehicleBalanceOption : unsigned char {
+  VEHICLEBALANCE_ForPlayers,      // 0
+  VEHICLEBALANCE_ForEnemyAI,      // 1
+  VEHICLEBALANCE_MAX              // 2
+  #define VEHICLEBALANCE_ForPlayers         VEHICLEBALANCE_ForPlayers
+  #define VEHICLEBALANCE_ForEnemyAI         VEHICLEBALANCE_ForEnemyAI
+  #define VEHICLEBALANCE_MAX                VEHICLEBALANCE_MAX
+  #define EVehicleBalanceOption_ForPlayers  VEHICLEBALANCE_ForPlayers
+  #define EVehicleBalanceOption_ForEnemyAI  VEHICLEBALANCE_ForEnemyAI
+  #define EVehicleBalanceOption_MAX         VEHICLEBALANCE_MAX
+} EVehicleBalanceOption;
+#define WillowVehicleRoles     WillowVehicleRoles
+#define EVehicleBalanceOption  EVehicleBalanceOption
