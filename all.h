@@ -1733,7 +1733,7 @@ struct FDouble {
 };
 struct FOctreeElementId {
   void *Node;
-  int ElementIndex;
+  int   ElementIndex;
 };
 struct FChunkedList_Mirror {
   void *Members;
@@ -2220,6 +2220,152 @@ struct FImplementedInterface {
   UClass *Class;                        ///< the interface class
   UProperty *PointerProperty;           ///< the pointer property that is located at the offset of the interface's vtable
 };
+
+/* ---------------------------------------------------------- UGearboxAccountActions ---------------------------------------------------------- */
+
+struct FEULAData {
+  int      Id;
+  FString  Version;
+  FString  Type;
+  FString  Title;
+  FString  Text;
+  BITFIELD bLocalSigned : 1;
+  BITFIELD bSeen        : 1;
+};
+struct UGearboxAccountActions {
+  UObject                              Super;
+  int                                  CurrentConsumeCount;
+  BYTE                                 CurrentControllerId;
+  UGearboxAccountEntitlement          *CurrentEntitlement;
+  TArray_UGearboxAccountEntitlementPtr CurrentBulkConsumeEntitlements;
+  TArray_INT                           CurrentBulkConsumeControllerIds;
+  TArray_INT                           CurrentBulkConsumeCounts;
+  FScriptDelegate                      __OnSignInGearboxAccount__Delegate;
+  FScriptDelegate                      __OnSignUpGearboxAccount__Delegate;
+  FScriptDelegate                      __OnResetPasswordGearboxAccount__Delegate;
+  FScriptDelegate                      __OnCodeRedeemed__Delegate;
+  FScriptDelegate                      __OnEntitlementConsumed__Delegate;
+}; assert_size(UGearboxAccountActions, 168);
+
+/* ---------------------------------------------------------- UFiringBehaviorManager ---------------------------------------------------------- */
+
+struct UFiringBehaviorManager {
+  UObject                    Super;
+  UFiringPattern            *CurrentFiringPattern;
+  float                      CurrentTargetExposure;
+  int                        NumShotsThisBurst;
+  FVector                    CachedTargetPoint;
+  BITFIELD                   bHasTargetPoint          : 1;
+  BITFIELD                   bSetupWithZoneCollection : 1;
+  /* TODO: FiringZoneCollectionDefinition */
+  void                      *CurrentZoneCollection;
+  /* TODO: FiringZoneDefinition */
+  void                      *CurrentZone;
+  UFiringBehaviorDefinition *CurrentBehavior;
+  int                        CurrentConditionalPattern;
+  UFiringBehaviorDefinition *DefaultFiringBehaviorDefinition;
+  UFiringPattern            *DefaultFiringPatternTemplate;
+}; assert_size(UFiringBehaviorManager, 112);
+
+/* ---------------------------------------------------------- UFiringCondition ---------------------------------------------------------- */
+
+struct UFiringCondition {
+  UObject Super;
+}; assert_size(UFiringCondition, 60);
+
+/* ---------------------------------------------------------- UFireCond_IsPlayerTarget ---------------------------------------------------------- */
+
+struct UFireCond_IsPlayerTarget {
+  UFiringCondition Super;
+}; assert_size(UFireCond_IsPlayerTarget, 60);
+
+/* ---------------------------------------------------------- UFiringPattern ---------------------------------------------------------- */
+
+struct native FFiringBehaviorBurstInfo {
+  AGearboxPawn    *Instigator;
+  AWeapon         *InstigatorWeapon;
+  AActor          *TargetActor;
+  int              NumShots;
+  float            RefireRate;
+  UMindTargetInfo *TargetInfo;
+  EWeaponFireType  FireType;
+};
+struct UFiringPattern {
+  UObject  Super;
+  BITFIELD bIsHarmlessToPawns : 1;
+  BITFIELD bAllowFakeShots    : 1;
+}; assert_size(UFiringPattern, 64);
+
+/* ---------------------------------------------------------- UFirePatt_StrafeOver ---------------------------------------------------------- */
+
+struct UFirePatt_StrafeOver {
+  UFiringPattern Super;
+  FRotator       CurrentAimRotation;
+  float          PitchDeltaPerShot;
+  float          MaxYawDeltaPerShot;
+  float          RefireRate;
+  float          LineOfShotsSpeed;
+  float          LineOfShotsEndZ;
+  float          YawDeltaRatio;
+  float          TargetPosition;
+}; assert_size(UFirePatt_StrafeOver, 104);
+
+/* ---------------------------------------------------------- UFirePatt_ShrinkingCone ---------------------------------------------------------- */
+
+struct UFirePatt_ShrinkingCone {
+  UFiringPattern   Super;
+  float            CurrentAccuracyConeDeg;
+  FRotator         LastDesiredAim;
+  float            MaxAccuracyConeDeg;
+  float            ConeMultiplierPerShot;
+  EPointSpreadType ShotSpreadType;
+}; assert_size(UFirePatt_ShrinkingCone, 92);
+
+/* ---------------------------------------------------------- UFirePatt_Cone ---------------------------------------------------------- */
+
+struct UFirePatt_Cone {
+  UFiringPattern   Super;
+  float            ConeDegrees;
+  EPointSpreadType ShotSpreadType;
+}; assert_size(UFirePatt_Cone, 72);
+
+/* ---------------------------------------------------------- UDownload ---------------------------------------------------------- */
+
+struct UDownload {
+  UObject         Super;
+  UNetConnection *Connection;                    /** Connection */
+	int             PackageIndex;                  /** Index of package in Map. */
+	FPackageInfo   *Info;                          /** Package Info */
+	FString         DownloadParams;                /** Download params sent to the client. */
+	UBOOL           UseCompression;                /** Send compressed files to the client. */
+	FArchive       *RecvFileAr;                    /** File being received. */
+	wchar_t         TempFilename[MAX_SPRINTF];     /** Filename being transfered. */
+	wchar_t         Error[256];                    /** A download error occurred. */
+	int             Transfered;                    /** Bytes transfered. */
+	int             FileSize;                      /** Size of the file being downloaded */
+	UBOOL           SkippedFile;                   /** File was skipped. */
+	UBOOL           IsCompressed;                  /** Use file compression. */
+	UBOOL           bDownloadSendsFileSizeInData;  /** If this is true, the first 4 bytes received is the filesize, followed by the actual file */
+}; assert_size(UDownload, 2672);
+
+/* ---------------------------------------------------------- UChannelDownload ---------------------------------------------------------- */
+
+struct UChannelDownload {
+  UDownload Super;
+  /* TODO: UFileChannel */
+  void     *Ch;
+}; assert_size(UChannelDownload, 2676);
+
+/* ---------------------------------------------------------- UPhysicsJumpConnection ---------------------------------------------------------- */
+
+struct UPhysicsJumpConnection {
+  UObject           Super;
+  APhysicsJumpNode *Source;
+  APhysicsJumpNode *Destination;
+  float             Speed;
+  float             Angle;
+  FVector           Velocity;
+}; assert_size(UPhysicsJumpConnection, 88);
 
 /* ---------------------------------------------------------- UMCPBase ---------------------------------------------------------- */
 
@@ -3765,8 +3911,7 @@ struct UGbxMessage {
 
 struct UGbxMessageManager {
   UObject                      Super;
-  /** IGbxMessageListener */
-  TArray_FImplementedInterface Listeners;
+  TArray_FImplementedInterface Listeners;  /** IGbxMessageListener */
   TArray_UGbxMessagePtr        MessagesToSend;
   FFlag                        SentMessagesRecently;
   float                        DistributionInterval;
@@ -4158,11 +4303,11 @@ struct UGearboxAIFactory {
 /* ---------------------------------------------------------- UGBXActorList ---------------------------------------------------------- */
 
 struct native Fs_actorList {
-  FName LevelName;
+  FName   LevelName;
   AActor *Actor;
 };
 struct UGBXActorList {
-  UObject Super;
+  UObject             Super;
   TArray_Fs_actorList ActorList;
 }; assert_size(UGBXActorList, 72);
 
@@ -4200,7 +4345,7 @@ struct UCombatMusicManager {
 /* ---------------------------------------------------------- UGBXObjectList ---------------------------------------------------------- */
 
 struct UGBXObjectList {
-  UObject Super;
+  UObject           Super;
   TArray_UObjectPtr ObjectList;
 }; assert_size(UGBXObjectList, 72);
 
@@ -4815,6 +4960,12 @@ struct UCheatManager {
   FString ViewingFrom;
   FString OwnCamera;
 }; assert_size(UCheatManager, 92);
+
+/* ---------------------------------------------------------- UGearboxCheatManager ---------------------------------------------------------- */
+
+struct UGearboxCheatManager {
+  UCheatManager Super;
+}; assert_size(UGearboxCheatManager, 92);
 
 /* ---------------------------------------------------------- UGearboxDialogManager ---------------------------------------------------------- */
 
@@ -5643,7 +5794,7 @@ struct UBehaviorEventFilterBase {
 
 struct UEventFilter_OnTakeDamage {
   UBehaviorEventFilterBase Super;
-  float DamageThreshold;
+  float                    DamageThreshold;
 }; assert_size(UEventFilter_OnTakeDamage, 68);
 
 /* ---------------------------------------------------------- USkeletalMesh ---------------------------------------------------------- */
@@ -6077,6 +6228,14 @@ struct ULocalMessage {
   FColor            DrawColor;
   ELocalMessageType MsgType;
 }; assert_size(ULocalMessage, 76);
+
+/* ---------------------------------------------------------- UChallengeFeedbackMessage ---------------------------------------------------------- */
+
+struct UChallengeFeedbackMessage {
+  ULocalMessage Super;
+  FString       ChallengeCompleted;
+  FString       ChallengeReceived;
+}; assert_size(UChallengeFeedbackMessage, 100);
 
 /* ---------------------------------------------------------- UFastTravelStationDiscoveryMessage ---------------------------------------------------------- */
 
@@ -7365,31 +7524,19 @@ struct native FOnlinePartyMember {
 };
 struct UOnlineSubsystem {
   UObject                   Super;
-  void                     *VfTable_FTickableObject;
-  /** OnlineAccountInterface */
-  FImplementedInterface     AccountInterface;
-  /** OnlinePlayerInterface */
-  FImplementedInterface     PlayerInterface;
-  /** OnlinePlayerInterfaceEx */
-  FImplementedInterface     PlayerInterfaceEx;
-  /** OnlineSystemInterface */
-  FImplementedInterface     SystemInterface;
-  /** OnlineGameInterface */
-  FImplementedInterface     GameInterface;
-  /** OnlineContentInterface */
-  FImplementedInterface     ContentInterface;
-  /** OnlineVoiceInterface */
-  FImplementedInterface     VoiceInterface;
-  /** OnlineStatsInterface */
-  FImplementedInterface     StatsInterface;
-  /** OnlineNewsInterface */
-  FImplementedInterface     NewsInterface;
-  /** OnlinePartyChatInterface */
-  FImplementedInterface     PartyChatInterface;
-  /** OnlineTitleFileInterface */
-  FImplementedInterface     TitleFileInterface;
-  /** OnlineAuthInterface */
-  FImplementedInterface     AuthInterface;
+  VfTable                   FTickableObject;
+  FImplementedInterface     AccountInterface;    /** OnlineAccountInterface */
+  FImplementedInterface     PlayerInterface;     /** OnlinePlayerInterface */
+  FImplementedInterface     PlayerInterfaceEx;   /** OnlinePlayerInterfaceEx */
+  FImplementedInterface     SystemInterface;     /** OnlineSystemInterface */
+  FImplementedInterface     GameInterface;       /** OnlineGameInterface */
+  FImplementedInterface     ContentInterface;    /** OnlineContentInterface */
+  FImplementedInterface     VoiceInterface;      /** OnlineVoiceInterface */
+  FImplementedInterface     StatsInterface;      /** OnlineStatsInterface */
+  FImplementedInterface     NewsInterface;       /** OnlineNewsInterface */
+  FImplementedInterface     PartyChatInterface;  /** OnlinePartyChatInterface */
+  FImplementedInterface     TitleFileInterface;  /** OnlineTitleFileInterface */
+  FImplementedInterface     AuthInterface;       /** OnlineAuthInterface */
   TArray_FNamedInterface    NamedInterfaces;
   TArray_FNamedInterfaceDef NamedInterfaceDefs;
   TArray_FNamedSession      Sessions;
@@ -8588,6 +8735,19 @@ struct UChannel {
 	FInBunch       *InRec;              /** Incoming data with queued dependencies. */
 	FOutBunch      *OutRec;             /** Outgoing reliable unacked data. */
 }; assert_size(UChannel, 104);
+
+/* ---------------------------------------------------------- UFileChannel ---------------------------------------------------------- */
+
+/** A channel for exchanging binary files. */
+struct UFileChannel {
+  UChannel          Super;
+  UChannelDownload *Download;          /** UDownload when receiving. */
+	/* Send Variables. */
+	FArchive         *SendFileAr;        /** File being sent. */
+	wchar_t           SrcFilename[256];  /** Filename being sent. */
+	int               PackageIndex;      /** Index of package in map. */
+	int               SentData;          /** Number of bytes sent. */
+}; assert_size(UFileChannel, 632);
 
 /* ---------------------------------------------------------- UControlChannel ---------------------------------------------------------- */
 
@@ -9891,25 +10051,25 @@ struct AWillowVersusDuelArena {
 
 struct native FNodeData {
   AGearboxAIMoveNode *Node;
-  float Weight;
+  float               Weight;
 };
 struct AGearboxAIMoveNode {
-  AActor Super;
-  BITFIELD bEnabled           : 1;
-  BITFIELD bFaceNodeDirection : 1;
-  TArray_FNodeData NextNodes;
-  TArray_AGearboxAIMoveNodePtr PreviousNodes;
-  float HoldTime;
-  TArray_UBehaviorBasePtr Behaviors;
+  AActor                           Super;
+  BITFIELD                         bEnabled           : 1;
+  BITFIELD                         bFaceNodeDirection : 1;
+  TArray_FNodeData                 NextNodes;
+  TArray_AGearboxAIMoveNodePtr     PreviousNodes;
+  float                            HoldTime;
+  TArray_UBehaviorBasePtr          Behaviors;
   TArray_USpecialMoveDefinitionPtr SpecialMoves;
-  USpriteComponent *Sprite;
+  USpriteComponent                *Sprite;
 }; assert_size(AGearboxAIMoveNode, 452);
 
 /* ---------------------------------------------------------- AWillowAIMoveNode ---------------------------------------------------------- */
 
 struct AWillowAIMoveNode {
   AGearboxAIMoveNode Super;
-  void              *VfTable_IInterface_NavigationHandle;
+  VfTable            IInterface_NavigationHandle;
   BITFIELD           bPreviewJump  : 1;
   BITFIELD           bShowPath     : 1;
   BITFIELD           bFuzzyArrival : 1;
@@ -9917,7 +10077,6 @@ struct AWillowAIMoveNode {
   float              AISpeedPercentageHere;
   EVehicleNodeType   VehicleNodeType;
 }; assert_size(AWillowAIMoveNode, 472);
-
 
 /* ---------------------------------------------------------- AWireManager ---------------------------------------------------------- */
 
@@ -10889,6 +11048,13 @@ struct ACamera {
   ADynamicCameraActor                   *AnimCameraActor;
 }; assert_size(ACamera, 1020);
 
+/* ---------------------------------------------------------- AGearboxCameraBasic ---------------------------------------------------------- */
+
+struct AGearboxCameraBasic {
+  ACamera Super;
+  VfTable IInterfaceGearboxCamera;
+}; assert_size(AGearboxCameraBasic, 1024);
+
 /* ---------------------------------------------------------- AProjectile ---------------------------------------------------------- */
 
 struct AProjectile {
@@ -10989,6 +11155,36 @@ struct UBehaviorBase {
   UObject              Super;
   FBehaviorContextData Context;
 }; assert_size(UBehaviorBase, 76);
+
+/* ---------------------------------------------------------- UBehavior_SetShieldDamageResistanceType ---------------------------------------------------------- */
+
+struct UBehavior_SetShieldDamageResistanceType {
+  UBehaviorBase                Super;
+  UWillowDamageTypeDefinition *DamageResistanceType;
+}; assert_size(UBehavior_SetShieldDamageResistanceType, 80);
+
+/* ---------------------------------------------------------- UBehavior_UpdateMissionObjective ---------------------------------------------------------- */
+
+struct UBehavior_UpdateMissionObjective {
+  UBehaviorBase                Super;
+  UMissionObjectiveDefinition *MissionObjective;
+}; assert_size(UBehavior_UpdateMissionObjective, 80);
+
+/* ---------------------------------------------------------- UBehavior_MatchTransform ---------------------------------------------------------- */
+
+struct UBehavior_MatchTransform {
+  UBehaviorBase        Super;
+  FName                AttachmentName;
+  FBehaviorContextData Source;
+}; assert_size(UBehavior_MatchTransform, 100);
+
+/* ---------------------------------------------------------- UBehavior_CheckMapChangeConditions ---------------------------------------------------------- */
+
+struct UBehavior_CheckMapChangeConditions {
+  UBehaviorBase Super;
+  FName         MapChangeCustomEvent;
+  FName         PlayerBusyCustomEvent;
+}; assert_size(UBehavior_CheckMapChangeConditions, 92);
 
 /* ---------------------------------------------------------- UBehavior_ConvertInstanceDataIntoPhysicsActor ---------------------------------------------------------- */
 
@@ -11132,6 +11328,22 @@ struct UCameraModifier {
   float    Alpha;
   float    TargetAlpha;
 }; assert_size(UCameraModifier, 88);
+
+/* ---------------------------------------------------------- UGearboxCameraModifier ---------------------------------------------------------- */
+
+struct UGearboxCameraModifier {
+  UCameraModifier          Super;
+  AGearboxCameraBasic     *GBXCameraOwner;
+  FTPOV                    DesiredPOV;
+  float                    MasterFadeValue;
+  float                    FadeElapsedTime;
+  float                    FadeTimeSpan;
+  BITFIELD                 FadeStarted           : 1;
+  BITFIELD                 FadingUpwards         : 1;
+  BITFIELD                 DisableWhenFadedOut   : 1;
+  BITFIELD                 AdjustForTimeDilation : 1;
+  ECameraInterpolationMode FadeMode;
+}; assert_size(UGearboxCameraModifier, 140);
 
 /* ---------------------------------------------------------- UCameraModifier_CameraShake ---------------------------------------------------------- */
 
@@ -15371,8 +15583,8 @@ struct AMissionTracker {
 /* ---------------------------------------------------------- ABlackMarketUpgradeManager ---------------------------------------------------------- */
 
 struct ABlackMarketUpgradeManager {
-  AActor Super;
-  void *VfTable_IIBehaviorConsumer;
+  AActor                  Super;
+  VfTable                 IIBehaviorConsumer;
   FBehaviorConsumerHandle BehaviorConsumerHandle;
 }; assert_size(ABlackMarketUpgradeManager, 400);
 
@@ -16597,10 +16809,10 @@ struct UAIComponent {
 
 struct APerch {
   AWillowAIMoveNode                  Super;
-  void                              *VfTable_IIInstanceData;
-  void                              *VfTable_IIBodyCompositionInstance;
-  void                              *VfTable_IIBehaviorConsumer;
-  void                              *VfTable_FTickableObject;
+  VfTable                            IIInstanceData;
+  VfTable                            IIBodyCompositionInstance;
+  VfTable                            IIBehaviorConsumer;
+  VfTable                            FTickableObject;
   UPerchDefinition                  *PerchDef;
   UPerchPreviewComponent            *PreviewComponent;
   float                              UseRadius;
@@ -16820,6 +17032,18 @@ struct UPrimitiveComponent {
 }; assert_size(UPrimitiveComponent, 528);
 DECLARE_A_TSET(UPrimitiveComponentPtr);
 
+/* ---------------------------------------------------------- UCameraConeComponent ---------------------------------------------------------- */
+
+struct UCameraConeComponent {
+  UPrimitiveComponent Super;
+}; assert_size(UCameraConeComponent, 528);
+
+/* ---------------------------------------------------------- UNavMeshRenderingComponent ---------------------------------------------------------- */
+
+struct UNavMeshRenderingComponent {
+  UPrimitiveComponent Super;
+}; assert_size(UNavMeshRenderingComponent, 528);
+
 /* ---------------------------------------------------------- UWillowDynamicNavMeshConnectionPointRenderingComponent ---------------------------------------------------------- */
 
 __ALIGN(16)
@@ -16979,13 +17203,13 @@ struct UWillowFormationComponent {
 __ALIGN(16)
 struct USpriteComponent {
   UPrimitiveComponent Super;
-  UTexture2D *Sprite;
-  BITFIELD bIsScreenSizeScaled : 1;
-  float ScreenSize;
-  float U;
-  float UL;
-  float V;
-  float VL;
+  UTexture2D         *Sprite;
+  BITFIELD            bIsScreenSizeScaled : 1;
+  float               ScreenSize;
+  float               U;
+  float               UL;
+  float               V;
+  float               VL;
 }; assert_size(USpriteComponent, 560);
 
 /* ---------------------------------------------------------- UBrushComponent ---------------------------------------------------------- */
@@ -18022,17 +18246,29 @@ struct UBulletListenerComponent {
 
 /* ---------------------------------------------------------- UDrawSphereComponent ---------------------------------------------------------- */
 
-__declspec(align(16))
+__ALIGN(16)
 struct UDrawSphereComponent {
   UPrimitiveComponent Super;
-  FColor SphereColor;
-  UMaterial *SphereMaterial;
-  float SphereRadius;
-  INT SphereSides;
-  BITFIELD bDrawWireSphere     : 1;
-  BITFIELD bDrawLitSphere      : 1;
-  BITFIELD bDrawOnlyIfSelected : 1;
+  FColor              SphereColor;
+  UMaterial          *SphereMaterial;
+  float               SphereRadius;
+  int                 SphereSides;
+  BITFIELD            bDrawWireSphere     : 1;
+  BITFIELD            bDrawLitSphere      : 1;
+  BITFIELD            bDrawOnlyIfSelected : 1;
 }; assert_size(UDrawSphereComponent, 560);
+
+/* ---------------------------------------------------------- UDrawPylonRadiusComponent ---------------------------------------------------------- */
+
+struct UDrawPylonRadiusComponent {
+  UDrawSphereComponent Super;
+}; assert_size(UDrawPylonRadiusComponent, 560);
+
+/* ---------------------------------------------------------- UDrawSoundRadiusComponent ---------------------------------------------------------- */
+
+struct UDrawSoundRadiusComponent {
+  UDrawSphereComponent Super;
+}; assert_size(UDrawSoundRadiusComponent, 560);
 
 /* ---------------------------------------------------------- UDrawLightRadiusComponent ---------------------------------------------------------- */
 
@@ -18163,6 +18399,58 @@ struct USequenceObject {
 struct UGBXDefinition {
 	UObject Super;
 }; assert_size(UGBXDefinition, 60);
+
+/* ---------------------------------------------------------- UFiringZoneDefinition ---------------------------------------------------------- */
+
+struct UFiringZoneDefinition {
+  UGBXDefinition             Super;
+  FString                    ZoneName;
+  BITFIELD                   OuterRimInfinitelyFarAway : 1;
+  float                      OuterRimDistance;
+  FColor                     ZoneColor;
+  UFiringBehaviorDefinition *FiringBehavior;
+}; assert_size(UFiringZoneDefinition, 88);
+
+/* ---------------------------------------------------------- UFiringZoneCollectionDefinition ---------------------------------------------------------- */
+
+struct UFiringZoneCollectionDefinition {
+  UGBXDefinition                  Super;
+  TArray_UFiringZoneDefinitionPtr Zones;
+}; assert_size(UFiringZoneCollectionDefinition, 72);
+
+/* ---------------------------------------------------------- UFiringBehaviorDefinition ---------------------------------------------------------- */
+
+struct native FConditionalPattern {
+  TArray_UFiringConditionPtr Conditions;
+  UFiringPattern            *Pattern;
+};
+struct UFiringBehaviorDefinition {
+  UGBXDefinition             Super;
+  TArray_FConditionalPattern ConditionalPatterns;
+}; assert_size(UFiringBehaviorDefinition, 72);
+
+/* ---------------------------------------------------------- UChassisDefinition ---------------------------------------------------------- */
+
+struct UChassisDefinition {
+  UGBXDefinition                     Super;
+  VfTable                            IIHitRegionInfoProvider;
+  FBodyCompositionData               BodyComposition;
+  UBodyHitRegionDefinition          *DefaultHitRegion;
+  TArray_UBodyHitRegionDefinitionPtr HitRegionList;
+  UPhysicalMaterial                 *DrivingPhysicalMaterial;
+  UPhysicalMaterial                 *DefaultPhysicalMaterial;
+  FName                              ReverseSwitchName;
+  FName                              BrakeSwitchName;
+  FName                              HeadlightSwitchName;
+  FName                              ThrottleSwitchName;
+  UWillowImpactDefinition           *TouchImpactDefinition;
+  UWillowImpactDefinition           *UntouchImpactDefinition;
+  UCoordinatedEffectDefinition      *SpawnCoordinatedEffect;
+  UCoordinatedEffectDefinition      *DeSpawnCoordinatedEffect;
+  BITFIELD                           AllowPawnsToStandOnTopOfVehicle : 1;
+  TArray_FName                       StatusEffectSockets;
+  UParticleSystem                   *StatusEffectParticleSystemTemplate;
+}; assert_size(UChassisDefinition, 176);
 
 /* ---------------------------------------------------------- UNameListDefinition ---------------------------------------------------------- */
 
@@ -18436,7 +18724,7 @@ struct UInputContextDefinition {
 
 struct UPopulationDefinition {
   UGBXDefinition            Super;
-  void                     *VfTable_IIConstructObject;
+  VfTable                   IIConstructObject;
   TArray_FPopulationActor   ActorArchetypeList;
   EPopulationRespawnOptions RespawnStyle;
   BITFIELD                  bTotalResetOnLevelLoad : 1;
@@ -18724,9 +19012,9 @@ struct native FPerchAnimData {
 };
 struct UPerchDefinition {
   UGBXDefinition               Super;
-  void                        *VfTable_IIBodyInfoProvider;
-  void                        *VfTable_IIBehaviorProvider;
-  void                        *VfTable_IIAnimProvider;
+  VfTable                      IIBodyInfoProvider;
+  VfTable                      IIBehaviorProvider;
+  VfTable                      IIAnimProvider;
   FAIRange                     LoopTime;
   FAIRange                     CooldownTime;
   TArray_FPerchAnimData        AnimMap;
@@ -24898,6 +25186,13 @@ struct USeqAct_Latent {
 	BITFIELD         bAborted : 1;
 }; assert_size(USeqAct_Latent, 180);
 
+/* ---------------------------------------------------------- UGearboxSeqAct_PopulationOpportunityLink ---------------------------------------------------------- */
+
+struct UGearboxSeqAct_PopulationOpportunityLink {
+  USeqAct_Latent                   Super;
+  TArray_APopulationOpportunityPtr CloneOpportunities;
+}; assert_size(UGearboxSeqAct_PopulationOpportunityLink, 192);
+
 /* ---------------------------------------------------------- UWillowSeqAct_AIScriptedAnim ---------------------------------------------------------- */
 
 struct UWillowSeqAct_AIScriptedAnim {
@@ -26600,6 +26895,22 @@ struct APathNode {
   ANavigationPoint Super;
 }; assert_size(APathNode, 580);
 
+/* ---------------------------------------------------------- APhysicsJumpNode ---------------------------------------------------------- */
+
+struct APhysicsJumpNode {
+  APathNode                        Super;
+  VfTable                          IIGBXNavMeshSpecialMove;
+  VfTable                          IIGBXNavMeshSeed;
+  VfTable                          IIGBXNavMeshBuildEvents;
+  VfTable                          FTickableObject;
+  TArray_UPhysicsJumpConnectionPtr Connections;
+  USpecialMove_PhysicsJump        *OverrideJumpSMD;
+  float                            JumpRadius;
+  BITFIELD                         bLimitUsage : 1;
+  BITFIELD                         bEnabled    : 1;
+  TArray_UPopulationBodyTagPtr     AllowedTags;
+}; assert_size(APhysicsJumpNode, 632);
+
 /* ---------------------------------------------------------- AVantageNode ---------------------------------------------------------- */
 
 struct AVantageNode {
@@ -26676,69 +26987,67 @@ struct native atomicwhencooked immutablewhencooked FPolyReference {
   void           *CachedPoly;
 };
 struct APylon {
-  ANavigationPoint Super;
-  void *VfTable_IEditorLinkSelectionInterface;
-  void *NavMeshPtr;
-  void *ObstacleMesh;
-  void *DynamicObstacleMesh;
-  void *WorkingSetPtr;
-  void *PathObjectsThatAffectThisPylon;
-  TArray_FVector NextPassSeedList;
-  FOctreeElementId OctreeId;
-  void *OctreeIWasAddedTo;
-  APylon *NextPylon;
-  TArray_AVolumePtr ExpansionVolumes;
-  float ExpansionRadius;
-  float MaxExpansionRadius;
-  TArray_FNavMeshPathSize PathSizes;
-  /* TODO: DrawPylonRadiusComponent */
-  void    *PylonRadiusPreview;
-  BITFIELD bImportedMesh                                       : 1;
-  BITFIELD bUseExpansionSphereOverride                         : 1;
-  BITFIELD bNeedsCostCheck                                     : 1;
-  BITFIELD bDrawEdgePolys                                      : 1;
-  BITFIELD bDrawPolyBounds                                     : 1;
-  BITFIELD bRenderInShowPaths                                  : 1;
-  BITFIELD bDrawWalkableSurface                                : 1;
-  BITFIELD bDrawObstacleSurface                                : 1;
-  BITFIELD bUseGBXValues                                       : 1;
-  BITFIELD bUseGBXExpansion                                    : 1;
-  BITFIELD bExpansionDoSimplification                          : 1;
-  BITFIELD bExpansionDoThreeToTwoMerge                         : 1;
-  BITFIELD bExpansionDoPolyMerge                               : 1;
-  BITFIELD bExpansionDoPolyConcaveMerge                        : 1;
-  BITFIELD bExpansionDoSquareMerge                             : 1;
-  BITFIELD bExpansionDoSaveFixup                               : 1;
-  BITFIELD bExpansionCullPolys                                 : 1;
-  BITFIELD bExpansionBuildObstacleMesh                         : 1;
-  BITFIELD bExpansionCreateEdgeConnections                     : 1;
-  BITFIELD bExpansionDoSubdivisionMerging                      : 1;
-  BITFIELD bExpansionDoObstacleMeshSimplification              : 1;
-  BITFIELD bExpansionDoEdgeSmoothing                           : 1;
-  BITFIELD bExpansionDoRawGridOnly                             : 1;
-  BITFIELD bExpansionDoConcaveSlabsOnly                        : 1;
-  BITFIELD bExpansionDoEdgeSimplificationEvenInConcaveSlabMode : 1;
-  BITFIELD bExpansionDrawDropDownPolys                         : 1;
-  BITFIELD bExpansionDrawPolyParents                           : 1;
-  BITFIELD bExpansionDisableSubdivisionHeightSnapping          : 1;
-  BITFIELD bExpansionDisableVertMaxHeightSlopeMax              : 1;
-  BITFIELD bBuildThisPylon                                     : 1;
-  BITFIELD bDisabled                                           : 1;
-  BITFIELD bForceObstacleMeshCollision                         : 1;
-  FVector ExpansionSphereCenter;
-  /* TODO: NavMeshRenderingComponent */
-  void             *RenderingComp;
-  USpriteComponent *BrokenSprite;
-  TArray_APylonPtr  ImposterPylons;
-  TArray_AActorPtr  OnBuild_DisableCollisionForThese;
-  TArray_AActorPtr  OnBuild_EnableCollisionForThese;
-  float             MaxPolyHeight_Optional;
-  int               DebugEdgeCount;
-  float             IconScale;
-  int               GBX_PolySize;
-  float             EdgeCheckHeight;
-  float             PolyMergeThreshold;
-  APylon           *OuterPylon;
+  ANavigationPoint            Super;
+  VfTable                     IEditorLinkSelectionInterface;
+  void                       *NavMeshPtr;
+  void                       *ObstacleMesh;
+  void                       *DynamicObstacleMesh;
+  void                       *WorkingSetPtr;
+  void                       *PathObjectsThatAffectThisPylon;
+  TArray_FVector              NextPassSeedList;
+  FOctreeElementId            OctreeId;
+  void                       *OctreeIWasAddedTo;
+  APylon                     *NextPylon;
+  TArray_AVolumePtr           ExpansionVolumes;
+  float                       ExpansionRadius;
+  float                       MaxExpansionRadius;
+  TArray_FNavMeshPathSize     PathSizes;
+  UDrawPylonRadiusComponent  *PylonRadiusPreview;
+  BITFIELD                    bImportedMesh                                       : 1;
+  BITFIELD                    bUseExpansionSphereOverride                         : 1;
+  BITFIELD                    bNeedsCostCheck                                     : 1;
+  BITFIELD                    bDrawEdgePolys                                      : 1;
+  BITFIELD                    bDrawPolyBounds                                     : 1;
+  BITFIELD                    bRenderInShowPaths                                  : 1;
+  BITFIELD                    bDrawWalkableSurface                                : 1;
+  BITFIELD                    bDrawObstacleSurface                                : 1;
+  BITFIELD                    bUseGBXValues                                       : 1;
+  BITFIELD                    bUseGBXExpansion                                    : 1;
+  BITFIELD                    bExpansionDoSimplification                          : 1;
+  BITFIELD                    bExpansionDoThreeToTwoMerge                         : 1;
+  BITFIELD                    bExpansionDoPolyMerge                               : 1;
+  BITFIELD                    bExpansionDoPolyConcaveMerge                        : 1;
+  BITFIELD                    bExpansionDoSquareMerge                             : 1;
+  BITFIELD                    bExpansionDoSaveFixup                               : 1;
+  BITFIELD                    bExpansionCullPolys                                 : 1;
+  BITFIELD                    bExpansionBuildObstacleMesh                         : 1;
+  BITFIELD                    bExpansionCreateEdgeConnections                     : 1;
+  BITFIELD                    bExpansionDoSubdivisionMerging                      : 1;
+  BITFIELD                    bExpansionDoObstacleMeshSimplification              : 1;
+  BITFIELD                    bExpansionDoEdgeSmoothing                           : 1;
+  BITFIELD                    bExpansionDoRawGridOnly                             : 1;
+  BITFIELD                    bExpansionDoConcaveSlabsOnly                        : 1;
+  BITFIELD                    bExpansionDoEdgeSimplificationEvenInConcaveSlabMode : 1;
+  BITFIELD                    bExpansionDrawDropDownPolys                         : 1;
+  BITFIELD                    bExpansionDrawPolyParents                           : 1;
+  BITFIELD                    bExpansionDisableSubdivisionHeightSnapping          : 1;
+  BITFIELD                    bExpansionDisableVertMaxHeightSlopeMax              : 1;
+  BITFIELD                    bBuildThisPylon                                     : 1;
+  BITFIELD                    bDisabled                                           : 1;
+  BITFIELD                    bForceObstacleMeshCollision                         : 1;
+  FVector                     ExpansionSphereCenter;
+  UNavMeshRenderingComponent *RenderingComp;
+  USpriteComponent           *BrokenSprite;
+  TArray_APylonPtr            ImposterPylons;
+  TArray_AActorPtr            OnBuild_DisableCollisionForThese;
+  TArray_AActorPtr            OnBuild_EnableCollisionForThese;
+  float                       MaxPolyHeight_Optional;
+  int                         DebugEdgeCount;
+  float                       IconScale;
+  int                         GBX_PolySize;
+  float                       EdgeCheckHeight;
+  float                       PolyMergeThreshold;
+  APylon                     *OuterPylon;
 }; assert_size(APylon, 756);
 
 /* ---------------------------------------------------------- AAISwitchablePylon ---------------------------------------------------------- */
@@ -29337,18 +29646,18 @@ struct ULevel {
   FPrecomputedVisibilityHandler PrecomputedVisibilityHandler; ///< Contains precomputed visibility data for this level.
   FPrecomputedVolumeDistanceField PrecomputedVolumeDistanceField; ///< Precomputed volume distance field for this level.
   FRenderCommandFence RemoveFromSceneFence; ///< Fence used to track when the rendering thread has finished referencing this ULevel's resources.
-  UBOOL bAreComponentsCurrentlyAttached; ///< Whether components are currently attached or not.
-  UBOOL bGeometryDirtyForLighting;      ///< Whether the geometry needs to be rebuilt for correct lighting
-  UBOOL bHasVisibilityRequestPending;   ///< Whether the level is currently pending being made visible.
-  UBOOL bAlreadyMovedActors;            ///< Whether we already moved actors.
-  UBOOL bAlreadyUpdatedComponents;      ///< Whether we already updated components.
-  UBOOL bAlreadyAssociatedStreamableResources; ///< Whether we already associated streamable resources.
-  UBOOL bAlreadyInitializedActors;      ///< Whether we already initialized actors.
-  UBOOL bAlreadyRoutedActorBeginPlay;   ///< Whether we already routed beginplay on actors.
-  UBOOL bAlreadyFixedUpCrossLevelRefs;  ///< Whether we already fixed up cross-level paths.
-  UBOOL bAlreadyRoutedSequenceBeginPlay; ///< Whether we already routed sequence begin play.
-  UBOOL bAlreadySortedActorList;        ///< Whether we already sorted the actor list.
-  BYTE unknown_00[24];
+  UBOOL bAreComponentsCurrentlyAttached;        /** Whether components are currently attached or not. */
+  UBOOL bGeometryDirtyForLighting;              /** Whether the geometry needs to be rebuilt for correct lighting */
+  UBOOL bHasVisibilityRequestPending;           /** Whether the level is currently pending being made visible. */
+  UBOOL bAlreadyMovedActors;                    /** Whether we already moved actors. */
+  UBOOL bAlreadyUpdatedComponents;              /** Whether we already updated components. */
+  UBOOL bAlreadyAssociatedStreamableResources;  /** Whether we already associated streamable resources. */
+  UBOOL bAlreadyInitializedActors;              /** Whether we already initialized actors. */
+  UBOOL bAlreadyRoutedActorBeginPlay;           /** Whether we already routed beginplay on actors. */
+  UBOOL bAlreadyFixedUpCrossLevelRefs;          /** Whether we already fixed up cross-level paths. */
+  UBOOL bAlreadyRoutedSequenceBeginPlay;        /** Whether we already routed sequence begin play. */
+  UBOOL bAlreadySortedActorList;                /** Whether we already sorted the actor list. */
+  BYTE  unknown_00[24];
   /* 864 */
   INT CurrentActorIndexForUpdateComponents; ///< Current index into actors array for updating components.
   UBOOL bAlreadyCreateBSPPhysMesh;      ///< Whether we already created the physics engine version of the levelBSP.
@@ -29508,28 +29817,27 @@ struct native FOpportunitySavedState {
   float NextSpawnTime;
 };
 struct APopulationOpportunity {
-  AInfo                         Super;
-  void                         *VfTable_IIBodyCompositionInstance;
-  FOpportunityCleanupParameters CleanupParams;
-  BITFIELD                      IsEnabled            : 1;
-  BITFIELD                      bNoRespawning        : 1;
-  BITFIELD                      bIsWaitingForRespawn : 1;
-  BITFIELD                      bUseRandomSpawns     : 1;
-  TArray_APopulationPointPtr    SpawnPoints;
-  ULevelStreaming              *StreamingLevel;
-  int                           SystemID;
-  int                           NextInitialDestinationIdx;
-  /* TODO: GearboxSeqAct_PopulationOpportunityLink */
-  void                         *SequenceActionLink;
-  float                         LastTimeBlockedFromSpawningDueToPopLimits;
-  float                         RespawnDelayStartTime;
-  URegionDefinition            *GameStageRegion;
-  UPopulationAspect            *Aspect;
-  TArray_UPopulationAspectPtr   Aspects;
-  int                           SpawnIndex;
-  TArray_INT                    SpawnList;
-  int                           InclusiveSpawnIndex;
-  TArray_INT                    InclusiveSpawnList;
+  AInfo                                     Super;
+  VfTable                                   IIBodyCompositionInstance;
+  FOpportunityCleanupParameters             CleanupParams;
+  BITFIELD                                  IsEnabled            : 1;
+  BITFIELD                                  bNoRespawning        : 1;
+  BITFIELD                                  bIsWaitingForRespawn : 1;
+  BITFIELD                                  bUseRandomSpawns     : 1;
+  TArray_APopulationPointPtr                SpawnPoints;
+  ULevelStreaming                          *StreamingLevel;
+  int                                       SystemID;
+  int                                       NextInitialDestinationIdx;
+  UGearboxSeqAct_PopulationOpportunityLink *SequenceActionLink;
+  float                                     LastTimeBlockedFromSpawningDueToPopLimits;
+  float                                     RespawnDelayStartTime;
+  URegionDefinition                        *GameStageRegion;
+  UPopulationAspect                        *Aspect;
+  TArray_UPopulationAspectPtr               Aspects;
+  int                                       SpawnIndex;
+  TArray_INT                                SpawnList;
+  int                                       InclusiveSpawnIndex;
+  TArray_INT                                InclusiveSpawnList;
 }; assert_size(APopulationOpportunity, 496);
 
 /* ---------------------------------------------------------- APopulationOpportunityDen ---------------------------------------------------------- */
@@ -29602,12 +29910,11 @@ struct native FEncounterLimitState {
   int NumCurrentlyActive;
 };
 struct native FEncounterLimitData {
-  /* TArray_PopulationSpawnedActorTagDefinitionPtr */
-  TArray_voidPtr              ActorTags;
-  AttributeInitializationData MaxTotalToSpawn;
-  AttributeInitializationData MaxActiveAtATime;
-  EEncounterConstraintType    ConstraintType;
-  FEncounterLimitState        LimitState;
+  TArray_UPopulationSpawnedActorTagDefinitionPtr ActorTags;
+  AttributeInitializationData                    MaxTotalToSpawn;
+  AttributeInitializationData                    MaxActiveAtATime;
+  EEncounterConstraintType                       ConstraintType;
+  FEncounterLimitState                           LimitState;
 };
 struct native FSpawnOption {
   UPopulationFactory *Factory;
@@ -30002,153 +30309,152 @@ struct native FAudioComponentParam {
  */
 struct FWaveInstance {
 	/** Wave data */
-	USoundNodeWave*		WaveData;
+	USoundNodeWave *WaveData;
 	/** Sound node to notify when the current audio buffer finishes */
-	USoundNode*			NotifyBufferFinishedHook;
+	USoundNode *NotifyBufferFinishedHook;
 	/** Audio component this wave instance belongs to */
-	UAudioComponent*	AudioComponent;
+	UAudioComponent *AudioComponent;
 
 	/** Current volume */
-	FLOAT				Volume;
+	FLOAT Volume;
 	/** Current volume multiplier - used to zero the volume without stopping the source */
-	FLOAT				VolumeMultiplier;
+	FLOAT VolumeMultiplier;
 	/** Current priority */
-	FLOAT				PlayPriority;
+	FLOAT PlayPriority;
 	/** Voice center channel volume */
-	FLOAT				VoiceCenterChannelVolume;
+	FLOAT VoiceCenterChannelVolume;
 	/** Volume of the radio filter effect */
-	FLOAT				RadioFilterVolume;
+	FLOAT RadioFilterVolume;
 	/** The volume at which the radio filter kicks in */
-	FLOAT				RadioFilterVolumeThreshold;
+	FLOAT RadioFilterVolumeThreshold;
 	/** Set to TRUE if the sound nodes state that the radio filter should be applied */
-	UBOOL				bApplyRadioFilter;
+	UBOOL bApplyRadioFilter;
 	/** Looping mode - None, loop with notification, forever */
-	INT					LoopingMode;
+	INT LoopingMode;
 
 	/** Whether wave instanced has been started */
-	UBOOL				bIsStarted;
+	UBOOL bIsStarted;
 	/** Whether wave instanced is finished */
-	UBOOL				bIsFinished;
+	UBOOL bIsFinished;
 	/** Whether the notify finished hook has been called since the last update/parsenodes */
-	UBOOL				bAlreadyNotifiedHook;
+	UBOOL bAlreadyNotifiedHook;
 	/** Whether to use spatialization */
-	UBOOL				bUseSpatialization;
+	UBOOL bUseSpatialization;
 	/** If TRUE, wave instance is requesting a restart */
-	UBOOL				bIsRequestingRestart;
+	UBOOL bIsRequestingRestart;
 
 	/** The amount of stereo sounds to bleed to the rear speakers */
-	FLOAT				StereoBleed;
+	FLOAT StereoBleed;
 	/** The amount of a sound to bleed to the LFE channel */
-	FLOAT				LFEBleed;
+	FLOAT LFEBleed;
 
 	/** Whether to apply audio effects */
-	UBOOL				bEQFilterApplied;
+	UBOOL bEQFilterApplied;
 	/** Whether to artificially keep active even at zero volume */
-	UBOOL				bAlwaysPlay;
+	UBOOL bAlwaysPlay;
 	/** Whether or not this sound plays when the game is paused in the UI */
-	UBOOL				bIsUISound;
+	UBOOL bIsUISound;
 	/** Whether or not this wave is music */
-	UBOOL				bIsMusic;
+	UBOOL bIsMusic;
 	/** Whether or not this wave has reverb applied */
-	UBOOL				bReverb;
+	UBOOL bReverb;
 	/** Whether or not this sound class forces sounds to the center channel */
-	UBOOL				bCenterChannelOnly;
+	UBOOL bCenterChannelOnly;
 
 	/** Low pass filter setting */
-	FLOAT				HighFrequencyGain;
+	FLOAT HighFrequencyGain;
 	/** Current pitch */
-	FLOAT				Pitch;
+	FLOAT Pitch;
 	/** Current velocity */
-	FVector				Velocity;
+	FVector Velocity;
 	/** Current location */
-	FVector				Location;
+	FVector Location;
 	/** Cached type hash */
-	DWORD				TypeHash;
+	DWORD TypeHash;
 	/** GUID for mapping of USoundNode reference to USoundNodeWave. */
-	QWORD				ParentGUID;
+	QWORD ParentGUID;
 };
 DECLARE_A_TMAP(USoundNodePtr, UINT);
 DECLARE_A_TMULTI_MAP(USoundNodePtr, FWaveInstancePtr);
 struct UAudioComponent {
-  UActorComponent Super;
-  USoundCue *SoundCue;
-  USoundNode *CueFirstNode;
-  TArray_FAudioComponentParam InstanceParameters;
-  BITFIELD bUseOwnerLocation            : 1;
-  BITFIELD bAutoPlay                    : 1;
-  BITFIELD bAutoDestroy                 : 1;
-  BITFIELD bStopWhenOwnerDestroyed      : 1;
-  BITFIELD bShouldRemainActiveIfDropped : 1;
-  BITFIELD bWasOccluded                 : 1;
-  BITFIELD bSuppressSubtitles           : 1;
-  BITFIELD bWasPlaying                  : 1;
-  BITFIELD bAllowSpatialization         : 1;
-  BITFIELD bFinished                    : 1;
-  BITFIELD bApplyRadioFilter            : 1;
-  BITFIELD bRadioFilterSelected         : 1;
-  BITFIELD bPreviewComponent            : 1;
-  BITFIELD bIgnoreForFlushing           : 1;
-  float StereoBleed;
-  float LFEBleed;
-  BITFIELD bEQFilterApplied   : 1;
-  BITFIELD bAlwaysPlay        : 1;
-  BITFIELD bIsUISound         : 1;
-  BITFIELD bIsMusic           : 1;
-  BITFIELD bReverb            : 1;
-  BITFIELD bCenterChannelOnly : 1;
-  BITFIELD bIsDialog          : 1;
-  BITFIELD bIsAmbience        : 1;
-  TArray_voidPtr WaveInstances;
-  TArray_BYTE SoundNodeData;
+  UActorComponent                                   Super;
+  USoundCue                                        *SoundCue;
+  USoundNode                                       *CueFirstNode;
+  TArray_FAudioComponentParam                       InstanceParameters;
+  BITFIELD                                          bUseOwnerLocation            : 1;
+  BITFIELD                                          bAutoPlay                    : 1;
+  BITFIELD                                          bAutoDestroy                 : 1;
+  BITFIELD                                          bStopWhenOwnerDestroyed      : 1;
+  BITFIELD                                          bShouldRemainActiveIfDropped : 1;
+  BITFIELD                                          bWasOccluded                 : 1;
+  BITFIELD                                          bSuppressSubtitles           : 1;
+  BITFIELD                                          bWasPlaying                  : 1;
+  BITFIELD                                          bAllowSpatialization         : 1;
+  BITFIELD                                          bFinished                    : 1;
+  BITFIELD                                          bApplyRadioFilter            : 1;
+  BITFIELD                                          bRadioFilterSelected         : 1;
+  BITFIELD                                          bPreviewComponent            : 1;
+  BITFIELD                                          bIgnoreForFlushing           : 1;
+  float                                             StereoBleed;
+  float                                             LFEBleed;
+  BITFIELD                                          bEQFilterApplied   : 1;
+  BITFIELD                                          bAlwaysPlay        : 1;
+  BITFIELD                                          bIsUISound         : 1;
+  BITFIELD                                          bIsMusic           : 1;
+  BITFIELD                                          bReverb            : 1;
+  BITFIELD                                          bCenterChannelOnly : 1;
+  BITFIELD                                          bIsDialog          : 1;
+  BITFIELD                                          bIsAmbience        : 1;
+  TArray_FWaveInstancePtr                           WaveInstances;
+  TArray_BYTE                                       SoundNodeData;
   _TMAP_NAME(USoundNodePtr, UINT)                   SoundNodeOffsetMap;
   _TMULTI_MAP_NAME(USoundNodePtr, FWaveInstancePtr) SoundNodeResetWaveMap;
   FListener                                        *Listener;
-  float PlaybackTime;
-  APortalVolume *PortalVolume;
-  FVector Location;
-  FVector ComponentLocation;
-  AActor *LastOwner;
-  float SubtitlePriority;
-  float FadeInStartTime;
-  float FadeInStopTime;
-  float FadeInTargetVolume;
-  float FadeOutStartTime;
-  float FadeOutStopTime;
-  float FadeOutTargetVolume;
-  float AdjustVolumeStartTime;
-  float AdjustVolumeStopTime;
-  float AdjustVolumeTargetVolume;
-  float CurrAdjustVolumeTargetVolume;
-  USoundNode *CurrentNotifyBufferFinishedHook;
-  FVector CurrentLocation;
-  float CurrentVolume;
-  float CurrentPitch;
-  float CurrentHighFrequencyGain;
-  int CurrentUseSpatialization;
-  int CurrentNotifyOnLoop;
-  float CurrentVolumeMultiplier;
-  float CurrentPitchMultiplier;
-  float CurrentHighFrequencyGainMultiplier;
-  float CurrentVoiceCenterChannelVolume;
-  float CurrentRadioFilterVolume;
-  float CurrentRadioFilterVolumeThreshold;
-  FDouble LastUpdateTime;
-  float SourceInteriorVolume;
-  float SourceInteriorLPF;
-  float CurrentInteriorVolume;
-  float CurrentInteriorLPF;
-  FVector LastLocation;
-  FInteriorSettings LastInteriorSettings;
-  int LastReverbVolumeIndex;
-  float VolumeMultiplier;
-  float PitchMultiplier;
-  float HighFrequencyGainMultiplier;
-  float OcclusionCheckInterval;
-  float LastOcclusionCheckTime;
-  /* TODO: DrawSoundRadiusComponent */
-  void *PreviewSoundRadius;
-  FScriptDelegate __OnAudioFinished__Delegate;
-  FScriptDelegate __OnQueueSubtitles__Delegate;
+  float                                             PlaybackTime;
+  APortalVolume                                    *PortalVolume;
+  FVector                                           Location;
+  FVector                                           ComponentLocation;
+  AActor                                           *LastOwner;
+  float                                             SubtitlePriority;
+  float                                             FadeInStartTime;
+  float                                             FadeInStopTime;
+  float                                             FadeInTargetVolume;
+  float                                             FadeOutStartTime;
+  float                                             FadeOutStopTime;
+  float                                             FadeOutTargetVolume;
+  float                                             AdjustVolumeStartTime;
+  float                                             AdjustVolumeStopTime;
+  float                                             AdjustVolumeTargetVolume;
+  float                                             CurrAdjustVolumeTargetVolume;
+  USoundNode                                       *CurrentNotifyBufferFinishedHook;
+  FVector                                           CurrentLocation;
+  float                                             CurrentVolume;
+  float                                             CurrentPitch;
+  float                                             CurrentHighFrequencyGain;
+  int                                               CurrentUseSpatialization;
+  int                                               CurrentNotifyOnLoop;
+  float                                             CurrentVolumeMultiplier;
+  float                                             CurrentPitchMultiplier;
+  float                                             CurrentHighFrequencyGainMultiplier;
+  float                                             CurrentVoiceCenterChannelVolume;
+  float                                             CurrentRadioFilterVolume;
+  float                                             CurrentRadioFilterVolumeThreshold;
+  FDouble                                           LastUpdateTime;
+  float                                             SourceInteriorVolume;
+  float                                             SourceInteriorLPF;
+  float                                             CurrentInteriorVolume;
+  float                                             CurrentInteriorLPF;
+  FVector                                           LastLocation;
+  FInteriorSettings                                 LastInteriorSettings;
+  int                                               LastReverbVolumeIndex;
+  float                                             VolumeMultiplier;
+  float                                             PitchMultiplier;
+  float                                             HighFrequencyGainMultiplier;
+  float                                             OcclusionCheckInterval;
+  float                                             LastOcclusionCheckTime;
+  UDrawSoundRadiusComponent                        *PreviewSoundRadius;
+  FScriptDelegate                                   __OnAudioFinished__Delegate;
+  FScriptDelegate                                   __OnQueueSubtitles__Delegate;
 }; assert_size(UAudioComponent, 540);
 
 /* ---------------------------------------------------------- UAudioDevice ---------------------------------------------------------- */
@@ -31136,10 +31442,10 @@ struct AAutoTestManager {
   int                NumMinutesPerMap;
   TArray_FString     CommandsToRunAtEachTravelTheWorldNode;
   FString            CommandStringToExec;
-  FString SelectedCharacterClass;
-  FName StationDefName;
-  FString AutomatedTestingTravelType;
-  int NumOfDLCsToIncludeInRun;
+  FString            SelectedCharacterClass;
+  FName              StationDefName;
+  FString            AutomatedTestingTravelType;
+  int                NumOfDLCsToIncludeInRun;
 }; assert_size(AAutoTestManager, 596);
 
 /* ---------------------------------------------------------- AReplicationInfo ---------------------------------------------------------- */
@@ -31266,17 +31572,17 @@ struct UResourcePool {
   int                          RegenerationDisabledBaseValue;
   TArray_UAttributeModifierPtr RegenerationDisabledModifierStack;
   float                        ResetRecentImpulseCountTime;
-  BITFIELD bIsAuthoritative                       : 1;
-  BITFIELD bIsBeingInitialized                    : 1;
-  BITFIELD bHasPoolBeenFullSinceLastBeingDepleted : 1;
-  BITFIELD bDisallowReinitialization              : 1;
-  BITFIELD bHideHUDDisplay                        : 1;
-  BITFIELD bCreatedAndNotModified                 : 1;
-  BITFIELD WasRegenerating                        : 1;
-  UObject                   *AssociatedProvider;
-  UMaterialInstanceConstant *HUDMaterialInstance;
-  UResourcePool             *RegenerationPool;
-  int                        IsRegenerating;
+  BITFIELD                     bIsAuthoritative                       : 1;
+  BITFIELD                     bIsBeingInitialized                    : 1;
+  BITFIELD                     bHasPoolBeenFullSinceLastBeingDepleted : 1;
+  BITFIELD                     bDisallowReinitialization              : 1;
+  BITFIELD                     bHideHUDDisplay                        : 1;
+  BITFIELD                     bCreatedAndNotModified                 : 1;
+  BITFIELD                     WasRegenerating                        : 1;
+  UObject                     *AssociatedProvider;
+  UMaterialInstanceConstant   *HUDMaterialInstance;
+  UResourcePool               *RegenerationPool;
+  int                          IsRegenerating;
 }; assert_size(UResourcePool, 280);
 
 /* ---------------------------------------------------------- UShieldResourcePool ---------------------------------------------------------- */
@@ -31661,13 +31967,13 @@ struct AGameInfo {
   TArray_APlayerReplicationInfoPtr InactivePRIArray;
   TArray_FScriptDelegate           Pausers;
   void                            *OnlineSub;
-  TScriptInterface                 GameInterface;
+  FImplementedInterface            GameInterface;
   UClass                          *OnlineStatsWriteClass;
   int                              LeaderboardId;
   int                              ArbitratedLeaderboardId;
   void                            *CoverReplicatorBase;
   UClass                          *OnlineGameSettingsClass;
-  TArray_UClass                    DebugBeaconActorClasses;
+  TArray_UClassPtr                 DebugBeaconActorClasses;
   FString                          ServerOptions;
   int                              AdjustedNetSpeed;
   float                            LastNetSpeedUpdateTime;
@@ -32230,17 +32536,17 @@ struct native FWaypointActorData {
   TArray_UWaypointComponentPtr Waypoints;
 };
 struct native FAreaWaypointData {
-  AActor *WaypointActor;
-  int WaypointRadius;
+  AActor                      *WaypointActor;
+  int                          WaypointRadius;
   UMissionObjectiveDefinition *WaypointObjective;
 };
 struct native FColiseumStat {
   EColiseumStatType StatType;
-  int StatValue;
+  int               StatValue;
 };
 struct native FColiseumPlayerInfo {
   AWillowPlayerController *WPC;
-  TArray_FColiseumStat Stats;
+  TArray_FColiseumStat     Stats;
 };
 struct AWillowGameInfo {
   AGearboxGameInfo                       Super;
@@ -32276,8 +32582,7 @@ struct AWillowGameInfo {
   AWillowPersonalTeleporter             *ReturnTeleporter;
   AWillowPersonalTeleporter             *PersonalTeleporter;
   FName                                  TeleporterDestinationName;
-  /* TODO: TArray_IPlayerObserverPtr */
-  TArray_voidPtr                         PlayerObservers;
+  TArray_FImplementedInterface           PlayerObservers;  /** IPlayerObserver */
   FString                                MapChangeInitiated;
   FString                                MapChangePlayerDown;
   FString                                MapChangePlayerInMenu;
@@ -32300,8 +32605,7 @@ struct AWillowGameInfo {
   FString                                MapChangeCanceledPlayerRespawn;
   int                                    TravelCountdownTime;
   int                                    TravelPostCountdownTime;
-  /* TODO: Behavior_CheckMapChangeConditions */
-  void                                  *TravelBehavior;
+  UBehavior_CheckMapChangeConditions    *TravelBehavior;
   FImplementedInterface                  TravelEventInterface;  /** ICustomEvent */
   UTravelStationDefinition              *TravelStationDef;
   AWillowPlayerController               *TravelInstigator;

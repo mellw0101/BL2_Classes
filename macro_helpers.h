@@ -23,6 +23,8 @@
 // # define __ALIGN(x)  __attribute__((__aligned__(x)))
 // #endif
 
+#define MAX_SPRINTF 1024
+
 #define STRUCT(x)       \
   typedef struct x  x;  \
   struct x

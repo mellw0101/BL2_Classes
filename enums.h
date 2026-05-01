@@ -14598,8 +14598,8 @@ typedef enum EPopPointContraintType : unsigned char {
   #define EPopPointContraintType_ExclusionOr  POPOINTCONSTRAINT_ExclusionOr
   #define EPopPointContraintType_MAX          POPOINTCONSTRAINT_MAX
 } EPopPointContraintType;
-#define EPopulationPointType    EPopulationPointType 
-#define EPopPointContraintType  EPopPointContraintType 
+#define EPopulationPointType    EPopulationPointType
+#define EPopPointContraintType  EPopPointContraintType
 
 /* ---------------------------------------------------------- USoundNodeWave ! ---------------------------------------------------------- */
 
@@ -17535,3 +17535,267 @@ typedef enum EVehicleBalanceOption : unsigned char {
 } EVehicleBalanceOption;
 #define WillowVehicleRoles     WillowVehicleRoles
 #define EVehicleBalanceOption  EVehicleBalanceOption
+
+/* ---------------------------------------------------------- UChassisDefinition ! ---------------------------------------------------------- */
+
+typedef enum EAIVehicleSeatPosition  : unsigned char {
+  VSEAT_None,                     // 0
+  VSEAT_Front,                    // 1
+  VSEAT_Rear,                     // 2
+  VSEAT_Right,                    // 3
+  VSEAT_Left,                     // 4
+  VSEAT_MAX                       // 5
+  #define VSEAT_None                    VSEAT_None
+  #define VSEAT_Front                   VSEAT_Front
+  #define VSEAT_Rear                    VSEAT_Rear
+  #define VSEAT_Right                   VSEAT_Right
+  #define VSEAT_Left                    VSEAT_Left
+  #define VSEAT_MAX                     VSEAT_MAX
+  #define EAIVehicleSeatPosition_None   VSEAT_None
+  #define EAIVehicleSeatPosition_Front  VSEAT_Front
+  #define EAIVehicleSeatPosition_Rear   VSEAT_Rear
+  #define EAIVehicleSeatPosition_Right  VSEAT_Right
+  #define EAIVehicleSeatPosition_Left   VSEAT_Left
+  #define EAIVehicleSeatPosition_MAX    VSEAT_MAX
+} EAIVehicleSeatPosition;
+typedef enum EVehicleSide            : unsigned char {
+  VSIDE_Left,                     // 0
+  VSIDE_Right,                    // 1
+  VSIDE_Front,                    // 2
+  VSIDE_Back,                     // 3
+  VSIDE_MAX                       // 4
+  #define VSIDE_Left          VSIDE_Left
+  #define VSIDE_Right         VSIDE_Right
+  #define VSIDE_Front         VSIDE_Front
+  #define VSIDE_Back          VSIDE_Back
+  #define VSIDE_MAX           VSIDE_MAX
+  #define EVehicleSide_Left   VSIDE_Left
+  #define EVehicleSide_Right  VSIDE_Right
+  #define EVehicleSide_Front  VSIDE_Front
+  #define EVehicleSide_Back   VSIDE_Back
+  #define EVehicleSide_MAX    VSIDE_MAX
+} EVehicleSide;
+typedef enum EOccupantDamageTransfer : unsigned char {
+  VEHDMGTRANS_None,               // 0
+  VEHDMGTRANS_Transfer,           // 1
+  VEHDMGTRANS_MAX                 // 2
+  #define VEHDMGTRANS_None                  VEHDMGTRANS_None
+  #define VEHDMGTRANS_Transfer              VEHDMGTRANS_Transfer
+  #define VEHDMGTRANS_MAX                   VEHDMGTRANS_MAX
+  #define EOccupantDamageTransfer_None      VEHDMGTRANS_None
+  #define EOccupantDamageTransfer_Transfer  VEHDMGTRANS_Transfer
+  #define EOccupantDamageTransfer_MAX       VEHDMGTRANS_MAX
+} EOccupantDamageTransfer;
+typedef enum ESeatDamageRules        : unsigned char {
+  SDRULES_OccupantInvincible,     // 0
+  SDRULES_PlayerOccupantInvincible,// 1
+  SDRULES_AIOccupantInvincible,   // 2
+  SDRULES_OccupantTakesDamage,    // 3
+  SDRULES_MAX                     // 4
+  #define SDRULES_OccupantInvincible                 SDRULES_OccupantInvincible
+  #define SDRULES_PlayerOccupantInvincible           SDRULES_PlayerOccupantInvincible
+  #define SDRULES_AIOccupantInvincible               SDRULES_AIOccupantInvincible
+  #define SDRULES_OccupantTakesDamage                SDRULES_OccupantTakesDamage
+  #define SDRULES_MAX                                SDRULES_MAX
+  #define ESeatDamageRules_OccupantInvincible        SDRULES_OccupantInvincible
+  #define ESeatDamageRules_PlayerOccupantInvincible  SDRULES_PlayerOccupantInvincible
+  #define ESeatDamageRules_AIOccupantInvincible      SDRULES_AIOccupantInvincible
+  #define ESeatDamageRules_OccupantTakesDamage       SDRULES_OccupantTakesDamage
+  #define ESeatDamageRules_MAX                       SDRULES_MAX
+} ESeatDamageRules;
+#define EAIVehicleSeatPosition   EAIVehicleSeatPosition
+#define EVehicleSide             EVehicleSide
+#define EOccupantDamageTransfer  EOccupantDamageTransfer
+#define ESeatDamageRules         ESeatDamageRules
+
+/* ---------------------------------------------------------- UChallengeFeedbackMessage ! ---------------------------------------------------------- */
+
+typedef enum EChallengeFeedback : unsigned char {
+  CHAL_FEEDBACK_Completed,        // 0
+  CHAL_FEEDBACK_Received,         // 1
+  CHAL_FEEDBACK_MAX               // 2
+  #define CHAL_FEEDBACK_Completed       CHAL_FEEDBACK_Completed
+  #define CHAL_FEEDBACK_Received        CHAL_FEEDBACK_Received
+  #define CHAL_FEEDBACK_MAX             CHAL_FEEDBACK_MAX
+  #define EChallengeFeedback_Completed  CHAL_FEEDBACK_Completed
+  #define EChallengeFeedback_Received   CHAL_FEEDBACK_Received
+  #define EChallengeFeedback_MAX        CHAL_FEEDBACK_MAX
+} EChallengeFeedback;
+#define EChallengeFeedback  EChallengeFeedback
+
+/* ---------------------------------------------------------- UFiringPattern ! ---------------------------------------------------------- */
+
+typedef enum EPointSpreadType : unsigned char {
+  POINTSPREAD_Linear,             // 0
+  POINTSPREAD_Squared,            // 1
+  POINTSPREAD_InverseSquared,     // 2
+  POINTSPREAD_Cubed,              // 3
+  POINTSPREAD_InverseCubed,       // 4
+  POINTSPREAD_MAX                 // 5
+  #define POINTSPREAD_Linear               POINTSPREAD_Linear
+  #define POINTSPREAD_Squared              POINTSPREAD_Squared
+  #define POINTSPREAD_InverseSquared       POINTSPREAD_InverseSquared
+  #define POINTSPREAD_Cubed                POINTSPREAD_Cubed
+  #define POINTSPREAD_InverseCubed         POINTSPREAD_InverseCubed
+  #define POINTSPREAD_MAX                  POINTSPREAD_MAX
+  #define EPointSpreadType_Linear          POINTSPREAD_Linear
+  #define EPointSpreadType_Squared         POINTSPREAD_Squared
+  #define EPointSpreadType_InverseSquared  POINTSPREAD_InverseSquared
+  #define EPointSpreadType_Cubed           POINTSPREAD_Cubed
+  #define EPointSpreadType_InverseCubed    POINTSPREAD_InverseCubed
+  #define EPointSpreadType_MAX             POINTSPREAD_MAX
+} EPointSpreadType;
+#define EPointSpreadType  EPointSpreadType
+
+/* ---------------------------------------------------------- UGearboxAccountActions ! ---------------------------------------------------------- */
+
+typedef enum EAgeGateResult             : unsigned char {
+  AGE_Valid,                      // 0
+  AGE_InvalidDate,                // 1
+  AGE_BelowMinimum,               // 2
+  AGE_MAX                         // 3
+  #define AGE_Valid                    AGE_Valid
+  #define AGE_InvalidDate              AGE_InvalidDate
+  #define AGE_BelowMinimum             AGE_BelowMinimum
+  #define AGE_MAX                      AGE_MAX
+  #define EAgeGateResult_Valid         AGE_Valid
+  #define EAgeGateResult_InvalidDate   AGE_InvalidDate
+  #define EAgeGateResult_BelowMinimum  AGE_BelowMinimum
+  #define EAgeGateResult_MAX           AGE_MAX
+} EAgeGateResult;
+typedef enum ESignUpResult              : unsigned char {
+  SIGNUP_Success,                 // 0
+  SIGNUP_EmailTaken,              // 1
+  SIGNUP_PlatformTaken,           // 2
+  SIGNUP_GeneralFailure,          // 3
+  SIGNUP_PasswordNotSet,          // 4
+  SIGNUP_PasswordTooShort,        // 5
+  SIGNUP_PasswordTooLong,         // 6
+  SIGNUP_PasswordInvalid,         // 7
+  SIGNUP_EmailNotSet,             // 8
+  SIGNUP_EmailNotValid,           // 9
+  SIGNUP_NetworkFailure,          // 10
+  SIGNUP_Timeout,                 // 11
+  SIGNUP_MAX                      // 12
+  #define SIGNUP_Success                  SIGNUP_Success
+  #define SIGNUP_EmailTaken               SIGNUP_EmailTaken
+  #define SIGNUP_PlatformTaken            SIGNUP_PlatformTaken
+  #define SIGNUP_GeneralFailure           SIGNUP_GeneralFailure
+  #define SIGNUP_PasswordNotSet           SIGNUP_PasswordNotSet
+  #define SIGNUP_PasswordTooShort         SIGNUP_PasswordTooShort
+  #define SIGNUP_PasswordTooLong          SIGNUP_PasswordTooLong
+  #define SIGNUP_PasswordInvalid          SIGNUP_PasswordInvalid
+  #define SIGNUP_EmailNotSet              SIGNUP_EmailNotSet
+  #define SIGNUP_EmailNotValid            SIGNUP_EmailNotValid
+  #define SIGNUP_NetworkFailure           SIGNUP_NetworkFailure
+  #define SIGNUP_Timeout                  SIGNUP_Timeout
+  #define SIGNUP_MAX                      SIGNUP_MAX
+  #define ESignUpResult_Success           SIGNUP_Success
+  #define ESignUpResult_EmailTaken        SIGNUP_EmailTaken
+  #define ESignUpResult_PlatformTaken     SIGNUP_PlatformTaken
+  #define ESignUpResult_GeneralFailure    SIGNUP_GeneralFailure
+  #define ESignUpResult_PasswordNotSet    SIGNUP_PasswordNotSet
+  #define ESignUpResult_PasswordTooShort  SIGNUP_PasswordTooShort
+  #define ESignUpResult_PasswordTooLong   SIGNUP_PasswordTooLong
+  #define ESignUpResult_PasswordInvalid   SIGNUP_PasswordInvalid
+  #define ESignUpResult_EmailNotSet       SIGNUP_EmailNotSet
+  #define ESignUpResult_EmailNotValid     SIGNUP_EmailNotValid
+  #define ESignUpResult_NetworkFailure    SIGNUP_NetworkFailure
+  #define ESignUpResult_Timeout           SIGNUP_Timeout
+  #define ESignUpResult_MAX               SIGNUP_MAX
+} ESignUpResult;
+typedef enum ESignInResult              : unsigned char {
+  SIGNIN_Success,                 // 0
+  SIGNIN_PlatformTakenByOther,    // 1
+  SIGNIN_PlatformTakenBySelf,     // 2
+  SIGNIN_LoginFail,               // 3
+  SIGNIN_NetworkFailure,          // 4
+  SIGNIN_GeneralFailure,          // 5
+  SIGNIN_Timeout,                 // 6
+  SIGNIN_MAX                      // 7
+  #define SIGNIN_Success                      SIGNIN_Success
+  #define SIGNIN_PlatformTakenByOther         SIGNIN_PlatformTakenByOther
+  #define SIGNIN_PlatformTakenBySelf          SIGNIN_PlatformTakenBySelf
+  #define SIGNIN_LoginFail                    SIGNIN_LoginFail
+  #define SIGNIN_NetworkFailure               SIGNIN_NetworkFailure
+  #define SIGNIN_GeneralFailure               SIGNIN_GeneralFailure
+  #define SIGNIN_Timeout                      SIGNIN_Timeout
+  #define SIGNIN_MAX                          SIGNIN_MAX
+  #define ESignInResult_Success               SIGNIN_Success
+  #define ESignInResult_PlatformTakenByOther  SIGNIN_PlatformTakenByOther
+  #define ESignInResult_PlatformTakenBySelf   SIGNIN_PlatformTakenBySelf
+  #define ESignInResult_LoginFail             SIGNIN_LoginFail
+  #define ESignInResult_NetworkFailure        SIGNIN_NetworkFailure
+  #define ESignInResult_GeneralFailure        SIGNIN_GeneralFailure
+  #define ESignInResult_Timeout               SIGNIN_Timeout
+  #define ESignInResult_MAX                   SIGNIN_MAX
+} ESignInResult;
+typedef enum ECodeRedeemedResult        : unsigned char {
+  REDEEM_Success,                 // 0
+  REDEEM_Expired,                 // 1
+  REDEEM_NotValid,                // 2
+  REDEEM_Taken,                   // 3
+  REDEEM_GeneralFailure,          // 4
+  REDEEM_NetworkFailure,          // 5
+  REDEEM_Timeout,                 // 6
+  REDEEM_Duplicate,               // 7
+  REDEEM_MAX                      // 8
+  #define REDEEM_Success                      REDEEM_Success
+  #define REDEEM_Expired                      REDEEM_Expired
+  #define REDEEM_NotValid                     REDEEM_NotValid
+  #define REDEEM_Taken                        REDEEM_Taken
+  #define REDEEM_GeneralFailure               REDEEM_GeneralFailure
+  #define REDEEM_NetworkFailure               REDEEM_NetworkFailure
+  #define REDEEM_Timeout                      REDEEM_Timeout
+  #define REDEEM_Duplicate                    REDEEM_Duplicate
+  #define REDEEM_MAX                          REDEEM_MAX
+  #define ECodeRedeemedResult_Success         REDEEM_Success
+  #define ECodeRedeemedResult_Expired         REDEEM_Expired
+  #define ECodeRedeemedResult_NotValid        REDEEM_NotValid
+  #define ECodeRedeemedResult_Taken           REDEEM_Taken
+  #define ECodeRedeemedResult_GeneralFailure  REDEEM_GeneralFailure
+  #define ECodeRedeemedResult_NetworkFailure  REDEEM_NetworkFailure
+  #define ECodeRedeemedResult_Timeout         REDEEM_Timeout
+  #define ECodeRedeemedResult_Duplicate       REDEEM_Duplicate
+  #define ECodeRedeemedResult_MAX             REDEEM_MAX
+} ECodeRedeemedResult;
+typedef enum EResetPasswordResult       : unsigned char {
+  RESETP_Success,                 // 0
+  RESETP_GeneralFailure,          // 1
+  RESETP_NetworkFailure,          // 2
+  RESETP_Timeout,                 // 3
+  RESETP_MAX                      // 4
+  #define RESETP_Success                       RESETP_Success
+  #define RESETP_GeneralFailure                RESETP_GeneralFailure
+  #define RESETP_NetworkFailure                RESETP_NetworkFailure
+  #define RESETP_Timeout                       RESETP_Timeout
+  #define RESETP_MAX                           RESETP_MAX
+  #define EResetPasswordResult_Success         RESETP_Success
+  #define EResetPasswordResult_GeneralFailure  RESETP_GeneralFailure
+  #define EResetPasswordResult_NetworkFailure  RESETP_NetworkFailure
+  #define EResetPasswordResult_Timeout         RESETP_Timeout
+  #define EResetPasswordResult_MAX             RESETP_MAX
+} EResetPasswordResult;
+typedef enum EEntitlementConsumedResult : unsigned char {
+  CONSUME_Success,                // 0
+  CONSUME_GeneralFailure,         // 1
+  CONSUME_NetworkFailure,         // 2
+  CONSUME_Timeout,                // 3
+  CONSUME_MAX                     // 4
+  #define CONSUME_Success                            CONSUME_Success
+  #define CONSUME_GeneralFailure                     CONSUME_GeneralFailure
+  #define CONSUME_NetworkFailure                     CONSUME_NetworkFailure
+  #define CONSUME_Timeout                            CONSUME_Timeout
+  #define CONSUME_MAX                                CONSUME_MAX
+  #define EEntitlementConsumedResult_Success         CONSUME_Success
+  #define EEntitlementConsumedResult_GeneralFailure  CONSUME_GeneralFailure
+  #define EEntitlementConsumedResult_NetworkFailure  CONSUME_NetworkFailure
+  #define EEntitlementConsumedResult_Timeout         CONSUME_Timeout
+  #define EEntitlementConsumedResult_MAX             CONSUME_MAX
+} EEntitlementConsumedResult;
+#define EAgeGateResult              EAgeGateResult
+#define ESignUpResult               ESignUpResult
+#define ESignInResult               ESignInResult
+#define ECodeRedeemedResult         ECodeRedeemedResult
+#define EResetPasswordResult        EResetPasswordResult
+#define EEntitlementConsumedResult  EEntitlementConsumedResult
