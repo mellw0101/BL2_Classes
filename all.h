@@ -32,9 +32,9 @@ struct FVector2D {
 };
 
 struct FString {
-  TCHAR *Data;
-  INT Count;
-  INT Max;
+  wchar_t *Data;
+  int      Count;
+  int      Max;
 };
 DECLARE_A_TSET(FString);
 DECLARE_A_TMAP(FString, FString);
@@ -360,6 +360,248 @@ struct FPackedNormal {
 		DWORD Packed;
 	} Vector;
 };
+
+/* ---------------------------------------------------------- FResolveRect ---------------------------------------------------------- */
+
+struct FResolveRect {
+	int X1;
+	int Y1;
+	int X2;
+	int Y2;
+};
+
+/* ---------------------------------------------------------- FMaterialRenderContext ---------------------------------------------------------- */
+
+/** The context of a material being rendered. */
+struct FMaterialRenderContext {
+	/** material instance used for the material shader */
+  /* FMaterialRenderProxy */
+	const void *MaterialRenderProxy;
+	/** current scene time */
+	FLOAT CurrentTime;
+	/** The current real-time */
+	FLOAT CurrentRealTime;
+	/** view matrix used for transform expression */
+	const FSceneView *View;
+	/** Whether uniform expression values can be cached when using this render context. */
+	UBOOL bAllowUniformParameterCaching;
+	/** Whether to modify sampler state set with this context to work around mip map artifacts that show up in deferred passes. */
+	UBOOL bWorkAroundDeferredMipArtifacts;
+};
+
+/* ---------------------------------------------------------- FMaterial ---------------------------------------------------------- */
+
+DECLARE_A_TMULTI_MAP(UMaterialExpressionPtr, FString);
+DECLARE_A_TMAP(UMaterialExpressionPtr, INT);
+typedef struct {
+  /** Destructor */
+	void (__thiscall *Dtor)(FMaterial *);
+
+  /**
+	 * Compiles this material for Platform, storing the result in OutShaderMap
+	 *
+	 * @param StaticParameters - the set of static parameters to compile
+	 * @param Platform - the platform to compile for
+	 * @param OutShaderMap - the shader map to compile
+	 * @param bForceCompile - force discard previous results 
+	 * @param bDebugDump - Dump out the preprocessed and disassembled shader for debugging.
+	 * @return - TRUE if compile succeeded or was not necessary (shader map for StaticParameters was found and was complete)
+	 */
+	UBOOL (__thiscall *Compile)(
+    FMaterial *,
+		FStaticParameterSet *StaticParameters, 
+		EShaderPlatform Platform, 
+		/* TRefCountPtr<class FMaterialShaderMap>& */
+    void *OutShaderMap, 
+		UBOOL bForceCompile /* = FALSE */, 
+		UBOOL bDebugDump /* = FALSE */
+  );
+
+  /**
+	 * Should the shader for this material with the given platform, shader type and vertex 
+	 * factory type combination be compiled
+	 *
+	 * @param Platform		The platform currently being compiled for
+	 * @param ShaderType	Which shader is being compiled
+	 * @param VertexFactory	Which vertex factory is being compiled (can be NULL)
+	 *
+	 * @return TRUE if the shader should be compiled
+	 */
+	UBOOL (__thiscall *ShouldCache)(
+    const FMaterial *,
+    EShaderPlatform Platform,
+    /* FShaderType */
+    const void *ShaderType,
+    /* FVertexFactoryType */
+    const void *VertexFactoryType
+  );
+
+	/** Whether shaders should be compiled right away in CompileShaderMap or deferred until later. */
+	UBOOL (__thiscall *DeferFinishCompiling)(const FMaterial *);
+
+	/**
+	 * Called by the material compilation code with a map of the compilation errors.
+	 * Note that it is called even if there were no errors, but it passes an empty error map in that case.
+	 * @param Errors - A set of expression error pairs.
+	 */
+	void (__thiscall *HandleMaterialErrors)(
+    FMaterial *,
+    const _TMULTI_MAP_NAME(UMaterialExpressionPtr, FString) *Errors
+  );
+  /** Entry point for compiling a specific material property.  This must call SetMaterialProperty. */
+	INT (__thiscall *CompileProperty)(
+    const FMaterial *,
+    EMaterialShaderPlatform MatPlatform,
+    EMaterialProperty Property,
+    /* FMaterialCompiler */
+    void *Compiler
+  );
+	UBOOL (__thiscall *IsTwoSided)(const FMaterial *);
+	UBOOL (__thiscall *RenderTwoSidedSeparatePass)(const FMaterial *);
+	UBOOL (__thiscall *RenderLitTranslucencyPrepass)(const FMaterial *);
+	UBOOL (__thiscall *RenderLitTranslucencyDepthPostpass)(const FMaterial *);
+	UBOOL (__thiscall *NeedsDepthTestDisabled)(const FMaterial *);
+	UBOOL (__thiscall *AllowsFog)(const FMaterial *);
+	UBOOL (__thiscall *UsesOneLayerDistortion)(const FMaterial *);
+	UBOOL (__thiscall *IsUsedWithFogVolumes)(const FMaterial *);
+	UBOOL (__thiscall *IsLightFunction)(const FMaterial *);
+	UBOOL (__thiscall *IsWireframe)(const FMaterial *);
+	UBOOL (__thiscall *IsDistorted)(const FMaterial *);
+	UBOOL (__thiscall *HasSubsurfaceScattering)(const FMaterial *);
+	UBOOL (__thiscall *HasSeparateTranslucency)(const FMaterial *);
+	UBOOL (__thiscall *IsSpecialEngineMaterial)(const FMaterial *);
+	UBOOL (__thiscall *IsTerrainMaterial)(const FMaterial *);
+	UBOOL (__thiscall *IsSpecularAllowed)(const FMaterial *);
+	UBOOL (__thiscall *IsLightmapSpecularAllowed)(const FMaterial *);
+	UBOOL (__thiscall *IsDecalMaterial)(const FMaterial *);
+	UBOOL (__thiscall *IsUsedWithSkeletalMesh)(const FMaterial *);
+	UBOOL (__thiscall *IsUsedWithTerrain)(const FMaterial *);
+	UBOOL (__thiscall *IsUsedWithLandscape)(const FMaterial *);
+	UBOOL (__thiscall *IsUsedWithFracturedMeshes)(const FMaterial *);
+	UBOOL (__thiscall *IsUsedWithSpeedTree)(const FMaterial *);
+	UBOOL (__thiscall *IsUsedWithParticleSystem)(const FMaterial *);
+	UBOOL (__thiscall *IsUsedWithParticleSprites)(const FMaterial *);
+	UBOOL (__thiscall *IsUsedWithBeamTrails)(const FMaterial *);
+	UBOOL (__thiscall *IsUsedWithParticleSubUV)(const FMaterial *);
+	UBOOL (__thiscall *IsUsedWithStaticLighting)(const FMaterial *);
+	UBOOL (__thiscall *IsUsedWithLensFlare)(const FMaterial *);
+	UBOOL (__thiscall *IsUsedWithGammaCorrection)(const FMaterial *);
+	UBOOL (__thiscall *IsUsedWithInstancedMeshParticles)(const FMaterial *);
+	UBOOL (__thiscall *IsUsedWithFluidSurfaces)(const FMaterial *);
+	UBOOL (__thiscall *IsUsedWithMaterialEffect)(const FMaterial *);
+	UBOOL (__thiscall *IsUsedWithDecals)(const FMaterial *);
+	UBOOL (__thiscall *IsUsedWithMorphTargets)(const FMaterial *);
+	UBOOL (__thiscall *IsUsedWithRadialBlur)(const FMaterial *);
+	UBOOL (__thiscall *IsUsedWithInstancedMeshes)(const FMaterial *);
+	UBOOL (__thiscall *IsUsedWithSplineMeshes)(const FMaterial *);
+	UBOOL (__thiscall *IsUsedWithAPEXMeshes)(const FMaterial *);
+	UBOOL (__thiscall *IsUsedWithScreenDoorFade)(const FMaterial *);
+	EMaterialTessellationMode (__thiscall *GetD3D11TessellationMode)(const FMaterial *);
+	/** @return TRUE if the material should only be used with simple static lighting */
+	UBOOL (__thiscall *RequiresSimpleStaticLighting)(const FMaterial *, EMaterialShaderPlatform MatPlatform);
+	UBOOL (__thiscall *IsMasked)(const FMaterial *);
+	UBOOL (__thiscall *UsesImageBasedReflections)(const FMaterial *);
+	UBOOL (__thiscall *UsesMaskedAntialiasing)(const FMaterial *);
+	FLOAT (__thiscall *GetImageReflectionNormalDampening)(const FMaterial *);
+	FLOAT (__thiscall *GetShadowDepthBias)(const FMaterial *);
+	UBOOL (__thiscall *UsesPerPixelCameraVector)(const FMaterial *);
+	UBOOL (__thiscall *CastLitTranslucencyShadowAsMasked)(const FMaterial *);
+	UBOOL (__thiscall *TranslucencyInheritDominantShadowsFromOpaque)(const FMaterial *);
+	EBlendMode (__thiscall *GetBlendMode)(const FMaterial *);
+	EMaterialLightingModel (__thiscall *GetLightingModel)(const FMaterial *);
+	UBOOL (__thiscall *IsMobileTextureCoordinateTransformed)(const FMaterial *);
+	void (__thiscall *FillMobileMaterialVertexParams)(const FMaterial *, /* FMobileMaterialVertexParams */ void *OutVertexParams);
+	void (__thiscall *FillMobileMaterialPixelParams)(const FMaterial *, /* FMobileMaterialPixelParams */ void *OutPixelParams);
+	QWORD (__thiscall *GetMobileMaterialSortKey)(const FMaterial *);
+	FLOAT (__thiscall *GetOpacityMaskClipValue)(const FMaterial *);
+	FString (__thiscall *GetFriendlyName)(const FMaterial *);
+
+  UBOOL (__thiscall *HasNormalmapConnected)(const FMaterial *);
+	UBOOL (__thiscall *AllowTranslucencyDoF)(const FMaterial *);
+	UBOOL (__thiscall *TranslucencyReceiveDominantShadowsFromStatic)(const FMaterial *);
+	UBOOL (__thiscall *HasVertexPositionOffsetConnected)(const FMaterial *);
+	/**
+	 * Internal helper functions to fill in the vertex params struct
+	 * @param InMaterial - The Material to draw the parameters from
+	 * @param OutVertexParams - Vertex parameter structure to pass to the shader system
+	 */
+	void (__thiscall *FillMobileMaterialVertexParams_2)(const FMaterial *, const UMaterial* InMaterial, /* FMobileMaterialVertexParams */void *OutVertexParams);
+	/**
+	 * Internal helper functions to fill in the vertex params struct
+	 * @param InMaterial - The Material to draw the parameters from
+	 * @param OutVertexParams - Vertex parameter structure to pass to the shader system
+	 */
+	void (__thiscall *FillMobileMaterialPixelParams_2)(const FMaterial *, const UMaterial *InMaterial, /* FMobileMaterialPixelParams */ void *OutVertexParams);
+
+	/** Should shaders compiled for this material be saved to disk? */
+	UBOOL (__thiscall *IsPersistent)(const FMaterial *);
+} VfTable__FMaterial;
+/** Information about one texture lookup. */
+struct FMaterial__FTextureLookup {
+  INT TexCoordIndex;
+  INT TextureIndex;  // Index into Uniform2DTextureExpressions
+
+  /** Horizontal multiplier that can be different from 1.0f if the artist uses tiling */
+  FLOAT	UScale;
+
+  /** Vertical multiplier */
+  FLOAT VScale;
+};
+typedef TArray_FMaterial__FTextureLookup FTextureLookupInfo;
+/** A material. */
+struct FMaterial {
+  VfTable__FMaterial *vftable;
+  /**
+	 * Maintains references to UTextures for this FMaterial.  This serves two purposes:
+	 * It allows soft texture references from uniform expressions (which are saved in the shader cache) to be reassociated on load,
+	 * And it allows the material to emit RTGC references so that no used textures get garbage collected in game.
+	 */
+	TArray_UTexturePtr UniformExpressionTextures;
+
+  TArray_FString CompileErrors;
+  
+	/** The texture dependency lengths for the materials' expressions. */
+	_TMAP_NAME(UMaterialExpressionPtr, INT) TextureDependencyLengthMap;
+
+  /** The maximum texture dependency length for the material. */
+	INT MaxTextureDependencyLength;
+
+  /* TRefCountPtr<FMaterialShaderMap> */
+  void *ShaderMap;
+
+  FGuid Id;
+
+	/** If non-NULL, contains legacy uniform expressions. */
+	/* FUniformExpressionSet */
+  void *LegacyUniformExpressions;
+
+	/** Information about each texture lookup in the pixel shader. */
+	FTextureLookupInfo	TextureLookups;
+
+	UINT NumUserTexCoords;
+
+	/** combination of ECoordTransformUsage flags used by this shader */
+	DWORD UsingTransforms;
+
+	/** Boolean indicators of using SceneColorTexture or SceneDepthTexture	*/
+	BITFIELD bUsesSceneColor : 1;
+	BITFIELD bUsesSceneDepth : 1;
+
+	/** Boolean indicating using DynamicParameter */
+	BITFIELD bUsesDynamicParameter : 1;
+
+	/** Boolean indicating using LightmapUvs */
+	BITFIELD bUsesLightmapUVs : 1;
+
+	/** Indicates whether the material uses the vertex position offset material input. */
+	BITFIELD bUsesMaterialVertexPositionOffset : 1;
+
+	/**
+	* False if the material's persistent compilation output was loaded from an archive older than VER_MIN_COMPILEDMATERIAL.
+	* (VER_MIN_COMPILEDMATERIAL is defined in MaterialShared.cpp)
+	*/
+	BITFIELD bValidCompilationOutput : 1;
+}; assert_size(FMaterial, 140);
 
 /* ---------------------------------------------------------- IConsoleManager ---------------------------------------------------------- */
 
@@ -1571,6 +1813,77 @@ struct FRenderResource {
 	TLinkedList_FRenderResourcePtr ResourceLink;
 	/** True if the resource has been initialized. */
 	BITFIELD bInitialized : 1;
+}; assert_size(FRenderResource, 20);
+
+/* ---------------------------------------------------------- FSceneRenderTargets ---------------------------------------------------------- */
+
+/** Single render target item consists of a render surface and its resolve texture. */
+struct FSceneRenderTargets__FSceneRenderTargetItem {
+  /** texture for resolving to */
+  /* FTexture2DRHIRef */ void *Texture;
+  
+  /** Cube texture RHI reference, if this is a cube map surface. */
+  /* FTextureCubeRHIRef */ void *TextureCube;
+
+  /** surface to render to */
+  /* FSurfaceRHIRef */ void *Surface;
+
+  /** combination of ESceneRenderTargetFlags */
+  DWORD Flags;
+};
+/** Encapsulates the render targets used for scene rendering. */
+struct FSceneRenderTargets {
+  FRenderResource Super;
+  /** TRUE if the ambient occlusion history render target needs to be cleared before next use. */
+	UBOOL bAOHistoryNeedsCleared;
+
+	/** TRUE if the shared surface memory used for SceneColor and SceneColorRaw contains the raw format. */
+	UBOOL bSceneColorTextureIsRaw;
+
+	/** TRUE if TranslucencyDominantLightAttenuationTexture has been populated with meaningful results. */
+	UBOOL bResolvedTranslucencyDominantLightAttenuationTexture;
+
+  BYTE unknown_00[52];
+
+  // size of the back buffer, in editor this has to be >= than the biggest view port
+	UINT BufferSizeX;
+	UINT BufferSizeY;
+
+	// e.g. 4
+	UINT FilterDownsampleFactor;
+	// back buffer size down sampled by "FilterDownsampleFactor" with additional border
+	UINT FilterBufferSizeX;
+	UINT FilterBufferSizeY;
+
+	// back buffer size down sampled by some factor (e.g. 2 on Xbox360, 1 by default)
+	UINT VelocityBufferSizeX;
+	UINT VelocityBufferSizeY;
+
+	// e.g. 2
+	UINT FogAccumulationDownsampleFactor;
+	// back buffer size down sampled by "FogAccumulationDownsampleFactor"
+	UINT FogAccumulationBufferSizeX;
+	UINT FogAccumulationBufferSizeY;
+
+	// e.g. 2
+	UINT SmallColorDepthDownsampleFactor;
+	// back buffer size down sampled by "SmallColorDepthDownsampleFactor"
+	UINT TranslucencyBufferSizeX;
+	UINT TranslucencyBufferSizeY;
+
+	// e.g. 2
+	UINT AODownsampleFactor;
+	// back buffer size down sampled by "AODownsampleFactor"
+	UINT AOBufferSizeX;
+	UINT AOBufferSizeY;
+
+  /* FSharedMemoryResourceRHIRef */ void *LightAttenuationMemoryBuffer;
+	/* FSharedMemoryResourceRHIRef */ void *PreviousFrameBackBufferMemoryBuffer;
+
+	EPixelFormat SceneColorBufferFormat;
+
+  /** static array of all the scene render targets */
+	FSceneRenderTargets__FSceneRenderTargetItem RenderTargets[MAX_SCENE_RENDERTARGETS];
 };
 
 /** A vertex buffer. */
@@ -1740,14 +2053,14 @@ struct FChunkedList_Mirror {
 };
 struct FArray_Mirror {
   void *Data;
-  int ArrayNum;
-  int ArrayMax;
+  int   ArrayNum;
+  int   ArrayMax;
 };
 struct FStableArray_Mirror {
-  int ArrayNumInUse;
-  int ArrayNumAllocated;
-  int ArrayCapacity;
-  int FreeListHeadIndex;
+  int           ArrayNumInUse;
+  int           ArrayNumAllocated;
+  int           ArrayCapacity;
+  int           FreeListHeadIndex;
   FArray_Mirror Chunks;
 };
 typedef struct {
@@ -2221,6 +2534,34 @@ struct FImplementedInterface {
   UProperty *PointerProperty;           ///< the pointer property that is located at the offset of the interface's vtable
 };
 
+/* ---------------------------------------------------------- USelection ---------------------------------------------------------- */
+
+_DECL_TMRUARRAY(UClassPtr);
+struct USelection {
+  UObject Super;
+
+  /** List of selected objects, ordered as they were selected. */
+	TArray_UObjectPtr SelectedObjects;
+
+	/** Tracks the most recently selected actor classes.  Used for UnrealEd menus. */
+	/* TMRUArray<UClass *> */
+  TMRUArray_UClassPtr SelectedClasses;
+
+	/** Tracks the number of active selection operations.  Allows batched selection operations to only send one notification at the end of the batch */
+	INT SelectionMutex;
+
+	/** Tracks whether the selection set changed during a batch selection operation */
+	UBOOL bIsBatchDirty;
+}; assert_size(USelection, 96);
+
+/* ---------------------------------------------------------- UClipPadEntry ---------------------------------------------------------- */
+
+struct UClipPadEntry {
+  UObject Super;
+  FString Title;
+  FString Text;
+}; assert_size(UClipPadEntry, 84);
+
 /* ---------------------------------------------------------- UGearboxAccountActions ---------------------------------------------------------- */
 
 struct FEULAData {
@@ -2250,21 +2591,19 @@ struct UGearboxAccountActions {
 /* ---------------------------------------------------------- UFiringBehaviorManager ---------------------------------------------------------- */
 
 struct UFiringBehaviorManager {
-  UObject                    Super;
-  UFiringPattern            *CurrentFiringPattern;
-  float                      CurrentTargetExposure;
-  int                        NumShotsThisBurst;
-  FVector                    CachedTargetPoint;
-  BITFIELD                   bHasTargetPoint          : 1;
-  BITFIELD                   bSetupWithZoneCollection : 1;
-  /* TODO: FiringZoneCollectionDefinition */
-  void                      *CurrentZoneCollection;
-  /* TODO: FiringZoneDefinition */
-  void                      *CurrentZone;
-  UFiringBehaviorDefinition *CurrentBehavior;
-  int                        CurrentConditionalPattern;
-  UFiringBehaviorDefinition *DefaultFiringBehaviorDefinition;
-  UFiringPattern            *DefaultFiringPatternTemplate;
+  UObject                          Super;
+  UFiringPattern                  *CurrentFiringPattern;
+  float                            CurrentTargetExposure;
+  int                              NumShotsThisBurst;
+  FVector                          CachedTargetPoint;
+  BITFIELD                         bHasTargetPoint          : 1;
+  BITFIELD                         bSetupWithZoneCollection : 1;
+  UFiringZoneCollectionDefinition *CurrentZoneCollection;
+  UFiringZoneDefinition           *CurrentZone;
+  UFiringBehaviorDefinition       *CurrentBehavior;
+  int                              CurrentConditionalPattern;
+  UFiringBehaviorDefinition       *DefaultFiringBehaviorDefinition;
+  UFiringPattern                  *DefaultFiringPatternTemplate;
 }; assert_size(UFiringBehaviorManager, 112);
 
 /* ---------------------------------------------------------- UFiringCondition ---------------------------------------------------------- */
@@ -2351,9 +2690,8 @@ struct UDownload {
 /* ---------------------------------------------------------- UChannelDownload ---------------------------------------------------------- */
 
 struct UChannelDownload {
-  UDownload Super;
-  /* TODO: UFileChannel */
-  void     *Ch;
+  UDownload     Super;
+  UFileChannel *Ch;
 }; assert_size(UChannelDownload, 2676);
 
 /* ---------------------------------------------------------- UPhysicsJumpConnection ---------------------------------------------------------- */
@@ -2393,7 +2731,7 @@ struct UDlcTmsHolder {
 #pragma pack(push, 4)
 struct native FMMStats_Timer {
   BITFIELD bInProgress : 1;
-  DOUBLE MSecs;
+  DOUBLE   MSecs;
 };
 #pragma pack(pop)
 struct UOnlineMatchmakingStats {
@@ -4077,11 +4415,10 @@ struct native FMovieInstanceArray {
   UGearboxGFxMovie          *PoolParent;
 };
 struct UGFxActorMoviePool {
-  UObject Super;
-  UGFxMovieDefinition *MovieDefinition;
-  TArray_FMovieInstanceArray Pools;
-  /** IGFxActorMovie */
-  TArray_FImplementedInterface MovieTargets;
+  UObject                      Super;
+  UGFxMovieDefinition         *MovieDefinition;
+  TArray_FMovieInstanceArray   Pools;
+  TArray_FImplementedInterface MovieTargets;  /** IGFxActorMovie */
 }; assert_size(UGFxActorMoviePool, 88);
 
 /* ---------------------------------------------------------- UInterpCurveEdSetup ---------------------------------------------------------- */
@@ -4352,13 +4689,12 @@ struct UGBXObjectList {
 /* ---------------------------------------------------------- UScreenSpaceManager ---------------------------------------------------------- */
 
 struct UScreenSpaceManager {
-  UObject Super;
+  UObject       Super;
   ULocalPlayer *pLocalPlayer;
-  int ViewWidth;
-  int ViewHeight;
-  __ALIGN(16)
-  FMatrix ViewProjectionMatrix;
-  BITFIELD bMatricesUpToDate : 1;
+  int           ViewWidth;
+  int           ViewHeight; __ALIGN(16)
+  FMatrix       ViewProjectionMatrix;
+  BITFIELD      bMatricesUpToDate : 1;
 }; assert_size(UScreenSpaceManager, 160);
 
 /* ---------------------------------------------------------- UGFxEngine ---------------------------------------------------------- */
@@ -4977,12 +5313,10 @@ struct UGearboxDialogManager {
   TArray_AActorPtr                  DisabledTalkers;
   TArray_UGearboxDialogGroupPtr     Groups;
   UGearboxDialogEventData          *CurrentEventContext;
-  /* native const transient Map_Mirror */
-  _TMAP_NAME(INT, INT)              GroupEventTagMap;
+  _TMAP_NAME(INT, INT)              GroupEventTagMap;  /* native const transient Map_Mirror */
   TArray_UGearboxDialogEventDataPtr EventDataPool;
   FString                           EventDataClassPath;
-  /** Class<Object> */
-  UClass                           *EventDataClass;
+  UClass                           *EventDataClass;  /** Class<Object> */
 }; assert_size(UGearboxDialogManager, 192);
 
 /* ---------------------------------------------------------- UWillowDialogManager ---------------------------------------------------------- */
@@ -5656,20 +5990,27 @@ struct UDownloadablePackageLicenseItem {
   int     LicenseMask;
 }; assert_size(UDownloadablePackageLicenseItem, 64);
 
+/* ---------------------------------------------------------- UMarketingUnlockLicenseItem ---------------------------------------------------------- */
+
+struct UMarketingUnlockLicenseItem {
+  UDownloadablePackageLicenseItem Super;
+  int                             UnlockId;
+}; assert_size(UMarketingUnlockLicenseItem, 68);
+
 /* ---------------------------------------------------------- UGoldenKeyLicenseItem ---------------------------------------------------------- */
 
 struct UGoldenKeyLicenseItem {
   UDownloadablePackageLicenseItem Super;
-  int SourceId;
-  int NumKeys;
+  int                             SourceId;
+  int                             NumKeys;
 }; assert_size(UGoldenKeyLicenseItem, 72);
 
 /* ---------------------------------------------------------- UGFxMovieManager ---------------------------------------------------------- */
 
 struct native FGearboxGFxPlayParameters {
   UGFxMovieDefinition *Definition;
-  UObject *OtherObject;
-  APlayerController *PlayerOwner;
+  UObject             *OtherObject;
+  APlayerController   *PlayerOwner;
 };
 struct UGFxMovieManager {
   UObject                            Super;
@@ -6086,6 +6427,12 @@ struct UParticleModule {
   BITFIELD bRequiresLoopingNotification : 1;
   BYTE     LODValidity;
 }; assert_size(UParticleModule, 68);
+
+/* ---------------------------------------------------------- UParticleModuleBeamBase ---------------------------------------------------------- */
+
+struct UParticleModuleBeamBase {
+  UParticleModule Super;
+}; assert_size(UParticleModuleBeamBase, 68);
 
 /* ---------------------------------------------------------- UParticleModuleOrbitBase ---------------------------------------------------------- */
 
@@ -8609,6 +8956,12 @@ struct UWillowDamageSource {
   UWillowDamageType Super;
 }; assert_size(UWillowDamageSource, 128);
 
+/* ---------------------------------------------------------- UWillowDmgSource_Rocket ---------------------------------------------------------- */
+
+struct UWillowDmgSource_Rocket {
+  UWillowDamageSource Super;
+}; assert_size(UWillowDmgSource_Rocket, 128);
+
 /* ---------------------------------------------------------- UWillowDmgSource_Grenade ---------------------------------------------------------- */
 
 struct UWillowDmgSource_Grenade {
@@ -8621,11 +8974,47 @@ struct UWillowDmgSource_Skill {
   UWillowDamageSource Super;
 }; assert_size(UWillowDmgSource_Skill, 128);
 
+/* ---------------------------------------------------------- UWillowDmgSource_Skill_IgnoreIOs ---------------------------------------------------------- */
+
+struct UWillowDmgSource_Skill_IgnoreIOs {
+  UWillowDmgSource_Skill Super;
+}; assert_size(UWillowDmgSource_Skill_IgnoreIOs, 128);
+
 /* ---------------------------------------------------------- UWillowDmgSource_Bullet ---------------------------------------------------------- */
 
 struct UWillowDmgSource_Bullet {
   UWillowDamageSource Super;
 }; assert_size(UWillowDmgSource_Bullet, 128);
+
+/* ---------------------------------------------------------- UWillowDmgSource_Shotgun ---------------------------------------------------------- */
+
+struct UWillowDmgSource_Shotgun {
+  UWillowDmgSource_Bullet Super;
+}; assert_size(UWillowDmgSource_Shotgun, 128);
+
+/* ---------------------------------------------------------- UWillowDmgSource_Sniper ---------------------------------------------------------- */
+
+struct UWillowDmgSource_Sniper {
+  UWillowDmgSource_Bullet Super;
+}; assert_size(UWillowDmgSource_Sniper, 128);
+
+/* ---------------------------------------------------------- UWillowDmgSource_Pistol ---------------------------------------------------------- */
+
+struct UWillowDmgSource_Pistol {
+  UWillowDmgSource_Bullet Super;
+}; assert_size(UWillowDmgSource_Pistol, 128);
+
+/* ---------------------------------------------------------- UWillowDmgSource_MachineGun ---------------------------------------------------------- */
+
+struct UWillowDmgSource_MachineGun {
+  UWillowDmgSource_Bullet Super;
+}; assert_size(UWillowDmgSource_MachineGun, 128);
+
+/* ---------------------------------------------------------- UWillowDmgSource_SubMachineGun ---------------------------------------------------------- */
+
+struct UWillowDmgSource_SubMachineGun {
+  UWillowDmgSource_Bullet Super;
+}; assert_size(UWillowDmgSource_SubMachineGun, 128);
 
 /* ---------------------------------------------------------- UWillowDmgSource_StatusEffect ---------------------------------------------------------- */
 
@@ -8998,6 +9387,14 @@ struct UQSortComparer {
   UObject Super;
 }; assert_size(UQSortComparer, 60);
 
+/* ---------------------------------------------------------- UQSortAttributeComparer ---------------------------------------------------------- */
+
+struct UQSortAttributeComparer {
+  UQSortComparer        Super;
+  UAttributeDefinition *Attribute;
+  BITFIELD              bBiggerIsBetter : 1;
+}; assert_size(UQSortAttributeComparer, 68);
+
 /* ---------------------------------------------------------- UWeaponTypeComparer ---------------------------------------------------------- */
 
 struct UWeaponTypeComparer {
@@ -9029,6 +9426,39 @@ struct UPostProcessEffect {
   int                      InDrawY;
   ESceneDepthPriorityGroup SceneDPG;
 }; assert_size(UPostProcessEffect, 100);
+
+/* ---------------------------------------------------------- UAmbientOcclusionEffect ---------------------------------------------------------- */
+
+struct UAmbientOcclusionEffect {
+  UPostProcessEffect       Super;
+  FLinearColor             OcclusionColor;
+  float                    OcclusionPower;
+  float                    OcclusionScale;
+  float                    OcclusionBias;
+  float                    MinOcclusion;
+  BITFIELD                 SSAO2           : 1;
+  BITFIELD                 bAngleBasedSSAO : 1;
+  float                    OcclusionRadius;
+  float                    OcclusionAttenuation;
+  EAmbientOcclusionQuality OcclusionQuality;
+  float                    OcclusionFadeoutMinDistance;
+  float                    OcclusionFadeoutMaxDistance;
+  float                    HaloDistanceThreshold;
+  float                    HaloDistanceScale;
+  float                    HaloOcclusion;
+  float                    EdgeDistanceThreshold;
+  float                    EdgeDistanceScale;
+  float                    FilterDistanceScale;
+  int                      FilterSize;
+  float                    HistoryConvergenceTime;
+  float                    HistoryWeightConvergenceTime;
+}; assert_size(UAmbientOcclusionEffect, 192);
+
+/* ---------------------------------------------------------- UFXAAEffect ---------------------------------------------------------- */
+
+struct UFXAAEffect {
+  UPostProcessEffect Super;
+}; assert_size(UFXAAEffect, 100);
 
 /* ---------------------------------------------------------- UAccumulateAlphaEffect ---------------------------------------------------------- */
 
@@ -12329,78 +12759,75 @@ struct UPlayerInput {
 
 struct native FInputDeviceAxisAddress {
   UInputDeviceDefinition *SourceDevice;
-  int SourceIndex;
+  int                     SourceIndex;
 };
 struct native FAccelStateData {
   BITFIELD bIsAccelerating : 1;
-  float Warmup;
-  float CurrentSpeed;
-  int Direction;
+  float    Warmup;
+  float    CurrentSpeed;
+  int      Direction;
 };
 struct native FInputAxisData {
-  FName AxisName;
+  FName                   AxisName;
   FInputDeviceAxisAddress InputDeviceHandler;
-  void *ParameterPtr;
-  FAccelStateData AccelState;
-  BITFIELD bIsLookAxis         : 1;
-  BITFIELD bIsRemappedInverted : 1;
+  void                   *ParameterPtr;
+  FAccelStateData         AccelState;
+  BITFIELD                bIsLookAxis         : 1;
+  BITFIELD                bIsRemappedInverted : 1;
 };
 struct native FDeviceLookAxisData {
   UInputDeviceDefinition *SourceDevice;
-  FName LookXAxisName;
-  FName LookYAxisName;
+  FName                   LookXAxisName;
+  FName                   LookYAxisName;
 };
 struct native FInputDeviceButtonAddress {
   UInputDeviceDefinition *SourceDevice;
-  int   SourceIndex;
-  void *RemappedButton;
+  int                     SourceIndex;
+  void                   *RemappedButton;
 };
 struct native FInputButtonData {
   TArray_FInputDeviceButtonAddress InputDeviceHandlers;
-  FName ButtonName;
-  EButtonState State;
-  float LastPressedTime;
+  FName                            ButtonName;
+  EButtonState                     State;
+  float                            LastPressedTime;
 };
 struct native FKeyRebindingData {
   FName DefaultKeyName;
   FName RemappedKeyName;
 };
 struct UWillowPlayerInput {
-  UPlayerInput Super;
-  BITFIELD bAlwaysPlayForceFeedback       : 1;
-  BITFIELD bDebugBindCommandsEnabled      : 1;
-  BITFIELD bHoldDuck                      : 1;
-  BITFIELD bBindCommandConsumedInputEvent : 1;
-  BITFIELD bCanSprint                     : 1;
-  BITFIELD bReviveHeld                    : 1;
-  BITFIELD bUpdateInputContext            : 1;
-  BITFIELD bApplyControllerViewAccel      : 1;
-  BITFIELD bTryToSprint                   : 1;
-  FName DebugBindOverrideKeyName;
-  float ButtonHoldEventTime;
-  float LastDuckTime;
-  EDoubleClickDir ForcedDoubleClick;
-  float RunWalkTransitionThreshold;
-  float TimeSinceLastMovement;
-  FName CurrentInputContextName;
+  UPlayerInput                      Super;
+  BITFIELD                          bAlwaysPlayForceFeedback       : 1;
+  BITFIELD                          bDebugBindCommandsEnabled      : 1;
+  BITFIELD                          bHoldDuck                      : 1;
+  BITFIELD                          bBindCommandConsumedInputEvent : 1;
+  BITFIELD                          bCanSprint                     : 1;
+  BITFIELD                          bReviveHeld                    : 1;
+  BITFIELD                          bUpdateInputContext            : 1;
+  BITFIELD                          bApplyControllerViewAccel      : 1;
+  BITFIELD                          bTryToSprint                   : 1;
+  FName                             DebugBindOverrideKeyName;
+  float                             ButtonHoldEventTime;
+  float                             LastDuckTime;
+  EDoubleClickDir                   ForcedDoubleClick;
+  float                             RunWalkTransitionThreshold;
+  float                             TimeSinceLastMovement;
+  FName                             CurrentInputContextName;
   TArray_UInputContextDefinitionPtr CurrentInputContexts;
-  TArray_FInputAxisData Axes;
-  /* private native map{VOID,VOID} */
-  _TMAP_NAME(INT, INT) NameToAxisStatePtr;
-  TArray_FDeviceLookAxisData DeviceLookAxes;
-  TArray_FInputButtonData Buttons;
-  /* private native map{VOID,VOID} */
-  _TMAP_NAME(INT, INT) NameToButtonStatePtr;
-  TArray_FName LatentButtons;
-  /* private map{VOID,VOID} */
-  _TMAP_NAME(INT, INT) InputActionToAvailabilityMap;
-  TArray_UInputActionDefinitionPtr PreSwitchAvailableActions;
-  float ControllerSensitivityX;
-  float ControllerSensitivityY;
-  int ControllerPresetIndex;
-  TArray_FKeyRebindingData KeyRebindings;
-  TArray_FKeyRebindingData ControllerRebindings;
-  int EndCrouchOnNextForwardMovement;
+  TArray_FInputAxisData             Axes;
+  _TMAP_NAME(INT, INT)              NameToAxisStatePtr;  /* private native map{VOID,VOID} */
+  TArray_FDeviceLookAxisData        DeviceLookAxes;
+  TArray_FInputButtonData           Buttons;
+  _TMAP_NAME(INT, INT)              NameToButtonStatePtr;  /* private native map{VOID,VOID} */
+  TArray_FName                      LatentButtons;
+  _TMAP_NAME(INT, INT)              InputActionToAvailabilityMap;  /* private map{VOID,VOID} */
+  TArray_UInputActionDefinitionPtr  PreSwitchAvailableActions;
+  float                             ControllerSensitivityX;
+  float                             ControllerSensitivityY;
+  int                               ControllerPresetIndex;
+  TArray_FKeyRebindingData          KeyRebindings;
+  TArray_FKeyRebindingData          ControllerRebindings;
+  int                               EndCrouchOnNextForwardMovement;
 }; assert_size(UWillowPlayerInput, 712);
 
 /* ---------------------------------------------------------- UUIInteraction ---------------------------------------------------------- */
@@ -14798,6 +15225,12 @@ struct UInterface {
   UObject Super;
 }; assert_size(UInterface, 60);
 
+/* ---------------------------------------------------------- UInterface_NavigationHandle ---------------------------------------------------------- */
+
+struct UInterface_NavigationHandle {
+  UInterface Super;
+}; assert_size(UInterface_NavigationHandle, 60);
+
 /* ---------------------------------------------------------- UUIListElementCellProvider ---------------------------------------------------------- */
 
 struct UUIListElementCellProvider {
@@ -15867,6 +16300,14 @@ struct FOutputDeviceConsole {
   UBOOL bAutoEmitLineTerminator;        ///< Whether to output a line-terminator after each log call...
 };
 
+/* ---------------------------------------------------------- FOutputDeviceConsoleWindows ---------------------------------------------------------- */
+
+/** Windows implementation of console log window, utilizing the Win32 console API. */
+struct FOutputDeviceConsoleWindows {
+  FOutputDeviceConsole Super;
+	HANDLE               ConsoleHandle;  /** Handle to the console log window */
+};
+
 /* ---------------------------------------------------------- FOutputDeviceConsoleWindowsInherited ---------------------------------------------------------- */
 
 /**
@@ -15885,6 +16326,8 @@ struct FOutputDeviceConsoleWindowsInherited {
 	/** Device we should forward to if we don't connect */
 	FOutputDeviceConsole *ForwardConsole;
 };
+
+/* ---------------------------------------------------------- FSynchronize ---------------------------------------------------------- */
 
 typedef struct {
 	/** Simple destructor */
@@ -16325,7 +16768,7 @@ struct UScriptStruct {
 
 struct UStructProperty {
   UProperty      Super;
-  UScriptStruct* Struct;
+  UScriptStruct *Struct;
 }; assert_size(UStructProperty, 132);
 
 /* ---------------------------------------------------------- UDistributionFloat ---------------------------------------------------------- */
@@ -16428,17 +16871,17 @@ struct FStateFrame {
 
 struct UFunction {
   UStruct Super;
-  DWORD	  FunctionFlags;
-	WORD	  iNative;
-	WORD	  RepOffset;
-  FName	  FriendlyName;   /** Friendly version for this function, mainly for operators. */
-  BYTE	  OperPrecedence;
+  DWORD FunctionFlags;
+	WORD  iNative;
+	WORD  RepOffset;
+  FName FriendlyName;   /** Friendly version for this function, mainly for operators. */
+  BYTE  OperPrecedence;
 	/* Variables in memory only. */
-	BYTE	  NumParms;
-	WORD	  ParmsSize;
-	WORD	  ReturnValueOffset;
+	BYTE NumParms;
+	WORD ParmsSize;
+	WORD ReturnValueOffset;
 	/** pointer to first local struct property in this UFunction that contains defaults */
-	UStructProperty* FirstStructWithDefaults;
+	UStructProperty *FirstStructWithDefaults;
   UObject_PMF Func;
 }; assert_size(UFunction, 176);
 
@@ -17031,6 +17474,20 @@ struct UPrimitiveComponent {
   float                        LastRenderTime;
 }; assert_size(UPrimitiveComponent, 528);
 DECLARE_A_TSET(UPrimitiveComponentPtr);
+
+/* ---------------------------------------------------------- USocketComponent ---------------------------------------------------------- */
+
+struct USocketComponent {
+  UPrimitiveComponent Super;
+  FName               SocketName;
+}; assert_size(USocketComponent, /* __ALIGN(16) == 544 */ 536);
+
+/* ---------------------------------------------------------- UHomingTargetComponent ---------------------------------------------------------- */
+
+__ALIGN(16)
+struct UHomingTargetComponent {
+  USocketComponent Super;
+}; assert_size(UHomingTargetComponent, 544);
 
 /* ---------------------------------------------------------- UCameraConeComponent ---------------------------------------------------------- */
 
@@ -18394,11 +18851,37 @@ struct USequenceObject {
 	BITFIELD   bShouldPersistWhenStreamedOut : 1;
 }; assert_size(USequenceObject, 72);
 
+/* ---------------------------------------------------------- USequenceFrame ---------------------------------------------------------- */
+
+struct USequenceFrame {
+  USequenceObject Super;
+  int             SizeX;
+  int             SizeY;
+  int             BorderWidth;
+  BITFIELD        bDrawBox  : 1;
+  BITFIELD        bFilled   : 1;
+  BITFIELD        bTileFill : 1;
+  FColor          BorderColor;
+  FColor          FillColor;
+}; assert_size(USequenceFrame, 96);
+
 /* ---------------------------------------------------------- UGBXDefinition ---------------------------------------------------------- */
 
 struct UGBXDefinition {
 	UObject Super;
 }; assert_size(UGBXDefinition, 60);
+
+/* ---------------------------------------------------------- UGFxFSCmdHandler ---------------------------------------------------------- */
+
+struct UGFxFSCmdHandler {
+  UGBXDefinition Super;
+}; assert_size(UGFxFSCmdHandler, 60);
+
+/* ---------------------------------------------------------- UGFxFSCmdHandler_Kismet ---------------------------------------------------------- */
+
+struct UGFxFSCmdHandler_Kismet {
+  UGFxFSCmdHandler Super;
+}; assert_size(UGFxFSCmdHandler_Kismet, 60);
 
 /* ---------------------------------------------------------- UFiringZoneDefinition ---------------------------------------------------------- */
 
@@ -21272,13 +21755,13 @@ struct native FBehaviorThread {
   float                BehaviorStartedTime;
 };
 struct native FBehaviorEventState {
-  int TriggerCount;
-  float LastTriggerTime;
+  int                       TriggerCount;
+  float                     LastTriggerTime;
   UBehaviorEventFilterBase *FilterObject;
 };
 struct native FBehaviorVariableState {
-  FName Name;
-  EBehaviorVariableType Type;
+  FName                              Name;
+  EBehaviorVariableType              Type;
   FBehaviorVariableValueUnion_Mirror Value;
 };
 struct native FBehaviorSequenceState {
@@ -21290,20 +21773,20 @@ struct native FBehaviorSequenceState {
   void    *VariableStateHead;
 };
 struct native FBehaviorProcess {
-  UObject *Owner;
-  int ProcessID;
-  int SequenceEnabledBitField;
+  UObject              *Owner;
+  int                   ProcessID;
+  int                   SequenceEnabledBitField;
   EBehaviorProcessState ProcessState;
-  BYTE NextSequenceEnabledBitIndexToUse;
-  BYTE bSupportsReplicatedSequenceState;
-  BYTE NumPendingProviderRemovalRequests;
-  FChunkedList_Mirror Sequences;
-  FChunkedList_Mirror Events;
-  FChunkedList_Mirror Variables;
+  BYTE                  NextSequenceEnabledBitIndexToUse;
+  BYTE                  bSupportsReplicatedSequenceState;
+  BYTE                  NumPendingProviderRemovalRequests;
+  FChunkedList_Mirror   Sequences;
+  FChunkedList_Mirror   Events;
+  FChunkedList_Mirror   Variables;
 };
 struct native FProviderRecord {
   UBehaviorProviderDefinition *ProviderDefinition;
-  int ReferenceCount;
+  int                          ReferenceCount;
 };
 struct native FBehaviorKernelArrayStats {
   int UsedSlots;
@@ -21312,41 +21795,41 @@ struct native FBehaviorKernelArrayStats {
   int ContainerSlack;
 };
 struct native FBehaviorKernelStats {
-  int NumProcessesCreated;
-  int NumThreadsCreated;
-  int NumWaitingThreads;
-  int NumEventsActivated;
-  int NumEventsIgnored;
-  int NumBehaviorsRun;
+  int                       NumProcessesCreated;
+  int                       NumThreadsCreated;
+  int                       NumWaitingThreads;
+  int                       NumEventsActivated;
+  int                       NumEventsIgnored;
+  int                       NumBehaviorsRun;
   FBehaviorKernelArrayStats ProcessListStats;
   FBehaviorKernelArrayStats ProviderListStats;
   FBehaviorKernelArrayStats ObjectVariablesListStats;
   FBehaviorKernelArrayStats DynamicBehaviorsListStats;
-  int ProvidersIndexFreeListLength;
-  int ObjectVariablesFreeListLength;
-  int TotalMemoryUsed;
-  int MemoryUsedBySlack;
+  int                       ProvidersIndexFreeListLength;
+  int                       ObjectVariablesFreeListLength;
+  int                       TotalMemoryUsed;
+  int                       MemoryUsedBySlack;
 };
 struct UBehaviorKernel {
-  UObject Super;
-  FStableArray_Mirror Processes;
-  FChunkedList_Mirror ProcessDeathList;
-  FChunkedList_Mirror WaitingThreads;
-  TArray_FProviderRecord Providers;
-  FChunkedList_Mirror ProvidersIndexFreeList;
-  FChunkedList_Mirror ProvidersPendingRemoval;
-  TArray_UObjectPtr ObjectVariables;
-  FChunkedList_Mirror ObjectVariablesIndexFreeList;
+  UObject                             Super;
+  FStableArray_Mirror                 Processes;
+  FChunkedList_Mirror                 ProcessDeathList;
+  FChunkedList_Mirror                 WaitingThreads;
+  TArray_FProviderRecord              Providers;
+  FChunkedList_Mirror                 ProvidersIndexFreeList;
+  FChunkedList_Mirror                 ProvidersPendingRemoval;
+  TArray_UObjectPtr                   ObjectVariables;
+  FChunkedList_Mirror                 ObjectVariablesIndexFreeList;
   TArray_FBehaviorSequenceActionData2 DynamicBehaviors;
-  FChunkedList_Mirror DynamicBehaviorsIndexFreeList;
-  int ProvidersListReserveLength;
-  int ObjectVariablesListReserveLength;
-  int DynamicBehaviorsListReserveLength;
-  int WatchedPID;
-  FChunkedList_Mirror RecentlyRunBehaviors;
-  int CurrentDebugPage;
-  TArray_FString DebugPages;
-  TArray_UObjectPtr EventFilterObjects;
+  FChunkedList_Mirror                 DynamicBehaviorsIndexFreeList;
+  int                                 ProvidersListReserveLength;
+  int                                 ObjectVariablesListReserveLength;
+  int                                 DynamicBehaviorsListReserveLength;
+  int                                 WatchedPID;
+  FChunkedList_Mirror                 RecentlyRunBehaviors;
+  int                                 CurrentDebugPage;
+  TArray_FString                      DebugPages;
+  TArray_UObjectPtr                   EventFilterObjects;
 }; assert_size(UBehaviorKernel, 196);
 
 /* ---------------------------------------------------------- UWeaponPartListDefinition ---------------------------------------------------------- */
@@ -21474,14 +21957,14 @@ struct UFiringModeDefinition {
 
 struct native FHomingTargetedActorInfo {
   AActor *HomingActor;
-  int HomingActorCount;
+  int     HomingActorCount;
 };
 struct native FHitActorData {
-  AActor *HitActor;
+  AActor       *HitActor;
   FTraceHitInfo HitInfo;
-  FVector HitLocation;
-  FVector HitLocationRelativeToHitActor;
-  FVector HitNormal;
+  FVector       HitLocation;
+  FVector       HitLocationRelativeToHitActor;
+  FVector       HitNormal;
 };
 struct AWillowProjectile {
   AProjectile                        Super;
@@ -21503,10 +21986,8 @@ struct AWillowProjectile {
   UExplosionDefinition              *MyExplosionDefinition;
   AWillowInventory                  *GearLikenessActor;
   UPawnAllegiance                   *Allegiance;
-  /** ITargetable */
-  FImplementedInterface              AllegianceParent;
-  /* TArray_ITargetable */
-  TArray_FImplementedInterface       AllegianceChildren;
+  FImplementedInterface              AllegianceParent;    /** ITargetable */
+  TArray_FImplementedInterface       AllegianceChildren;  /** ITargetable */
   float                              LastRBImpactEffectTime;
   UMeshComponent                    *MyMeshClone;
   FTimerBehaviorUserState            ProjectileTimers;
@@ -21552,8 +22033,7 @@ struct AWillowProjectile {
   int                                FiringWeaponStatsID;
   int                                FiringWeaponMode;
   float                              CheckRadius;
-  /** Class<PointLightComponent> */
-  UClass                            *ProjectileLightClass;
+  UClass                            *ProjectileLightClass;  /** Class<PointLightComponent> */
   UPointLightComponent              *ProjectileLight;
   UDynamicLightEnvironmentComponent *LightEnvironment;
   AActor                            *HomingActor;
@@ -21618,10 +22098,8 @@ struct AWillowProjectile {
   UMovementComponent                *MovementComponent;
   float                              DesiredWorldZForLeveling;
   float                              LevelingTurnSpeed;
-  /** Class<DamageType> */
-  UClass                            *TakingDamageFromType;
-  /** IDamageCauser */
-  FImplementedInterface              TakingDamageFromDamageCauser;
+  UClass                            *TakingDamageFromType;          /** Class<DamageType> */
+  FImplementedInterface              TakingDamageFromDamageCauser;  /** IDamageCauser */
   AController                       *TakingDamageFromInstigator;
   FVector                            BehaviorHitNormal;
 }; assert_size(AWillowProjectile, 1184);
@@ -21630,15 +22108,15 @@ struct AWillowProjectile {
 
 struct AWillowServerSideProjectile {
   AWillowProjectile Super;
-  FVector ServerLocation;
-  FVector ServerVelocity;
-  FVector ServerAcceleration;
+  FVector           ServerLocation;
+  FVector           ServerVelocity;
+  FVector           ServerAcceleration;
 }; assert_size(AWillowServerSideProjectile, 1220);
 
 /* ---------------------------------------------------------- UWeaponGlowEffectDefinition ---------------------------------------------------------- */
 
 struct UWeaponGlowEffectDefinition {
-  UGBXDefinition Super;
+  UGBXDefinition    Super;
   FInterpCurveFloat GlowScaleCurve;
 }; assert_size(UWeaponGlowEffectDefinition, 76);
 
@@ -22002,6 +22480,18 @@ struct UAttributeInitializationDefinition {
   Variance                             RandomVariance;
   Range                                RangeRestriction;
 }; assert_size(UAttributeInitializationDefinition, 240);
+
+/* ---------------------------------------------------------- ULootConfigurationDefinition ---------------------------------------------------------- */
+
+struct native FLootData {
+  AttributeInitializationData   Weight;
+  TArray_UItemPoolDefinitionPtr ItemPools;
+};
+struct ULootConfigurationDefinition {
+  UGBXDefinition              Super;
+  TArray_FLootData            Loot;
+  AttributeInitializationData Probability;
+}; assert_size(ULootConfigurationDefinition, 88);
 
 /* ---------------------------------------------------------- UPopulationFactoryWillowVehicle ---------------------------------------------------------- */
 
@@ -22566,6 +23056,17 @@ struct UBalanceModifierDefinition {
 struct UAttributeValueResolver {
 	UObject Super;
 }; assert_size(UAttributeValueResolver, 60);
+
+/* ---------------------------------------------------------- UPlayerClassCountAttributeValueResolver ---------------------------------------------------------- */
+
+struct native FPlayerClassCountOverride {
+  int                               Override;
+  UPlayerClassIdentifierDefinition *PlayerClassIdDef;
+};
+struct UPlayerClassCountAttributeValueResolver {
+  UAttributeValueResolver           Super;
+  UPlayerClassIdentifierDefinition *PlayerClassId;
+}; assert_size(UPlayerClassCountAttributeValueResolver, 64);
 
 /* ---------------------------------------------------------- UManufacturerAttributeValueResolver ---------------------------------------------------------- */
 
@@ -25047,6 +25548,15 @@ struct USequenceEvent {
 	BYTE                                 RequiredAllegiance;
 	USequenceEventCustomEnableCondition *CustomEnableCondition;
 }; assert_size(USequenceEvent, 196);
+
+/* ---------------------------------------------------------- UGFxEvent_FSCommand ---------------------------------------------------------- */
+
+struct UGFxEvent_FSCommand {
+  USequenceEvent           Super;
+  USwfMovie               *Movie;
+  FString                  FSCommand;
+  UGFxFSCmdHandler_Kismet *Handler;
+}; assert_size(UGFxEvent_FSCommand, 216);
 
 /* ---------------------------------------------------------- USeqEvent_Touch ---------------------------------------------------------- */
 
@@ -29740,6 +30250,18 @@ struct AInfo {
   AActor Super;
 }; assert_size(AInfo, 392);
 
+/* ---------------------------------------------------------- AFogVolumeDensityInfo ---------------------------------------------------------- */
+
+struct AFogVolumeDensityInfo__FCheckpointRecord {
+  BITFIELD bEnabled : 1;
+};
+struct AFogVolumeDensityInfo {
+  AInfo                       Super;
+  UFogVolumeDensityComponent *DensityComponent;
+  UStaticMeshComponent       *AutomaticMeshComponent;
+  BITFIELD                    bEnabled : 1;
+}; assert_size(AFogVolumeDensityInfo, 404);
+
 /* ---------------------------------------------------------- AHybridNavigationArea ---------------------------------------------------------- */
 
 struct AHybridNavigationArea {
@@ -30958,6 +31480,8 @@ struct UMaterialInstanceConstant {
   TArray_FVectorParameterValue  VectorParameterValues;
 }; assert_size(UMaterialInstanceConstant, 208);
 
+/* ---------------------------------------------------------- UFogVolumeDensityComponent ---------------------------------------------------------- */
+
 struct UFogVolumeDensityComponent {
   UActorComponent Super;
   UMaterialInterface *FogMaterial;
@@ -30972,11 +31496,43 @@ struct UFogVolumeDensityComponent {
   TArray_AActor FogVolumeActors;
 }; assert_size(UFogVolumeDensityComponent, 156);
 
+/* ---------------------------------------------------------- UFogVolumeLinearHalfspaceDensityComponent ---------------------------------------------------------- */
+
+struct UFogVolumeLinearHalfspaceDensityComponent {
+  UFogVolumeDensityComponent Super;
+  float                      PlaneDistanceFactor;
+  FPlane                     HalfspacePlane;
+}; assert_size(UFogVolumeLinearHalfspaceDensityComponent, 176);
+
+/* ---------------------------------------------------------- UFogVolumeSphericalDensityComponent ---------------------------------------------------------- */
+
+struct UFogVolumeSphericalDensityComponent {
+  UFogVolumeDensityComponent Super;
+  float                      MaxDensity;
+  FVector                    SphereCenter;
+  float                      SphereRadius;
+  UDrawLightRadiusComponent *PreviewSphereRadius;
+}; assert_size(UFogVolumeSphericalDensityComponent, 180);
+
+/* ---------------------------------------------------------- UFogVolumeConeDensityComponent ---------------------------------------------------------- */
+
+struct UFogVolumeConeDensityComponent {
+  UFogVolumeDensityComponent Super;
+  float                      MaxDensity;
+  FVector                    ConeVertex;
+  float                      ConeRadius;
+  FVector                    ConeAxis;
+  float                      ConeMaxAngle;
+  UDrawLightConeComponent   *PreviewCone;
+}; assert_size(UFogVolumeConeDensityComponent, 196);
+
+/* ---------------------------------------------------------- ULightFunction ---------------------------------------------------------- */
+
 struct ULightFunction {
-  UObject Super;
+  UObject             Super;
   UMaterialInterface *SourceMaterial;
-  FVector Scale;
-  float DisabledBrightness;
+  FVector             Scale;
+  float               DisabledBrightness;
 }; assert_size(ULightFunction, 80);
 
 struct IAppearanceBehavior {
@@ -30986,10 +31542,8 @@ struct IAppearanceBehavior {
 /* ---------------------------------------------------------- ULightComponent ---------------------------------------------------------- */
 
 struct ULightComponent {
-  UActorComponent Super;
-  // IAppearanceBehavior *Interface;
-  void *SceneInfo;
-  // __declspec(align(16))
+  UActorComponent             Super;
+  void                       *SceneInfo;
   FMatrix                     WorldToLight;
   FMatrix                     LightToWorld;
   FGuid                       LightGuid;
@@ -30997,24 +31551,24 @@ struct ULightComponent {
   float                       Brightness;
   FColor                      LightColor;
   ULightFunction             *Function;
-  BITFIELD                    bEnabled : 1;
-  BITFIELD                    CastShadows : 1;
-  BITFIELD                    CastStaticShadows : 1;
-  BITFIELD                    CastDynamicShadows : 1;
-  BITFIELD                    bCastCompositeShadow : 1;
-  BITFIELD                    bAffectCompositeShadowDirection : 1;
-  BITFIELD                    bNonModulatedSelfShadowing : 1;
-  BITFIELD                    bSelfShadowOnly : 1;
-  BITFIELD                    bAllowPreShadow : 1;
-  BITFIELD                    bForceDynamicLight : 1;
-  BITFIELD                    UseDirectLightMap : 1;
-  BITFIELD                    bHasLightEverBeenBuiltIntoLightMap : 1;
+  BITFIELD                    bEnabled                                         : 1;
+  BITFIELD                    CastShadows                                      : 1;
+  BITFIELD                    CastStaticShadows                                : 1;
+  BITFIELD                    CastDynamicShadows                               : 1;
+  BITFIELD                    bCastCompositeShadow                             : 1;
+  BITFIELD                    bAffectCompositeShadowDirection                  : 1;
+  BITFIELD                    bNonModulatedSelfShadowing                       : 1;
+  BITFIELD                    bSelfShadowOnly                                  : 1;
+  BITFIELD                    bAllowPreShadow                                  : 1;
+  BITFIELD                    bForceDynamicLight                               : 1;
+  BITFIELD                    UseDirectLightMap                                : 1;
+  BITFIELD                    bHasLightEverBeenBuiltIntoLightMap               : 1;
   BITFIELD                    bCanAffectDynamicPrimitivesOutsideDynamicChannel : 1;
-  BITFIELD                    bAllowProjectedShadowing : 1;
-  BITFIELD                    bRenderLightShafts : 1;
-  BITFIELD                    bPrecomputedLightingIsValid : 1;
-  BITFIELD                    bExplicitlyAssignedLight : 1;
-  BITFIELD                    bAllowCompositingIntoDLE : 1;
+  BITFIELD                    bAllowProjectedShadowing                         : 1;
+  BITFIELD                    bRenderLightShafts                               : 1;
+  BITFIELD                    bPrecomputedLightingIsValid                      : 1;
+  BITFIELD                    bExplicitlyAssignedLight                         : 1;
+  BITFIELD                    bAllowCompositingIntoDLE                         : 1;
   ULightEnvironmentComponent *LightEnvironment;
   LightingChannelContainer    LightingChannels;
   ELightAffectsClassification LightAffectsClassification;
@@ -31025,9 +31579,9 @@ struct ULightComponent {
   int                         LightListIndex;
   EShadowProjectionTechnique  ShadowProjectionTechnique;
   EShadowFilterQuality        ShadowFilterQuality;
-  INT                         MinShadowResolution;
-  INT                         MaxShadowResolution;
-  INT                         ShadowFadeResolution;
+  int                         MinShadowResolution;
+  int                         MaxShadowResolution;
+  int                         ShadowFadeResolution;
   float                       OcclusionDepthRange;
   float                       BloomScale;
   float                       BloomThreshold;
@@ -32095,18 +32649,16 @@ struct FArchiveTagUsedNonRecursive {
 /* ---------------------------------------------------------- FArchiveFileReaderWindows ---------------------------------------------------------- */
 
 struct FArchiveFileReaderWindows {
-  FArchive Super;
-  HANDLE Handle;
-	/** Handle for stats tracking */
-	int StatsHandle;
-	/** Filename for debugging purposes. */
-	FString Filename;
-	FOutputDevice*  Error;
-	int Size;
-	int Pos;
-	int BufferBase;
-	int BufferCount;
-	BYTE Buffer[1024];
+  FArchive       Super;
+  HANDLE         Handle;
+	int            StatsHandle;  /** Handle for stats tracking */
+	FString        Filename;     /** Filename for debugging purposes. */
+	FOutputDevice *Error;
+	int            Size;
+	int            Pos;
+	int            BufferBase;
+	int            BufferCount;
+	BYTE           Buffer[1024];
 };
 
 /**
@@ -32806,7 +33358,7 @@ struct UPackageMap {
 
 struct UArrayProperty {
   UProperty  Super;
-  UProperty* Inner;
+  UProperty *Inner;
 }; assert_size(UArrayProperty, 132);
 
 /* ---------------------------------------------------------- UObjectRedirector ---------------------------------------------------------- */
@@ -32835,10 +33387,10 @@ struct FTimeStamp {
   INT DayOfWeek;  /* days since Sunday - [0,6]        */
 };
 
+/* ---------------------------------------------------------- FFileManager ---------------------------------------------------------- */
+
 struct VfTable__FFileManager {
-  /**
-	 * Initialize the file manager _before_ the commandline has been set up
-	 */
+  /** Initialize the file manager _before_ the commandline has been set up. */
 	void (__thiscall *PreInit)(FFileManager *This);
 	void (__thiscall *Init)(FFileManager *This, UBOOL Startup);
 
@@ -32941,12 +33493,12 @@ struct VfTable__FFileManager {
   /**
 	 *	Returns the size of a file. (Thread-safe)
 	 *
-	 *	@param Filename		Platform-independent Unreal filename.
-	 *	@return				File size in bytes or INDEX_NONE if the file didn't exist.
+	 *	@param Filename Platform-independent Unreal filename.
+	 *	@return File size in bytes or INDEX_NONE if the file didn't exist.
 	 **/
 	INT (__thiscall *FileSize)(FFileManager *This, const TCHAR *Filename);
 
-  /**Enables file system drive addressing where appropriate (360)*/
+  /** Enables file system drive addressing where appropriate (360). */
 	void (__thiscall *EnableLogging)(FFileManager *This);
 
   /**
@@ -32959,11 +33511,25 @@ struct VfTable__FFileManager {
 	 */
 	UBOOL (__thiscall *EnsureFileIsLocal)(FFileManager *This, const TCHAR *Filename);
 };
-
 struct FFileManager {
   VfTable__FFileManager *vftable;
 	/** Set to TRUE if the file manager has been initialized. */
 	UBOOL bIsInitialized;
+};
+
+/* ---------------------------------------------------------- FFileManagerGeneric ---------------------------------------------------------- */
+
+struct FFileManagerGeneric {
+  FFileManager Super;
+};
+
+/* ---------------------------------------------------------- FFileManagerWindows ---------------------------------------------------------- */
+
+struct FFileManagerWindows {
+  FFileManagerGeneric Super;
+	FString             WindowsUserDir;       /** Directory where a Standard User can write to (to save settings, etc) */
+	FString             WindowsRootDir;       /** Directory where the game in installed to */
+	UBOOL               bIsRunningInstalled;  /** Is the game running as if installed, ie, out of a directory a Standard User can't write to? */
 };
 
 /* ---------------------------------------------------------- UBlurEffect ---------------------------------------------------------- */

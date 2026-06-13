@@ -142,6 +142,15 @@
     int ArrayMax;        \
   }
 
+#define _TMRUARRAY(__type)  \
+  struct {  \
+    __type *Data;  \
+    int ArrayNum;  \
+    int ArrayMax;  \
+    /** The maximum number of items we can store in this array. */ \
+	  int MaxItems;  \
+  }
+
 #define _TRESOURCE_ARRAY(__type) \
   struct {                       \
     _TARRAY_NAME(__type) Super;  \
@@ -221,6 +230,7 @@
 #define _FALIGNED_ELEMENTS_NAME(__type)          PP_CAT(FAlignedElements_, __type)
 #define _FPAIR_NAME(__t0, __t1)                  PP_CAT(FPair_, PP_CAT(__t0, PP_CAT(_, __t1)))
 #define _TARRAY_NAME(__type)                     PP_CAT(TArray_, __type)
+#define _TMRUARRAY_NAME(__type)                  PP_CAT(TMRUArray_, __type)
 #define _TRESOURCE_ARRAY_NAME(__type)            PP_CAT(TResourceArray_, __type)
 
 #define _TARRAY_TINLINEALLOCATOR_NAME(__type, __num)  \
@@ -244,6 +254,7 @@
 #define _DECL_FALIGNED_ELEMENTS(__type)         typedef _FALIGNED_ELEMENTS(__type)         _FALIGNED_ELEMENTS_NAME(__type)
 #define _DECL_FPAIR(__t0, __t1)                 typedef _FPAIR(__t0, __t1)                 _FPAIR_NAME(__t0, __t1)
 #define _DECL_TARRAY(__type)                    typedef _TARRAY(__type)                    _TARRAY_NAME(__type)
+#define _DECL_TMRUARRAY(__type)                 typedef _TMRUARRAY(__type)                 _TMRUARRAY_NAME(__type)
 #define _DECL_TRESOURCE_ARRAY(__type)           typedef _TRESOURCE_ARRAY(__type)           _TRESOURCE_ARRAY_NAME(__type)
 
 #define _DECL_TARRAY_TINLINEALLOCATOR(__type, __num)  typedef _TARRAY_TINLINEALLOCATOR(__type, __num) _TARRAY_TINLINEALLOCATOR_NAME(__type, __num)

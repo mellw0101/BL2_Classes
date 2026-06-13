@@ -7,6 +7,16 @@ typedef enum : unsigned int {
   TRUE,
 } UBOOL;
 
+/* ---------------------------------------------------------- Development\Src\Core\Inc\UnFile.h ---------------------------------------------------------- */
+
+typedef enum ELoadFileHashOptions {
+	LoadFileHash_EnableVerify     = (1 << 0),  /** Enable the async task for verifying the hash for the file being loaded */
+	LoadFileHash_ErrorMissingHash = (1 << 1)   /** A missing hash entry should trigger an error */
+  #define LoadFileHash_EnableVerify      LoadFileHash_EnableVerify
+  #define LoadFileHash_ErrorMissingHash  LoadFileHash_ErrorMissingHash
+} ELoadFileHashOptions;
+#define ELoadFileHashOptions  ELoadFileHashOptions
+
 /* ---------------------------------------------------------- Internal ---------------------------------------------------------- */
 
 typedef enum ENativeConstructor { EC_NativeConstructor } ENativeConstructor;
@@ -17799,3 +17809,343 @@ typedef enum EEntitlementConsumedResult : unsigned char {
 #define ECodeRedeemedResult         ECodeRedeemedResult
 #define EResetPasswordResult        EResetPasswordResult
 #define EEntitlementConsumedResult  EEntitlementConsumedResult
+
+/* ---------------------------------------------------------- UParticleModuleBeamBase ! ---------------------------------------------------------- */
+
+
+typedef enum Beam2SourceTargetMethod        : unsigned char {
+  PEB2STM_Default,                // 0
+  PEB2STM_UserSet,                // 1
+  PEB2STM_Emitter,                // 2
+  PEB2STM_Particle,               // 3
+  PEB2STM_Actor,                  // 4
+  PEB2STM_MAX                     // 5
+  #define PEB2STM_Default                   PEB2STM_Default
+  #define PEB2STM_UserSet                   PEB2STM_UserSet
+  #define PEB2STM_Emitter                   PEB2STM_Emitter
+  #define PEB2STM_Particle                  PEB2STM_Particle
+  #define PEB2STM_Actor                     PEB2STM_Actor
+  #define PEB2STM_MAX                       PEB2STM_MAX
+  #define Beam2SourceTargetMethod_Default   PEB2STM_Default
+  #define Beam2SourceTargetMethod_UserSet   PEB2STM_UserSet
+  #define Beam2SourceTargetMethod_Emitter   PEB2STM_Emitter
+  #define Beam2SourceTargetMethod_Particle  PEB2STM_Particle
+  #define Beam2SourceTargetMethod_Actor     PEB2STM_Actor
+  #define Beam2SourceTargetMethod_MAX       PEB2STM_MAX
+} Beam2SourceTargetMethod;
+typedef enum Beam2SourceTargetTangentMethod : unsigned char {
+  PEB2STTM_Direct,                // 0
+  PEB2STTM_UserSet,               // 1
+  PEB2STTM_Distribution,          // 2
+  PEB2STTM_Emitter,               // 3
+  PEB2STTM_MAX                    // 4
+  #define PEB2STTM_Direct                              PEB2STTM_Direct
+  #define PEB2STTM_UserSet                             PEB2STTM_UserSet
+  #define PEB2STTM_Distribution                        PEB2STTM_Distribution
+  #define PEB2STTM_Emitter                             PEB2STTM_Emitter
+  #define PEB2STTM_MAX                                 PEB2STTM_MAX
+  #define Beam2SourceTargetTangentMethod_Direct        PEB2STTM_Direct
+  #define Beam2SourceTargetTangentMethod_UserSet       PEB2STTM_UserSet
+  #define Beam2SourceTargetTangentMethod_Distribution  PEB2STTM_Distribution
+  #define Beam2SourceTargetTangentMethod_Emitter       PEB2STTM_Emitter
+  #define Beam2SourceTargetTangentMethod_MAX           PEB2STTM_MAX
+} Beam2SourceTargetTangentMethod;
+#define Beam2SourceTargetMethod         Beam2SourceTargetMethod
+#define Beam2SourceTargetTangentMethod  Beam2SourceTargetTangentMethod
+
+/* ---------------------------------------------------------- UAmbientOcclusionEffect ! ---------------------------------------------------------- */
+
+typedef enum EAmbientOcclusionQuality : unsigned char {
+  AO_High,                        // 0
+  AO_Medium,                      // 1
+  AO_Low,                         // 2
+  AO_MAX                          // 3
+  #define AO_High                          AO_High
+  #define AO_Medium                        AO_Medium
+  #define AO_Low                           AO_Low
+  #define AO_MAX                           AO_MAX
+  #define EAmbientOcclusionQuality_High    AO_High
+  #define EAmbientOcclusionQuality_Medium  AO_Medium
+  #define EAmbientOcclusionQuality_Low     AO_Low
+  #define EAmbientOcclusionQuality_MAX     AO_MAX
+} EAmbientOcclusionQuality;
+#define EAmbientOcclusionQuality  EAmbientOcclusionQuality
+
+
+/* ---------------------------------------------------------- FSceneRenderTargets ! ---------------------------------------------------------- */
+
+/** Bit-flags to indicate how a rendertarget is about to be used. */
+typedef enum FSceneRenderTargetUsage {
+	RTUsage_Default        = 0x0000,  /* For normal rendering */
+	RTUsage_FullOverwrite  = 0x0001,  /* (PS3) Makes sure surface and resolvetarget points to different memory. Use this if the next drawcall is a fullscreen quad. */
+	RTUsage_DontSwapBuffer = 0x0002,  /* (PS3) Overrides the swapping the surface and resolvetarget. (Don't ping-pong fullscreen drawcalls.) */
+	RTUsage_RestoreSurface = 0x0004,  /* If set then copies the contents of the rendertarget Texture to its Surface */
+	RTUsage_ResolveDepth   = 0x0008,  /* Whether the resulting depth values needs to be resolved at the end of this pass */
+	RTUsage_DWORD          = 0x7fffffff
+  #define RTUsage_Default                         RTUsage_Default
+  #define RTUsage_FullOverwrite                   RTUsage_FullOverwrite
+  #define RTUsage_DontSwapBuffer                  RTUsage_DontSwapBuffer
+  #define RTUsage_RestoreSurface                  RTUsage_RestoreSurface
+  #define RTUsage_ResolveDepth                    RTUsage_ResolveDepth
+  #define RTUsage_DWORD                           RTUsage_DWORD
+  #define FSceneRenderTargetUsage_Default         RTUsage_Default
+  #define FSceneRenderTargetUsage_FullOverwrite   RTUsage_FullOverwrite
+  #define FSceneRenderTargetUsage_DontSwapBuffer  RTUsage_DontSwapBuffer
+  #define FSceneRenderTargetUsage_RestoreSurface  RTUsage_RestoreSurface
+  #define FSceneRenderTargetUsage_ResolveDepth    RTUsage_ResolveDepth
+  #define FSceneRenderTargetUsage_DWORD           RTUsage_DWORD
+} FSceneRenderTargetUsage;
+typedef enum ESceneRenderTargetTypes {
+	FilterColor1=0,                        /* Render target for post process filter colors. */
+	FilterColor2,                          /* Second Render target for post process filter colors. */
+	FilterColor3,                          /* Third Render target for post process filter colors. */
+	SceneColor,                            /* Render target for scene colors. */
+	SceneColorRaw,                         /* Render target for scene colors (resolved as raw-bits). */
+	SceneColorFixedPoint,                  /* Render target for scene colors (converted to fixed point). */
+	SceneDepthZ,                           /* Render target for scene depths. */
+	SmallDepthZ,                           /* Render target for a quarter-sized version of the scene depths. */
+	ReflectionSmallDepthZ,                 /* Depth stencil target for image reflection planar shadowing */
+	ShadowDepthZ,                          /* Render target for per-object shadow depths. */
+	DominantShadowDepthZ,                  /* Render target for whole scene dominant shadow depths. */
+	TranslucencyShadowDepthZ,              /* Render target for dynamic shadow depths on translucency. */
+	PreshadowCacheDepthZ,                  /* Render target for preshadow depths which are cached across multiple frames. */
+	CubeShadowDepthZ0,                     /* Render target for one pass point light shadows, 0:at the highest resolution 4:at the lowest resolution */
+	CubeShadowDepthZ1,
+	CubeShadowDepthZ2,
+	CubeShadowDepthZ3,
+	CubeShadowDepthZ4,
+	ShadowDepthColor,                      /* Render target for per-object shadow depths as color. */
+	DominantShadowDepthColor,              /* Render target for whole scene dominant shadow depths as color. */
+	TranslucencyShadowDepthColor,          /* Render target for dynamic shadow depths as color on translucency. */
+	PreshadowCacheDepthColor,              /* Render target for preshadow depths as color which are cached across multiple frames. */
+	LightAttenuation0,                     /* Render target for light attenuation values, also used to store offset vectors for the distortion effect. */
+	LightAttenuation1,                     /* Second render target for light attenuation values, only used with one pass dominant lights */
+	TranslucencyBuffer,                    /* Render target for downsampled translucency buffer, now also used for half res scene before (postprocessing DOF, Bloom, MotionBlur) */
+	HalfResPostProcess,                    /* Render target for half res scene before postprocessing (DOF, Bloom, MotionBlur) */
+	TranslucencyDominantLightAttenuation,  /* Render target that stores the dominant light shadow factors for translucency that wants to inherit dynamic shadows from opaque pixels */
+	AOInput,                               /* Render target for ambient occlusion calculations. */
+	AOOutput,                              /* Render target for ambient occlusion calculations. */
+	AOHistory,                             /* Render target for ambient occlusion history. */
+	VelocityBuffer,                        /* Render target for motion velocity 2D-vectors. */
+	QuarterSizeSceneColor,                 /* Render target for scene colors (resolved at quarter size). */
+	FogFrontfacesIntegralAccumulation,     /* Render target that accumulates fog volume frontface integrals */
+	FogBackfacesIntegralAccumulation,      /* Render target that accumulates fog volume backface integrals */
+	HitProxy,                              /* Render target that hit proxy IDs are drawn to */
+	FogBuffer,                             /* Render target for downsampled fog factors */
+	DoFBlurBuffer,                         /* Render target for rendering DoF blur factor for translucency (overlaps stencil bits on console) */
+	StereoFix,                             /* Procedural texture with stereo offset parameters */
+	LUTBlend,                              /* LUTBlend */
+	TexturePoolMemory,                     /* Texture pool memory visualizer */
+	SubsurfaceInscattering,                /* The inscattered radiant energy for surfaces with subsurface scattering. */
+	SubsurfaceScatteringAttenuation,       /* The scattering attenuation parameters for surfaces with subsurface scattering. */
+	WorldNormalGBuffer,                    /* World space normal G Buffer */
+	WorldReflectionNormalGBuffer,          /* World space reflection normal G Buffer */
+	SpecularGBuffer,                       /* Specular color and power G Buffer */
+	DiffuseGBuffer,                        /* Diffuse color G Buffer */
+	WhiteDummy,                            /* A 1x1 MSAAed white dummy render target. */
+	BokehDOF,                              /* Render target for BokehDOF. */
+	SeparateTranslucency,                  /* Render target for SeparateTranslucency (RGB: color of translucent objects, A:blend factor to blend with opaque layer) */
+	SeparateTranslucencyDepth,             /* Render target for SeparateTranslucency (R:depth, needs to be normalized with SeparateTranslucency.a) */
+	ResolvedDepthBuffer,                   /* MSAA-resolved depth buffer (same size as SceneColor, downsampled from the SceneDepth MSAA buffer) */
+	PreviousFrameBackBuffer,               /* The previous frame's back buffer. */
+	CurrentFrameBackBuffer,                /* A copy of the current frame's back buffer. */
+	SceneColorARGB,                        /* A8R8G8B8 version of the SceneColor texture memory */
+	MAX_SCENE_RENDERTARGETS                /* Max scene RTs available */
+  #define FilterColor1                                                  FilterColor1
+  #define FilterColor2                                                  FilterColor2
+  #define FilterColor3                                                  FilterColor3
+  #define SceneColor                                                    SceneColor
+  #define SceneColorRaw                                                 SceneColorRaw
+  #define SceneColorFixedPoint                                          SceneColorFixedPoint
+  #define SceneDepthZ                                                   SceneDepthZ
+  #define SmallDepthZ                                                   SmallDepthZ
+  #define ReflectionSmallDepthZ                                         ReflectionSmallDepthZ
+  #define ShadowDepthZ                                                  ShadowDepthZ
+  #define DominantShadowDepthZ                                          DominantShadowDepthZ
+  #define TranslucencyShadowDepthZ                                      TranslucencyShadowDepthZ
+  #define PreshadowCacheDepthZ                                          PreshadowCacheDepthZ
+  #define CubeShadowDepthZ0                                             CubeShadowDepthZ0
+  #define CubeShadowDepthZ1                                             CubeShadowDepthZ1
+  #define CubeShadowDepthZ2                                             CubeShadowDepthZ2
+  #define CubeShadowDepthZ3                                             CubeShadowDepthZ3
+  #define CubeShadowDepthZ4                                             CubeShadowDepthZ4
+  #define ShadowDepthColor                                              ShadowDepthColor
+  #define DominantShadowDepthColor                                      DominantShadowDepthColor
+  #define TranslucencyShadowDepthColor                                  TranslucencyShadowDepthColor
+  #define PreshadowCacheDepthColor                                      PreshadowCacheDepthColor
+  #define LightAttenuation0                                             LightAttenuation0
+  #define LightAttenuation1                                             LightAttenuation1
+  #define TranslucencyBuffer                                            TranslucencyBuffer
+  #define HalfResPostProcess                                            HalfResPostProcess
+  #define TranslucencyDominantLightAttenuation                          TranslucencyDominantLightAttenuation
+  #define AOInput                                                       AOInput
+  #define AOOutput                                                      AOOutput
+  #define AOHistory                                                     AOHistory
+  #define VelocityBuffer                                                VelocityBuffer
+  #define QuarterSizeSceneColor                                         QuarterSizeSceneColor
+  #define FogFrontfacesIntegralAccumulation                             FogFrontfacesIntegralAccumulation
+  #define FogBackfacesIntegralAccumulation                              FogBackfacesIntegralAccumulation
+  #define HitProxy                                                      HitProxy
+  #define FogBuffer                                                     FogBuffer
+  #define DoFBlurBuffer                                                 DoFBlurBuffer
+  #define StereoFix                                                     StereoFix
+  #define LUTBlend                                                      LUTBlend
+  #define TexturePoolMemory                                             TexturePoolMemory
+  #define SubsurfaceInscattering                                        SubsurfaceInscattering
+  #define SubsurfaceScatteringAttenuation                               SubsurfaceScatteringAttenuation
+  #define WorldNormalGBuffer                                            WorldNormalGBuffer
+  #define WorldReflectionNormalGBuffer                                  WorldReflectionNormalGBuffer
+  #define SpecularGBuffer                                               SpecularGBuffer
+  #define DiffuseGBuffer                                                DiffuseGBuffer
+  #define WhiteDummy                                                    WhiteDummy
+  #define BokehDOF                                                      BokehDOF
+  #define SeparateTranslucency                                          SeparateTranslucency
+  #define SeparateTranslucencyDepth                                     SeparateTranslucencyDepth
+  #define ResolvedDepthBuffer                                           ResolvedDepthBuffer
+  #define PreviousFrameBackBuffer                                       PreviousFrameBackBuffer
+  #define CurrentFrameBackBuffer                                        CurrentFrameBackBuffer
+  #define SceneColorARGB                                                SceneColorARGB
+  #define MAX_SCENE_RENDERTARGETS                                       MAX_SCENE_RENDERTARGETS
+  #define ESceneRenderTargetTypes_FilterColor1                          FilterColor1
+  #define ESceneRenderTargetTypes_FilterColor2                          FilterColor2
+  #define ESceneRenderTargetTypes_FilterColor3                          FilterColor3
+  #define ESceneRenderTargetTypes_SceneColor                            SceneColor
+  #define ESceneRenderTargetTypes_SceneColorRaw                         SceneColorRaw
+  #define ESceneRenderTargetTypes_SceneColorFixedPoint                  SceneColorFixedPoint
+  #define ESceneRenderTargetTypes_SceneDepthZ                           SceneDepthZ
+  #define ESceneRenderTargetTypes_SmallDepthZ                           SmallDepthZ
+  #define ESceneRenderTargetTypes_ReflectionSmallDepthZ                 ReflectionSmallDepthZ
+  #define ESceneRenderTargetTypes_ShadowDepthZ                          ShadowDepthZ
+  #define ESceneRenderTargetTypes_DominantShadowDepthZ                  DominantShadowDepthZ
+  #define ESceneRenderTargetTypes_TranslucencyShadowDepthZ              TranslucencyShadowDepthZ
+  #define ESceneRenderTargetTypes_PreshadowCacheDepthZ                  PreshadowCacheDepthZ
+  #define ESceneRenderTargetTypes_CubeShadowDepthZ0                     CubeShadowDepthZ0
+  #define ESceneRenderTargetTypes_CubeShadowDepthZ1                     CubeShadowDepthZ1
+  #define ESceneRenderTargetTypes_CubeShadowDepthZ2                     CubeShadowDepthZ2
+  #define ESceneRenderTargetTypes_CubeShadowDepthZ3                     CubeShadowDepthZ3
+  #define ESceneRenderTargetTypes_CubeShadowDepthZ4                     CubeShadowDepthZ4
+  #define ESceneRenderTargetTypes_ShadowDepthColor                      ShadowDepthColor
+  #define ESceneRenderTargetTypes_DominantShadowDepthColor              DominantShadowDepthColor
+  #define ESceneRenderTargetTypes_TranslucencyShadowDepthColor          TranslucencyShadowDepthColor
+  #define ESceneRenderTargetTypes_PreshadowCacheDepthColor              PreshadowCacheDepthColor
+  #define ESceneRenderTargetTypes_LightAttenuation0                     LightAttenuation0
+  #define ESceneRenderTargetTypes_LightAttenuation1                     LightAttenuation1
+  #define ESceneRenderTargetTypes_TranslucencyBuffer                    TranslucencyBuffer
+  #define ESceneRenderTargetTypes_HalfResPostProcess                    HalfResPostProcess
+  #define ESceneRenderTargetTypes_TranslucencyDominantLightAttenuation  TranslucencyDominantLightAttenuation
+  #define ESceneRenderTargetTypes_AOInput                               AOInput
+  #define ESceneRenderTargetTypes_AOOutput                              AOOutput
+  #define ESceneRenderTargetTypes_AOHistory                             AOHistory
+  #define ESceneRenderTargetTypes_VelocityBuffer                        VelocityBuffer
+  #define ESceneRenderTargetTypes_QuarterSizeSceneColor                 QuarterSizeSceneColor
+  #define ESceneRenderTargetTypes_FogFrontfacesIntegralAccumulation     FogFrontfacesIntegralAccumulation
+  #define ESceneRenderTargetTypes_FogBackfacesIntegralAccumulation      FogBackfacesIntegralAccumulation
+  #define ESceneRenderTargetTypes_HitProxy                              HitProxy
+  #define ESceneRenderTargetTypes_FogBuffer                             FogBuffer
+  #define ESceneRenderTargetTypes_DoFBlurBuffer                         DoFBlurBuffer
+  #define ESceneRenderTargetTypes_StereoFix                             StereoFix
+  #define ESceneRenderTargetTypes_LUTBlend                              LUTBlend
+  #define ESceneRenderTargetTypes_TexturePoolMemory                     TexturePoolMemory
+  #define ESceneRenderTargetTypes_SubsurfaceInscattering                SubsurfaceInscattering
+  #define ESceneRenderTargetTypes_SubsurfaceScatteringAttenuation       SubsurfaceScatteringAttenuation
+  #define ESceneRenderTargetTypes_WorldNormalGBuffer                    WorldNormalGBuffer
+  #define ESceneRenderTargetTypes_WorldReflectionNormalGBuffer          WorldReflectionNormalGBuffer
+  #define ESceneRenderTargetTypes_SpecularGBuffer                       SpecularGBuffer
+  #define ESceneRenderTargetTypes_DiffuseGBuffer                        DiffuseGBuffer
+  #define ESceneRenderTargetTypes_WhiteDummy                            WhiteDummy
+  #define ESceneRenderTargetTypes_BokehDOF                              BokehDOF
+  #define ESceneRenderTargetTypes_SeparateTranslucency                  SeparateTranslucency
+  #define ESceneRenderTargetTypes_SeparateTranslucencyDepth             SeparateTranslucencyDepth
+  #define ESceneRenderTargetTypes_ResolvedDepthBuffer                   ResolvedDepthBuffer
+  #define ESceneRenderTargetTypes_PreviousFrameBackBuffer               PreviousFrameBackBuffer
+  #define ESceneRenderTargetTypes_CurrentFrameBackBuffer                CurrentFrameBackBuffer
+  #define ESceneRenderTargetTypes_SceneColorARGB                        SceneColorARGB
+  #define ESceneRenderTargetTypes_MAX_SCENE_RENDERTARGETS               MAX_SCENE_RENDERTARGETS
+} ESceneRenderTargetTypes;
+#define FSceneRenderTargetUsage  FSceneRenderTargetUsage
+#define ESceneRenderTargetTypes  ESceneRenderTargetTypes
+
+/* ---------------------------------------------------------- FMaterial ! ---------------------------------------------------------- */
+
+/** transform types usable by a material shader */
+typedef enum ECoordTransformUsage {
+	UsedCoord_None     = 0,       /* no transforms used */
+	UsedCoord_World    = 1 << 0,  /* local to world used */
+	UsedCoord_View     = 1 << 1,  /* local to view used */
+	UsedCoord_Local    = 1 << 2,  /* local to local used */
+	UsedCoord_WorldPos = 1 << 3   /* World Position used */
+  #define UsedCoord_None                 UsedCoord_None
+  #define UsedCoord_World                UsedCoord_World
+  #define UsedCoord_View                 UsedCoord_View
+  #define UsedCoord_Local                UsedCoord_Local
+  #define UsedCoord_WorldPos             UsedCoord_WorldPos
+  #define ECoordTransformUsage_None      UsedCoord_None
+  #define ECoordTransformUsage_World     UsedCoord_World
+  #define ECoordTransformUsage_View      UsedCoord_View
+  #define ECoordTransformUsage_Local     UsedCoord_Local
+  #define ECoordTransformUsage_WorldPos  UsedCoord_WorldPos
+} ECoordTransformUsage;
+typedef enum EMaterialProperty {
+	MP_EmissiveColor = 0,
+	MP_Opacity,
+	MP_OpacityMask,
+	MP_Distortion,
+	MP_TwoSidedLightingMask,
+	MP_DiffuseColor,
+	MP_DiffusePower,
+	MP_SpecularColor,
+	MP_SpecularPower,
+	MP_Normal,
+	MP_CustomLighting,
+	MP_CustomLightingDiffuse,
+	MP_AnisotropicDirection,
+	MP_WorldPositionOffset,
+	MP_WorldDisplacement,
+	MP_TessellationFactors,
+	MP_SubsurfaceAbsorptionColor,
+	MP_SubsurfaceInscatteringColor,
+	MP_SubsurfaceScatteringRadius,
+	MP_MAX
+  #define MP_EmissiveColor                               MP_EmissiveColor
+  #define MP_Opacity                                     MP_Opacity
+  #define MP_OpacityMask                                 MP_OpacityMask
+  #define MP_Distortion                                  MP_Distortion
+  #define MP_TwoSidedLightingMask                        MP_TwoSidedLightingMask
+  #define MP_DiffuseColor                                MP_DiffuseColor
+  #define MP_DiffusePower                                MP_DiffusePower
+  #define MP_SpecularColor                               MP_SpecularColor
+  #define MP_SpecularPower                               MP_SpecularPower
+  #define MP_Normal                                      MP_Normal
+  #define MP_CustomLighting                              MP_CustomLighting
+  #define MP_CustomLightingDiffuse                       MP_CustomLightingDiffuse
+  #define MP_AnisotropicDirection                        MP_AnisotropicDirection
+  #define MP_WorldPositionOffset                         MP_WorldPositionOffset
+  #define MP_WorldDisplacement                           MP_WorldDisplacement
+  #define MP_TessellationFactors                         MP_TessellationFactors
+  #define MP_SubsurfaceAbsorptionColor                   MP_SubsurfaceAbsorptionColor
+  #define MP_SubsurfaceInscatteringColor                 MP_SubsurfaceInscatteringColor
+  #define MP_SubsurfaceScatteringRadius                  MP_SubsurfaceScatteringRadius
+  #define MP_MAX                                         MP_MAX
+  #define EMaterialProperty_EmissiveColor                MP_EmissiveColor
+  #define EMaterialProperty_Opacity                      MP_Opacity
+  #define EMaterialProperty_OpacityMask                  MP_OpacityMask
+  #define EMaterialProperty_Distortion                   MP_Distortion
+  #define EMaterialProperty_TwoSidedLightingMask         MP_TwoSidedLightingMask
+  #define EMaterialProperty_DiffuseColor                 MP_DiffuseColor
+  #define EMaterialProperty_DiffusePower                 MP_DiffusePower
+  #define EMaterialProperty_SpecularColor                MP_SpecularColor
+  #define EMaterialProperty_SpecularPower                MP_SpecularPower
+  #define EMaterialProperty_Normal                       MP_Normal
+  #define EMaterialProperty_CustomLighting               MP_CustomLighting
+  #define EMaterialProperty_CustomLightingDiffuse        MP_CustomLightingDiffuse
+  #define EMaterialProperty_AnisotropicDirection         MP_AnisotropicDirection
+  #define EMaterialProperty_WorldPositionOffset          MP_WorldPositionOffset
+  #define EMaterialProperty_WorldDisplacement            MP_WorldDisplacement
+  #define EMaterialProperty_TessellationFactors          MP_TessellationFactors
+  #define EMaterialProperty_SubsurfaceAbsorptionColor    MP_SubsurfaceAbsorptionColor
+  #define EMaterialProperty_SubsurfaceInscatteringColor  MP_SubsurfaceInscatteringColor
+  #define EMaterialProperty_SubsurfaceScatteringRadius   MP_SubsurfaceScatteringRadius
+  #define EMaterialProperty_MAX                          MP_MAX
+} EMaterialProperty;
+#define ECoordTransformUsage  ECoordTransformUsage
+#define EMaterialProperty     EMaterialProperty
